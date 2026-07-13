@@ -42,6 +42,21 @@ class PatientTask extends Model
         'reminder_minutes' => 'integer',
     ];
 
+    public function patient()
+    {
+        return $this->belongsTo(User::class, 'patient_user_id');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_user_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by_id');
+    }
+
     public function getIsCompletedAttribute(): bool
     {
         return $this->status === 'completed';

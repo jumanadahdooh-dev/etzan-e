@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ArticleCategory;
+use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class AdminArticleCategoryController extends Controller
 {
+    use GeneratesUniqueSlug;
+
     public function index()
     {
         $categories = ArticleCategory::query()
@@ -31,19 +33,7 @@ class AdminArticleCategoryController extends Controller
             'name.required' => 'اسم التصنيف مطلوب.',
         ]);
 
-        $slug = Str::slug($validated['name']);
-
-        if (blank($slug)) {
-            $slug = 'category-' . Str::random(6);
-        }
-
-        $originalSlug = $slug;
-        $counter = 1;
-
-        while (ArticleCategory::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
+        $slug = $this->makeUniqueSlug(ArticleCategory::class, $validated['name'], fallbackPrefix: 'category');
 
         ArticleCategory::create([
             'name' => $validated['name'],
@@ -72,23 +62,7 @@ class AdminArticleCategoryController extends Controller
             'name.required' => 'اسم التصنيف مطلوب.',
         ]);
 
-        $slug = Str::slug($validated['name']);
-
-        if (blank($slug)) {
-            $slug = 'category-' . $articleCategory->id;
-        }
-
-        $originalSlug = $slug;
-        $counter = 1;
-
-        while (
-            ArticleCategory::where('slug', $slug)
-                ->where('id', '!=', $articleCategory->id)
-                ->exists()
-        ) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
+        $slug = $this->makeUniqueSlug(ArticleCategory::class, $validated['name'], $articleCategory->id, 'category');
 
         $articleCategory->update([
             'name' => $validated['name'],

@@ -68,4 +68,54 @@ class User extends Authenticatable
     {
         return $this->hasMany(PatientMeal::class);
     }
+
+    public function appointments(): HasMany
+    {
+        return $this->hasMany(PatientAppointment::class, 'user_id');
+    }
+
+    public function patientTasks(): HasMany
+    {
+        return $this->hasMany(PatientTask::class, 'patient_user_id');
+    }
+
+    public function doctorReviews(): HasMany
+    {
+        return $this->hasMany(DoctorReview::class, 'patient_id');
+    }
+
+    public function conversations(): HasMany
+    {
+        return $this->hasMany(Conversation::class, 'user_id');
+    }
+
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    public function reviewedDoctorApplications(): HasMany
+    {
+        return $this->hasMany(DoctorApplication::class, 'reviewed_by');
+    }
+
+    public function patientDoctorRequests(): HasMany
+    {
+        return $this->hasMany(PatientDoctorRequest::class, 'patient_id');
+    }
+
+    public function weightLogs(): HasMany
+    {
+        return $this->hasMany(PatientWeightLog::class, 'user_id');
+    }
+
+    public function calorieGoals(): HasMany
+    {
+        return $this->hasMany(PatientDailyCalorieGoal::class, 'user_id');
+    }
+
+    public function articles(): HasMany
+    {
+        return $this->hasMany(Article::class, 'user_id');
+    }
 }

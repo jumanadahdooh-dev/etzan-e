@@ -58,4 +58,16 @@ class DoctorProfile extends Model
     {
         return $this->hasMany(\App\Models\DoctorReview::class, 'doctor_profile_id');
     }
+
+    /** سجلات وزن المرضى المتابعين مع هاد الطبيب */
+    public function weightLogs()
+    {
+        return $this->hasMany(\App\Models\PatientWeightLog::class, 'doctor_profile_id');
+    }
+
+    /** أهداف السعرات اليومية يلي حددها هاد الطبيب لمرضاه */
+    public function calorieGoals()
+    {
+        return $this->hasMany(\App\Models\PatientDailyCalorieGoal::class, 'doctor_profile_id');
+    }
 }

@@ -23,4 +23,19 @@ class PatientWeightLog extends Model
             'weight_kg' => 'decimal:2',
         ];
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function patientProfile()
+    {
+        return $this->belongsTo(PatientProfile::class);
+    }
+
+    public function doctorProfile()
+    {
+        return $this->belongsTo(DoctorProfile::class);
+    }
 }

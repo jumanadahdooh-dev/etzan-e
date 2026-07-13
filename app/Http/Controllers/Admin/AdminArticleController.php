@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Specialty;
 use App\Services\AiArticleDraftService;
+use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Schema;
@@ -13,6 +14,8 @@ use Illuminate\Support\Str;
 
 class AdminArticleController extends Controller
 {
+    use GeneratesUniqueSlug;
+
     public function index(Request $request)
     {
         $baseQuery = Article::query()
@@ -188,7 +191,7 @@ class AdminArticleController extends Controller
             'specialty_id' => $validated['specialty_id'],
             'source' => 'admin',
             'title' => $validated['title'],
-            'slug' => $this->makeUniqueSlug($validated['title']),
+            'slug' => $this->makeUniqueSlug(Article::class, $validated['title'], fallbackPrefix: 'article'),
             'excerpt' => $validated['excerpt'],
             'content' => $validated['content'],
             'cover_image' => $coverImagePath,
@@ -262,7 +265,7 @@ class AdminArticleController extends Controller
             'specialty_id' => $validated['specialty_id'],
             'source' => 'admin',
             'title' => $draft['title'],
-            'slug' => $this->makeUniqueSlug($draft['title']),
+            'slug' => $this->makeUniqueSlug(Article::class, $draft['title'], fallbackPrefix: 'article'),
             'excerpt' => $draft['excerpt'],
             'content' => $draft['content'],
             'cover_image' => $this->generateAiCoverImage($draft['title'], $validated['article_type'], $validated['audience']),
@@ -358,7 +361,7 @@ class AdminArticleController extends Controller
         $article->update(array_merge([
             'specialty_id' => $validated['specialty_id'],
             'title' => $validated['title'],
-            'slug' => $this->makeUniqueSlug($validated['title'], $article->id),
+            'slug' => $this->makeUniqueSlug(Article::class, $validated['title'], $article->id, 'article'),
             'excerpt' => $validated['excerpt'],
             'content' => $validated['content'],
             'cover_image' => $coverImagePath,
@@ -713,26 +716,4 @@ SVG;
         return $payload;
     }
 
-    private function makeUniqueSlug(string $title, ?int $ignoreId = null): string
-    {
-        $slug = Str::slug($title);
-
-        if (blank($slug)) {
-            $slug = 'article-' . Str::random(8);
-        }
-
-        $originalSlug = $slug;
-        $counter = 1;
-
-        while (
-            Article::where('slug', $slug)
-                ->when($ignoreId, fn ($query) => $query->where('id', '!=', $ignoreId))
-                ->exists()
-        ) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
-    }
 }

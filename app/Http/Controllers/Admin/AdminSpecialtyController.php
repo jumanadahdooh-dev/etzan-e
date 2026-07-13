@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Specialty;
+use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class AdminSpecialtyController extends Controller
 {
+    use GeneratesUniqueSlug;
+
     public function index()
     {
         $specialties = Specialty::query()
@@ -35,7 +37,7 @@ class AdminSpecialtyController extends Controller
             'sort_order.min' => 'ترتيب الظهور لا يمكن أن يكون أقل من صفر.',
         ]);
 
-        $slug = $this->makeUniqueSlug($validated['name']);
+        $slug = $this->makeUniqueSlug(Specialty::class, $validated['name'], fallbackPrefix: 'specialty');
 
         Specialty::create([
             'name' => $validated['name'],
@@ -71,7 +73,7 @@ class AdminSpecialtyController extends Controller
             'sort_order.min' => 'ترتيب الظهور لا يمكن أن يكون أقل من صفر.',
         ]);
 
-        $slug = $this->makeUniqueSlug($validated['name'], $specialty->id);
+        $slug = $this->makeUniqueSlug(Specialty::class, $validated['name'], $specialty->id, 'specialty');
 
         $specialty->update([
             'name' => $validated['name'],
@@ -102,29 +104,6 @@ class AdminSpecialtyController extends Controller
         $specialty->delete();
 
         return back()->with('success', 'تم حذف التخصص بنجاح.');
-    }
-
-    private function makeUniqueSlug(string $name, ?int $ignoreId = null): string
-    {
-        $slug = Str::slug($name);
-
-        if (blank($slug)) {
-            $slug = 'specialty-' . Str::random(6);
-        }
-
-        $originalSlug = $slug;
-        $counter = 1;
-
-        while (
-            Specialty::where('slug', $slug)
-                ->when($ignoreId, fn ($query) => $query->where('id', '!=', $ignoreId))
-                ->exists()
-        ) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
     }
 
     private function resolveIconFromName(string $name): string

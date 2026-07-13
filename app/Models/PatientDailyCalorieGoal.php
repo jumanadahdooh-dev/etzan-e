@@ -29,4 +29,24 @@ class PatientDailyCalorieGoal extends Model
         'carbs_goal' => 'integer',
         'fat_goal' => 'integer',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function patientProfile()
+    {
+        return $this->belongsTo(PatientProfile::class);
+    }
+
+    public function doctorProfile()
+    {
+        return $this->belongsTo(DoctorProfile::class);
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(User::class, 'doctor_user_id');
+    }
 }
