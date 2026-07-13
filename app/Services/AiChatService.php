@@ -104,7 +104,7 @@ class AiChatService
 
     protected function askAi(AiChatConversation $conversation, User $user): string
     {
-        if (! env('OPENROUTER_API_KEY')) {
+        if (! config('prism.providers.openrouter.api_key')) {
             return 'مساعد اتزان الذكي غير مفعل حاليًا. أضف مفتاح OpenRouter حتى يعمل الشات.';
         }
 
@@ -133,7 +133,7 @@ class AiChatService
             ->withMaxTokens(700)
             ->usingTemperature(0.35)
             ->withClientOptions([
-                'timeout' => (int) env('PRISM_REQUEST_TIMEOUT', 120),
+                'timeout' => (int) config('prism.request_timeout', 120),
             ])
             ->generate();
 
@@ -248,6 +248,6 @@ PROMPT;
 
     protected function model(): string
     {
-        return env('OPENROUTER_MODEL', 'tngtech/deepseek-r1t2-chimera:free');
+        return config('prism.providers.openrouter.model') ?: 'tngtech/deepseek-r1t2-chimera:free';
     }
 }

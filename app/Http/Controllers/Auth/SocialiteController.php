@@ -82,7 +82,7 @@ class SocialiteController extends Controller
         return match ($user->role) {
             'admin' => url('/admin/dashboard'),
             'doctor' => url('/doctor/dashboard'),
-            default => url('/patient/dashboard'),
+            default => url('/patient/home'),
         };
     }
 
@@ -144,11 +144,7 @@ public function handleFacebookCallback()
 
     \Illuminate\Support\Facades\Auth::login($user, true);
 
-    $redirectTo = match ($user->role) {
-        'admin' => url('/admin/dashboard'),
-        'doctor' => url('/doctor/dashboard'),
-        default => url('/patient/dashboard'),
-    };
+    $redirectTo = $this->redirectByRole($user);
 
     return response()->view('auth.social-close', compact('redirectTo'));
 }

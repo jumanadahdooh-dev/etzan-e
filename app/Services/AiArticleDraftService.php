@@ -15,7 +15,7 @@ class AiArticleDraftService
 {
     public function generate(array $input): array
     {
-        if (! env('OPENROUTER_API_KEY')) {
+        if (! config('prism.providers.openrouter.api_key')) {
             return $this->fallbackDraft($input, 'خدمة الذكاء الاصطناعي غير مفعلة حاليًا. أضيفي OPENROUTER_API_KEY حتى يتم توليد المقال تلقائيًا.');
         }
 
@@ -29,7 +29,7 @@ class AiArticleDraftService
                 ->withMaxTokens($this->maxTokens($input['length'] ?? 'medium'))
                 ->usingTemperature(0.32)
                 ->withClientOptions([
-                    'timeout' => (int) env('PRISM_REQUEST_TIMEOUT', 120),
+                    'timeout' => (int) config('prism.request_timeout', 120),
                 ])
                 ->generate();
 
@@ -277,6 +277,6 @@ CONTENT;
 
     private function model(): string
     {
-        return env('OPENROUTER_MODEL', 'tngtech/deepseek-r1t2-chimera:free');
+        return config('prism.providers.openrouter.model') ?: 'tngtech/deepseek-r1t2-chimera:free';
     }
 }

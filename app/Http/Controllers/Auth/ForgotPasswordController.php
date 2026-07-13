@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Mail;
 
 class ForgotPasswordController extends Controller
 {
+    /**
+     * أقصى عدد محاولات خاطئة لرمز التحقق قبل ما نلغي الرمز
+     * ونطلب من المستخدم يطلب رمز جديد (حماية من التخمين العشوائي).
+     */
+    private const MAX_VERIFY_ATTEMPTS = 5;
+
     public function show(Request $request)
     {
         $currentStep = (int) $request->query('step', 1);
@@ -96,6 +102,19 @@ class ForgotPasswordController extends Controller
 
         if (!Hash::check($request->code, $reset->code)) {
             $reset->increment('attempts');
+
+            if ($reset->attempts >= self::MAX_VERIFY_ATTEMPTS) {
+                // تجاوز الحد المسموح من المحاولات: نلغي الرمز الحالي بالكامل
+                // بدل ما نترك فرصة لتخمينه لباقي مدة الصلاحية (10 دقائق).
+                $reset->update(['used_at' => now()]);
+
+                return redirect()->route('forgot-password', [
+                    'step' => 1,
+                    'email' => $request->email,
+                ])->withErrors([
+                    'code' => 'تجاوزت عدد المحاولات المسموح بها. الرجاء طلب رمز جديد.',
+                ]);
+            }
 
             return redirect()->route('forgot-password', [
                 'step' => 2,

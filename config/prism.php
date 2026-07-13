@@ -6,7 +6,7 @@ return [
         'middleware' => [],
         'enabled' => env('PRISM_SERVER_ENABLED', false),
     ],
-    'request_timeout' => env('PRISM_REQUEST_TIMEOUT', 30), // The timeout for requests in seconds.
+    'request_timeout' => env('PRISM_REQUEST_TIMEOUT', 120), // The timeout for requests in seconds.
     'providers' => [
         'openai' => [
             'url' => env('OPENAI_URL', 'https://api.openai.com/v1'),
@@ -56,6 +56,7 @@ return [
         'openrouter' => [
                 'api_key' => env('OPENROUTER_API_KEY'),
                 'url' => env('OPENROUTER_URL', 'https://openrouter.ai/api/v1'),
+                'model' => env('OPENROUTER_MODEL'),
                 'site' => [
                     'http_referer' => env('OPENROUTER_SITE_HTTP_REFERER'),
                     'x_title' => env('OPENROUTER_SITE_X_TITLE'),

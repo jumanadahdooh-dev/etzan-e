@@ -76,19 +76,6 @@ Route::post('/quiz/analyze', [QuizController::class, 'analyze'])
 
 /*
 |--------------------------------------------------------------------------
-| Test Error Pages
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/test-400', fn () => abort(400));
-Route::get('/test-401', fn () => abort(401));
-Route::get('/test-402', fn () => abort(402));
-Route::get('/test-403', fn () => abort(403));
-Route::get('/test-404', fn () => abort(404));
-Route::get('/test-500', fn () => abort(500));
-
-/*
-|--------------------------------------------------------------------------
 | Auth Routes
 |--------------------------------------------------------------------------
 */
@@ -117,17 +104,19 @@ Route::post('/logout', [AuthController::class, 'logout'])
 Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])
     ->name('forgot-password');
 
-Route::post('/forgot-password/send-code', [ForgotPasswordController::class, 'sendCode'])
-    ->name('forgot-password.send-code');
+Route::middleware('throttle:6,1')->group(function () {
+    Route::post('/forgot-password/send-code', [ForgotPasswordController::class, 'sendCode'])
+        ->name('forgot-password.send-code');
 
-Route::post('/forgot-password/verify-code', [ForgotPasswordController::class, 'verifyCode'])
-    ->name('forgot-password.verify-code');
+    Route::post('/forgot-password/verify-code', [ForgotPasswordController::class, 'verifyCode'])
+        ->name('forgot-password.verify-code');
 
-Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword'])
-    ->name('forgot-password.reset');
+    Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword'])
+        ->name('forgot-password.reset');
 
-Route::post('/forgot-password/resend-code', [ForgotPasswordController::class, 'resendCode'])
-    ->name('forgot-password.resend-code');
+    Route::post('/forgot-password/resend-code', [ForgotPasswordController::class, 'resendCode'])
+        ->name('forgot-password.resend-code');
+});
 
 Route::get('/forgot-password/direct-setup', [ForgotPasswordController::class, 'directSetup'])
     ->middleware('signed')
@@ -216,6 +205,7 @@ Route::prefix('admin')
             ->except(['show', 'create']);
 
         Route::post('/articles/ai-generate', [AdminArticleController::class, 'generateAiDraft'])
+            ->middleware('throttle:10,1')
             ->name('articles.ai-generate');
 
         Route::resource('articles', AdminArticleController::class)
@@ -281,7 +271,7 @@ Route::prefix('admin')
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth'])
+Route::middleware(['auth', 'patient'])
     ->prefix('patient')
     ->name('patient.')
     ->group(function () {
@@ -454,6 +444,7 @@ Route::middleware(['auth'])
                 ->name('ai-chat.show');
 
             Route::post('/ai-chat/send', [AiChatController::class, 'send'])
+                ->middleware('throttle:15,1')
                 ->name('ai-chat.send');
 
             Route::delete('/ai-chat/{conversation}', [AiChatController::class, 'destroy'])
@@ -465,6 +456,7 @@ Route::middleware(['auth'])
             ->name('calories');
 
         Route::post('/calories/analyze', [PatientHomeController::class, 'analyzeMeal'])
+            ->middleware('throttle:15,1')
             ->name('calories.analyze');
 
         Route::post('/calories/confirm', [PatientHomeController::class, 'confirmMeal'])
@@ -494,12 +486,6 @@ Route::middleware(['auth'])
 
 
 
-Route::get('/check-phpinfo', function () {
-    phpinfo();
-    exit;
-});
-
-// Add this block inside routes/web.php:
 Route::prefix('doctor')
     ->name('doctor.')
     ->middleware(['auth', 'doctor'])

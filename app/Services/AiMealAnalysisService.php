@@ -24,7 +24,7 @@ class AiMealAnalysisService
             );
         }
 
-        if (! env('OPENROUTER_API_KEY')) {
+        if (! config('prism.providers.openrouter.api_key')) {
             return $this->fallbackResult(
                 mealType: $mealType,
                 description: $description,
@@ -42,7 +42,7 @@ class AiMealAnalysisService
                 ->withMaxTokens(700)
                 ->usingTemperature(0.2)
                 ->withClientOptions([
-                    'timeout' => (int) env('PRISM_REQUEST_TIMEOUT', 120),
+                    'timeout' => (int) config('prism.request_timeout', 120),
                 ])
                 ->generate();
 
@@ -211,6 +211,6 @@ PROMPT;
 
     private function model(): string
     {
-        return env('OPENROUTER_MODEL', 'baidu/cobuddy:free');
+        return config('prism.providers.openrouter.model') ?: 'baidu/cobuddy:free';
     }
 }

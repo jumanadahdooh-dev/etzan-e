@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\AdminMiddleware::class,
             'doctor' => \App\Http\Middleware\DoctorMiddleware::class,
+            'patient' => \App\Http\Middleware\PatientMiddleware::class,
         ]);
 
         $middleware->append(\App\Http\Middleware\CheckMaintenanceMode::class);

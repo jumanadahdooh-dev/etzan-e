@@ -40,12 +40,8 @@ class DoctorDashboardController extends Controller
 
         // لو حساب الطبيب ما إله ملف طبيب مكتمل لسا (حالة حافة حقيقية، مش وهمية)
         if (!$doctorProfile) {
-            $weeklyMealsCount = Schema::hasTable('patient_meals')
-                    ? \App\Models\PatientMeal::where('doctor_profile_id', $doctorProfile->id)
-                        ->where('meal_date', '>=', now()->subDays(7))
-                        ->count()
-                    : 0;
-
+            // ما في ملف طبيب بعد، فمنطقياً ما في وجبات مرتبطة فيه لنعدّها
+            $weeklyMealsCount = 0;
 
             return view('doctor.dashboard', [
                 'pageTitle' => $this->pages['dashboard'],
