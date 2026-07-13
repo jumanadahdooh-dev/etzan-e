@@ -51,7 +51,11 @@ return new class extends Migration
             }
         });
 
-        DB::statement("ALTER TABLE articles MODIFY status ENUM('draft', 'pending_review', 'published', 'rejected') NOT NULL DEFAULT 'draft'");
+        // MySQL فقط: SQLite (المستخدمة بالاختبارات) ما بتدعم صيغة MODIFY هاي أصلاً،
+        // وما في داعي لها لأنه العمود أصلاً string مش enum صارم على SQLite.
+        if (DB::connection()->getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE articles MODIFY status ENUM('draft', 'pending_review', 'published', 'rejected') NOT NULL DEFAULT 'draft'");
+        }
     }
 
     public function down(): void
@@ -86,6 +90,8 @@ return new class extends Migration
             }
         });
 
-        DB::statement("ALTER TABLE articles MODIFY status ENUM('draft', 'published') NOT NULL DEFAULT 'draft'");
+        if (DB::connection()->getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE articles MODIFY status ENUM('draft', 'published') NOT NULL DEFAULT 'draft'");
+        }
     }
 };
