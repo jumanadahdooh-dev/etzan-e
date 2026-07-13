@@ -1,0 +1,149 @@
+:root {
+  --primary-bg: #F9F5F0;
+  --secondary-bg: #F1E8D9;
+  --primary-action: #7A4A35;
+  --heading-text: #4A2C1D;
+  --body-text: #2D2D2D;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #F9F5F0;
+  color: #2D2D2D;
+}
+
+.contact-page {
+  width: 90%;
+  margin: auto;
+}
+
+h1 {
+  color: #4A2C1D;
+  margin-bottom: 20px;
+}
+
+/* Layout */
+.contact-container {
+  overflow: hidden;
+}
+
+/* Form */
+form {
+  width: 45%;
+  float: left;
+  background-color: #F1E8D9;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+}
+
+textarea {
+  height: 100px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #7A4A35;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/*button:hover {
+  background-color: #5f3727;
+}
+*/
+.error {
+  border: 2px solid red;
+}
+
+/* Messages */
+#formMessage {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.success {
+  color: green;
+}
+
+.fail {
+  color: red;
+}
+
+/* Map */
+.map {
+  width: 50%;
+  height: 420px;
+  float: right;
+  border: none;
+}
+
+/* ===== Dark Mode – Contact Page ===== */
+
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+/* Title */
+body.dark-mode h1 {
+  color: #f1d6c3;
+}
+
+/* Form */
+body.dark-mode form {
+  background-color: #2a2a2a;
+}
+
+/* Labels */
+body.dark-mode label {
+  color: #e0e0e0;
+}
+
+/* Inputs & Textarea */
+body.dark-mode input,
+body.dark-mode textarea {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+
+/* Placeholder (اختياري لكن مرتب) */
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #999;
+}
+
+/* Button */
+body.dark-mode button {
+  background-color: #c08a6a;
+  color: #1e1e1e;
+}
+
+/* Messages */
+body.dark-mode .success {
+  color: #6bd98b;
+}
+
+body.dark-mode .fail {
+  color: #ff6b6b;
+}
+
+/* Map Shadow */
+body.dark-mode .map {
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+

@@ -1,0 +1,1854 @@
+/* =========================================================
+   Etzan Doctor Deck - Unified Dark / Light Medical UI
+========================================================= */
+
+.docdeck-page {
+    --dd-primary: #15916f;
+    --dd-primary-2: #1d9e75;
+    --dd-primary-dark: #0f6f55;
+    --dd-secondary: #4da8da;
+    --dd-accent: #15916f;
+    --dd-warning: #f6b73c;
+
+    --dd-bg: #effaf7;
+    --dd-soft: #effaf7;
+    --dd-soft-2: #f7fbfa;
+    --dd-surface: rgba(255, 255, 255, 0.82);
+    --dd-surface-2: #f7fbfa;
+    --dd-white: #ffffff;
+
+    --dd-text: #12333f;
+    --dd-muted: #657b84;
+
+    --dd-line: rgba(19, 131, 101, 0.18);
+    --dd-line-strong: rgba(19, 51, 63, 0.09);
+
+    --dd-shadow: 0 22px 55px rgba(18, 61, 71, 0.09);
+    --dd-shadow-soft: 0 14px 35px rgba(18, 61, 71, 0.07);
+    --dd-glow: rgba(21, 145, 111, 0.15);
+
+    width: 100%;
+    display: grid;
+    gap: 22px;
+    direction: rtl;
+    color: var(--dd-text);
+    background:
+        radial-gradient(circle at 88% 3%, rgba(77, 168, 218, 0.10), transparent 34%),
+        radial-gradient(circle at 7% 18%, rgba(29, 158, 117, 0.09), transparent 35%),
+        var(--dd-bg);
+}
+
+html[data-theme="dark"] .docdeck-page,
+body[data-theme="dark"] .docdeck-page,
+body.dark .docdeck-page,
+body.dark-mode .docdeck-page,
+[data-theme="dark"] .docdeck-page {
+    --dd-primary: #15916f;
+    --dd-primary-2: #1d9e75;
+    --dd-primary-dark: #0f6f55;
+    --dd-secondary: #4da8da;
+    --dd-accent: #15916f;
+    --dd-warning: #f6b73c;
+
+    --dd-bg: #0d1d22;
+    --dd-soft: rgba(23, 68, 64, 0.38);
+    --dd-soft-2: #0d1d22;
+    --dd-surface: rgba(16, 35, 40, 0.82);
+    --dd-surface-2: #11262c;
+    --dd-white: #11262c;
+
+    --dd-text: #edf8f6;
+    --dd-muted: #a8c1c7;
+
+    --dd-line: rgba(87, 210, 178, 0.22);
+    --dd-line-strong: rgba(255, 255, 255, 0.08);
+
+    --dd-shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
+    --dd-shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.22);
+    --dd-glow: rgba(21, 145, 111, 0.20);
+
+    color: var(--dd-text);
+    background:
+        radial-gradient(circle at 88% 3%, rgba(77, 168, 218, 0.10), transparent 34%),
+        radial-gradient(circle at 7% 18%, rgba(29, 158, 117, 0.09), transparent 35%),
+        var(--dd-bg);
+}
+
+.docdeck-alert {
+    min-height: 58px;
+    padding: 13px 18px;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    line-height: 1.8;
+    box-shadow: var(--dd-shadow-soft);
+    border: 1px solid var(--dd-line);
+    background: var(--dd-surface);
+}
+
+.docdeck-alert svg {
+    width: 23px;
+    height: 23px;
+}
+
+.docdeck-alert-success {
+    color: var(--dd-primary-dark);
+}
+
+.docdeck-alert-error {
+    color: #ef4444;
+}
+
+.docdeck-kicker,
+.docdeck-card-head span {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--dd-primary);
+    font-size: 12px;
+    font-weight: 950;
+    letter-spacing: .45px;
+    text-transform: uppercase;
+}
+
+/* Empty */
+.docdeck-empty {
+    min-height: 620px;
+    padding: 46px;
+    border-radius: 42px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    background:
+        radial-gradient(circle at 20% 15%, var(--dd-glow), transparent 28%),
+        radial-gradient(circle at 84% 12%, rgba(77, 168, 218, 0.10), transparent 32%),
+        var(--dd-surface);
+    border: 1px solid var(--dd-line);
+    box-shadow: var(--dd-shadow);
+}
+
+.docdeck-empty-orb {
+    width: 132px;
+    height: 132px;
+    border-radius: 38px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+    box-shadow: 0 24px 60px var(--dd-glow);
+    margin-bottom: 22px;
+}
+
+.docdeck-empty-orb svg {
+    width: 58px;
+    height: 58px;
+}
+
+.docdeck-empty h1 {
+    margin: 12px 0;
+    font-size: clamp(42px, 6vw, 76px);
+    line-height: 1.05;
+    font-weight: 950;
+    letter-spacing: -1.5px;
+}
+
+.docdeck-empty p {
+    max-width: 650px;
+    color: var(--dd-muted);
+    line-height: 2;
+    font-weight: 800;
+}
+
+.docdeck-main-btn {
+    min-height: 56px;
+    margin-top: 22px;
+    padding: 0 24px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 950;
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+    box-shadow: 0 18px 36px var(--dd-glow);
+}
+
+/* Hero */
+.docdeck-hero {
+    position: relative;
+    min-height: 520px;
+    padding: 34px;
+    border-radius: 42px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 250px;
+    gap: 30px;
+    align-items: stretch;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 20% 10%, var(--dd-glow), transparent 30%),
+        radial-gradient(circle at 86% 22%, rgba(77, 168, 218, 0.10), transparent 34%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.07), rgba(77, 168, 218, 0.05)),
+        var(--dd-surface);
+    border: 1px solid var(--dd-line-strong);
+    box-shadow: var(--dd-shadow);
+}
+
+html[data-theme="dark"] .docdeck-hero,
+body[data-theme="dark"] .docdeck-hero,
+body.dark .docdeck-hero {
+    background:
+        radial-gradient(circle at 72% 18%, rgba(52, 228, 196, 0.18), transparent 30%),
+        radial-gradient(circle at 20% 70%, rgba(56, 168, 255, 0.08), transparent 34%),
+        linear-gradient(135deg, rgba(7, 19, 31, 0.94), rgba(8, 28, 42, 0.95));
+}
+
+.docdeck-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.022) 1px, transparent 1px);
+    background-size: 46px 46px;
+    opacity: .35;
+    pointer-events: none;
+}
+
+.docdeck-hero::after {
+    content: "";
+    position: absolute;
+    width: 520px;
+    height: 520px;
+    border-radius: 999px;
+    left: -220px;
+    bottom: -260px;
+    background: radial-gradient(circle, var(--dd-glow), transparent 68%);
+    pointer-events: none;
+}
+
+.docdeck-hero-content,
+.docdeck-hero-side {
+    position: relative;
+    z-index: 1;
+}
+
+.docdeck-hero-content {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    min-width: 0;
+}
+
+/* Clean doctor image - no colored frame */
+.docdeck-photo {
+    position: relative;
+    width: 250px;
+    height: 350px;
+    flex: 0 0 250px;
+    border-radius: 34px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,.70), transparent 34%),
+        linear-gradient(135deg, rgba(29,158,117,.08), rgba(77,168,218,.08)),
+        var(--dd-surface-2);
+    border: 1px solid var(--dd-line);
+    box-shadow:
+        0 24px 60px rgba(18, 61, 71, 0.12),
+        inset 0 1px 0 rgba(255,255,255,.55);
+}
+
+html[data-theme="dark"] .docdeck-photo,
+body[data-theme="dark"] .docdeck-photo,
+body.dark .docdeck-photo {
+    box-shadow:
+        0 26px 70px rgba(0,0,0,.28),
+        inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.docdeck-photo::after {
+    content: "";
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 46%;
+    height: 30%;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(255,255,255,.45), transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.docdeck-photo img,
+.docdeck-photo-fallback {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.docdeck-photo-fallback {
+    display: grid;
+    place-items: center;
+    color: var(--dd-primary);
+}
+
+.docdeck-photo-fallback svg {
+    width: 72px;
+    height: 72px;
+}
+
+.docdeck-photo-mark {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    width: 46px;
+    height: 46px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+    box-shadow: 0 14px 28px var(--dd-glow);
+    z-index: 3;
+}
+
+.docdeck-doctor-copy {
+    min-width: 0;
+}
+
+.docdeck-status-pill {
+    min-height: 38px;
+    padding: 0 14px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--dd-primary);
+    background: rgba(29, 158, 117, .10);
+    border: 1px solid rgba(29, 158, 117, .18);
+    font-size: 12px;
+    font-weight: 950;
+}
+
+html[data-theme="dark"] .docdeck-status-pill,
+body[data-theme="dark"] .docdeck-status-pill,
+body.dark .docdeck-status-pill {
+    background: rgba(52, 228, 196, .10);
+    border-color: rgba(52, 228, 196, .16);
+}
+
+.docdeck-doctor-copy h1 {
+    margin: 18px 0 8px;
+    font-size: clamp(46px, 5.2vw, 82px);
+    line-height: 1.04;
+    font-weight: 950;
+    letter-spacing: -1.8px;
+}
+
+.docdeck-doctor-copy p {
+    margin: 0 0 24px;
+    color: var(--dd-primary);
+    font-size: 20px;
+    font-weight: 850;
+}
+
+.docdeck-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 24px;
+    max-width: 680px;
+}
+
+.docdeck-info-grid > div {
+    min-height: 58px;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    grid-template-areas:
+        "icon label"
+        "icon value";
+    column-gap: 10px;
+    align-content: center;
+    border-bottom: 1px solid var(--dd-line);
+    padding-bottom: 10px;
+}
+
+.docdeck-info-grid svg {
+    grid-area: icon;
+    width: 22px;
+    height: 22px;
+    color: var(--dd-muted);
+    align-self: center;
+}
+
+.docdeck-info-grid span {
+    grid-area: label;
+    color: var(--dd-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.docdeck-info-grid strong {
+    grid-area: value;
+    color: var(--dd-text);
+    font-size: 14px;
+    font-weight: 900;
+    overflow-wrap: anywhere;
+}
+
+/* Compact hero side */
+.docdeck-hero-side {
+    display: grid;
+    align-content: center;
+    gap: 14px;
+}
+
+.docdeck-compact-status {
+    padding: 16px;
+    border-radius: 24px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: rgba(255, 255, 255, 0.52);
+    border: 1px solid var(--dd-line);
+    backdrop-filter: blur(14px);
+}
+
+html[data-theme="dark"] .docdeck-compact-status,
+body[data-theme="dark"] .docdeck-compact-status,
+body.dark .docdeck-compact-status {
+    background: rgba(255, 255, 255, 0.055);
+    border-color: rgba(255, 255, 255, 0.10);
+}
+
+.docdeck-compact-status > svg {
+    width: 38px;
+    height: 38px;
+    padding: 9px;
+    border-radius: 15px;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+    flex: 0 0 auto;
+}
+
+.docdeck-compact-status strong {
+    display: block;
+    color: var(--dd-text);
+    font-size: 15px;
+    font-weight: 950;
+    margin-bottom: 4px;
+}
+
+.docdeck-compact-status span {
+    display: block;
+    color: var(--dd-muted);
+    font-size: 12px;
+    line-height: 1.75;
+    font-weight: 800;
+}
+
+.docdeck-hero-mini-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.docdeck-hero-mini-stats > div {
+    min-height: 86px;
+    padding: 13px;
+    border-radius: 22px;
+    display: grid;
+    align-content: center;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.46);
+    border: 1px solid var(--dd-line);
+}
+
+html[data-theme="dark"] .docdeck-hero-mini-stats > div,
+body[data-theme="dark"] .docdeck-hero-mini-stats > div,
+body.dark .docdeck-hero-mini-stats > div {
+    background: rgba(255, 255, 255, 0.055);
+    border-color: rgba(255, 255, 255, 0.10);
+}
+
+.docdeck-hero-mini-stats span {
+    color: var(--dd-muted);
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.docdeck-hero-mini-stats strong {
+    color: var(--dd-text);
+    font-size: 26px;
+    font-weight: 950;
+    line-height: 1.2;
+}
+
+.docdeck-hero-mini-stats small {
+    color: var(--dd-muted);
+    font-size: 10px;
+    font-weight: 800;
+}
+
+/* Actions */
+.docdeck-actions {
+    padding: 18px;
+    border-radius: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    background: var(--dd-surface);
+    border: 1px solid var(--dd-line);
+    box-shadow: var(--dd-shadow-soft);
+}
+
+.docdeck-action {
+    min-height: 56px;
+    border: 1px solid var(--dd-line);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--dd-text);
+    background: transparent;
+    text-decoration: none;
+    font-weight: 950;
+    cursor: pointer;
+    transition: .22s ease;
+}
+
+.docdeck-action svg {
+    width: 20px;
+    height: 20px;
+    color: var(--dd-primary);
+}
+
+.docdeck-action:hover {
+    transform: translateY(-2px);
+    background: rgba(29,158,117,.08);
+}
+
+.docdeck-action.is-primary {
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+    box-shadow: 0 16px 30px var(--dd-glow);
+}
+
+.docdeck-action.is-primary svg {
+    color: #fff;
+}
+
+.docdeck-action.is-disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+/* Bio */
+.docdeck-bio-panel {
+    position: relative;
+    padding: 30px;
+    border-radius: 34px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) 0.65fr;
+    gap: 24px;
+    align-items: stretch;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 100% 0%, var(--dd-glow), transparent 28%),
+        var(--dd-surface);
+    border: 1px solid var(--dd-line);
+    box-shadow: var(--dd-shadow-soft);
+}
+
+.docdeck-bio-panel::before {
+    content: "";
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 999px;
+    left: -120px;
+    bottom: -150px;
+    background: linear-gradient(135deg, rgba(29, 158, 117, 0.08), rgba(77, 168, 218, 0.08));
+}
+
+.docdeck-bio-main,
+.docdeck-bio-side {
+    position: relative;
+    z-index: 1;
+}
+
+.docdeck-bio-main h2 {
+    margin: 8px 0 12px;
+    color: var(--dd-text);
+    font-size: clamp(28px, 3vw, 44px);
+    line-height: 1.2;
+    font-weight: 950;
+}
+
+.docdeck-bio-main p {
+    margin: 0;
+    max-width: 950px;
+    color: var(--dd-muted);
+    font-size: 15px;
+    line-height: 2;
+    font-weight: 800;
+}
+
+.docdeck-bio-side {
+    padding: 22px;
+    border-radius: 28px;
+    display: grid;
+    align-content: center;
+    gap: 10px;
+    background: var(--dd-surface-2);
+    border: 1px solid var(--dd-line);
+}
+
+.docdeck-bio-side > svg {
+    width: 48px;
+    height: 48px;
+    padding: 11px;
+    border-radius: 18px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+    box-shadow: 0 16px 30px var(--dd-glow);
+}
+
+.docdeck-bio-side strong {
+    color: var(--dd-text);
+    font-size: 17px;
+    font-weight: 950;
+}
+
+.docdeck-bio-side span {
+    color: var(--dd-muted);
+    font-size: 13px;
+    line-height: 1.8;
+    font-weight: 800;
+}
+
+/* Cards */
+.docdeck-main-grid,
+.docdeck-lower-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.docdeck-note-card,
+.docdeck-appointment-card,
+.docdeck-nutrition-card,
+.docdeck-review-card,
+.docdeck-privacy {
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    border-radius: 32px;
+    background:
+        radial-gradient(circle at 100% 0%, var(--dd-glow), transparent 26%),
+        var(--dd-surface);
+    border: 1px solid var(--dd-line);
+    box-shadow: var(--dd-shadow-soft);
+}
+
+.docdeck-card-head {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.docdeck-card-head h2 {
+    margin: 0;
+    color: var(--dd-text);
+    font-size: clamp(24px, 2.4vw, 34px);
+    line-height: 1.25;
+    font-weight: 950;
+}
+
+.docdeck-note-card p {
+    margin: 0;
+    color: var(--dd-muted);
+    font-size: 15px;
+    line-height: 2;
+    font-weight: 800;
+}
+
+.docdeck-quote-mark {
+    position: absolute;
+    top: 78px;
+    left: 28px;
+    color: var(--dd-primary);
+    opacity: .35;
+    font-size: 78px;
+    line-height: 1;
+    font-weight: 950;
+}
+
+.docdeck-note-footer {
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--dd-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.docdeck-note-footer svg {
+    width: 38px;
+    height: 38px;
+    padding: 9px;
+    border-radius: 14px;
+    color: var(--dd-primary);
+    background: rgba(29,158,117,.10);
+}
+
+.docdeck-empty-state,
+.docdeck-date-block {
+    min-height: 150px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    gap: 8px;
+    color: var(--dd-muted);
+}
+
+.docdeck-empty-state svg {
+    width: 48px;
+    height: 48px;
+    padding: 11px;
+    border-radius: 18px;
+    color: var(--dd-primary);
+    background: rgba(29,158,117,.10);
+}
+
+.docdeck-empty-state strong,
+.docdeck-date-block strong {
+    color: var(--dd-text);
+    font-size: 19px;
+    font-weight: 950;
+}
+
+.docdeck-empty-state span,
+.docdeck-date-block span,
+.docdeck-date-block small {
+    color: var(--dd-muted);
+    line-height: 1.8;
+    font-weight: 800;
+}
+
+.docdeck-date-block strong {
+    font-size: 34px;
+}
+
+.docdeck-date-block span {
+    font-size: 28px;
+    color: var(--dd-primary);
+}
+
+/* Half nutrition gauge */
+.docdeck-half-layout {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 20px;
+    align-items: center;
+}
+
+.docdeck-half-gauge {
+    position: relative;
+    width: 220px;
+    height: 135px;
+    justify-self: center;
+}
+
+.docdeck-half-gauge svg {
+    width: 220px;
+    height: 130px;
+    overflow: visible;
+}
+
+.docdeck-half-track,
+.docdeck-half-progress {
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 18;
+}
+
+.docdeck-half-track {
+    stroke: rgba(24, 51, 59, 0.10);
+}
+
+.docdeck-half-progress {
+    stroke: var(--dd-primary);
+    filter: drop-shadow(0 8px 12px var(--dd-glow));
+}
+
+html[data-theme="dark"] .docdeck-half-track,
+body[data-theme="dark"] .docdeck-half-track,
+body.dark .docdeck-half-track {
+    stroke: rgba(255, 255, 255, 0.12);
+}
+
+.docdeck-half-content {
+    position: absolute;
+    inset: 36px 0 auto;
+    display: grid;
+    place-items: center;
+    text-align: center;
+}
+
+.docdeck-half-content strong {
+    color: var(--dd-text);
+    font-size: 32px;
+    font-weight: 950;
+    line-height: 1;
+}
+
+.docdeck-half-content span {
+    color: var(--dd-muted);
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.docdeck-half-content small {
+    margin-top: 4px;
+    color: var(--dd-primary);
+    font-size: 12px;
+    font-weight: 950;
+}
+
+.docdeck-calorie-side {
+    display: grid;
+    gap: 10px;
+}
+
+.docdeck-calorie-side > div,
+.docdeck-macro-list > div {
+    min-height: 58px;
+    padding: 12px 14px;
+    border-radius: 17px;
+    display: grid;
+    align-content: center;
+    background: var(--dd-surface-2);
+    border: 1px solid var(--dd-line);
+}
+
+.docdeck-calorie-side span,
+.docdeck-macro-list span {
+    color: var(--dd-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.docdeck-calorie-side strong,
+.docdeck-macro-list strong {
+    color: var(--dd-text);
+    font-size: 18px;
+    font-weight: 950;
+}
+
+.docdeck-calorie-placeholder {
+    min-height: 165px;
+    padding: 18px;
+    border-radius: 28px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    gap: 6px;
+    background: var(--dd-surface-2);
+    border: 1px solid var(--dd-line);
+}
+
+.docdeck-calorie-placeholder svg {
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border-radius: 17px;
+    color: var(--dd-primary);
+    background: rgba(29, 158, 117, 0.10);
+}
+
+.docdeck-calorie-placeholder strong {
+    color: var(--dd-text);
+    font-size: 15px;
+    font-weight: 950;
+}
+
+.docdeck-calorie-placeholder span {
+    color: var(--dd-muted);
+    font-size: 12px;
+    line-height: 1.7;
+    font-weight: 800;
+}
+
+.docdeck-macro-list {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.docdeck-wide-link {
+    min-height: 52px;
+    margin-top: 18px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    color: var(--dd-primary);
+    text-decoration: none;
+    font-weight: 950;
+    border: 1px solid var(--dd-line);
+    background: rgba(29,158,117,.06);
+}
+
+/* Review */
+.docdeck-review-summary {
+    margin: 0 0 18px;
+    color: var(--dd-muted);
+    line-height: 1.8;
+    font-weight: 800;
+}
+
+.docdeck-star-form {
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+}
+
+.docdeck-stars {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.docdeck-star {
+    width: 62px;
+    height: 62px;
+    border: 0;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: #83959a;
+    background: var(--dd-surface-2);
+    box-shadow: 0 12px 26px rgba(0,0,0,.06);
+    cursor: pointer;
+    transition: .18s ease;
+}
+
+.docdeck-star svg {
+    width: 32px;
+    height: 32px;
+}
+
+.docdeck-star:hover,
+.docdeck-star.is-active {
+    color: var(--dd-primary);
+    background: rgba(29, 158, 117, 0.12);
+    transform: translateY(-5px) scale(1.06);
+    box-shadow: 0 18px 34px var(--dd-glow);
+}
+
+.docdeck-star.is-active svg {
+    fill: currentColor;
+}
+
+.docdeck-star-form small {
+    color: var(--dd-muted);
+    font-weight: 850;
+}
+
+.docdeck-star-form textarea {
+    width: min(100%, 620px);
+    min-height: 110px;
+    padding: 16px;
+    border: 1px solid var(--dd-line);
+    border-radius: 22px;
+    color: var(--dd-text);
+    background: var(--dd-surface-2);
+    resize: vertical;
+    outline: none;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.8;
+}
+
+.docdeck-star-form textarea:focus {
+    border-color: var(--dd-primary);
+    box-shadow: 0 0 0 4px rgba(29,158,117,.12);
+}
+
+.docdeck-star-form button[type="submit"] {
+    min-height: 54px;
+    min-width: 220px;
+    border: 0;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+    font-weight: 950;
+    cursor: pointer;
+    box-shadow: 0 18px 34px var(--dd-glow);
+}
+
+/* Privacy */
+.docdeck-privacy {
+    min-height: 72px;
+    padding: 18px 24px;
+    border-radius: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.docdeck-privacy svg {
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+    border-radius: 14px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+}
+
+.docdeck-privacy span {
+    color: var(--dd-muted);
+    font-weight: 850;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .docdeck-hero,
+    .docdeck-bio-panel,
+    .docdeck-main-grid,
+    .docdeck-lower-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .docdeck-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .docdeck-hero-side {
+        align-content: stretch;
+    }
+
+    .docdeck-half-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 760px) {
+    .docdeck-empty,
+    .docdeck-hero,
+    .docdeck-actions,
+    .docdeck-bio-panel,
+    .docdeck-note-card,
+    .docdeck-appointment-card,
+    .docdeck-nutrition-card,
+    .docdeck-review-card {
+        padding: 20px;
+        border-radius: 28px;
+    }
+
+    .docdeck-hero-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .docdeck-photo {
+        width: 180px;
+        height: 230px;
+        flex-basis: auto;
+    }
+
+    .docdeck-doctor-copy h1 {
+        font-size: 38px;
+    }
+
+    .docdeck-info-grid,
+    .docdeck-actions,
+    .docdeck-macro-list {
+        grid-template-columns: 1fr;
+    }
+
+    .docdeck-hero-mini-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .docdeck-half-gauge,
+    .docdeck-half-gauge svg {
+        width: 190px;
+    }
+
+    .docdeck-stars {
+        gap: 7px;
+    }
+
+    .docdeck-star {
+        width: 46px;
+        height: 46px;
+    }
+
+    .docdeck-star svg {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+
+
+/* =========================================================
+   My Doctor Dark Mode - Etzan Black / Green
+   نفس ألوان باقي صفحات المريض
+========================================================= */
+
+html[data-theme="dark"] .docdeck-page,
+body[data-theme="dark"] .docdeck-page,
+body.dark .docdeck-page,
+body.dark-mode .docdeck-page {
+    --dd-bg: #0d1d22;
+    --dd-surface: rgba(15, 29, 25, 0.94);
+    --dd-surface-2: rgba(21, 38, 33, 0.94);
+    --dd-text: #edf8f6;
+    --dd-muted: #a8c1c7;
+
+    --dd-primary: #1d9e75;
+    --dd-primary-dark: #0f6f55;
+    --dd-secondary: #1d9e75;
+    --dd-accent: #1d9e75;
+
+    --dd-line: rgba(255, 255, 255, 0.08);
+    --dd-line-strong: rgba(255, 255, 255, 0.13);
+
+    --dd-shadow: 0 30px 90px rgba(0, 0, 0, 0.42);
+    --dd-shadow-soft: 0 18px 46px rgba(0, 0, 0, 0.28);
+    --dd-glow: rgba(29, 158, 117, 0.20);
+
+    color: var(--dd-text);
+}
+
+/* خلفية الهيرو والكروت */
+html[data-theme="dark"] .docdeck-hero,
+html[data-theme="dark"] .docdeck-actions,
+html[data-theme="dark"] .docdeck-bio-panel,
+html[data-theme="dark"] .docdeck-note-card,
+html[data-theme="dark"] .docdeck-appointment-card,
+html[data-theme="dark"] .docdeck-nutrition-card,
+html[data-theme="dark"] .docdeck-review-card,
+html[data-theme="dark"] .docdeck-privacy,
+html[data-theme="dark"] .docdeck-alert,
+body[data-theme="dark"] .docdeck-hero,
+body[data-theme="dark"] .docdeck-actions,
+body[data-theme="dark"] .docdeck-bio-panel,
+body[data-theme="dark"] .docdeck-note-card,
+body[data-theme="dark"] .docdeck-appointment-card,
+body[data-theme="dark"] .docdeck-nutrition-card,
+body[data-theme="dark"] .docdeck-review-card,
+body[data-theme="dark"] .docdeck-privacy,
+body[data-theme="dark"] .docdeck-alert,
+body.dark .docdeck-hero,
+body.dark .docdeck-actions,
+body.dark .docdeck-bio-panel,
+body.dark .docdeck-note-card,
+body.dark .docdeck-appointment-card,
+body.dark .docdeck-nutrition-card,
+body.dark .docdeck-review-card,
+body.dark .docdeck-privacy,
+body.dark .docdeck-alert,
+body.dark-mode .docdeck-hero,
+body.dark-mode .docdeck-actions,
+body.dark-mode .docdeck-bio-panel,
+body.dark-mode .docdeck-note-card,
+body.dark-mode .docdeck-appointment-card,
+body.dark-mode .docdeck-nutrition-card,
+body.dark-mode .docdeck-review-card,
+body.dark-mode .docdeck-privacy,
+body.dark-mode .docdeck-alert {
+    background:
+        radial-gradient(circle at 88% 10%, rgba(29, 158, 117, 0.12), transparent 30%),
+        linear-gradient(135deg, rgba(15, 29, 25, 0.96), rgba(7, 19, 15, 0.98)) !important;
+    border-color: var(--dd-line) !important;
+    box-shadow: var(--dd-shadow-soft) !important;
+}
+
+/* الهيرو يكون أفخم شوية */
+html[data-theme="dark"] .docdeck-hero,
+body[data-theme="dark"] .docdeck-hero,
+body.dark .docdeck-hero,
+body.dark-mode .docdeck-hero {
+    background:
+        radial-gradient(circle at 72% 18%, rgba(29, 158, 117, 0.18), transparent 32%),
+        radial-gradient(circle at 18% 76%, rgba(29, 158, 117, 0.08), transparent 36%),
+        linear-gradient(135deg, #0d1c18, #0d1d22) !important;
+}
+
+/* الصورة بدون إطار ملون */
+html[data-theme="dark"] .docdeck-photo,
+body[data-theme="dark"] .docdeck-photo,
+body.dark .docdeck-photo,
+body.dark-mode .docdeck-photo {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.10), transparent 34%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.07), rgba(255, 255, 255, 0.03)),
+        #11262c !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow:
+        0 28px 70px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.07) !important;
+}
+
+/* الصناديق الداخلية */
+html[data-theme="dark"] .docdeck-compact-status,
+html[data-theme="dark"] .docdeck-hero-mini-stats > div,
+html[data-theme="dark"] .docdeck-bio-side,
+html[data-theme="dark"] .docdeck-empty-state,
+html[data-theme="dark"] .docdeck-date-block,
+html[data-theme="dark"] .docdeck-calorie-side > div,
+html[data-theme="dark"] .docdeck-macro-list > div,
+html[data-theme="dark"] .docdeck-calorie-placeholder,
+html[data-theme="dark"] .docdeck-star-form textarea,
+html[data-theme="dark"] .docdeck-star,
+body[data-theme="dark"] .docdeck-compact-status,
+body[data-theme="dark"] .docdeck-hero-mini-stats > div,
+body[data-theme="dark"] .docdeck-bio-side,
+body[data-theme="dark"] .docdeck-empty-state,
+body[data-theme="dark"] .docdeck-date-block,
+body[data-theme="dark"] .docdeck-calorie-side > div,
+body[data-theme="dark"] .docdeck-macro-list > div,
+body[data-theme="dark"] .docdeck-calorie-placeholder,
+body[data-theme="dark"] .docdeck-star-form textarea,
+body[data-theme="dark"] .docdeck-star,
+body.dark .docdeck-compact-status,
+body.dark .docdeck-hero-mini-stats > div,
+body.dark .docdeck-bio-side,
+body.dark .docdeck-empty-state,
+body.dark .docdeck-date-block,
+body.dark .docdeck-calorie-side > div,
+body.dark .docdeck-macro-list > div,
+body.dark .docdeck-calorie-placeholder,
+body.dark .docdeck-star-form textarea,
+body.dark .docdeck-star,
+body.dark-mode .docdeck-compact-status,
+body.dark-mode .docdeck-hero-mini-stats > div,
+body.dark-mode .docdeck-bio-side,
+body.dark-mode .docdeck-empty-state,
+body.dark-mode .docdeck-date-block,
+body.dark-mode .docdeck-calorie-side > div,
+body.dark-mode .docdeck-macro-list > div,
+body.dark-mode .docdeck-calorie-placeholder,
+body.dark-mode .docdeck-star-form textarea,
+body.dark-mode .docdeck-star {
+    background: rgba(255, 255, 255, 0.045) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* النصوص */
+html[data-theme="dark"] .docdeck-page h1,
+html[data-theme="dark"] .docdeck-page h2,
+html[data-theme="dark"] .docdeck-page h3,
+html[data-theme="dark"] .docdeck-page strong,
+body[data-theme="dark"] .docdeck-page h1,
+body[data-theme="dark"] .docdeck-page h2,
+body[data-theme="dark"] .docdeck-page h3,
+body[data-theme="dark"] .docdeck-page strong,
+body.dark .docdeck-page h1,
+body.dark .docdeck-page h2,
+body.dark .docdeck-page h3,
+body.dark .docdeck-page strong,
+body.dark-mode .docdeck-page h1,
+body.dark-mode .docdeck-page h2,
+body.dark-mode .docdeck-page h3,
+body.dark-mode .docdeck-page strong {
+    color: #edf8f6 !important;
+}
+
+html[data-theme="dark"] .docdeck-page p,
+html[data-theme="dark"] .docdeck-page span,
+html[data-theme="dark"] .docdeck-page small,
+body[data-theme="dark"] .docdeck-page p,
+body[data-theme="dark"] .docdeck-page span,
+body[data-theme="dark"] .docdeck-page small,
+body.dark .docdeck-page p,
+body.dark .docdeck-page span,
+body.dark .docdeck-page small,
+body.dark-mode .docdeck-page p,
+body.dark-mode .docdeck-page span,
+body.dark-mode .docdeck-page small {
+    color: #a8c1c7;
+}
+
+/* الأخضر فقط للأشياء المهمة */
+html[data-theme="dark"] .docdeck-kicker,
+html[data-theme="dark"] .docdeck-card-head span,
+html[data-theme="dark"] .docdeck-doctor-copy p,
+html[data-theme="dark"] .docdeck-action svg,
+html[data-theme="dark"] .docdeck-wide-link,
+html[data-theme="dark"] .docdeck-half-content small,
+body[data-theme="dark"] .docdeck-kicker,
+body[data-theme="dark"] .docdeck-card-head span,
+body[data-theme="dark"] .docdeck-doctor-copy p,
+body[data-theme="dark"] .docdeck-action svg,
+body[data-theme="dark"] .docdeck-wide-link,
+body[data-theme="dark"] .docdeck-half-content small,
+body.dark .docdeck-kicker,
+body.dark .docdeck-card-head span,
+body.dark .docdeck-doctor-copy p,
+body.dark .docdeck-action svg,
+body.dark .docdeck-wide-link,
+body.dark .docdeck-half-content small,
+body.dark-mode .docdeck-kicker,
+body.dark-mode .docdeck-card-head span,
+body.dark-mode .docdeck-doctor-copy p,
+body.dark-mode .docdeck-action svg,
+body.dark-mode .docdeck-wide-link,
+body.dark-mode .docdeck-half-content small {
+    color: #1d9e75 !important;
+}
+
+/* الأزرار الرئيسية */
+html[data-theme="dark"] .docdeck-action.is-primary,
+html[data-theme="dark"] .docdeck-main-btn,
+html[data-theme="dark"] .docdeck-star-form button[type="submit"],
+body[data-theme="dark"] .docdeck-action.is-primary,
+body[data-theme="dark"] .docdeck-main-btn,
+body[data-theme="dark"] .docdeck-star-form button[type="submit"],
+body.dark .docdeck-action.is-primary,
+body.dark .docdeck-main-btn,
+body.dark .docdeck-star-form button[type="submit"],
+body.dark-mode .docdeck-action.is-primary,
+body.dark-mode .docdeck-main-btn,
+body.dark-mode .docdeck-star-form button[type="submit"] {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #1d9e75, #0f6f55) !important;
+    border-color: transparent !important;
+    box-shadow: 0 18px 34px rgba(29, 158, 117, 0.22) !important;
+}
+
+/* الأيقونات المربعة */
+html[data-theme="dark"] .docdeck-photo-mark,
+html[data-theme="dark"] .docdeck-compact-status > svg,
+html[data-theme="dark"] .docdeck-bio-side > svg,
+html[data-theme="dark"] .docdeck-privacy svg,
+html[data-theme="dark"] .docdeck-empty-orb,
+body[data-theme="dark"] .docdeck-photo-mark,
+body[data-theme="dark"] .docdeck-compact-status > svg,
+body[data-theme="dark"] .docdeck-bio-side > svg,
+body[data-theme="dark"] .docdeck-privacy svg,
+body[data-theme="dark"] .docdeck-empty-orb,
+body.dark .docdeck-photo-mark,
+body.dark .docdeck-compact-status > svg,
+body.dark .docdeck-bio-side > svg,
+body.dark .docdeck-privacy svg,
+body.dark .docdeck-empty-orb,
+body.dark-mode .docdeck-photo-mark,
+body.dark-mode .docdeck-compact-status > svg,
+body.dark-mode .docdeck-bio-side > svg,
+body.dark-mode .docdeck-privacy svg,
+body.dark-mode .docdeck-empty-orb {
+    background: linear-gradient(135deg, #1d9e75, #0f6f55) !important;
+    box-shadow: 0 14px 28px rgba(29, 158, 117, 0.22) !important;
+}
+
+/* نصف دائرة السعرات */
+html[data-theme="dark"] .docdeck-half-track,
+body[data-theme="dark"] .docdeck-half-track,
+body.dark .docdeck-half-track,
+body.dark-mode .docdeck-half-track {
+    stroke: rgba(255, 255, 255, 0.12);
+}
+
+html[data-theme="dark"] .docdeck-half-progress,
+body[data-theme="dark"] .docdeck-half-progress,
+body.dark .docdeck-half-progress,
+body.dark-mode .docdeck-half-progress {
+    stroke: #1d9e75;
+    filter: drop-shadow(0 8px 12px rgba(29, 158, 117, 0.20));
+}
+
+/* النجوم */
+html[data-theme="dark"] .docdeck-star:hover,
+html[data-theme="dark"] .docdeck-star.is-active,
+body[data-theme="dark"] .docdeck-star:hover,
+body[data-theme="dark"] .docdeck-star.is-active,
+body.dark .docdeck-star:hover,
+body.dark .docdeck-star.is-active,
+body.dark-mode .docdeck-star:hover,
+body.dark-mode .docdeck-star.is-active {
+    color: #1d9e75 !important;
+    background: rgba(29, 158, 117, 0.13) !important;
+    box-shadow: 0 18px 34px rgba(29, 158, 117, 0.18) !important;
+}
+
+/* =========================================================
+   FINAL OVERRIDE - Appointments Palette for Every Element
+   لايت ودارك بنفس روح صفحة المواعيد
+========================================================= */
+
+/* Light layer */
+.docdeck-page {
+    color: var(--dd-text) !important;
+}
+
+.docdeck-empty,
+.docdeck-hero,
+.docdeck-actions,
+.docdeck-bio-panel,
+.docdeck-note-card,
+.docdeck-appointment-card,
+.docdeck-nutrition-card,
+.docdeck-review-card,
+.docdeck-privacy,
+.docdeck-alert {
+    background:
+        radial-gradient(circle at 88% 3%, rgba(77, 168, 218, 0.10), transparent 34%),
+        radial-gradient(circle at 7% 18%, rgba(29, 158, 117, 0.09), transparent 35%),
+        var(--dd-surface) !important;
+    border: 1px solid var(--dd-line-strong) !important;
+    color: var(--dd-text) !important;
+    box-shadow: var(--dd-shadow-soft) !important;
+}
+
+.docdeck-compact-status,
+.docdeck-hero-mini-stats > div,
+.docdeck-bio-side,
+.docdeck-empty-state,
+.docdeck-date-block,
+.docdeck-calorie-side > div,
+.docdeck-macro-list > div,
+.docdeck-calorie-placeholder,
+.docdeck-star-form textarea,
+.docdeck-star,
+.docdeck-photo,
+.docdeck-action,
+.docdeck-wide-link {
+    background: var(--dd-surface-2) !important;
+    border-color: var(--dd-line-strong) !important;
+    color: var(--dd-text) !important;
+}
+
+.docdeck-page h1,
+.docdeck-page h2,
+.docdeck-page h3,
+.docdeck-page h4,
+.docdeck-page strong {
+    color: var(--dd-text) !important;
+}
+
+.docdeck-page p,
+.docdeck-page span,
+.docdeck-page small,
+.docdeck-page label {
+    color: var(--dd-muted);
+}
+
+.docdeck-kicker,
+.docdeck-card-head span,
+.docdeck-doctor-copy p,
+.docdeck-action svg,
+.docdeck-wide-link,
+.docdeck-half-content small,
+.docdeck-score-rating,
+.docdeck-hero-mini-stats strong,
+.docdeck-date-block span {
+    color: var(--dd-primary) !important;
+}
+
+.docdeck-main-btn,
+.docdeck-action.is-primary,
+.docdeck-star-form button[type="submit"],
+.docdeck-photo-mark,
+.docdeck-compact-status > svg,
+.docdeck-bio-side > svg,
+.docdeck-privacy svg,
+.docdeck-empty-orb {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, var(--dd-primary-2), var(--dd-primary-dark)) !important;
+    border-color: transparent !important;
+    box-shadow: 0 16px 30px rgba(21, 145, 111, 0.20) !important;
+}
+
+.docdeck-main-btn *,
+.docdeck-action.is-primary *,
+.docdeck-star-form button[type="submit"] *,
+.docdeck-photo-mark *,
+.docdeck-compact-status > svg *,
+.docdeck-bio-side > svg *,
+.docdeck-privacy svg *,
+.docdeck-empty-orb * {
+    color: #ffffff !important;
+}
+
+/* Inputs and clickable elements */
+.docdeck-star-form textarea,
+.docdeck-page input,
+.docdeck-page select,
+.docdeck-page textarea,
+.docdeck-page button {
+    border-color: var(--dd-line-strong);
+}
+
+.docdeck-star-form textarea:focus,
+.docdeck-page input:focus,
+.docdeck-page select:focus,
+.docdeck-page textarea:focus {
+    outline: none !important;
+    border-color: rgba(21, 145, 111, 0.45) !important;
+    box-shadow: 0 0 0 4px rgba(21, 145, 111, 0.12) !important;
+}
+
+.docdeck-page input::placeholder,
+.docdeck-page textarea::placeholder {
+    color: var(--dd-muted) !important;
+    opacity: 0.78;
+}
+
+/* Image card - clean, no colored frame */
+.docdeck-photo {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.42), transparent 34%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.05), rgba(77, 168, 218, 0.04)),
+        var(--dd-surface-2) !important;
+    border: 1px solid var(--dd-line-strong) !important;
+    box-shadow: var(--dd-shadow-soft) !important;
+}
+
+.docdeck-photo::after {
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 70%) !important;
+}
+
+/* Nutrition gauge */
+.docdeck-half-track {
+    stroke: rgba(19, 51, 63, 0.09) !important;
+}
+
+.docdeck-half-progress {
+    stroke: var(--dd-primary) !important;
+    filter: drop-shadow(0 8px 12px var(--dd-glow)) !important;
+}
+
+/* Stars */
+.docdeck-star:hover,
+.docdeck-star.is-active {
+    color: var(--dd-primary) !important;
+    background: rgba(21, 145, 111, 0.12) !important;
+    box-shadow: 0 18px 34px rgba(21, 145, 111, 0.16) !important;
+}
+
+.docdeck-star.is-active svg {
+    fill: currentColor;
+}
+
+/* Dark layer */
+html[data-theme="dark"] .docdeck-page,
+body[data-theme="dark"] .docdeck-page,
+body.dark .docdeck-page,
+body.dark-mode .docdeck-page,
+[data-theme="dark"] .docdeck-page {
+    color: var(--dd-text) !important;
+}
+
+html[data-theme="dark"] .docdeck-empty,
+html[data-theme="dark"] .docdeck-hero,
+html[data-theme="dark"] .docdeck-actions,
+html[data-theme="dark"] .docdeck-bio-panel,
+html[data-theme="dark"] .docdeck-note-card,
+html[data-theme="dark"] .docdeck-appointment-card,
+html[data-theme="dark"] .docdeck-nutrition-card,
+html[data-theme="dark"] .docdeck-review-card,
+html[data-theme="dark"] .docdeck-privacy,
+html[data-theme="dark"] .docdeck-alert,
+body[data-theme="dark"] .docdeck-empty,
+body[data-theme="dark"] .docdeck-hero,
+body[data-theme="dark"] .docdeck-actions,
+body[data-theme="dark"] .docdeck-bio-panel,
+body[data-theme="dark"] .docdeck-note-card,
+body[data-theme="dark"] .docdeck-appointment-card,
+body[data-theme="dark"] .docdeck-nutrition-card,
+body[data-theme="dark"] .docdeck-review-card,
+body[data-theme="dark"] .docdeck-privacy,
+body[data-theme="dark"] .docdeck-alert,
+body.dark .docdeck-empty,
+body.dark .docdeck-hero,
+body.dark .docdeck-actions,
+body.dark .docdeck-bio-panel,
+body.dark .docdeck-note-card,
+body.dark .docdeck-appointment-card,
+body.dark .docdeck-nutrition-card,
+body.dark .docdeck-review-card,
+body.dark .docdeck-privacy,
+body.dark .docdeck-alert,
+body.dark-mode .docdeck-empty,
+body.dark-mode .docdeck-hero,
+body.dark-mode .docdeck-actions,
+body.dark-mode .docdeck-bio-panel,
+body.dark-mode .docdeck-note-card,
+body.dark-mode .docdeck-appointment-card,
+body.dark-mode .docdeck-nutrition-card,
+body.dark-mode .docdeck-review-card,
+body.dark-mode .docdeck-privacy,
+body.dark-mode .docdeck-alert,
+[data-theme="dark"] .docdeck-empty,
+[data-theme="dark"] .docdeck-hero,
+[data-theme="dark"] .docdeck-actions,
+[data-theme="dark"] .docdeck-bio-panel,
+[data-theme="dark"] .docdeck-note-card,
+[data-theme="dark"] .docdeck-appointment-card,
+[data-theme="dark"] .docdeck-nutrition-card,
+[data-theme="dark"] .docdeck-review-card,
+[data-theme="dark"] .docdeck-privacy,
+[data-theme="dark"] .docdeck-alert {
+    background:
+        radial-gradient(circle at 88% 3%, rgba(77, 168, 218, 0.10), transparent 34%),
+        radial-gradient(circle at 7% 18%, rgba(29, 158, 117, 0.09), transparent 35%),
+        var(--dd-surface) !important;
+    border-color: var(--dd-line-strong) !important;
+    box-shadow: var(--dd-shadow-soft) !important;
+}
+
+html[data-theme="dark"] .docdeck-compact-status,
+html[data-theme="dark"] .docdeck-hero-mini-stats > div,
+html[data-theme="dark"] .docdeck-bio-side,
+html[data-theme="dark"] .docdeck-empty-state,
+html[data-theme="dark"] .docdeck-date-block,
+html[data-theme="dark"] .docdeck-calorie-side > div,
+html[data-theme="dark"] .docdeck-macro-list > div,
+html[data-theme="dark"] .docdeck-calorie-placeholder,
+html[data-theme="dark"] .docdeck-star-form textarea,
+html[data-theme="dark"] .docdeck-star,
+html[data-theme="dark"] .docdeck-photo,
+html[data-theme="dark"] .docdeck-action,
+html[data-theme="dark"] .docdeck-wide-link,
+body[data-theme="dark"] .docdeck-compact-status,
+body[data-theme="dark"] .docdeck-hero-mini-stats > div,
+body[data-theme="dark"] .docdeck-bio-side,
+body[data-theme="dark"] .docdeck-empty-state,
+body[data-theme="dark"] .docdeck-date-block,
+body[data-theme="dark"] .docdeck-calorie-side > div,
+body[data-theme="dark"] .docdeck-macro-list > div,
+body[data-theme="dark"] .docdeck-calorie-placeholder,
+body[data-theme="dark"] .docdeck-star-form textarea,
+body[data-theme="dark"] .docdeck-star,
+body[data-theme="dark"] .docdeck-photo,
+body[data-theme="dark"] .docdeck-action,
+body[data-theme="dark"] .docdeck-wide-link,
+body.dark .docdeck-compact-status,
+body.dark .docdeck-hero-mini-stats > div,
+body.dark .docdeck-bio-side,
+body.dark .docdeck-empty-state,
+body.dark .docdeck-date-block,
+body.dark .docdeck-calorie-side > div,
+body.dark .docdeck-macro-list > div,
+body.dark .docdeck-calorie-placeholder,
+body.dark .docdeck-star-form textarea,
+body.dark .docdeck-star,
+body.dark .docdeck-photo,
+body.dark .docdeck-action,
+body.dark .docdeck-wide-link,
+body.dark-mode .docdeck-compact-status,
+body.dark-mode .docdeck-hero-mini-stats > div,
+body.dark-mode .docdeck-bio-side,
+body.dark-mode .docdeck-empty-state,
+body.dark-mode .docdeck-date-block,
+body.dark-mode .docdeck-calorie-side > div,
+body.dark-mode .docdeck-macro-list > div,
+body.dark-mode .docdeck-calorie-placeholder,
+body.dark-mode .docdeck-star-form textarea,
+body.dark-mode .docdeck-star,
+body.dark-mode .docdeck-photo,
+body.dark-mode .docdeck-action,
+body.dark-mode .docdeck-wide-link,
+[data-theme="dark"] .docdeck-compact-status,
+[data-theme="dark"] .docdeck-hero-mini-stats > div,
+[data-theme="dark"] .docdeck-bio-side,
+[data-theme="dark"] .docdeck-empty-state,
+[data-theme="dark"] .docdeck-date-block,
+[data-theme="dark"] .docdeck-calorie-side > div,
+[data-theme="dark"] .docdeck-macro-list > div,
+[data-theme="dark"] .docdeck-calorie-placeholder,
+[data-theme="dark"] .docdeck-star-form textarea,
+[data-theme="dark"] .docdeck-star,
+[data-theme="dark"] .docdeck-photo,
+[data-theme="dark"] .docdeck-action,
+[data-theme="dark"] .docdeck-wide-link {
+    background: var(--dd-surface-2) !important;
+    border-color: var(--dd-line-strong) !important;
+    color: var(--dd-text) !important;
+}
+
+html[data-theme="dark"] .docdeck-page h1,
+html[data-theme="dark"] .docdeck-page h2,
+html[data-theme="dark"] .docdeck-page h3,
+html[data-theme="dark"] .docdeck-page h4,
+html[data-theme="dark"] .docdeck-page strong,
+body[data-theme="dark"] .docdeck-page h1,
+body[data-theme="dark"] .docdeck-page h2,
+body[data-theme="dark"] .docdeck-page h3,
+body[data-theme="dark"] .docdeck-page h4,
+body[data-theme="dark"] .docdeck-page strong,
+body.dark .docdeck-page h1,
+body.dark .docdeck-page h2,
+body.dark .docdeck-page h3,
+body.dark .docdeck-page h4,
+body.dark .docdeck-page strong,
+body.dark-mode .docdeck-page h1,
+body.dark-mode .docdeck-page h2,
+body.dark-mode .docdeck-page h3,
+body.dark-mode .docdeck-page h4,
+body.dark-mode .docdeck-page strong,
+[data-theme="dark"] .docdeck-page h1,
+[data-theme="dark"] .docdeck-page h2,
+[data-theme="dark"] .docdeck-page h3,
+[data-theme="dark"] .docdeck-page h4,
+[data-theme="dark"] .docdeck-page strong {
+    color: var(--dd-text) !important;
+}
+
+html[data-theme="dark"] .docdeck-page p,
+html[data-theme="dark"] .docdeck-page span,
+html[data-theme="dark"] .docdeck-page small,
+html[data-theme="dark"] .docdeck-page label,
+body[data-theme="dark"] .docdeck-page p,
+body[data-theme="dark"] .docdeck-page span,
+body[data-theme="dark"] .docdeck-page small,
+body[data-theme="dark"] .docdeck-page label,
+body.dark .docdeck-page p,
+body.dark .docdeck-page span,
+body.dark .docdeck-page small,
+body.dark .docdeck-page label,
+body.dark-mode .docdeck-page p,
+body.dark-mode .docdeck-page span,
+body.dark-mode .docdeck-page small,
+body.dark-mode .docdeck-page label,
+[data-theme="dark"] .docdeck-page p,
+[data-theme="dark"] .docdeck-page span,
+[data-theme="dark"] .docdeck-page small,
+[data-theme="dark"] .docdeck-page label {
+    color: var(--dd-muted);
+}
+
+html[data-theme="dark"] .docdeck-kicker,
+html[data-theme="dark"] .docdeck-card-head span,
+html[data-theme="dark"] .docdeck-doctor-copy p,
+html[data-theme="dark"] .docdeck-action svg,
+html[data-theme="dark"] .docdeck-wide-link,
+html[data-theme="dark"] .docdeck-half-content small,
+html[data-theme="dark"] .docdeck-date-block span,
+body[data-theme="dark"] .docdeck-kicker,
+body[data-theme="dark"] .docdeck-card-head span,
+body[data-theme="dark"] .docdeck-doctor-copy p,
+body[data-theme="dark"] .docdeck-action svg,
+body[data-theme="dark"] .docdeck-wide-link,
+body[data-theme="dark"] .docdeck-half-content small,
+body[data-theme="dark"] .docdeck-date-block span,
+body.dark .docdeck-kicker,
+body.dark .docdeck-card-head span,
+body.dark .docdeck-doctor-copy p,
+body.dark .docdeck-action svg,
+body.dark .docdeck-wide-link,
+body.dark .docdeck-half-content small,
+body.dark .docdeck-date-block span,
+body.dark-mode .docdeck-kicker,
+body.dark-mode .docdeck-card-head span,
+body.dark-mode .docdeck-doctor-copy p,
+body.dark-mode .docdeck-action svg,
+body.dark-mode .docdeck-wide-link,
+body.dark-mode .docdeck-half-content small,
+body.dark-mode .docdeck-date-block span,
+[data-theme="dark"] .docdeck-kicker,
+[data-theme="dark"] .docdeck-card-head span,
+[data-theme="dark"] .docdeck-doctor-copy p,
+[data-theme="dark"] .docdeck-action svg,
+[data-theme="dark"] .docdeck-wide-link,
+[data-theme="dark"] .docdeck-half-content small,
+[data-theme="dark"] .docdeck-date-block span {
+    color: var(--dd-primary) !important;
+}
+
+html[data-theme="dark"] .docdeck-main-btn,
+html[data-theme="dark"] .docdeck-action.is-primary,
+html[data-theme="dark"] .docdeck-star-form button[type="submit"],
+html[data-theme="dark"] .docdeck-photo-mark,
+html[data-theme="dark"] .docdeck-compact-status > svg,
+html[data-theme="dark"] .docdeck-bio-side > svg,
+html[data-theme="dark"] .docdeck-privacy svg,
+html[data-theme="dark"] .docdeck-empty-orb,
+body[data-theme="dark"] .docdeck-main-btn,
+body[data-theme="dark"] .docdeck-action.is-primary,
+body[data-theme="dark"] .docdeck-star-form button[type="submit"],
+body[data-theme="dark"] .docdeck-photo-mark,
+body[data-theme="dark"] .docdeck-compact-status > svg,
+body[data-theme="dark"] .docdeck-bio-side > svg,
+body[data-theme="dark"] .docdeck-privacy svg,
+body[data-theme="dark"] .docdeck-empty-orb,
+body.dark .docdeck-main-btn,
+body.dark .docdeck-action.is-primary,
+body.dark .docdeck-star-form button[type="submit"],
+body.dark .docdeck-photo-mark,
+body.dark .docdeck-compact-status > svg,
+body.dark .docdeck-bio-side > svg,
+body.dark .docdeck-privacy svg,
+body.dark .docdeck-empty-orb,
+body.dark-mode .docdeck-main-btn,
+body.dark-mode .docdeck-action.is-primary,
+body.dark-mode .docdeck-star-form button[type="submit"],
+body.dark-mode .docdeck-photo-mark,
+body.dark-mode .docdeck-compact-status > svg,
+body.dark-mode .docdeck-bio-side > svg,
+body.dark-mode .docdeck-privacy svg,
+body.dark-mode .docdeck-empty-orb,
+[data-theme="dark"] .docdeck-main-btn,
+[data-theme="dark"] .docdeck-action.is-primary,
+[data-theme="dark"] .docdeck-star-form button[type="submit"],
+[data-theme="dark"] .docdeck-photo-mark,
+[data-theme="dark"] .docdeck-compact-status > svg,
+[data-theme="dark"] .docdeck-bio-side > svg,
+[data-theme="dark"] .docdeck-privacy svg,
+[data-theme="dark"] .docdeck-empty-orb {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, var(--dd-primary-2), var(--dd-primary-dark)) !important;
+    border-color: transparent !important;
+    box-shadow: 0 16px 30px rgba(21, 145, 111, 0.20) !important;
+}
+
+html[data-theme="dark"] .docdeck-half-track,
+body[data-theme="dark"] .docdeck-half-track,
+body.dark .docdeck-half-track,
+body.dark-mode .docdeck-half-track,
+[data-theme="dark"] .docdeck-half-track {
+    stroke: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .docdeck-half-progress,
+body[data-theme="dark"] .docdeck-half-progress,
+body.dark .docdeck-half-progress,
+body.dark-mode .docdeck-half-progress,
+[data-theme="dark"] .docdeck-half-progress {
+    stroke: var(--dd-primary) !important;
+    filter: drop-shadow(0 8px 12px var(--dd-glow)) !important;
+}
+
+html[data-theme="dark"] .docdeck-star:hover,
+html[data-theme="dark"] .docdeck-star.is-active,
+body[data-theme="dark"] .docdeck-star:hover,
+body[data-theme="dark"] .docdeck-star.is-active,
+body.dark .docdeck-star:hover,
+body.dark .docdeck-star.is-active,
+body.dark-mode .docdeck-star:hover,
+body.dark-mode .docdeck-star.is-active,
+[data-theme="dark"] .docdeck-star:hover,
+[data-theme="dark"] .docdeck-star.is-active {
+    color: var(--dd-primary) !important;
+    background: rgba(21, 145, 111, 0.14) !important;
+    box-shadow: 0 18px 34px rgba(21, 145, 111, 0.18) !important;
+}

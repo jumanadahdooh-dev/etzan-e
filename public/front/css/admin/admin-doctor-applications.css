@@ -1,0 +1,2937 @@
+/* =========================
+   ADMIN DOCTOR APPLICATIONS
+   نفس روح الداشبورد والمقالات والتخصصات
+========================= */
+
+.doctor-apps-page,
+.doctor-apps-v2-page {
+    display: grid;
+    gap: 22px;
+}
+
+/* fallback variables لو ناقصة */
+:root {
+    --surface: #ffffff;
+    --surface2: #f5fbf8;
+    --surface-2: #f5fbf8;
+
+    --text: #173530;
+    --muted: #6b8a84;
+    --text-2: #6b8a84;
+
+    --border: rgba(29, 158, 117, .15);
+
+    --green: #1D9E75;
+    --green-s: rgba(29, 158, 117, .12);
+    --green-glow: rgba(29, 158, 117, .25);
+
+    --blue: #38b8f2;
+    --blue-s: rgba(56, 184, 242, .12);
+
+    --orange: #F5A623;
+    --orange-s: rgba(245, 166, 35, .14);
+
+    --red: #ef4444;
+    --red-s: rgba(239, 68, 68, .13);
+
+    --purple: #8B5CF6;
+    --purple-s: rgba(139, 92, 246, .13);
+
+    --shadow: 0 20px 50px rgba(15, 55, 45, .09);
+    --shadow-md: 0 20px 50px rgba(15, 55, 45, .09);
+    --shadow-sm: 0 8px 24px rgba(15, 55, 45, .07);
+
+    --r-xl: 28px;
+    --r-lg: 20px;
+}
+
+html[data-theme="dark"] {
+    --surface: #132522;
+    --surface2: #192e2b;
+    --surface-2: #192e2b;
+
+    --text: #e2f5ee;
+    --muted: #7fa89f;
+    --text-2: #7fa89f;
+
+    --border: rgba(255, 255, 255, .08);
+
+    --green-s: rgba(29, 158, 117, .20);
+    --blue-s: rgba(56, 184, 242, .16);
+    --orange-s: rgba(245, 166, 35, .17);
+    --red-s: rgba(239, 68, 68, .15);
+    --purple-s: rgba(139, 92, 246, .16);
+
+    --shadow: 0 20px 55px rgba(0, 0, 0, .35);
+    --shadow-md: 0 20px 55px rgba(0, 0, 0, .35);
+    --shadow-sm: 0 8px 24px rgba(0, 0, 0, .25);
+}
+
+/* =========================
+   Toast
+========================= */
+
+.doctor-apps-toast,
+.doctor-apps-alert {
+    min-height: 52px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+}
+
+.doctor-apps-toast--success,
+.doctor-apps-alert--success {
+    background: var(--green-s);
+    color: var(--green);
+    border-color: rgba(29, 158, 117, .25);
+}
+
+/* =========================
+   Hero
+========================= */
+
+.doctor-apps-hero-v2 {
+    position: relative;
+    overflow: hidden;
+    padding: 30px;
+    border-radius: var(--r-xl);
+    background:
+        radial-gradient(circle at top right, rgba(29, 158, 117, .12), transparent 36%),
+        radial-gradient(circle at bottom left, rgba(56, 184, 242, .10), transparent 38%),
+        var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+}
+
+.doctor-apps-hero-v2::after {
+    content: "";
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    left: -70px;
+    top: -70px;
+    border-radius: 50%;
+    background: var(--green-s);
+    filter: blur(10px);
+    opacity: .75;
+}
+
+.doctor-apps-kicker-v2 {
+    position: relative;
+    z-index: 2;
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.doctor-apps-hero-v2 h1 {
+    position: relative;
+    z-index: 2;
+    margin: 10px 0 8px;
+    color: var(--text);
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1.25;
+}
+
+.doctor-apps-hero-v2 p {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    max-width: 720px;
+    color: var(--muted);
+    line-height: 1.9;
+    font-weight: 600;
+}
+
+.doctor-apps-hero-badge-v2 {
+    position: relative;
+    z-index: 2;
+    min-width: 170px;
+    padding: 18px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    box-shadow: 0 14px 32px var(--green-glow);
+    text-align: center;
+}
+
+.doctor-apps-hero-badge-v2 span {
+    display: block;
+    font-size: 12px;
+    font-weight: 800;
+    opacity: .9;
+    margin-bottom: 6px;
+}
+
+.doctor-apps-hero-badge-v2 strong {
+    display: block;
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+/* =========================
+   Status Cards
+========================= */
+
+.doctor-apps-status-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.doctor-apps-status-card-v2 {
+    min-height: 116px;
+    padding: 20px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: .25s ease;
+}
+
+.doctor-apps-status-card-v2:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+    border-color: rgba(29, 158, 117, .30);
+}
+
+.doctor-apps-status-card-v2.is-active {
+    border-color: rgba(29, 158, 117, .36);
+    background:
+        radial-gradient(circle at top right, rgba(29, 158, 117, .12), transparent 45%),
+        var(--surface);
+}
+
+.doctor-apps-status-icon-v2 {
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    background: var(--green-s);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    font-size: 22px;
+}
+
+.doctor-apps-status-card-v2.is-pending .doctor-apps-status-icon-v2 {
+    background: var(--orange-s);
+    color: var(--orange);
+}
+
+.doctor-apps-status-card-v2.is-approved .doctor-apps-status-icon-v2 {
+    background: var(--green-s);
+    color: var(--green);
+}
+
+.doctor-apps-status-card-v2.is-rejected .doctor-apps-status-icon-v2 {
+    background: var(--red-s);
+    color: var(--red);
+}
+
+.doctor-apps-status-card-v2 span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.doctor-apps-status-card-v2 strong {
+    display: block;
+    color: var(--text);
+    font-size: 28px;
+    font-weight: 900;
+    line-height: 1.1;
+}
+
+/* =========================
+   Toolbar
+========================= */
+
+.doctor-apps-toolbar-v2 {
+    padding: 18px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.doctor-apps-toolbar-form-v2 {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.doctor-apps-search-v2 {
+    flex: 1;
+    min-width: 280px;
+    height: 48px;
+    border-radius: 999px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: .25s ease;
+}
+
+.doctor-apps-search-v2:focus-within {
+    background: var(--surface);
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px var(--green-s);
+}
+
+.doctor-apps-search-v2 i {
+    color: var(--green);
+}
+
+.doctor-apps-search-v2 input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.doctor-apps-search-v2 input::placeholder {
+    color: var(--muted);
+}
+
+.doctor-apps-toolbar-actions-v2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.doctor-apps-filter-wrap-v2 {
+    position: relative;
+}
+
+.doctor-apps-tool-btn-v2 {
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: .22s ease;
+}
+
+.doctor-apps-tool-btn-v2:hover {
+    transform: translateY(-2px);
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--green-s);
+}
+
+.doctor-apps-tool-btn-v2--reset {
+    color: var(--red);
+}
+
+.doctor-apps-tool-btn-v2--reset:hover {
+    color: #fff;
+    border-color: var(--red);
+    background: var(--red);
+}
+
+.doctor-apps-popover-v2 {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    width: 320px;
+    max-width: calc(100vw - 32px);
+    padding: 16px;
+    border-radius: 22px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(.98);
+    transform-origin: top left;
+    transition: .22s ease;
+}
+
+.doctor-apps-popover-v2.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.doctor-apps-popover-head-v2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--green);
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+
+.doctor-apps-popover-list-v2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 230px;
+    overflow-y: auto;
+}
+
+.doctor-apps-popover-chip-v2 {
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    transition: .22s ease;
+}
+
+.doctor-apps-popover-chip-v2:hover,
+.doctor-apps-popover-chip-v2.is-active {
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--green-s);
+}
+
+/* =========================
+   Results
+========================= */
+
+.doctor-apps-results-v2 {
+    padding: 28px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.doctor-apps-results-head-v2 {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.doctor-apps-results-head-v2 span {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-apps-results-head-v2 h2 {
+    margin: 7px 0 5px;
+    color: var(--text);
+    font-size: 26px;
+    font-weight: 900;
+}
+
+.doctor-apps-results-head-v2 p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.doctor-apps-results-count-v2 {
+    min-height: 46px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--green-s);
+    border: 1px solid rgba(29, 158, 117, .22);
+    color: var(--green);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.doctor-apps-results-count-v2 strong {
+    font-size: 20px;
+}
+
+.doctor-apps-list-v2 {
+    display: grid;
+    gap: 14px;
+}
+
+/* =========================
+   Application Card
+========================= */
+
+.doctor-app-card-v2 {
+    position: relative;
+    overflow: hidden;
+    padding: 18px;
+    border-radius: 24px;
+    background:
+        radial-gradient(circle at top right, rgba(29, 158, 117, .07), transparent 38%),
+        var(--surface2);
+    border: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+    transition: .25s ease;
+}
+
+.doctor-app-card-v2:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: rgba(29, 158, 117, .30);
+}
+
+.doctor-app-card-v2::before {
+    content: "";
+    position: absolute;
+    top: 18px;
+    bottom: 18px;
+    right: 0;
+    width: 4px;
+    border-radius: 999px 0 0 999px;
+    background: var(--green);
+}
+
+.doctor-app-card-v2--pending::before {
+    background: var(--orange);
+}
+
+.doctor-app-card-v2--approved::before {
+    background: var(--green);
+}
+
+.doctor-app-card-v2--rejected::before {
+    background: var(--red);
+}
+
+.doctor-app-card-v2__main {
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.doctor-app-avatar-v2 {
+    width: 66px;
+    height: 66px;
+    border-radius: 22px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    font-size: 24px;
+    font-weight: 900;
+    box-shadow: 0 12px 26px var(--green-glow);
+}
+
+.doctor-app-avatar-v2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.doctor-app-info-v2 {
+    min-width: 0;
+    flex: 1;
+}
+
+.doctor-app-title-row-v2 {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.doctor-app-title-row-v2 h3 {
+    margin: 0 0 4px;
+    color: var(--text);
+    font-size: 19px;
+    font-weight: 900;
+}
+
+.doctor-app-title-row-v2 p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.doctor-app-status-v2 {
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-app-status-v2--pending {
+    background: var(--orange-s);
+    color: var(--orange);
+}
+
+.doctor-app-status-v2--approved {
+    background: var(--green-s);
+    color: var(--green);
+}
+
+.doctor-app-status-v2--rejected {
+    background: var(--red-s);
+    color: var(--red);
+}
+
+.doctor-app-chips-v2 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.doctor-app-chips-v2 span {
+    min-height: 34px;
+    padding: 0 11px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.doctor-app-chips-v2 i {
+    color: var(--green);
+}
+
+.doctor-app-card-v2__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.doctor-app-view-btn-v2 {
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 900;
+    box-shadow: 0 10px 24px var(--green-glow);
+    transition: .22s ease;
+    white-space: nowrap;
+}
+
+.doctor-app-view-btn-v2:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px var(--green-glow);
+}
+
+/* =========================
+   Empty / Pagination
+========================= */
+
+.doctor-apps-empty-v2 {
+    padding: 54px 24px;
+    text-align: center;
+    border-radius: 24px;
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+}
+
+.doctor-apps-empty-icon-v2 {
+    width: 72px;
+    height: 72px;
+    border-radius: 24px;
+    margin: 0 auto 16px;
+    background: var(--green-s);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 32px;
+}
+
+.doctor-apps-empty-v2 h3 {
+    margin: 0 0 8px;
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.doctor-apps-empty-v2 p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.doctor-apps-pagination-v2,
+.doctor-apps-pagination {
+    margin-top: 22px;
+}
+
+/* Laravel pagination small reset */
+.doctor-apps-pagination-v2 nav,
+.doctor-apps-pagination nav {
+    display: flex;
+    justify-content: center;
+}
+
+/* =========================
+   Old class compatibility
+   عشان لو بقيت كلاس قديم من الصفحة ما يخرب
+========================= */
+
+.doctor-apps-head,
+.doctor-apps-status-row,
+.doctor-apps-toolbar,
+.doctor-apps-results {
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.doctor-apps-icon-control,
+.doctor-app-icon-btn {
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 1180px) {
+    .doctor-apps-status-grid-v2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .doctor-app-card-v2 {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-app-card-v2__actions {
+        justify-content: flex-start;
+    }
+}
+
+@media (max-width: 760px) {
+    .doctor-apps-hero-v2,
+    .doctor-apps-results-head-v2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .doctor-apps-status-grid-v2 {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-apps-toolbar-form-v2 {
+        align-items: stretch;
+    }
+
+    .doctor-apps-search-v2 {
+        min-width: 100%;
+    }
+
+    .doctor-apps-toolbar-actions-v2 {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .doctor-apps-tool-btn-v2 {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .doctor-apps-popover-v2 {
+        right: 0;
+        left: auto;
+        width: min(330px, calc(100vw - 32px));
+    }
+
+    .doctor-app-card-v2__main {
+        align-items: flex-start;
+    }
+
+    .doctor-app-title-row-v2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .doctor-app-avatar-v2 {
+        width: 58px;
+        height: 58px;
+        border-radius: 19px;
+    }
+
+    .doctor-app-view-btn-v2 {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .doctor-apps-hero-v2,
+    .doctor-apps-results-v2 {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 520px) {
+    .doctor-app-card-v2__main {
+        flex-direction: column;
+    }
+
+    .doctor-app-chips-v2 span {
+        width: 100%;
+    }
+}
+
+
+/* =========================
+   DOCTOR APPLICATION SHOW PAGE
+   تفاصيل طلب الطبيب
+========================= */
+
+.doctor-show-page,
+.doctor-show-v2-page {
+    display: grid;
+    gap: 22px;
+}
+
+/* تنبيه الأخطاء */
+.doctor-show-alert-v2,
+.doctor-show-alert {
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: var(--red-s);
+    border: 1px solid rgba(239, 68, 68, .24);
+    color: var(--red);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-weight: 900;
+    box-shadow: var(--shadow-sm);
+}
+
+.doctor-show-alert-v2 i,
+.doctor-show-alert i {
+    margin-top: 3px;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.doctor-show-hero-v2 {
+    position: relative;
+    overflow: hidden;
+    padding: 30px;
+    border-radius: var(--r-xl);
+    background:
+        radial-gradient(circle at top right, rgba(29, 158, 117, .13), transparent 38%),
+        radial-gradient(circle at bottom left, rgba(56, 184, 242, .10), transparent 40%),
+        var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.doctor-show-hero-v2::after {
+    content: "";
+    position: absolute;
+    width: 190px;
+    height: 190px;
+    left: -70px;
+    top: -70px;
+    border-radius: 50%;
+    background: var(--green-s);
+    filter: blur(12px);
+    opacity: .75;
+}
+
+.doctor-show-hero-v2--pending {
+    background:
+        radial-gradient(circle at top right, rgba(245, 166, 35, .14), transparent 38%),
+        radial-gradient(circle at bottom left, rgba(56, 184, 242, .10), transparent 40%),
+        var(--surface);
+}
+
+.doctor-show-hero-v2--approved {
+    background:
+        radial-gradient(circle at top right, rgba(29, 158, 117, .14), transparent 38%),
+        radial-gradient(circle at bottom left, rgba(56, 184, 242, .10), transparent 40%),
+        var(--surface);
+}
+
+.doctor-show-hero-v2--rejected {
+    background:
+        radial-gradient(circle at top right, rgba(239, 68, 68, .13), transparent 38%),
+        radial-gradient(circle at bottom left, rgba(56, 184, 242, .08), transparent 40%),
+        var(--surface);
+}
+
+.doctor-show-hero-v2__main {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.doctor-show-back-v2 {
+    width: 44px;
+    height: 44px;
+    border-radius: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    transition: .22s ease;
+    flex-shrink: 0;
+}
+
+.doctor-show-back-v2:hover {
+    transform: translateX(3px);
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--green-s);
+}
+
+.doctor-show-avatar-v2 {
+    width: 82px;
+    height: 82px;
+    border-radius: 28px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 30px;
+    font-weight: 900;
+    box-shadow: 0 14px 34px var(--green-glow);
+}
+
+.doctor-show-avatar-v2 img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.doctor-show-title-v2 {
+    min-width: 0;
+    flex: 1;
+}
+
+.doctor-show-kicker-v2 {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.doctor-show-title-row-v2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.doctor-show-title-row-v2 h1 {
+    margin: 0;
+    color: var(--text);
+    font-size: 32px;
+    font-weight: 900;
+    line-height: 1.25;
+}
+
+.doctor-show-title-v2 p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-weight: 800;
+    line-height: 1.7;
+}
+
+.doctor-show-status-v2 {
+    min-height: 34px;
+    padding: 0 13px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-show-status-v2--pending {
+    background: var(--orange-s);
+    color: var(--orange);
+}
+
+.doctor-show-status-v2--approved {
+    background: var(--green-s);
+    color: var(--green);
+}
+
+.doctor-show-status-v2--rejected {
+    background: var(--red-s);
+    color: var(--red);
+}
+
+.doctor-show-hero-chips-v2 {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.doctor-show-hero-chips-v2 span {
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-show-hero-chips-v2 i {
+    color: var(--green);
+}
+
+/* =========================
+   REVIEW STRIP
+========================= */
+
+.doctor-review-strip-v2 {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.doctor-review-item-v2 {
+    min-height: 104px;
+    padding: 20px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: .25s ease;
+}
+
+.doctor-review-item-v2:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    border-color: rgba(29, 158, 117, .28);
+}
+
+.doctor-review-icon-v2 {
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    background: var(--green-s);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.doctor-review-item-v2 span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.doctor-review-item-v2 strong {
+    color: var(--text);
+    font-size: 17px;
+    font-weight: 900;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.doctor-show-layout-v2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 22px;
+    align-items: start;
+}
+
+.doctor-show-main-v2 {
+    display: grid;
+    gap: 22px;
+}
+
+.doctor-show-side-v2 {
+    min-width: 0;
+}
+
+.doctor-show-card-v2 {
+    padding: 28px;
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.doctor-show-card-v2--sticky {
+    position: sticky;
+    top: 20px;
+}
+
+.doctor-show-card-head-v2 {
+    margin-bottom: 22px;
+}
+
+.doctor-show-card-head-v2 span {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-show-card-head-v2 h2 {
+    margin: 7px 0 0;
+    color: var(--text);
+    font-size: 24px;
+    font-weight: 900;
+}
+
+/* =========================
+   INFO GRID
+========================= */
+
+.doctor-show-info-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.doctor-show-info-item-v2 {
+    min-height: 118px;
+    padding: 18px;
+    border-radius: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: grid;
+    gap: 7px;
+}
+
+.doctor-show-info-item-v2 i {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+    background: var(--green-s);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+}
+
+.doctor-show-info-item-v2 span {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-show-info-item-v2 strong {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+/* =========================
+   BIO
+========================= */
+
+.doctor-show-bio-v2 {
+    padding: 20px;
+    border-radius: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    line-height: 2;
+    font-weight: 700;
+    white-space: pre-line;
+}
+
+/* =========================
+   FILES
+========================= */
+
+.doctor-show-files-v2 {
+    display: grid;
+    gap: 12px;
+}
+
+.doctor-show-file-v2 {
+    min-height: 74px;
+    padding: 14px;
+    border-radius: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    transition: .22s ease;
+}
+
+.doctor-show-file-v2:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
+    border-color: rgba(29, 158, 117, .30);
+}
+
+.doctor-show-file-icon-v2 {
+    width: 48px;
+    height: 48px;
+    border-radius: 17px;
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.doctor-show-file-icon-v2.is-image {
+    background: var(--blue-s);
+    color: var(--blue);
+}
+
+.doctor-show-file-icon-v2.is-pdf {
+    background: var(--red-s);
+    color: var(--red);
+}
+
+.doctor-show-file-icon-v2.is-file {
+    background: var(--green-s);
+    color: var(--green);
+}
+
+.doctor-show-file-v2 strong {
+    display: block;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+
+.doctor-show-file-v2 small {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.doctor-show-file-arrow-v2 {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+}
+
+/* =========================
+   REVIEW FORM
+========================= */
+
+.doctor-show-form-v2 {
+    display: grid;
+    gap: 16px;
+}
+
+.doctor-show-form-field-v2 {
+    display: grid;
+    gap: 8px;
+}
+
+.doctor-show-form-field-v2 > label {
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.doctor-show-form-field-v2 textarea {
+    width: 100%;
+    min-height: 115px;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--surface2);
+    color: var(--text);
+    padding: 13px 14px;
+    font-family: inherit;
+    outline: none;
+    resize: vertical;
+    transition: .22s ease;
+}
+
+.doctor-show-form-field-v2 textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px var(--green-s);
+}
+
+/* choices */
+.doctor-status-choices-v2 {
+    display: grid;
+    gap: 10px;
+}
+
+.doctor-status-choice-v2 {
+    cursor: pointer;
+}
+
+.doctor-status-choice-v2 input {
+    display: none;
+}
+
+.doctor-status-choice-v2 span {
+    min-height: 48px;
+    padding: 0 14px;
+    border-radius: 18px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-weight: 900;
+    transition: .22s ease;
+}
+
+.doctor-status-choice-v2 input:checked + span {
+    color: var(--text);
+    transform: translateY(-2px);
+}
+
+.doctor-status-choice-v2--pending input:checked + span {
+    border-color: var(--orange);
+    background: var(--orange-s);
+    color: var(--orange);
+}
+
+.doctor-status-choice-v2--approved input:checked + span {
+    border-color: var(--green);
+    background: var(--green-s);
+    color: var(--green);
+}
+
+.doctor-status-choice-v2--rejected input:checked + span {
+    border-color: var(--red);
+    background: var(--red-s);
+    color: var(--red);
+}
+
+#rejectionReasonWrap {
+    display: none;
+}
+
+#rejectionReasonWrap.is-visible {
+    animation: doctorShowFadeIn .22s ease both;
+}
+
+@keyframes doctorShowFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.doctor-show-save-v2 {
+    min-height: 48px;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    font-family: inherit;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    cursor: pointer;
+    box-shadow: 0 12px 28px var(--green-glow);
+    transition: .22s ease;
+}
+
+.doctor-show-save-v2:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px var(--green-glow);
+}
+
+/* =========================
+   OLD CLASS COMPATIBILITY
+   لو بقيت بعض الكلاسات القديمة
+========================= */
+
+.doctor-show-hero,
+.doctor-review-strip,
+.doctor-show-card {
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.doctor-show-status--pending {
+    background: var(--orange-s);
+    color: var(--orange);
+}
+
+.doctor-show-status--approved {
+    background: var(--green-s);
+    color: var(--green);
+}
+
+.doctor-show-status--rejected {
+    background: var(--red-s);
+    color: var(--red);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1180px) {
+    .doctor-show-layout-v2 {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-show-card-v2--sticky {
+        position: static;
+    }
+}
+
+@media (max-width: 800px) {
+    .doctor-review-strip-v2,
+    .doctor-show-info-grid-v2 {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-show-hero-v2__main {
+        align-items: flex-start;
+    }
+
+    .doctor-show-title-row-v2 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 640px) {
+    .doctor-show-hero-v2,
+    .doctor-show-card-v2 {
+        padding: 22px;
+    }
+
+    .doctor-show-hero-v2__main {
+        flex-direction: column;
+    }
+
+    .doctor-show-back-v2 {
+        order: -1;
+    }
+
+    .doctor-show-avatar-v2 {
+        width: 72px;
+        height: 72px;
+        border-radius: 24px;
+    }
+
+    .doctor-show-title-row-v2 h1 {
+        font-size: 26px;
+    }
+
+    .doctor-show-file-v2 {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .doctor-show-file-arrow-v2 {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+}
+
+
+/* =========================
+   CLEAN DOCTOR APPLICATION CATEGORIES
+   نفس ستايل تصنيفات الإشعارات والمقالات
+========================= */
+
+.doctor-apps-categories-v3 {
+    padding: 8px 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.doctor-apps-categories-v3__head {
+    display: grid;
+    gap: 4px;
+}
+
+.doctor-apps-categories-v3__head span {
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-apps-categories-v3__head strong {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 900;
+}
+
+.doctor-apps-categories-v3__list {
+    flex: 1;
+    min-width: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.doctor-apps-category-v3 {
+    min-height: 38px;
+    padding: 0 13px;
+    border-radius: 999px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v3 i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v3 b {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: var(--surface2);
+    color: var(--green);
+    display: inline-grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 900;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v3:hover {
+    color: var(--green);
+    transform: translateY(-2px);
+}
+
+.doctor-apps-category-v3:hover i,
+.doctor-apps-category-v3:hover b {
+    background: var(--green-s);
+}
+
+.doctor-apps-category-v3.is-active {
+    padding-inline: 15px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    box-shadow: 0 10px 24px var(--green-glow);
+}
+
+.doctor-apps-category-v3.is-active i,
+.doctor-apps-category-v3.is-active b {
+    background: rgba(255, 255, 255, .18);
+    color: #fff;
+}
+
+.doctor-apps-clear-filter-v3 {
+    min-height: 38px;
+    padding: 0 13px;
+    border-radius: 999px;
+    background: var(--red-s);
+    color: var(--red);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: .22s ease;
+}
+
+.doctor-apps-clear-filter-v3:hover {
+    background: var(--red);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .doctor-apps-categories-v3 {
+        padding: 0;
+        align-items: flex-start;
+    }
+
+    .doctor-apps-categories-v3__list {
+        justify-content: flex-start;
+        min-width: 100%;
+    }
+
+    .doctor-apps-category-v3 {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .doctor-apps-clear-filter-v3 {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+/* =========================
+   DOCTOR APPLICATION SEARCH + FILTER V3
+   بحث وفلترة أنعم ومتوافقة مع التصنيفات
+========================= */
+
+.doctor-apps-searchbar-v3 {
+    padding: 6px 2px 10px;
+}
+
+.doctor-apps-searchbar-form-v3 {
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) auto auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.doctor-apps-searchbox-v3 {
+    min-height: 48px;
+    padding: 0 15px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: .22s ease;
+}
+
+.doctor-apps-searchbox-v3:focus-within {
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px var(--green-s);
+    transform: translateY(-1px);
+}
+
+.doctor-apps-searchbox-v3 > i {
+    color: var(--green);
+    font-size: 14px;
+}
+
+.doctor-apps-searchbox-v3 input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.doctor-apps-searchbox-v3 input::placeholder {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.doctor-apps-search-clear-v3 {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--red-s);
+    color: var(--red);
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    font-size: 12px;
+    transition: .22s ease;
+}
+
+.doctor-apps-search-clear-v3:hover {
+    background: var(--red);
+    color: #fff;
+}
+
+.doctor-apps-specialty-filter-v3 {
+    position: relative;
+}
+
+.doctor-apps-specialty-btn-v3 {
+    min-height: 48px;
+    padding: 0 14px 0 10px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: .22s ease;
+    white-space: nowrap;
+}
+
+.doctor-apps-specialty-btn-v3 > i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--green-s);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+}
+
+.doctor-apps-specialty-btn-v3 b {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-btn-v3:hover,
+.doctor-apps-specialty-btn-v3.is-active {
+    border-color: var(--green);
+    color: var(--green);
+    transform: translateY(-2px);
+}
+
+.doctor-apps-specialty-btn-v3.is-active {
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 10px 24px var(--green-glow);
+}
+
+.doctor-apps-specialty-btn-v3.is-active > i,
+.doctor-apps-specialty-btn-v3.is-active b {
+    background: rgba(255, 255, 255, .18);
+    color: #fff;
+}
+
+.doctor-apps-specialty-menu-v3 {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    width: 330px;
+    max-width: calc(100vw - 32px);
+    padding: 16px;
+    border-radius: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    z-index: 80;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(.98);
+    transform-origin: top left;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-menu-v3.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.doctor-apps-specialty-menu-head-v3 {
+    margin-bottom: 12px;
+}
+
+.doctor-apps-specialty-menu-head-v3 span {
+    display: block;
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+
+.doctor-apps-specialty-menu-head-v3 strong {
+    display: block;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.doctor-apps-specialty-list-v3 {
+    display: grid;
+    gap: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+    padding-left: 4px;
+}
+
+.doctor-apps-specialty-option-v3 {
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 16px;
+    background: var(--surface2);
+    border: 1px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    font-weight: 900;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-option-v3 i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+}
+
+.doctor-apps-specialty-option-v3:hover,
+.doctor-apps-specialty-option-v3.is-active {
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--green-s);
+    transform: translateX(-3px);
+}
+
+.doctor-apps-filter-clear-v3 {
+    min-height: 48px;
+    padding: 0 15px;
+    border-radius: 999px;
+    background: var(--red-s);
+    color: var(--red);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: .22s ease;
+    white-space: nowrap;
+}
+
+.doctor-apps-filter-clear-v3:hover {
+    background: var(--red);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* نخفي شكل التولبار القديم لو بقي موجود */
+.doctor-apps-toolbar-v2 {
+    display: none;
+}
+
+@media (max-width: 980px) {
+    .doctor-apps-searchbar-form-v3 {
+        grid-template-columns: 1fr;
+    }
+
+    .doctor-apps-specialty-filter-v3,
+    .doctor-apps-specialty-btn-v3,
+    .doctor-apps-filter-clear-v3 {
+        width: 100%;
+    }
+
+    .doctor-apps-specialty-btn-v3,
+    .doctor-apps-filter-clear-v3 {
+        justify-content: center;
+    }
+
+    .doctor-apps-specialty-menu-v3 {
+        right: 0;
+        left: auto;
+        width: min(100%, 360px);
+    }
+}
+
+@media (max-width: 560px) {
+    .doctor-apps-searchbox-v3 {
+        border-radius: 20px;
+    }
+
+    .doctor-apps-specialty-btn-v3,
+    .doctor-apps-filter-clear-v3 {
+        border-radius: 20px;
+    }
+}
+
+/* =========================
+   DOCTOR APPLICATIONS FILTERS V4
+   تصنيفات بالنص + بحث مرتب
+========================= */
+
+/* التصنيفات بالنص بدون عنوان */
+.doctor-apps-categories-v4 {
+    padding: 4px 0 2px;
+    display: grid;
+    place-items: center;
+    gap: 10px;
+}
+
+.doctor-apps-categories-v4__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.doctor-apps-category-v4 {
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v4 i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v4 b {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: var(--surface2);
+    color: var(--green);
+    display: inline-grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 900;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v4:hover {
+    color: var(--green);
+    transform: translateY(-2px);
+}
+
+.doctor-apps-category-v4:hover i,
+.doctor-apps-category-v4:hover b {
+    background: var(--green-s);
+}
+
+.doctor-apps-category-v4.is-active {
+    padding-inline: 16px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    box-shadow: 0 10px 24px var(--green-glow);
+}
+
+.doctor-apps-category-v4.is-active i,
+.doctor-apps-category-v4.is-active b {
+    background: rgba(255, 255, 255, .18);
+    color: #fff;
+}
+
+.doctor-apps-clear-filter-v4 {
+    min-height: 36px;
+    padding: 0 13px;
+    border-radius: 999px;
+    background: var(--red-s);
+    color: var(--red);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: .22s ease;
+}
+
+.doctor-apps-clear-filter-v4:hover {
+    background: var(--red);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* البحث والفلتر تحت التصنيفات بشكل أنعم */
+.doctor-apps-searchbar-v4 {
+    padding: 6px 0 12px;
+    display: flex;
+    justify-content: center;
+}
+
+.doctor-apps-searchbar-form-v4 {
+    width: min(920px, 100%);
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) auto auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.doctor-apps-searchbox-v4 {
+    min-height: 50px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: .22s ease;
+}
+
+.doctor-apps-searchbox-v4:focus-within {
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px var(--green-s);
+    transform: translateY(-1px);
+}
+
+.doctor-apps-searchbox-v4 > i {
+    color: var(--green);
+    font-size: 14px;
+}
+
+.doctor-apps-searchbox-v4 input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.doctor-apps-searchbox-v4 input::placeholder {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.doctor-apps-search-clear-v4 {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--red-s);
+    color: var(--red);
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    font-size: 12px;
+    transition: .22s ease;
+}
+
+.doctor-apps-search-clear-v4:hover {
+    background: var(--red);
+    color: #fff;
+}
+
+/* فلتر التخصص */
+.doctor-apps-specialty-filter-v4 {
+    position: relative;
+}
+
+.doctor-apps-specialty-btn-v4 {
+    min-height: 50px;
+    padding: 0 14px 0 10px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: .22s ease;
+    white-space: nowrap;
+}
+
+.doctor-apps-specialty-btn-v4 > i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--green-s);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+}
+
+.doctor-apps-specialty-btn-v4 b {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-btn-v4:hover,
+.doctor-apps-specialty-btn-v4.is-active {
+    border-color: var(--green);
+    color: var(--green);
+    transform: translateY(-2px);
+}
+
+.doctor-apps-specialty-btn-v4.is-active {
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 10px 24px var(--green-glow);
+}
+
+.doctor-apps-specialty-btn-v4.is-active > i,
+.doctor-apps-specialty-btn-v4.is-active b {
+    background: rgba(255, 255, 255, .18);
+    color: #fff;
+}
+
+/* قائمة التخصص */
+.doctor-apps-specialty-menu-v4 {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    width: 330px;
+    max-width: calc(100vw - 32px);
+    padding: 16px;
+    border-radius: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    z-index: 80;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(.98);
+    transform-origin: top left;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-menu-v4.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.doctor-apps-specialty-menu-head-v4 {
+    margin-bottom: 12px;
+}
+
+.doctor-apps-specialty-menu-head-v4 span {
+    display: block;
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-apps-specialty-list-v4 {
+    display: grid;
+    gap: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+    padding-left: 4px;
+}
+
+.doctor-apps-specialty-option-v4 {
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 16px;
+    background: var(--surface2);
+    border: 1px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    font-weight: 900;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-option-v4 i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+}
+
+.doctor-apps-specialty-option-v4:hover,
+.doctor-apps-specialty-option-v4.is-active {
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--green-s);
+    transform: translateX(-3px);
+}
+
+/* زر المسح */
+.doctor-apps-filter-clear-v4 {
+    min-height: 50px;
+    padding: 0 15px;
+    border-radius: 999px;
+    background: var(--red-s);
+    color: var(--red);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: .22s ease;
+    white-space: nowrap;
+}
+
+.doctor-apps-filter-clear-v4:hover {
+    background: var(--red);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* نخفي النسخ القديمة لو ضلت موجودة */
+.doctor-apps-toolbar-v2,
+.doctor-apps-categories-v3,
+.doctor-apps-searchbar-v3 {
+    display: none !important;
+}
+
+@media (max-width: 980px) {
+    .doctor-apps-searchbar-form-v4 {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .doctor-apps-specialty-filter-v4,
+    .doctor-apps-specialty-btn-v4,
+    .doctor-apps-filter-clear-v4 {
+        width: 100%;
+    }
+
+    .doctor-apps-specialty-btn-v4,
+    .doctor-apps-filter-clear-v4 {
+        justify-content: center;
+    }
+
+    .doctor-apps-specialty-menu-v4 {
+        right: 0;
+        left: auto;
+        width: min(100%, 360px);
+    }
+}
+
+@media (max-width: 560px) {
+    .doctor-apps-categories-v4__list {
+        width: 100%;
+    }
+
+    .doctor-apps-category-v4 {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .doctor-apps-searchbox-v4,
+    .doctor-apps-specialty-btn-v4,
+    .doctor-apps-filter-clear-v4 {
+        border-radius: 20px;
+    }
+}
+
+
+/* =========================
+   DOCTOR APPLICATIONS FINAL PAGE FLOW
+   ترتيب الصفحة بعد التصنيفات والبحث الجديد
+========================= */
+
+.doctor-apps-v2-page {
+    gap: 20px;
+}
+
+/* Hero أنعم */
+.doctor-apps-hero-v2--compact {
+    padding: 26px 28px;
+    min-height: auto;
+}
+
+.doctor-apps-hero-v2--compact h1 {
+    font-size: 32px;
+}
+
+.doctor-apps-hero-v2--compact p {
+    max-width: 620px;
+}
+
+/* البادج يصير أخف */
+.doctor-apps-hero-badge-v2--compact {
+    min-width: 145px;
+    padding: 15px 18px;
+    border-radius: 22px;
+}
+
+.doctor-apps-hero-badge-v2--compact strong {
+    font-size: 30px;
+}
+
+/* نخلي التصنيفات قريبة من الهيرو */
+.doctor-apps-categories-v4 {
+    margin-top: -4px;
+}
+
+/* البحث يكون كأنه جزء من الصفحة مش كرت ثقيل */
+.doctor-apps-searchbar-v4 {
+    margin-top: -2px;
+    margin-bottom: 2px;
+}
+
+/* قسم النتائج يكون أخف شوي */
+.doctor-apps-results-v2 {
+    margin-top: 4px;
+}
+
+/* رأس النتائج أنعم */
+.doctor-apps-results-head-v2 {
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.doctor-apps-results-head-v2 p {
+    max-width: 560px;
+}
+
+/* الكروت داخل النتائج تتنفس أكثر */
+.doctor-apps-list-v2 {
+    margin-top: 18px;
+}
+
+/* تحسين المسافات بين البحث والفلتر */
+.doctor-apps-searchbar-form-v4 {
+    margin-inline: auto;
+}
+
+/* لما يكون في موبايل نخلي الصفحة مريحة */
+@media (max-width: 760px) {
+    .doctor-apps-hero-v2--compact {
+        padding: 22px;
+    }
+
+    .doctor-apps-hero-badge-v2--compact {
+        width: 100%;
+    }
+
+    .doctor-apps-categories-v4 {
+        place-items: stretch;
+    }
+
+    .doctor-apps-categories-v4__list {
+        justify-content: center;
+    }
+
+    .doctor-apps-results-head-v2 {
+        gap: 12px;
+    }
+}
+/* =========================
+   DOCTOR APPLICATIONS FINAL PAGE FLOW
+   ترتيب الصفحة بعد التصنيفات والبحث الجديد
+========================= */
+
+.doctor-apps-v2-page {
+    gap: 20px;
+}
+
+/* Hero compact */
+.doctor-apps-hero-v2--compact {
+    padding: 26px 28px;
+    min-height: auto;
+}
+
+.doctor-apps-hero-v2--compact h1 {
+    font-size: 32px;
+}
+
+.doctor-apps-hero-v2--compact p {
+    max-width: 620px;
+}
+
+.doctor-apps-hero-badge-v2--compact {
+    min-width: 145px;
+    padding: 15px 18px;
+    border-radius: 22px;
+}
+
+.doctor-apps-hero-badge-v2--compact strong {
+    font-size: 30px;
+}
+
+/* =========================
+   CENTERED CATEGORIES V4
+========================= */
+
+.doctor-apps-categories-v4 {
+    padding: 4px 0 2px;
+    display: grid;
+    place-items: center;
+    gap: 10px;
+}
+
+.doctor-apps-categories-v4__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.doctor-apps-category-v4 {
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v4 i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v4 b {
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: var(--surface2);
+    color: var(--green);
+    display: inline-grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 900;
+    transition: .22s ease;
+}
+
+.doctor-apps-category-v4:hover {
+    color: var(--green);
+    transform: translateY(-2px);
+}
+
+.doctor-apps-category-v4:hover i,
+.doctor-apps-category-v4:hover b {
+    background: var(--green-s);
+}
+
+.doctor-apps-category-v4.is-active {
+    padding-inline: 16px;
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    box-shadow: 0 10px 24px var(--green-glow);
+}
+
+.doctor-apps-category-v4.is-active i,
+.doctor-apps-category-v4.is-active b {
+    background: rgba(255, 255, 255, .18);
+    color: #fff;
+}
+
+.doctor-apps-clear-filter-v4 {
+    min-height: 36px;
+    padding: 0 13px;
+    border-radius: 999px;
+    background: var(--red-s);
+    color: var(--red);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: .22s ease;
+}
+
+.doctor-apps-clear-filter-v4:hover {
+    background: var(--red);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   SEARCH + SPECIALTY FILTER V4
+========================= */
+
+.doctor-apps-searchbar-v4 {
+    padding: 6px 0 12px;
+    display: flex;
+    justify-content: center;
+}
+
+.doctor-apps-searchbar-form-v4 {
+    width: min(920px, 100%);
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) auto auto;
+    gap: 10px;
+    align-items: center;
+    margin-inline: auto;
+}
+
+.doctor-apps-searchbox-v4 {
+    min-height: 50px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: .22s ease;
+}
+
+.doctor-apps-searchbox-v4:focus-within {
+    border-color: var(--green);
+    box-shadow: 0 0 0 4px var(--green-s);
+    transform: translateY(-1px);
+}
+
+.doctor-apps-searchbox-v4 > i {
+    color: var(--green);
+    font-size: 14px;
+}
+
+.doctor-apps-searchbox-v4 input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.doctor-apps-searchbox-v4 input::placeholder {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.doctor-apps-search-clear-v4 {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--red-s);
+    color: var(--red);
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    font-size: 12px;
+    transition: .22s ease;
+}
+
+.doctor-apps-search-clear-v4:hover {
+    background: var(--red);
+    color: #fff;
+}
+
+/* Specialty Filter */
+.doctor-apps-specialty-filter-v4 {
+    position: relative;
+}
+
+.doctor-apps-specialty-btn-v4 {
+    min-height: 50px;
+    padding: 0 14px 0 10px;
+    border-radius: 999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    transition: .22s ease;
+    white-space: nowrap;
+}
+
+.doctor-apps-specialty-btn-v4 > i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--green-s);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+}
+
+.doctor-apps-specialty-btn-v4 b {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--surface2);
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-btn-v4:hover,
+.doctor-apps-specialty-btn-v4.is-active {
+    border-color: var(--green);
+    color: var(--green);
+    transform: translateY(-2px);
+}
+
+.doctor-apps-specialty-btn-v4.is-active {
+    background: linear-gradient(135deg, var(--green), var(--blue));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 10px 24px var(--green-glow);
+}
+
+.doctor-apps-specialty-btn-v4.is-active > i,
+.doctor-apps-specialty-btn-v4.is-active b {
+    background: rgba(255, 255, 255, .18);
+    color: #fff;
+}
+
+/* Specialty Dropdown */
+.doctor-apps-specialty-menu-v4 {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    width: 330px;
+    max-width: calc(100vw - 32px);
+    padding: 16px;
+    border-radius: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    z-index: 80;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(.98);
+    transform-origin: top left;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-menu-v4.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.doctor-apps-specialty-menu-head-v4 {
+    margin-bottom: 12px;
+}
+
+.doctor-apps-specialty-menu-head-v4 span {
+    display: block;
+    color: var(--green);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.doctor-apps-specialty-list-v4 {
+    display: grid;
+    gap: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+    padding-left: 4px;
+}
+
+.doctor-apps-specialty-option-v4 {
+    min-height: 42px;
+    padding: 0 12px;
+    border-radius: 16px;
+    background: var(--surface2);
+    border: 1px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    font-weight: 900;
+    transition: .22s ease;
+}
+
+.doctor-apps-specialty-option-v4 i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--green);
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+}
+
+.doctor-apps-specialty-option-v4:hover,
+.doctor-apps-specialty-option-v4.is-active {
+    color: var(--green);
+    border-color: var(--green);
+    background: var(--green-s);
+    transform: translateX(-3px);
+}
+
+.doctor-apps-filter-clear-v4 {
+    min-height: 50px;
+    padding: 0 15px;
+    border-radius: 999px;
+    background: var(--red-s);
+    color: var(--red);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 900;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: .22s ease;
+    white-space: nowrap;
+}
+
+.doctor-apps-filter-clear-v4:hover {
+    background: var(--red);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* =========================
+   RESULTS FLOW IMPROVEMENT
+========================= */
+
+.doctor-apps-results-v2 {
+    margin-top: 4px;
+}
+
+.doctor-apps-results-head-v2 {
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.doctor-apps-results-head-v2 p {
+    max-width: 560px;
+}
+
+.doctor-apps-list-v2 {
+    margin-top: 18px;
+}
+
+/* نخفي النسخ القديمة لو بقيت موجودة */
+.doctor-apps-toolbar-v2,
+.doctor-apps-status-grid-v2,
+.doctor-apps-categories-v3,
+.doctor-apps-searchbar-v3 {
+    display: none !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 980px) {
+    .doctor-apps-searchbar-form-v4 {
+        grid-template-columns: 1fr;
+        width: 100%;
+    }
+
+    .doctor-apps-specialty-filter-v4,
+    .doctor-apps-specialty-btn-v4,
+    .doctor-apps-filter-clear-v4 {
+        width: 100%;
+    }
+
+    .doctor-apps-specialty-btn-v4,
+    .doctor-apps-filter-clear-v4 {
+        justify-content: center;
+    }
+
+    .doctor-apps-specialty-menu-v4 {
+        right: 0;
+        left: auto;
+        width: min(100%, 360px);
+    }
+}
+
+@media (max-width: 760px) {
+    .doctor-apps-hero-v2--compact {
+        padding: 22px;
+    }
+
+    .doctor-apps-hero-badge-v2--compact {
+        width: 100%;
+    }
+
+    .doctor-apps-categories-v4 {
+        place-items: stretch;
+    }
+
+    .doctor-apps-categories-v4__list {
+        justify-content: center;
+    }
+
+    .doctor-apps-results-head-v2 {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 560px) {
+    .doctor-apps-categories-v4__list {
+        width: 100%;
+    }
+
+    .doctor-apps-category-v4 {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .doctor-apps-searchbox-v4,
+    .doctor-apps-specialty-btn-v4,
+    .doctor-apps-filter-clear-v4 {
+        border-radius: 20px;
+    }
+}

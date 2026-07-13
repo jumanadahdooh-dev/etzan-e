@@ -1,0 +1,2628 @@
+/* =========================================================
+   ETZAN ADMIN SETTINGS PAGE
+   FULL REPLACEMENT FILE
+   Colors match admin sidebar exactly:
+   Deep navy-slate + Jade + Sapphire
+========================================================= */
+
+/* =========================================================
+   Page Variables
+========================================================= */
+
+.admin-settings-page {
+    --settings-ink: var(--ink, #0b1220);
+    --settings-ink-2: var(--ink-2, #131d2e);
+    --settings-ink-3: var(--ink-3, #1a2538);
+
+    --settings-surface-0: var(--surface-0, rgba(255,255,255,0.03));
+    --settings-surface-1: var(--surface-1, rgba(255,255,255,0.055));
+    --settings-surface-2: var(--surface-2, rgba(255,255,255,0.09));
+    --settings-surface-3: var(--surface-3, rgba(255,255,255,0.13));
+
+    --settings-border-0: var(--border-0, rgba(255,255,255,0.05));
+    --settings-border-1: var(--border-1, rgba(255,255,255,0.09));
+    --settings-border-2: var(--border-2, rgba(255,255,255,0.16));
+
+    --settings-jade: var(--jade, #00c9a7);
+    --settings-jade-dim: var(--jade-dim, rgba(0,201,167,0.12));
+    --settings-jade-glow: var(--jade-glow, rgba(0,201,167,0.22));
+    --settings-jade-soft: var(--jade-soft, rgba(0,201,167,0.07));
+
+    --settings-sapphire: var(--sapphire, #4b9ef5);
+    --settings-sapphire-dim: var(--sapphire-dim, rgba(75,158,245,0.12));
+
+    --settings-amber: var(--amber, #f59e0b);
+    --settings-amber-dim: var(--amber-dim, rgba(245,158,11,0.12));
+
+    --settings-rose: var(--rose, #f43f5e);
+    --settings-rose-dim: var(--rose-dim, rgba(244,63,94,0.10));
+
+    --settings-t1: var(--t1, #e8f2ff);
+    --settings-t2: var(--t2, #8ba5c4);
+    --settings-t3: var(--t3, #4d6880);
+    --settings-t4: var(--t4, #2d4258);
+
+    --settings-shadow-xs: var(--shadow-xs, 0 2px 8px rgba(0,0,0,0.25));
+    --settings-shadow-sm: var(--shadow-sm, 0 4px 20px rgba(0,0,0,0.32));
+    --settings-shadow-md: var(--shadow-md, 0 8px 36px rgba(0,0,0,0.40));
+    --settings-shadow-lg: var(--shadow-lg, 0 16px 56px rgba(0,0,0,0.50));
+
+    min-height: 100vh;
+    padding: 28px;
+    color: var(--settings-t1) !important;
+    background:
+        radial-gradient(ellipse 70% 55% at 15% -5%, var(--settings-jade-soft) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 88% 95%, var(--settings-sapphire-dim) 0%, transparent 52%),
+        linear-gradient(180deg, var(--settings-ink) 0%, var(--settings-ink-2) 100%) !important;
+}
+
+/* =========================================================
+   Alerts
+========================================================= */
+
+.admin-settings-page .admin-alert {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    font-weight: 800;
+    border: 1px solid transparent;
+    box-shadow: var(--settings-shadow-xs);
+}
+
+.admin-settings-page .admin-alert-success {
+    color: var(--settings-jade) !important;
+    background: var(--settings-jade-dim) !important;
+    border-color: rgba(0, 201, 167, 0.24) !important;
+}
+
+.admin-settings-page .admin-alert-error {
+    color: #fb7185 !important;
+    background: var(--settings-rose-dim) !important;
+    border-color: rgba(244, 63, 94, 0.24) !important;
+}
+
+/* =========================================================
+   Page Head
+========================================================= */
+
+.admin-settings-page .admin-page-head {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 22px;
+    padding: 34px 38px;
+    border-radius: 34px;
+    background:
+        radial-gradient(circle at top right, rgba(0, 201, 167, 0.13), transparent 34%),
+        linear-gradient(175deg, rgba(255,255,255,0.070) 0%, rgba(255,255,255,0.035) 62%, rgba(255,255,255,0.020) 100%) !important;
+    border: 1px solid var(--settings-border-1) !important;
+    box-shadow:
+        var(--settings-shadow-lg),
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        inset 1px 0 0 rgba(255,255,255,0.04) !important;
+    backdrop-filter: blur(18px);
+}
+
+.admin-settings-page .admin-page-head::before {
+    content: "";
+    position: absolute;
+    inset-inline-end: -110px;
+    top: -115px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,201,167,0.16), transparent 68%) !important;
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+.admin-settings-page .admin-page-head::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: -80px;
+    bottom: -100px;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(75,158,245,0.12), transparent 68%) !important;
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+.admin-settings-page .admin-page-badge {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 8px 15px;
+    border-radius: 999px;
+    background: var(--settings-jade-dim) !important;
+    color: var(--settings-jade) !important;
+    border: 1px solid rgba(0,201,167,0.22) !important;
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+
+.admin-settings-page .admin-page-head h1 {
+    position: relative;
+    z-index: 1;
+    margin: 0 0 7px;
+    color: var(--settings-t1) !important;
+    font-size: 32px;
+    font-weight: 950;
+    letter-spacing: -0.5px;
+}
+
+.admin-settings-page .admin-page-head p {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: var(--settings-t2) !important;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   Main Layout
+========================================================= */
+
+.admin-settings-page form {
+    width: 100%;
+}
+
+.admin-settings-page .settings-shell {
+    display: block !important;
+}
+
+/* =========================================================
+   Icon Dock Tabs
+========================================================= */
+
+.admin-settings-page .settings-tabs,
+.admin-settings-page .settings-tabs-clean {
+    position: sticky;
+    top: 82px;
+    z-index: 30;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 22px;
+    padding: 12px 16px;
+
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    border-radius: 999px;
+    background:
+        linear-gradient(175deg, rgba(255,255,255,0.070) 0%, rgba(255,255,255,0.035) 62%, rgba(255,255,255,0.020) 100%) !important;
+    border: 1px solid var(--settings-border-1) !important;
+    box-shadow:
+        var(--settings-shadow-md),
+        inset 0 1px 0 rgba(255,255,255,0.08) !important;
+    backdrop-filter: blur(20px);
+}
+
+.admin-settings-page .settings-tabs::-webkit-scrollbar,
+.admin-settings-page .settings-tabs-clean::-webkit-scrollbar {
+    display: none;
+}
+
+.admin-settings-page .settings-tab {
+    position: relative;
+    flex: 0 0 auto;
+
+    width: 56px;
+    height: 56px;
+
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    cursor: pointer;
+    transition: 0.22s ease;
+}
+
+.admin-settings-page .settings-tab::before,
+.admin-settings-page .settings-tab::after {
+    display: none !important;
+}
+
+.admin-settings-page .settings-tab-icon {
+    width: 48px;
+    height: 48px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background:
+        linear-gradient(180deg, rgba(255,255,255,0.085), rgba(255,255,255,0.035)) !important;
+    color: var(--settings-jade) !important;
+    border: 1px solid var(--settings-border-1) !important;
+
+    font-size: 18px;
+    transition: 0.22s ease;
+}
+
+.admin-settings-page .settings-tab-text {
+    position: absolute;
+    top: calc(100% + 11px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+
+    min-width: max-content;
+    padding: 8px 12px;
+
+    border-radius: 999px;
+    background: var(--settings-ink) !important;
+    border: 1px solid var(--settings-border-1) !important;
+    color: var(--settings-t1) !important;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    box-shadow: var(--settings-shadow-md);
+    transition: 0.18s ease;
+}
+
+.admin-settings-page .settings-tab-text strong {
+    display: block;
+    color: var(--settings-t1) !important;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.admin-settings-page .settings-tab-text small {
+    display: none;
+}
+
+.admin-settings-page .settings-tab:hover .settings-tab-text {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.admin-settings-page .settings-tab:hover .settings-tab-icon {
+    transform: translateY(-4px);
+    background: var(--settings-jade-dim) !important;
+    color: var(--settings-jade) !important;
+    border-color: rgba(0,201,167,0.28) !important;
+    box-shadow: 0 10px 28px rgba(0,201,167,0.18) !important;
+}
+
+.admin-settings-page .settings-tab.is-active .settings-tab-icon {
+    background: linear-gradient(135deg, var(--settings-jade), var(--settings-sapphire)) !important;
+    color: #ffffff !important;
+    border-color: rgba(255,255,255,0.14) !important;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.14),
+        0 8px 26px rgba(0,201,167,0.22) !important;
+}
+
+.admin-settings-page .settings-tab.is-active::after {
+    content: "";
+    display: block !important;
+    position: absolute;
+    bottom: -7px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--settings-jade) !important;
+    box-shadow: 0 0 14px rgba(0,201,167,0.55) !important;
+    transform: translateX(-50%);
+}
+
+/* =========================================================
+   Content Container
+========================================================= */
+
+.admin-settings-page .settings-content {
+    max-width: 1120px;
+    margin: 0 auto;
+
+    border-radius: 34px;
+    background:
+        linear-gradient(175deg, rgba(255,255,255,0.070) 0%, rgba(255,255,255,0.035) 62%, rgba(255,255,255,0.020) 100%) !important;
+
+    border: 1px solid var(--settings-border-1) !important;
+    box-shadow:
+        var(--settings-shadow-lg),
+        inset 0 1px 0 rgba(255,255,255,0.08) !important;
+    backdrop-filter: blur(18px);
+    overflow: hidden;
+}
+
+.admin-settings-page .settings-panel {
+    display: none;
+    min-height: 600px;
+    padding: 34px;
+    background:
+        radial-gradient(ellipse 70% 55% at 15% -5%, rgba(0,201,167,0.055) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 88% 95%, rgba(75,158,245,0.045) 0%, transparent 52%),
+        rgba(255,255,255,0.012) !important;
+}
+
+.admin-settings-page .settings-panel.is-active {
+    display: block;
+    animation: settingsCleanIn .25s ease both;
+}
+
+@keyframes settingsCleanIn {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   Panel Head
+========================================================= */
+
+.admin-settings-page .settings-card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 22px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid var(--settings-border-1) !important;
+}
+
+.admin-settings-page .settings-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 18px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--settings-jade-dim) !important;
+    color: var(--settings-jade) !important;
+    border: 1px solid rgba(0,201,167,0.22) !important;
+    box-shadow: 0 8px 22px rgba(0,201,167,0.10) !important;
+
+    font-size: 20px;
+}
+
+.admin-settings-page .settings-card-head h2 {
+    margin: 0 0 5px;
+    color: var(--settings-t1) !important;
+    font-size: 24px;
+    font-weight: 950;
+}
+
+.admin-settings-page .settings-card-head p {
+    margin: 0;
+    color: var(--settings-t2) !important;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   Fields
+========================================================= */
+
+.admin-settings-page .settings-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 20px;
+}
+
+.admin-settings-page .settings-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.admin-settings-page .settings-field-full {
+    grid-column: 1 / -1;
+}
+
+.admin-settings-page .settings-field label {
+    color: var(--settings-t1) !important;
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.admin-settings-page .settings-field input,
+.admin-settings-page .settings-field textarea,
+.admin-settings-page .settings-field select {
+    width: 100%;
+    border: 1px solid var(--settings-border-1) !important;
+    background: var(--settings-surface-1) !important;
+    color: var(--settings-t1) !important;
+    border-radius: 18px;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    outline: none;
+    transition: 0.22s ease;
+}
+
+.admin-settings-page .settings-field textarea {
+    min-height: 118px;
+    resize: vertical;
+}
+
+.admin-settings-page .settings-field input::placeholder,
+.admin-settings-page .settings-field textarea::placeholder {
+    color: var(--settings-t3) !important;
+}
+
+.admin-settings-page .settings-field input:focus,
+.admin-settings-page .settings-field textarea:focus,
+.admin-settings-page .settings-field select:focus {
+    background: var(--settings-surface-2) !important;
+    border-color: rgba(0,201,167,0.42) !important;
+    box-shadow: 0 0 0 5px rgba(0,201,167,0.10) !important;
+}
+
+/* =========================================================
+   Uploads / Colors
+========================================================= */
+
+.admin-settings-page .settings-upload-row,
+.admin-settings-page .settings-colors {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.admin-settings-page .settings-preview {
+    position: relative;
+    margin-top: 10px;
+    width: 175px;
+    min-height: 96px;
+    overflow: hidden;
+    border-radius: 20px;
+    background: var(--settings-surface-1) !important;
+    border: 1px solid var(--settings-border-1) !important;
+    box-shadow: var(--settings-shadow-xs);
+}
+
+.admin-settings-page .settings-preview-small {
+    width: 110px;
+    min-height: 80px;
+}
+
+.admin-settings-page .settings-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.25s ease;
+}
+
+.admin-settings-page .settings-preview::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.42) 100%);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s ease;
+}
+
+.admin-settings-page .settings-preview:hover::after {
+    opacity: 1;
+}
+
+.admin-settings-page .settings-preview:hover img {
+    transform: scale(1.04);
+    filter: brightness(0.88);
+}
+
+.admin-settings-page .settings-field input[type="file"] {
+    padding: 12px;
+    cursor: pointer;
+}
+
+.admin-settings-page .settings-field input[type="color"] {
+    height: 54px;
+    padding: 6px;
+    cursor: pointer;
+}
+
+/* =========================================================
+   Theme Options
+========================================================= */
+
+.admin-settings-page .theme-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.admin-settings-page .theme-option {
+    cursor: pointer;
+}
+
+.admin-settings-page .theme-option input {
+    display: none;
+}
+
+.admin-settings-page .theme-option span {
+    min-height: 60px;
+    border-radius: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    background: var(--settings-surface-1) !important;
+    border: 1px solid var(--settings-border-1) !important;
+    color: var(--settings-t2) !important;
+
+    font-size: 14px;
+    font-weight: 950;
+    transition: 0.22s ease;
+}
+
+.admin-settings-page .theme-option span i {
+    color: var(--settings-jade) !important;
+}
+
+.admin-settings-page .theme-option span:hover {
+    background: rgba(0,201,167,0.10) !important;
+    color: var(--settings-t1) !important;
+    border-color: rgba(0,201,167,0.24) !important;
+}
+
+.admin-settings-page .theme-option input:checked + span {
+    background: rgba(0,201,167,0.14) !important;
+    color: var(--settings-jade) !important;
+    border-color: rgba(0,201,167,0.36) !important;
+}
+
+/* =========================================================
+   Switch
+========================================================= */
+
+.admin-settings-page .settings-switch {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    align-items: center;
+    gap: 14px;
+
+    padding: 16px;
+    border-radius: 20px;
+
+    background: var(--settings-surface-1) !important;
+    border: 1px solid var(--settings-border-1) !important;
+    cursor: pointer;
+    transition: 0.22s ease;
+}
+
+.admin-settings-page .settings-switch:hover {
+    background: rgba(0,201,167,0.08) !important;
+    border-color: rgba(0,201,167,0.22) !important;
+}
+
+.admin-settings-page .settings-switch input {
+    display: none;
+}
+
+.admin-settings-page .settings-switch > span {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.16) !important;
+    transition: 0.22s ease;
+}
+
+.admin-settings-page .settings-switch > span::after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.14);
+    transition: 0.22s ease;
+}
+
+.admin-settings-page .settings-switch input:checked + span {
+    background: linear-gradient(135deg, var(--settings-jade), var(--settings-sapphire)) !important;
+}
+
+.admin-settings-page .settings-switch input:checked + span::after {
+    right: 26px;
+}
+
+.admin-settings-page .settings-switch strong {
+    display: block;
+    color: var(--settings-t1) !important;
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.admin-settings-page .settings-switch small {
+    display: block;
+    color: var(--settings-t2) !important;
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: 2px;
+}
+
+/* =========================================================
+   Home Page Settings Inner Tabs
+========================================================= */
+
+.admin-settings-page .home-section-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+    padding: 10px;
+    border-radius: 22px;
+    background: var(--settings-surface-1) !important;
+    border: 1px solid var(--settings-border-1) !important;
+}
+
+.admin-settings-page .home-section-tab {
+    border: 0;
+    border-radius: 999px;
+    background: transparent !important;
+    color: var(--settings-t2) !important;
+    padding: 11px 16px;
+    font-size: 13px;
+    font-weight: 950;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.admin-settings-page .home-section-tab:hover {
+    background: rgba(0,201,167,0.10) !important;
+    color: var(--settings-jade) !important;
+}
+
+.admin-settings-page .home-section-tab.is-active {
+    background: linear-gradient(135deg, var(--settings-jade), var(--settings-sapphire)) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 26px rgba(0,201,167,0.20) !important;
+}
+
+.admin-settings-page .home-section-panel {
+    display: none;
+}
+
+.admin-settings-page .home-section-panel.is-active {
+    display: block;
+    animation: settingsCleanIn .25s ease both;
+}
+
+.admin-settings-page .home-settings-group {
+    background: transparent !important;
+    padding: 0 !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.admin-settings-page .home-settings-group-head {
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--settings-border-1) !important;
+}
+
+.admin-settings-page .home-settings-group-head h3 {
+    margin: 0 0 5px;
+    color: var(--settings-t1) !important;
+    font-size: 19px;
+    font-weight: 950;
+}
+
+.admin-settings-page .home-settings-group-head span {
+    color: var(--settings-t2) !important;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Service / FAQ separators */
+.admin-settings-page .settings-field-full > hr {
+    display: none;
+}
+
+.admin-settings-page .settings-field-full > strong {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    margin: 6px 0 2px;
+    padding: 12px 14px;
+
+    border-radius: 18px;
+    background: rgba(0,201,167,0.10) !important;
+    color: var(--settings-jade) !important;
+    font-size: 13px;
+    font-weight: 950;
+    border: 1px solid rgba(0,201,167,0.22) !important;
+}
+
+.admin-settings-page .settings-field-full > strong::before {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--settings-jade) !important;
+    box-shadow: 0 0 0 5px rgba(0,201,167,0.12) !important;
+}
+
+/* =========================================================
+   Save Actions
+========================================================= */
+
+.admin-settings-page .settings-actions {
+    max-width: 1120px;
+    margin: 0 auto;
+    position: sticky;
+    bottom: 18px;
+    z-index: 25;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+    pointer-events: none;
+}
+
+.admin-settings-page .settings-save-btn {
+    pointer-events: auto;
+    border: 0;
+    border-radius: 999px;
+    padding: 15px 26px;
+    background: linear-gradient(135deg, var(--settings-jade), var(--settings-sapphire)) !important;
+    color: #ffffff !important;
+    font-size: 14px;
+    font-weight: 950;
+    cursor: pointer;
+    box-shadow: 0 18px 38px rgba(0,201,167,0.24) !important;
+    transition: 0.22s ease;
+}
+
+.admin-settings-page .settings-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 48px rgba(0,201,167,0.30) !important;
+}
+
+/* =========================================================
+   Light Mode Compatibility
+   لأن القائمة الجانبية عندك تغيّر نفس المتغيرات في اللايت
+========================================================= */
+
+html[data-theme="light"] .admin-settings-page {
+    color: var(--settings-t1) !important;
+}
+
+html[data-theme="light"] .admin-settings-page .admin-page-head,
+html[data-theme="light"] .admin-settings-page .settings-tabs,
+html[data-theme="light"] .admin-settings-page .settings-tabs-clean,
+html[data-theme="light"] .admin-settings-page .settings-content {
+    background:
+        linear-gradient(175deg, rgba(255,255,255,0.86) 0%, rgba(255,255,255,0.66) 100%) !important;
+    border-color: var(--settings-border-1) !important;
+}
+
+html[data-theme="light"] .admin-settings-page .settings-panel {
+    background:
+        radial-gradient(ellipse 70% 55% at 15% -5%, var(--settings-jade-soft) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 88% 95%, var(--settings-sapphire-dim) 0%, transparent 52%),
+        rgba(255,255,255,0.35) !important;
+}
+
+html[data-theme="light"] .admin-settings-page .settings-field input,
+html[data-theme="light"] .admin-settings-page .settings-field textarea,
+html[data-theme="light"] .admin-settings-page .settings-field select,
+html[data-theme="light"] .admin-settings-page .theme-option span,
+html[data-theme="light"] .admin-settings-page .settings-switch,
+html[data-theme="light"] .admin-settings-page .home-section-tabs {
+    background: rgba(255,255,255,0.78) !important;
+    color: var(--settings-t1) !important;
+    border-color: var(--settings-border-1) !important;
+}
+
+/* =========================================================
+   Responsive
+========================================================= */
+
+@media (max-width: 1000px) {
+    .admin-settings-page {
+        padding: 20px;
+    }
+
+    .admin-settings-page .settings-tabs,
+    .admin-settings-page .settings-tabs-clean {
+        justify-content: flex-start;
+        top: 72px;
+    }
+
+    .admin-settings-page .settings-content {
+        border-radius: 28px;
+    }
+
+    .admin-settings-page .settings-panel {
+        padding: 26px;
+    }
+
+    .admin-settings-page .settings-fields,
+    .admin-settings-page .settings-upload-row,
+    .admin-settings-page .settings-colors,
+    .admin-settings-page .theme-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .admin-settings-page {
+        padding: 16px;
+    }
+
+    .admin-settings-page .admin-page-head {
+        padding: 26px 22px;
+        border-radius: 26px;
+    }
+
+    .admin-settings-page .admin-page-head h1 {
+        font-size: 26px;
+    }
+
+    .admin-settings-page .settings-tab {
+        width: 52px;
+        height: 52px;
+    }
+
+    .admin-settings-page .settings-tab-icon {
+        width: 44px;
+        height: 44px;
+    }
+
+    .admin-settings-page .settings-panel {
+        padding: 22px;
+    }
+
+    .admin-settings-page .settings-card-head {
+        align-items: flex-start;
+    }
+
+    .admin-settings-page .settings-actions {
+        justify-content: center;
+    }
+
+    .admin-settings-page .settings-save-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* =========================================================
+   SETTINGS DARK MODE - MATCH ADMIN SIDEBAR
+   نفس دارك القائمة الجانبية بدون موف
+========================================================= */
+
+html[data-theme="dark"] .admin-settings-page,
+body.dark .admin-settings-page {
+    --settings-accent: var(--jade, #00c9a7);
+    --settings-accent-2: var(--sapphire, #4b9ef5);
+    --settings-accent-3: var(--amber, #f59e0b);
+
+    --settings-ink: var(--ink, #0b1220);
+    --settings-ink-2: var(--ink-2, #131d2e);
+    --settings-ink-3: var(--ink-3, #1a2538);
+
+    --settings-surface-0: rgba(255, 255, 255, 0.03);
+    --settings-surface-1: rgba(255, 255, 255, 0.055);
+    --settings-surface-2: rgba(255, 255, 255, 0.085);
+    --settings-surface-3: rgba(255, 255, 255, 0.12);
+
+    --settings-border: rgba(255, 255, 255, 0.09);
+    --settings-border-strong: rgba(255, 255, 255, 0.16);
+
+    --settings-heading: var(--t1, #e8f2ff);
+    --settings-text: var(--t1, #e8f2ff);
+    --settings-muted: var(--t2, #8ba5c4);
+    --settings-muted-2: var(--t3, #4d6880);
+
+    --settings-shadow: 0 18px 58px rgba(0, 0, 0, 0.46);
+    --settings-shadow-soft: 0 10px 34px rgba(0, 0, 0, 0.34);
+
+    background:
+        radial-gradient(ellipse 70% 55% at 15% -5%, rgba(0, 201, 167, 0.10) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 88% 95%, rgba(75, 158, 245, 0.08) 0%, transparent 52%),
+        linear-gradient(180deg, var(--settings-ink) 0%, var(--settings-ink-2) 100%) !important;
+
+    color: var(--settings-text) !important;
+}
+
+/* Header */
+html[data-theme="dark"] .admin-settings-page .admin-page-head,
+body.dark .admin-settings-page .admin-page-head {
+    background:
+        radial-gradient(circle at top right, rgba(0, 201, 167, 0.13), transparent 34%),
+        linear-gradient(
+            175deg,
+            rgba(255, 255, 255, 0.07) 0%,
+            rgba(255, 255, 255, 0.035) 62%,
+            rgba(255, 255, 255, 0.02) 100%
+        ) !important;
+    border-color: var(--settings-border) !important;
+    box-shadow:
+        var(--settings-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .admin-page-head::before,
+body.dark .admin-settings-page .admin-page-head::before {
+    background: radial-gradient(circle, rgba(0, 201, 167, 0.16), transparent 68%) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .admin-page-head::after,
+body.dark .admin-settings-page .admin-page-head::after {
+    background: radial-gradient(circle, rgba(75, 158, 245, 0.12), transparent 68%) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .admin-page-badge,
+body.dark .admin-settings-page .admin-page-badge {
+    background: rgba(0, 201, 167, 0.12) !important;
+    color: var(--settings-accent) !important;
+    border-color: rgba(0, 201, 167, 0.24) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .admin-page-head h1,
+body.dark .admin-settings-page .admin-page-head h1,
+html[data-theme="dark"] .admin-settings-page h1,
+html[data-theme="dark"] .admin-settings-page h2,
+html[data-theme="dark"] .admin-settings-page h3,
+body.dark .admin-settings-page h1,
+body.dark .admin-settings-page h2,
+body.dark .admin-settings-page h3 {
+    color: var(--settings-heading) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .admin-page-head p,
+body.dark .admin-settings-page .admin-page-head p,
+html[data-theme="dark"] .admin-settings-page p,
+html[data-theme="dark"] .admin-settings-page small,
+body.dark .admin-settings-page p,
+body.dark .admin-settings-page small {
+    color: var(--settings-muted) !important;
+}
+
+/* Icon Dock */
+html[data-theme="dark"] .admin-settings-page .settings-tabs,
+html[data-theme="dark"] .admin-settings-page .settings-tabs-clean,
+body.dark .admin-settings-page .settings-tabs,
+body.dark .admin-settings-page .settings-tabs-clean {
+    background:
+        linear-gradient(
+            175deg,
+            rgba(255, 255, 255, 0.07) 0%,
+            rgba(255, 255, 255, 0.035) 62%,
+            rgba(255, 255, 255, 0.02) 100%
+        ) !important;
+    border-color: var(--settings-border) !important;
+    box-shadow:
+        var(--settings-shadow-soft),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-tab-icon,
+body.dark .admin-settings-page .settings-tab-icon {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.085),
+            rgba(255, 255, 255, 0.035)
+        ) !important;
+    color: var(--settings-accent) !important;
+    border-color: var(--settings-border) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-tab:hover .settings-tab-icon,
+body.dark .admin-settings-page .settings-tab:hover .settings-tab-icon {
+    background: rgba(0, 201, 167, 0.12) !important;
+    color: var(--settings-accent) !important;
+    border-color: rgba(0, 201, 167, 0.28) !important;
+    box-shadow: 0 12px 30px rgba(0, 201, 167, 0.18) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-tab.is-active .settings-tab-icon,
+body.dark .admin-settings-page .settings-tab.is-active .settings-tab-icon {
+    background: linear-gradient(135deg, var(--settings-accent), var(--settings-accent-2)) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 10px 28px rgba(0, 201, 167, 0.24) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-tab.is-active::after,
+body.dark .admin-settings-page .settings-tab.is-active::after {
+    background: var(--settings-accent) !important;
+    box-shadow: 0 0 14px rgba(0, 201, 167, 0.55) !important;
+}
+
+/* Tooltip */
+html[data-theme="dark"] .admin-settings-page .settings-tab-text,
+body.dark .admin-settings-page .settings-tab-text {
+    background: var(--settings-ink) !important;
+    border: 1px solid var(--settings-border) !important;
+    box-shadow: var(--settings-shadow-soft) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-tab-text strong,
+body.dark .admin-settings-page .settings-tab-text strong {
+    color: var(--settings-heading) !important;
+}
+
+/* Main content */
+html[data-theme="dark"] .admin-settings-page .settings-content,
+body.dark .admin-settings-page .settings-content {
+    background:
+        linear-gradient(
+            175deg,
+            rgba(255, 255, 255, 0.07) 0%,
+            rgba(255, 255, 255, 0.035) 62%,
+            rgba(255, 255, 255, 0.02) 100%
+        ) !important;
+    border-color: var(--settings-border) !important;
+    box-shadow:
+        var(--settings-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-panel,
+body.dark .admin-settings-page .settings-panel {
+    background:
+        radial-gradient(ellipse 70% 55% at 15% -5%, rgba(0, 201, 167, 0.055) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 45% at 88% 95%, rgba(75, 158, 245, 0.045) 0%, transparent 52%),
+        rgba(255, 255, 255, 0.012) !important;
+    color: var(--settings-text) !important;
+}
+
+/* Section head */
+html[data-theme="dark"] .admin-settings-page .settings-card-head,
+body.dark .admin-settings-page .settings-card-head,
+html[data-theme="dark"] .admin-settings-page .home-settings-group-head,
+body.dark .admin-settings-page .home-settings-group-head {
+    border-color: var(--settings-border) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-icon,
+body.dark .admin-settings-page .settings-icon {
+    background: rgba(0, 201, 167, 0.12) !important;
+    color: var(--settings-accent) !important;
+    border-color: rgba(0, 201, 167, 0.22) !important;
+    box-shadow: 0 8px 22px rgba(0, 201, 167, 0.10) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-card-head h2,
+html[data-theme="dark"] .admin-settings-page .home-settings-group-head h3,
+body.dark .admin-settings-page .settings-card-head h2,
+body.dark .admin-settings-page .home-settings-group-head h3 {
+    color: var(--settings-heading) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-card-head p,
+html[data-theme="dark"] .admin-settings-page .home-settings-group-head span,
+body.dark .admin-settings-page .settings-card-head p,
+body.dark .admin-settings-page .home-settings-group-head span {
+    color: var(--settings-muted) !important;
+}
+
+/* Fields */
+html[data-theme="dark"] .admin-settings-page .settings-field,
+body.dark .admin-settings-page .settings-field {
+    background: transparent !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-field label,
+body.dark .admin-settings-page .settings-field label {
+    color: var(--settings-text) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-field input,
+html[data-theme="dark"] .admin-settings-page .settings-field textarea,
+html[data-theme="dark"] .admin-settings-page .settings-field select,
+body.dark .admin-settings-page .settings-field input,
+body.dark .admin-settings-page .settings-field textarea,
+body.dark .admin-settings-page .settings-field select {
+    background: var(--settings-surface-1) !important;
+    color: var(--settings-heading) !important;
+    border-color: var(--settings-border) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-field input::placeholder,
+html[data-theme="dark"] .admin-settings-page .settings-field textarea::placeholder,
+body.dark .admin-settings-page .settings-field input::placeholder,
+body.dark .admin-settings-page .settings-field textarea::placeholder {
+    color: var(--settings-muted-2) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-field input:focus,
+html[data-theme="dark"] .admin-settings-page .settings-field textarea:focus,
+html[data-theme="dark"] .admin-settings-page .settings-field select:focus,
+body.dark .admin-settings-page .settings-field input:focus,
+body.dark .admin-settings-page .settings-field textarea:focus,
+body.dark .admin-settings-page .settings-field select:focus {
+    background: var(--settings-surface-2) !important;
+    border-color: rgba(0, 201, 167, 0.42) !important;
+    box-shadow: 0 0 0 5px rgba(0, 201, 167, 0.10) !important;
+}
+
+/* Theme options */
+html[data-theme="dark"] .admin-settings-page .theme-option span,
+body.dark .admin-settings-page .theme-option span {
+    background: var(--settings-surface-1) !important;
+    color: var(--settings-muted) !important;
+    border-color: var(--settings-border) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .theme-option span i,
+body.dark .admin-settings-page .theme-option span i {
+    color: var(--settings-accent) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .theme-option span:hover,
+body.dark .admin-settings-page .theme-option span:hover {
+    background: rgba(0, 201, 167, 0.10) !important;
+    color: var(--settings-heading) !important;
+    border-color: rgba(0, 201, 167, 0.24) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .theme-option input:checked + span,
+body.dark .admin-settings-page .theme-option input:checked + span {
+    background: rgba(0, 201, 167, 0.14) !important;
+    color: var(--settings-accent) !important;
+    border-color: rgba(0, 201, 167, 0.36) !important;
+}
+
+/* Switch */
+html[data-theme="dark"] .admin-settings-page .settings-switch,
+body.dark .admin-settings-page .settings-switch {
+    background: var(--settings-surface-1) !important;
+    border-color: var(--settings-border) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-switch:hover,
+body.dark .admin-settings-page .settings-switch:hover {
+    background: rgba(0, 201, 167, 0.08) !important;
+    border-color: rgba(0, 201, 167, 0.22) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-switch strong,
+body.dark .admin-settings-page .settings-switch strong {
+    color: var(--settings-heading) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-switch small,
+body.dark .admin-settings-page .settings-switch small {
+    color: var(--settings-muted) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-switch > span,
+body.dark .admin-settings-page .settings-switch > span {
+    background: rgba(255, 255, 255, 0.16) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-switch input:checked + span,
+body.dark .admin-settings-page .settings-switch input:checked + span {
+    background: linear-gradient(135deg, var(--settings-accent), var(--settings-accent-2)) !important;
+}
+
+/* Home inner tabs */
+html[data-theme="dark"] .admin-settings-page .home-section-tabs,
+body.dark .admin-settings-page .home-section-tabs {
+    background: var(--settings-surface-1) !important;
+    border-color: var(--settings-border) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .home-section-tab,
+body.dark .admin-settings-page .home-section-tab {
+    color: var(--settings-muted) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .home-section-tab:hover,
+body.dark .admin-settings-page .home-section-tab:hover {
+    background: rgba(0, 201, 167, 0.10) !important;
+    color: var(--settings-accent) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .home-section-tab.is-active,
+body.dark .admin-settings-page .home-section-tab.is-active {
+    background: linear-gradient(135deg, var(--settings-accent), var(--settings-accent-2)) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 26px rgba(0, 201, 167, 0.20) !important;
+}
+
+/* Separators */
+html[data-theme="dark"] .admin-settings-page .settings-field-full > strong,
+body.dark .admin-settings-page .settings-field-full > strong {
+    background: rgba(0, 201, 167, 0.10) !important;
+    color: var(--settings-accent) !important;
+    border-color: rgba(0, 201, 167, 0.22) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-field-full > strong::before,
+body.dark .admin-settings-page .settings-field-full > strong::before {
+    background: var(--settings-accent) !important;
+    box-shadow: 0 0 0 5px rgba(0, 201, 167, 0.12) !important;
+}
+
+/* Image preview */
+html[data-theme="dark"] .admin-settings-page .settings-preview,
+body.dark .admin-settings-page .settings-preview {
+    background: var(--settings-surface-1) !important;
+    border-color: var(--settings-border) !important;
+}
+
+/* Save button */
+html[data-theme="dark"] .admin-settings-page .settings-save-btn,
+body.dark .admin-settings-page .settings-save-btn {
+    background: linear-gradient(135deg, var(--settings-accent), var(--settings-accent-2)) !important;
+    color: #ffffff !important;
+    box-shadow: 0 18px 38px rgba(0, 201, 167, 0.24) !important;
+}
+
+html[data-theme="dark"] .admin-settings-page .settings-save-btn:hover,
+body.dark .admin-settings-page .settings-save-btn:hover {
+    box-shadow: 0 22px 48px rgba(0, 201, 167, 0.30) !important;
+}
+
+
+/* =========================================================
+   HOME BUILDER INNER DESIGN
+========================================================= */
+
+.home-builder {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.home-builder-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 18px;
+    align-items: stretch;
+    padding: 24px;
+    border-radius: 30px;
+    background:
+        radial-gradient(circle at top right, rgba(0, 201, 167, 0.12), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,0.065), rgba(255,255,255,0.030)) !important;
+    border: 1px solid rgba(255,255,255,0.09);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.14);
+}
+
+.home-builder-intro__tag {
+    display: inline-flex;
+    width: fit-content;
+    padding: 7px 13px;
+    border-radius: 999px;
+    background: rgba(0, 201, 167, 0.10);
+    border: 1px solid rgba(0, 201, 167, 0.18);
+    color: var(--settings-jade, #00c9a7);
+    font-size: 12px;
+    font-weight: 950;
+}
+
+.home-builder-intro h3 {
+    margin: 10px 0 8px;
+    color: var(--settings-t1, #e8f2ff) !important;
+    font-size: 24px;
+    font-weight: 950;
+}
+
+.home-builder-intro p {
+    margin: 0;
+    color: var(--settings-t2, #8ba5c4) !important;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.9;
+}
+
+.home-builder-summary {
+    display: grid;
+    gap: 10px;
+}
+
+.home-builder-summary__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.050);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.home-builder-summary__item span {
+    color: var(--settings-t2, #8ba5c4);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.home-builder-summary__item strong {
+    color: var(--settings-t1, #e8f2ff);
+    font-size: 13px;
+    font-weight: 950;
+}
+
+.home-builder-tabs {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.home-builder-tabs .home-section-tab {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 82px;
+    padding: 15px 16px !important;
+    border-radius: 24px !important;
+    text-align: right;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.065), rgba(255,255,255,0.025)) !important;
+    border: 1px solid rgba(255,255,255,0.09) !important;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.10);
+    transition: .22s ease;
+}
+
+.home-builder-tabs .home-section-tab:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 201, 167, 0.24) !important;
+    box-shadow: 0 14px 30px rgba(0, 201, 167, 0.12);
+}
+
+.home-builder-tabs .home-section-tab.is-active {
+    background:
+        radial-gradient(circle at top right, rgba(0, 201, 167, 0.14), transparent 42%),
+        linear-gradient(135deg, rgba(0, 201, 167, 0.14), rgba(75, 158, 245, 0.10)) !important;
+    border-color: rgba(0, 201, 167, 0.30) !important;
+    box-shadow: 0 16px 38px rgba(0, 201, 167, 0.16);
+}
+
+.home-section-tab__icon {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+    background: rgba(255,255,255,0.070);
+    color: var(--settings-jade, #00c9a7);
+    border: 1px solid rgba(255,255,255,0.08);
+    font-size: 18px;
+}
+
+.home-section-tab.is-active .home-section-tab__icon {
+    background: linear-gradient(135deg, var(--settings-jade, #00c9a7), var(--settings-sapphire, #4b9ef5));
+    color: #fff;
+    border-color: transparent;
+}
+
+.home-section-tab__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.home-section-tab__content strong {
+    color: var(--settings-t1, #e8f2ff);
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.home-section-tab__content small {
+    color: var(--settings-t2, #8ba5c4);
+    font-size: 12px;
+    font-weight: 750;
+}
+
+.home-settings-group-head {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 18px;
+    padding: 20px 22px !important;
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at top left, rgba(0, 201, 167, 0.10), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,0.065), rgba(255,255,255,0.030)) !important;
+    border: 1px solid rgba(255,255,255,0.09) !important;
+}
+
+.home-settings-group > .settings-fields {
+    padding: 22px;
+    border-radius: 28px;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,0.055), rgba(255,255,255,0.025)) !important;
+    border: 1px solid rgba(255,255,255,0.09) !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+}
+
+html[data-theme="light"] .home-builder-intro,
+html[data-theme="light"] .home-builder-tabs .home-section-tab,
+html[data-theme="light"] .home-settings-group-head,
+html[data-theme="light"] .home-settings-group > .settings-fields {
+    background: rgba(255,255,255,0.84) !important;
+    border-color: rgba(36, 53, 47, 0.10) !important;
+    box-shadow: 0 12px 28px rgba(36, 53, 47, 0.06);
+}
+
+html[data-theme="light"] .home-builder-intro h3,
+html[data-theme="light"] .home-section-tab__content strong,
+html[data-theme="light"] .home-builder-summary__item strong {
+    color: #24352f !important;
+}
+
+html[data-theme="light"] .home-builder-intro p,
+html[data-theme="light"] .home-section-tab__content small,
+html[data-theme="light"] .home-builder-summary__item span {
+    color: #6f817a !important;
+}
+
+@media (max-width: 1100px) {
+    .home-builder-intro {
+        grid-template-columns: 1fr;
+    }
+
+    .home-builder-tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 700px) {
+    .home-builder-tabs {
+        grid-template-columns: 1fr;
+    }
+
+    .home-builder-intro {
+        padding: 20px;
+    }
+
+    .home-settings-group > .settings-fields {
+        padding: 18px;
+    }
+}
+
+
+
+/* =========================================================
+   HOME SECTIONS STEPPER
+   عرض أقسام الصفحة الرئيسية كمسار ناعم بدون بطاقات
+========================================================= */
+
+.admin-settings-page .home-builder-tabs,
+.admin-settings-page .home-section-tabs.home-builder-tabs {
+    position: relative;
+    display: flex !important;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0;
+
+    width: 100%;
+    margin: 8px 0 26px !important;
+    padding: 18px 10px 8px !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.admin-settings-page .home-builder-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* الخط الواصل بين الأقسام */
+.admin-settings-page .home-builder-tabs::before {
+    content: "";
+    position: absolute;
+    top: 42px;
+    inset-inline: 42px;
+    height: 2px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.10);
+    z-index: 0;
+}
+
+html[data-theme="light"] .admin-settings-page .home-builder-tabs::before {
+    background: rgba(36, 53, 47, 0.12);
+}
+
+/* زر القسم نفسه بدون بطاقة */
+.admin-settings-page .home-builder-tabs .home-section-tab {
+    position: relative;
+    z-index: 1;
+
+    flex: 1 0 92px;
+    min-width: 92px;
+    max-width: 130px;
+
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 9px;
+
+    min-height: auto !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+
+    text-align: center;
+    cursor: pointer;
+    transform: none !important;
+}
+
+/* إلغاء أي تأثير بطاقات قديم */
+.admin-settings-page .home-builder-tabs .home-section-tab:hover,
+.admin-settings-page .home-builder-tabs .home-section-tab.is-active {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* دائرة الأيقونة فقط */
+.admin-settings-page .home-builder-tabs .home-section-tab__icon {
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,0.085),
+            rgba(255,255,255,0.035)
+        ) !important;
+
+    border: 1px solid rgba(255,255,255,0.10) !important;
+    color: var(--settings-jade, #00c9a7);
+
+    font-size: 18px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
+    transition: 0.22s ease;
+}
+
+html[data-theme="light"] .admin-settings-page .home-builder-tabs .home-section-tab__icon {
+    background: #ffffff !important;
+    border-color: rgba(36, 53, 47, 0.12) !important;
+    box-shadow: 0 8px 22px rgba(36, 53, 47, 0.08);
+}
+
+/* hover ناعم */
+.admin-settings-page .home-builder-tabs .home-section-tab:hover .home-section-tab__icon {
+    color: var(--settings-jade, #00c9a7);
+    border-color: rgba(0, 201, 167, 0.32) !important;
+    background: rgba(0, 201, 167, 0.10) !important;
+    transform: translateY(-3px);
+}
+
+/* active */
+.admin-settings-page .home-builder-tabs .home-section-tab.is-active .home-section-tab__icon {
+    background:
+        linear-gradient(
+            135deg,
+            var(--settings-jade, #00c9a7),
+            var(--settings-sapphire, #4b9ef5)
+        ) !important;
+
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 12px 28px rgba(0, 201, 167, 0.24);
+    transform: translateY(-4px) scale(1.05);
+}
+
+/* نقطة صغيرة تحت القسم النشط */
+.admin-settings-page .home-builder-tabs .home-section-tab.is-active::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    margin-top: -1px;
+    border-radius: 50%;
+    background: var(--settings-jade, #00c9a7);
+    box-shadow: 0 0 0 5px rgba(0, 201, 167, 0.12);
+}
+
+/* النص */
+.admin-settings-page .home-builder-tabs .home-section-tab__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    min-width: 0;
+}
+
+.admin-settings-page .home-builder-tabs .home-section-tab__content strong {
+    color: var(--settings-t1, #e8f2ff) !important;
+    font-size: 13px;
+    font-weight: 950;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.admin-settings-page .home-builder-tabs .home-section-tab__content small {
+    display: none !important;
+}
+
+html[data-theme="light"] .admin-settings-page .home-builder-tabs .home-section-tab__content strong {
+    color: #24352f !important;
+}
+
+/* النص النشط */
+.admin-settings-page .home-builder-tabs .home-section-tab.is-active .home-section-tab__content strong {
+    color: var(--settings-jade, #00c9a7) !important;
+}
+
+/* لوحة المحتوى تحت المسار */
+.admin-settings-page .home-section-panels {
+    margin-top: 8px;
+}
+
+/* رأس القسم المفتوح يكون ناعم، مش بطاقة */
+.admin-settings-page .home-settings-group-head {
+    padding: 0 0 18px !important;
+    margin-bottom: 22px !important;
+
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.09) !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+html[data-theme="light"] .admin-settings-page .home-settings-group-head {
+    border-bottom-color: rgba(36, 53, 47, 0.10) !important;
+}
+
+.admin-settings-page .home-settings-group-head h3 {
+    color: var(--settings-t1, #e8f2ff) !important;
+    font-size: 22px;
+    font-weight: 950;
+    margin: 0 0 6px;
+}
+
+.admin-settings-page .home-settings-group-head span {
+    color: var(--settings-t2, #8ba5c4) !important;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+html[data-theme="light"] .admin-settings-page .home-settings-group-head h3 {
+    color: #24352f !important;
+}
+
+html[data-theme="light"] .admin-settings-page .home-settings-group-head span {
+    color: #6f817a !important;
+}
+
+/* إلغاء بطاقة الحقول لو كانت موجودة من الستايل السابق */
+.admin-settings-page .home-settings-group > .settings-fields {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+/* ترتيب الحقول يبقى نظيف */
+.admin-settings-page .settings-panel[data-panel="home"] .settings-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 20px;
+}
+
+/* Responsive */
+@media (max-width: 950px) {
+    .admin-settings-page .home-builder-tabs {
+        justify-content: flex-start;
+        gap: 22px;
+        padding-inline: 6px !important;
+    }
+
+    .admin-settings-page .home-builder-tabs::before {
+        inset-inline: 32px;
+        min-width: 780px;
+    }
+
+    .admin-settings-page .home-builder-tabs .home-section-tab {
+        flex: 0 0 88px;
+        min-width: 88px;
+    }
+}
+
+@media (max-width: 700px) {
+    .admin-settings-page .home-builder-tabs .home-section-tab__icon {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+        font-size: 16px;
+    }
+
+    .admin-settings-page .home-builder-tabs .home-section-tab__content strong {
+        font-size: 12px;
+    }
+
+    .admin-settings-page .settings-panel[data-panel="home"] .settings-fields {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   FINAL FIX - HOME SECTIONS NAV NO BOXES
+   يشيل المستطيل الخلفي + مربع الاختيار + الخط نهائيًا
+========================================================= */
+
+/* الحاوية الأساسية لأقسام الصفحة الرئيسية */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tabs,
+html[data-theme="dark"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tabs,
+body.dark .admin-settings-page .settings-panel[data-panel="home"] .home-section-tabs,
+html[data-theme="light"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tabs {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 18px !important;
+
+    width: 100% !important;
+    margin: 0 0 30px !important;
+    padding: 6px 0 18px !important;
+
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    border-radius: 0 !important;
+
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+}
+
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tabs::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* حذف أي خط بين الأيقونات */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tabs::before,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tabs::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* الزر نفسه: ممنوع يكون بطاقة أو مربع */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:focus,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:active,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active,
+html[data-theme="dark"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab,
+html[data-theme="dark"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover,
+html[data-theme="dark"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active,
+body.dark .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab,
+body.dark .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover,
+body.dark .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active {
+    position: relative !important;
+
+    flex: 1 0 82px !important;
+    min-width: 82px !important;
+    max-width: 110px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 9px !important;
+
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+
+    border: 0 !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+    border-radius: 0 !important;
+
+    color: inherit !important;
+    transform: none !important;
+    text-align: center !important;
+}
+
+/* حذف أي مربع قديم معمول بـ before/after على الزر */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab::before {
+    content: none !important;
+    display: none !important;
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* نلغي after العريض ونخليه نقطة فقط للنشط */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* الأيقونة فقط هي اللي تبين */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__icon {
+    width: 58px !important;
+    height: 58px !important;
+    flex: 0 0 58px !important;
+
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border-radius: 50% !important;
+
+    background: rgba(255, 255, 255, 0.065) !important;
+    background-image: none !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.11) !important;
+    box-shadow: none !important;
+
+    color: var(--settings-jade, #00c9a7) !important;
+    font-size: 19px !important;
+
+    transform: none !important;
+    transition: 0.22s ease !important;
+}
+
+/* Hover: لا مربع، فقط الدائرة */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover .home-section-tab__icon {
+    background: rgba(0, 201, 167, 0.12) !important;
+    border-color: rgba(0, 201, 167, 0.30) !important;
+    color: var(--settings-jade, #00c9a7) !important;
+    box-shadow: 0 10px 24px rgba(0, 201, 167, 0.14) !important;
+    transform: translateY(-4px) !important;
+}
+
+/* النشط: الدائرة فقط */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon,
+html[data-theme="dark"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon,
+body.dark .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon {
+    background: linear-gradient(
+        135deg,
+        var(--settings-jade, #00c9a7),
+        var(--settings-sapphire, #4b9ef5)
+    ) !important;
+
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 14px 30px rgba(0, 201, 167, 0.24) !important;
+    transform: translateY(-5px) scale(1.06) !important;
+}
+
+/* نقطة صغيرة تحت القسم المختار */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active::after {
+    content: "" !important;
+    display: block !important;
+
+    width: 8px !important;
+    height: 8px !important;
+
+    margin-top: -2px !important;
+    border-radius: 50% !important;
+
+    background: var(--settings-jade, #00c9a7) !important;
+    box-shadow: 0 0 0 5px rgba(0, 201, 167, 0.12) !important;
+}
+
+/* النص بدون خلفية نهائيًا */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__content,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__content strong,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__content small {
+    background: none !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 3px !important;
+}
+
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__content strong {
+    color: var(--settings-t1, #e8f2ff) !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    line-height: 1.3 !important;
+    white-space: nowrap !important;
+}
+
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__content small {
+    display: none !important;
+}
+
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__content strong {
+    color: var(--settings-jade, #00c9a7) !important;
+}
+
+/* Light */
+html[data-theme="light"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__icon {
+    background: #ffffff !important;
+    border-color: rgba(36, 53, 47, 0.12) !important;
+    color: var(--settings-jade, #00c9a7) !important;
+    box-shadow: 0 8px 20px rgba(36, 53, 47, 0.07) !important;
+}
+
+html[data-theme="light"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon {
+    background: linear-gradient(
+        135deg,
+        var(--settings-jade, #00c9a7),
+        var(--settings-sapphire, #4b9ef5)
+    ) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 28px rgba(0, 201, 167, 0.20) !important;
+}
+
+html[data-theme="light"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab__content strong {
+    color: #24352f !important;
+}
+
+html[data-theme="light"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__content strong {
+    color: var(--settings-jade, #00c9a7) !important;
+}
+
+
+/* =========================================================
+   FIX HOME SECTION ACTIVE MOVEMENT
+   منع الأيقونة من الطلوع لفوق عند اختيار القسم
+========================================================= */
+
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab .home-section-tab__icon,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover .home-section-tab__icon,
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon,
+html[data-theme="light"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab .home-section-tab__icon,
+html[data-theme="light"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover .home-section-tab__icon,
+html[data-theme="light"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon,
+html[data-theme="dark"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab .home-section-tab__icon,
+html[data-theme="dark"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover .home-section-tab__icon,
+html[data-theme="dark"] .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon,
+body.dark .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab .home-section-tab__icon,
+body.dark .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover .home-section-tab__icon,
+body.dark .admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon {
+    transform: none !important;
+}
+
+/* خلي الاختيار يظهر باللون فقط */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab.is-active .home-section-tab__icon {
+    background: linear-gradient(
+        135deg,
+        var(--settings-jade, #00c9a7),
+        var(--settings-sapphire, #4b9ef5)
+    ) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 10px 24px rgba(0, 201, 167, 0.20) !important;
+}
+
+/* hover بدون طلوع */
+.admin-settings-page .settings-panel[data-panel="home"] .home-section-tab:hover .home-section-tab__icon {
+    background: rgba(0, 201, 167, 0.12) !important;
+    border-color: rgba(0, 201, 167, 0.30) !important;
+    color: var(--settings-jade, #00c9a7) !important;
+    box-shadow: 0 8px 20px rgba(0, 201, 167, 0.12) !important;
+}
+
+.quiz-rules-manager {
+    padding: 20px;
+    border-radius: 26px;
+    background: linear-gradient(135deg, rgba(79, 143, 111, 0.08), rgba(223, 243, 232, 0.8));
+    border: 1px solid rgba(79, 143, 111, 0.16);
+}
+
+.quiz-rules-manager__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.quiz-rules-manager__head h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #1f3d34;
+}
+
+.quiz-rules-manager__head p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #63776f;
+}
+
+.quiz-add-rule-btn,
+.quiz-remove-rule-btn {
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 900;
+    transition: 0.25s ease;
+}
+
+.quiz-add-rule-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 17px;
+    border-radius: 999px;
+    background: #4f8f6f;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.quiz-add-rule-btn:hover,
+.quiz-remove-rule-btn:hover {
+    transform: translateY(-2px);
+}
+
+.quiz-rules-list {
+    display: grid;
+    gap: 14px;
+}
+
+.quiz-rule-card {
+    padding: 18px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(79, 143, 111, 0.14);
+    box-shadow: 0 16px 36px rgba(31, 61, 52, 0.06);
+}
+
+.quiz-rule-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.quiz-rule-card__top strong {
+    color: #1f3d34;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.quiz-rule-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 800;
+    color: #b42318;
+    cursor: pointer;
+}
+
+.quiz-remove-rule-btn {
+    padding: 8px 13px;
+    border-radius: 999px;
+    background: rgba(180, 35, 24, 0.1);
+    color: #b42318;
+}
+
+.quiz-rule-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.quiz-rule-grid .settings-field-full {
+    grid-column: 1 / -1;
+}
+
+.quiz-rules-empty {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.75);
+    color: #63776f;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .quiz-rules-manager__head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .quiz-rule-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+.quiz-rules-manager {
+    padding: 20px;
+    border-radius: 26px;
+    background: linear-gradient(135deg, rgba(79, 143, 111, 0.08), rgba(223, 243, 232, 0.8));
+    border: 1px solid rgba(79, 143, 111, 0.16);
+}
+
+.quiz-rules-manager__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.quiz-rules-manager__head h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #1f3d34;
+}
+
+.quiz-rules-manager__head p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #63776f;
+}
+
+.quiz-add-rule-btn,
+.quiz-remove-rule-btn {
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 900;
+    transition: 0.25s ease;
+}
+
+.quiz-add-rule-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 17px;
+    border-radius: 999px;
+    background: #4f8f6f;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.quiz-add-rule-btn:hover,
+.quiz-remove-rule-btn:hover {
+    transform: translateY(-2px);
+}
+
+.quiz-rules-list {
+    display: grid;
+    gap: 14px;
+}
+
+.quiz-rule-card {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(79, 143, 111, 0.14);
+    box-shadow: 0 16px 36px rgba(31, 61, 52, 0.06);
+}
+
+.quiz-rule-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 18px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.quiz-rule-summary::-webkit-details-marker {
+    display: none;
+}
+
+.quiz-rule-summary strong {
+    display: block;
+    color: #1f3d34;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.quiz-rule-summary small {
+    display: block;
+    margin-top: 5px;
+    color: #63776f;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.7;
+}
+
+.quiz-rule-summary span {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(79, 143, 111, 0.1);
+    color: #4f8f6f;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.quiz-rule-body {
+    padding: 18px;
+    border-top: 1px solid rgba(79, 143, 111, 0.12);
+}
+
+.quiz-rule-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.quiz-rule-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 800;
+    color: #b42318;
+    cursor: pointer;
+}
+
+.quiz-remove-rule-btn {
+    padding: 8px 13px;
+    border-radius: 999px;
+    background: rgba(180, 35, 24, 0.1);
+    color: #b42318;
+}
+
+.quiz-rule-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.quiz-rule-grid .settings-field-full {
+    grid-column: 1 / -1;
+}
+
+.quiz-rules-empty {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.75);
+    color: #63776f;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .quiz-rules-manager__head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .quiz-rule-summary {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .quiz-rule-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* =========================================================
+   CLEAN APPEARANCE SETTINGS
+========================================================= */
+
+.settings-appearance-card {
+    padding: 24px;
+    border-radius: 26px;
+}
+
+.settings-appearance-card .settings-card-head {
+    margin-bottom: 18px;
+}
+
+.settings-appearance-card .settings-card-kicker {
+    display: inline-flex;
+    width: fit-content;
+    margin-bottom: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(29, 158, 117, 0.10);
+    color: #1D9E75;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.settings-appearance-card h3 {
+    margin: 0 0 7px;
+    color: var(--settings-t1, #e8f2ff);
+    font-size: 20px;
+    font-weight: 950;
+}
+
+.settings-appearance-card p {
+    margin: 0;
+    color: var(--settings-t2, #8ba5c4);
+    font-size: 13px;
+    font-weight: 750;
+    line-height: 1.8;
+}
+
+.appearance-mode-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.appearance-mode-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    align-items: center;
+    min-height: 82px;
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.appearance-mode-row:hover {
+    transform: translateY(-2px);
+    border-color: rgba(29, 158, 117, 0.30);
+    background: rgba(29, 158, 117, 0.055);
+}
+
+.appearance-mode-row input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.appearance-mode-icon {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    font-size: 18px;
+}
+
+.appearance-mode-icon.light {
+    background: rgba(29, 158, 117, 0.12);
+    color: #1D9E75;
+}
+
+.appearance-mode-icon.dark {
+    background: rgba(77, 168, 218, 0.12);
+    color: #4DA8DA;
+}
+
+.appearance-mode-content strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--settings-t1, #e8f2ff);
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.appearance-mode-content small {
+    display: block;
+    color: var(--settings-t2, #8ba5c4);
+    font-size: 12px;
+    font-weight: 750;
+    line-height: 1.6;
+}
+
+.appearance-mode-row:has(input:checked) {
+    border-color: rgba(29, 158, 117, 0.45);
+    background: linear-gradient(
+        135deg,
+        rgba(29, 158, 117, 0.14),
+        rgba(77, 168, 218, 0.08)
+    );
+    box-shadow: 0 14px 30px rgba(29, 158, 117, 0.10);
+}
+
+.appearance-mode-row:has(input:checked)::after {
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #1D9E75;
+    color: #ffffff;
+    font-size: 11px;
+}
+
+/* Light theme */
+html[data-theme="light"] .appearance-mode-row {
+    background: rgba(255, 255, 255, 0.88);
+    border-color: rgba(24, 51, 59, 0.08);
+}
+
+html[data-theme="light"] .appearance-mode-content strong,
+html[data-theme="light"] .settings-appearance-card h3 {
+    color: #18333B;
+}
+
+html[data-theme="light"] .appearance-mode-content small,
+html[data-theme="light"] .settings-appearance-card p {
+    color: #647b84;
+}
+
+html[data-theme="light"] .appearance-mode-row:has(input:checked) {
+    background: linear-gradient(
+        135deg,
+        rgba(29, 158, 117, 0.12),
+        rgba(77, 168, 218, 0.08),
+        #ffffff
+    );
+}
+
+/* Mobile */
+@media (max-width: 760px) {
+    .appearance-mode-list {
+        grid-template-columns: 1fr;
+    }
+
+    .appearance-mode-row {
+        min-height: 76px;
+    }
+}
+
+/* =========================================================
+   Settings V4 color repair - light/dark readable and Etzan-like
+========================================================= */
+.admin-settings-page {
+    --settings-ink: #18333B !important;
+    --settings-ink-2: #f4fbf8 !important;
+    --settings-ink-3: #ffffff !important;
+    --settings-t1: #18333B !important;
+    --settings-t2: #647b84 !important;
+    --settings-t3: #7c9298 !important;
+    --settings-surface-0: rgba(255,255,255,.82) !important;
+    --settings-surface-1: rgba(255,255,255,.90) !important;
+    --settings-surface-2: #ffffff !important;
+    --settings-surface-3: #f8fcfb !important;
+    --settings-border-0: rgba(24,51,59,.08) !important;
+    --settings-border-1: rgba(29,158,117,.14) !important;
+    --settings-border-2: rgba(29,158,117,.24) !important;
+    color: var(--settings-t1) !important;
+    background: transparent !important;
+}
+body[data-theme="dark"] .admin-settings-page,
+body.dark .admin-settings-page,
+html[data-theme="dark"] .admin-settings-page {
+    --settings-ink: #061719 !important;
+    --settings-ink-2: #082426 !important;
+    --settings-ink-3: #0b2f32 !important;
+    --settings-t1: #effffb !important;
+    --settings-t2: #9fbdc1 !important;
+    --settings-t3: #86a9ad !important;
+    --settings-surface-0: rgba(8, 35, 36, .76) !important;
+    --settings-surface-1: rgba(9, 42, 43, .88) !important;
+    --settings-surface-2: rgba(10, 48, 49, .94) !important;
+    --settings-surface-3: rgba(14, 58, 58, .92) !important;
+    --settings-border-0: rgba(92,225,190,.10) !important;
+    --settings-border-1: rgba(92,225,190,.16) !important;
+    --settings-border-2: rgba(92,225,190,.28) !important;
+}
+.admin-settings-page .admin-page-head,
+.admin-settings-page .settings-tabs,
+.admin-settings-page .settings-tabs-clean,
+.admin-settings-page .settings-card,
+.admin-settings-page .settings-preview,
+.admin-settings-page .quiz-rule-card,
+.admin-settings-page .settings-appearance-card,
+.admin-settings-page .appearance-mode-row {
+    background: var(--settings-surface-1) !important;
+    color: var(--settings-t1) !important;
+    border-color: var(--settings-border-1) !important;
+    box-shadow: 0 16px 44px rgba(18,61,71,.08) !important;
+}
+body[data-theme="dark"] .admin-settings-page .admin-page-head,
+body[data-theme="dark"] .admin-settings-page .settings-tabs,
+body[data-theme="dark"] .admin-settings-page .settings-tabs-clean,
+body[data-theme="dark"] .admin-settings-page .settings-card,
+body[data-theme="dark"] .admin-settings-page .settings-preview,
+body[data-theme="dark"] .admin-settings-page .quiz-rule-card,
+body[data-theme="dark"] .admin-settings-page .settings-appearance-card,
+body[data-theme="dark"] .admin-settings-page .appearance-mode-row,
+body.dark .admin-settings-page .admin-page-head,
+body.dark .admin-settings-page .settings-tabs,
+body.dark .admin-settings-page .settings-tabs-clean,
+body.dark .admin-settings-page .settings-card,
+body.dark .admin-settings-page .settings-preview,
+body.dark .admin-settings-page .quiz-rule-card,
+body.dark .admin-settings-page .settings-appearance-card,
+body.dark .admin-settings-page .appearance-mode-row {
+    box-shadow: 0 20px 60px rgba(0,0,0,.22) !important;
+}
+.admin-settings-page :is(h1,h2,h3,h4,strong,label,.settings-tab-text strong,.appearance-mode-content strong) { color: var(--settings-t1) !important; }
+.admin-settings-page :is(p,small,.settings-card-head p,.settings-tab-text small,.appearance-mode-content small) { color: var(--settings-t2) !important; }
+.admin-settings-page :is(input,textarea,select) {
+    background: var(--settings-surface-2) !important;
+    border-color: var(--settings-border-1) !important;
+    color: var(--settings-t1) !important;
+}
+.admin-settings-page :is(input,textarea,select)::placeholder { color: color-mix(in srgb, var(--settings-t2) 60%, transparent) !important; }
+.admin-settings-page .settings-save-btn {
+    background: linear-gradient(135deg, #1D9E75, #4DA8DA) !important;
+    color: #fff !important;
+    box-shadow: 0 18px 36px rgba(29,158,117,.22) !important;
+}

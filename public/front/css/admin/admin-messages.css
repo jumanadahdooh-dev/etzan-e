@@ -1,0 +1,1036 @@
+/* =========================================================
+   Etzan Admin Messages - Final Balanced Style
+   يحافظ على الدارك/الفاتح بدون تخريب إعدادات لوحة الإدارة
+========================================================= */
+
+.msg-page-v2 {
+    --msg-primary: #1D9E75;
+    --msg-primary-dark: #15795A;
+    --msg-secondary: #4DA8DA;
+    --msg-text: #18333B;
+    --msg-muted: #647B84;
+    --msg-page-bg: transparent;
+    --msg-card: rgba(255, 255, 255, 0.94);
+    --msg-card-solid: #ffffff;
+    --msg-soft: #F8FCFB;
+    --msg-border: rgba(29, 158, 117, 0.15);
+    --msg-border-strong: rgba(29, 158, 117, 0.34);
+    --msg-shadow: 0 18px 45px rgba(18, 51, 59, 0.08);
+    --msg-radius-xl: 26px;
+    --msg-radius-lg: 20px;
+
+    direction: rtl;
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 22px 24px;
+    display: grid;
+    grid-template-columns: minmax(370px, 400px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: stretch;
+    min-height: calc(100vh - 120px);
+    background: var(--msg-page-bg);
+}
+
+/* دعم الدارك بدون تغيير إعدادات لوحة الإدارة */
+html.dark .msg-page-v2,
+body.dark .msg-page-v2,
+body.dark-mode .msg-page-v2,
+html[data-theme="dark"] .msg-page-v2,
+body[data-theme="dark"] .msg-page-v2,
+.dark .msg-page-v2,
+.dark-mode .msg-page-v2 {
+    --msg-text: #EAF7F4;
+    --msg-muted: #9FB8B2;
+    --msg-page-bg: transparent;
+    --msg-card: rgba(18, 43, 39, 0.92);
+    --msg-card-solid: #102823;
+    --msg-soft: #10231F;
+    --msg-border: rgba(70, 190, 150, 0.18);
+    --msg-border-strong: rgba(70, 190, 150, 0.36);
+    --msg-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+}
+
+/* =========================================================
+   Sidebar - قائمة المحادثات
+========================================================= */
+
+.msg-sidebar-v2 {
+    min-width: 0;
+    height: calc(100vh - 140px);
+    border-radius: var(--msg-radius-xl);
+    background: var(--msg-card);
+    border: 1px solid var(--msg-border);
+    box-shadow: var(--msg-shadow);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+}
+
+.msg-sidebar-head-v2 {
+    padding: 22px 22px 18px;
+    border-bottom: 1px solid var(--msg-border);
+    background:
+        radial-gradient(circle at top right, rgba(29, 158, 117, 0.10), transparent 42%),
+        var(--msg-card);
+}
+
+.msg-kicker-v2 {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    width: fit-content;
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: var(--msg-primary-dark);
+    background: rgba(29, 158, 117, 0.12);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.msg-sidebar-head-v2 h1 {
+    margin: 12px 0 6px;
+    color: var(--msg-text);
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 950;
+}
+
+.msg-sidebar-head-v2 p {
+    margin: 0;
+    color: var(--msg-muted);
+    font-size: 13px;
+    line-height: 1.7;
+    font-weight: 750;
+}
+
+.msg-conversations-v2 {
+    padding: 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(29, 158, 117, 0.30) transparent;
+}
+
+.msg-conversations-v2::-webkit-scrollbar,
+.msg-chat-body-v2::-webkit-scrollbar {
+    width: 6px;
+}
+
+.msg-conversations-v2::-webkit-scrollbar-thumb,
+.msg-chat-body-v2::-webkit-scrollbar-thumb {
+    background: rgba(29, 158, 117, 0.28);
+    border-radius: 999px;
+}
+
+.msg-conversations-v2::-webkit-scrollbar-track,
+.msg-chat-body-v2::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.msg-conv-item-v2 {
+    position: relative;
+    display: grid;
+    grid-template-columns: 50px minmax(0, 1fr);
+    gap: 11px;
+    align-items: center;
+    min-height: 86px;
+    padding: 12px;
+    border-radius: 20px;
+    background: var(--msg-card-solid);
+    border: 1px solid var(--msg-border);
+    color: var(--msg-text);
+    text-decoration: none !important;
+    box-shadow: 0 8px 18px rgba(24, 51, 59, 0.04);
+    transition: 0.22s ease;
+}
+
+.msg-conv-item-v2:hover,
+.msg-conv-item-v2.is-active {
+    background:
+        linear-gradient(135deg, rgba(29, 158, 117, 0.08), rgba(77, 168, 218, 0.07)),
+        var(--msg-card-solid);
+    border-color: var(--msg-border-strong);
+}
+
+.msg-conv-item-v2.has-unread::after {
+    content: "";
+    position: absolute;
+    top: 13px;
+    inset-inline-start: 13px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--msg-primary);
+    box-shadow: 0 0 0 5px rgba(29, 158, 117, 0.13);
+}
+
+.msg-conv-avatar-v2 {
+    width: 50px;
+    height: 50px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--msg-primary), var(--msg-secondary));
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    font-weight: 950;
+    position: relative;
+    box-shadow: 0 10px 22px rgba(29, 158, 117, 0.16);
+}
+
+.msg-conv-online-v2 {
+    position: absolute;
+    bottom: -2px;
+    inset-inline-start: -2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #25C88A;
+    border: 3px solid var(--msg-card-solid);
+}
+
+.msg-conv-body-v2 {
+    min-width: 0;
+}
+
+.msg-conv-top-v2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.msg-conv-top-v2 strong {
+    color: var(--msg-text);
+    font-size: 14px;
+    font-weight: 950;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.msg-conv-top-v2 small {
+    color: var(--msg-muted);
+    font-size: 10px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.msg-conv-preview-v2 {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.msg-conv-preview-v2 span {
+    flex: 1;
+    min-width: 0;
+    color: var(--msg-muted);
+    font-size: 12px;
+    font-weight: 750;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.msg-conv-preview-v2 b {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    border-radius: 50%;
+    background: var(--msg-primary);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 950;
+}
+
+.msg-conv-meta-v2 {
+    margin-top: 7px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.msg-conv-meta-v2 em,
+.msg-type-pill-v2 {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 165px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.msg-conv-meta-v2 em.is-guest,
+.msg-type-pill-v2.is-guest {
+    color: var(--msg-primary-dark);
+    background: rgba(29, 158, 117, 0.12);
+}
+
+.msg-conv-meta-v2 em.is-user,
+.msg-type-pill-v2.is-user,
+.msg-conv-meta-v2 em.is-email {
+    color: #267EA9;
+    background: rgba(77, 168, 218, 0.13);
+}
+
+/* =========================================================
+   Chat Area
+========================================================= */
+
+.msg-chat-v2 {
+    min-width: 0;
+    height: calc(100vh - 140px);
+    border-radius: var(--msg-radius-xl);
+    background: var(--msg-card);
+    border: 1px solid var(--msg-border);
+    box-shadow: var(--msg-shadow);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+}
+
+.msg-chat-head-v2 {
+    min-height: 92px;
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--msg-border);
+    background:
+        radial-gradient(circle at top right, rgba(29, 158, 117, 0.08), transparent 44%),
+        var(--msg-card);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.msg-chat-user-v2 {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-width: 0;
+}
+
+.msg-chat-avatar-v2 {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--msg-primary), var(--msg-secondary));
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 950;
+}
+
+.msg-chat-user-v2 span {
+    display: block;
+    color: var(--msg-primary-dark);
+    font-size: 12px;
+    font-weight: 900;
+    margin-bottom: 3px;
+}
+
+.msg-chat-user-v2 strong {
+    display: block;
+    color: var(--msg-text);
+    font-size: 21px;
+    font-weight: 950;
+    line-height: 1.25;
+}
+
+.msg-chat-user-v2 small {
+    display: block;
+    color: var(--msg-muted);
+    font-size: 12px;
+    font-weight: 760;
+    line-height: 1.6;
+    margin-top: 4px;
+}
+
+.msg-chat-head-actions-v2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.msg-status-btn-v2 {
+    border: none;
+    min-height: 37px;
+    padding: 0 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 950;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--msg-primary-dark);
+    background: rgba(29, 158, 117, 0.12);
+}
+
+/* =========================================================
+   Messages
+========================================================= */
+
+.msg-chat-body-v2 {
+    padding: 24px 28px;
+    overflow-y: auto;
+    background:
+        radial-gradient(circle at 18% 18%, rgba(77, 168, 218, 0.05), transparent 28%),
+        radial-gradient(circle at 82% 76%, rgba(29, 158, 117, 0.06), transparent 31%),
+        var(--msg-soft);
+}
+
+.msg-bubble-v2 {
+    display: flex !important;
+    width: 100% !important;
+    margin-bottom: 13px !important;
+}
+
+.msg-bubble-v2--user {
+    justify-content: flex-start !important;
+}
+
+.msg-bubble-v2--admin {
+    justify-content: flex-end !important;
+}
+
+/* هذا هو الإصلاح الأساسي: البابل على قد الكلام */
+.msg-bubble-content-v2 {
+    width: fit-content !important;
+    min-width: 0 !important;
+    max-width: min(430px, 56%) !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 11px 15px !important;
+    border-radius: 20px !important;
+    line-height: 1.75 !important;
+    font-size: 14px !important;
+    font-weight: 820 !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+    white-space: pre-wrap !important;
+    display: inline-block !important;
+}
+
+.msg-bubble-content-v2 p {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+}
+
+.msg-bubble-content-v2 span {
+    display: block !important;
+    margin-top: 7px !important;
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    opacity: 0.68 !important;
+    font-weight: 800 !important;
+}
+
+.msg-bubble-v2--user .msg-bubble-content-v2 {
+    background: var(--msg-card-solid) !important;
+    color: var(--msg-text) !important;
+    border: 1px solid var(--msg-border) !important;
+    border-bottom-right-radius: 7px !important;
+    box-shadow: 0 9px 22px rgba(24, 51, 59, 0.06) !important;
+}
+
+.msg-bubble-v2--admin .msg-bubble-content-v2 {
+    background: linear-gradient(135deg, var(--msg-primary), var(--msg-secondary)) !important;
+    color: #ffffff !important;
+    border-bottom-left-radius: 7px !important;
+    box-shadow: 0 12px 26px rgba(29, 158, 117, 0.20) !important;
+}
+
+/* =========================================================
+   Reply Footer
+========================================================= */
+
+.msg-chat-footer-v2 {
+    padding: 15px 18px 17px;
+    background: var(--msg-card-solid);
+    border-top: 1px solid var(--msg-border);
+    display: grid;
+    gap: 8px;
+}
+
+.msg-input-form-v2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 52px;
+    gap: 10px;
+    align-items: end;
+}
+
+.msg-input-wrap-v2 textarea {
+    width: 100%;
+    min-height: 52px;
+    max-height: 125px;
+    height: 52px;
+    resize: none;
+    overflow: hidden;
+    border: 1px solid rgba(24, 51, 59, 0.14);
+    border-radius: 18px;
+    outline: none;
+    padding: 13px 15px;
+    color: var(--msg-text);
+    background: var(--msg-card-solid);
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.7;
+}
+
+.msg-input-wrap-v2 textarea:focus {
+    border-color: rgba(29, 158, 117, 0.48);
+    box-shadow: 0 0 0 4px rgba(29, 158, 117, 0.10);
+}
+
+.msg-send-btn-v2 {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border: none;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--msg-primary), var(--msg-secondary));
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 12px 24px rgba(29, 158, 117, 0.20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.msg-reply-note-v2 {
+    color: var(--msg-muted);
+    font-size: 12px;
+    font-weight: 850;
+    line-height: 1.6;
+    padding-inline: 4px;
+}
+
+.msg-reply-note-v2 strong {
+    color: var(--msg-primary-dark);
+}
+
+/* =========================================================
+   Empty States
+========================================================= */
+
+.msg-conv-empty-v2,
+.msg-chat-empty-v2 {
+    padding: 42px 18px;
+    text-align: center;
+    color: var(--msg-muted);
+    font-weight: 800;
+}
+
+.msg-conv-empty-v2 h3,
+.msg-chat-empty-v2 h2 {
+    color: var(--msg-text);
+    margin: 12px 0 6px;
+    font-weight: 950;
+}
+
+.msg-chat-empty-v2 {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.msg-chat-empty-watermark-v2 {
+    display: none;
+}
+
+/* =========================================================
+   Responsive
+========================================================= */
+
+@media (max-width: 1200px) {
+    .msg-page-v2 {
+        grid-template-columns: 340px minmax(0, 1fr);
+        padding: 18px;
+    }
+
+    .msg-bubble-content-v2 {
+        max-width: min(440px, 70%) !important;
+    }
+}
+
+@media (max-width: 950px) {
+    .msg-page-v2 {
+        grid-template-columns: 1fr;
+    }
+
+    .msg-sidebar-v2 {
+        height: auto;
+        max-height: 420px;
+    }
+
+    .msg-chat-v2 {
+        height: 650px;
+    }
+}
+
+@media (max-width: 640px) {
+    .msg-page-v2 {
+        padding: 12px;
+    }
+
+    .msg-chat-head-v2 {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .msg-chat-head-actions-v2 {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .msg-bubble-content-v2 {
+        max-width: 90% !important;
+    }
+
+    .msg-input-form-v2 {
+        grid-template-columns: minmax(0, 1fr) 50px;
+    }
+
+    .msg-send-btn-v2 {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+    }
+}
+
+
+/* =========================================================
+   FIX ONLY MESSAGE BUBBLE SIZE
+   تصغير بوكس الرسالة فقط بدون تغيير عرض الصفحة
+========================================================= */
+
+.msg-chat-body-v2 {
+    align-content: flex-start !important;
+}
+
+/* صف الرسالة */
+.msg-bubble-v2 {
+    width: 100% !important;
+    display: flex !important;
+    margin-bottom: 12px !important;
+}
+
+/* رسالة الزائر */
+.msg-bubble-v2--user {
+    justify-content: flex-start !important;
+}
+
+/* رد الأدمن */
+.msg-bubble-v2--admin {
+    justify-content: flex-end !important;
+}
+
+/* أهم جزء: خلي البوكس على قد الكلام */
+.msg-bubble-content-v2 {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 420px !important;
+
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    padding: 10px 14px !important;
+    border-radius: 18px !important;
+
+    display: inline-block !important;
+    align-self: flex-start !important;
+
+    line-height: 1.7 !important;
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+}
+
+/* النص داخل البوكس */
+.msg-bubble-content-v2 p {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    display: block !important;
+    line-height: 1.7 !important;
+}
+
+/* الوقت تحت الرسالة، بدون ما يمدد البوكس */
+.msg-bubble-content-v2 span {
+    display: block !important;
+    margin-top: 6px !important;
+    padding: 0 !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    opacity: 0.65 !important;
+}
+
+/* لو في ستايل قديم عامل البابل كارد كبير */
+.msg-bubble-v2 .msg-bubble-content-v2,
+.msg-bubble-v2 .msg-bubble-content-v2 * {
+    box-sizing: border-box !important;
+}
+
+/* ألغِ أي تمدد قديم */
+.msg-bubble-content-v2 {
+    flex: 0 0 auto !important;
+}
+
+/* لو الكلام طويل جدًا خليه يلف بس ما يمدد الصفحة */
+@media (max-width: 1200px) {
+    .msg-bubble-content-v2 {
+        max-width: 360px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .msg-bubble-content-v2 {
+        max-width: 85% !important;
+    }
+}
+
+/* =========================================================
+   FINAL FIX - Messages Width + Bubble Size
+   يصغر الفراغات ويكبر مساحة الشات ويخلي الرسالة على قد الكلام
+========================================================= */
+
+/* الصفحة تاخد عرض المساحة المتاحة بدل ما تكون محصورة بالنص */
+.msg-page-v2 {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 18px 22px !important;
+
+    display: grid !important;
+    grid-template-columns: minmax(360px, 390px) minmax(0, 1fr) !important;
+    gap: 16px !important;
+
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+}
+
+/* تصغير الفراغ حوالين البوكسات */
+.msg-sidebar-v2,
+.msg-chat-v2 {
+    height: calc(100vh - 125px) !important;
+    border-radius: 24px !important;
+}
+
+/* الشات نفسه ياخد المساحة الأكبر */
+.msg-chat-v2 {
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+/* قائمة المحادثات أعرض شوي ومناسبة */
+.msg-sidebar-v2 {
+    min-width: 360px !important;
+    max-width: 390px !important;
+}
+
+/* تصغير هيدر الشات شوي عشان ما ياخد مساحة زيادة */
+.msg-chat-head-v2 {
+    min-height: 86px !important;
+    padding: 16px 22px !important;
+}
+
+/* جسم المحادثة: ممنوع يوزع الرسائل على كل الارتفاع */
+.msg-chat-body-v2 {
+    display: block !important;
+    align-content: flex-start !important;
+    justify-content: flex-start !important;
+
+    padding: 22px 24px !important;
+    overflow-y: auto !important;
+}
+
+/* صف الرسالة */
+.msg-bubble-v2 {
+    width: 100% !important;
+    display: flex !important;
+    margin: 0 0 12px 0 !important;
+    padding: 0 !important;
+
+    align-items: flex-start !important;
+}
+
+/* مكان رسالة الزائر/المستخدم */
+.msg-bubble-v2--user {
+    justify-content: flex-start !important;
+}
+
+/* مكان رد الأدمن */
+.msg-bubble-v2--admin {
+    justify-content: flex-end !important;
+}
+
+/* أهم تعديل: فقاعة الرسالة نفسها على قد الكلام */
+.msg-bubble-content-v2 {
+    width: fit-content !important;
+    max-width: min(480px, 52%) !important;
+
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    padding: 10px 14px !important;
+    margin: 0 !important;
+
+    display: block !important;
+    flex: 0 1 auto !important;
+
+    border-radius: 18px !important;
+    line-height: 1.7 !important;
+    font-size: 13.5px !important;
+    font-weight: 800 !important;
+
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+}
+
+/* النص داخل الفقاعة لا يمدد الكرت */
+.msg-bubble-content-v2 p {
+    margin: 0 !important;
+    padding: 0 !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    max-height: none !important;
+
+    display: block !important;
+    line-height: 1.7 !important;
+}
+
+/* الوقت ما ينزل آخر كرت طويل */
+.msg-bubble-content-v2 span {
+    display: block !important;
+    margin-top: 6px !important;
+    padding: 0 !important;
+
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+
+    font-size: 10px !important;
+    line-height: 1.2 !important;
+    opacity: 0.65 !important;
+}
+
+/* لو في ستايل قديم عامل display flex داخل البابل */
+.msg-bubble-content-v2,
+.msg-bubble-content-v2 * {
+    box-sizing: border-box !important;
+}
+
+/* شكل فقاعة الزائر */
+.msg-bubble-v2--user .msg-bubble-content-v2 {
+    background: var(--msg-card-solid, #ffffff) !important;
+    color: var(--msg-text, #18333B) !important;
+    border: 1px solid var(--msg-border, rgba(29, 158, 117, 0.15)) !important;
+    border-bottom-right-radius: 7px !important;
+    box-shadow: 0 8px 20px rgba(24, 51, 59, 0.06) !important;
+}
+
+/* شكل فقاعة الأدمن */
+.msg-bubble-v2--admin .msg-bubble-content-v2 {
+    background: linear-gradient(135deg, #1D9E75, #4DA8DA) !important;
+    color: #ffffff !important;
+    border-bottom-left-radius: 7px !important;
+    box-shadow: 0 12px 24px rgba(29, 158, 117, 0.20) !important;
+}
+
+/* تصغير مساحة الإدخال تحت */
+.msg-chat-footer-v2 {
+    padding: 14px 16px 15px !important;
+}
+
+.msg-input-form-v2 {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 50px !important;
+    gap: 10px !important;
+}
+
+.msg-input-wrap-v2 textarea {
+    min-height: 50px !important;
+    height: 50px !important;
+    max-height: 120px !important;
+    border-radius: 17px !important;
+}
+
+.msg-send-btn-v2 {
+    width: 50px !important;
+    height: 50px !important;
+    min-width: 50px !important;
+    border-radius: 17px !important;
+}
+
+/* للشاشات المتوسطة */
+@media (max-width: 1200px) {
+    .msg-page-v2 {
+        grid-template-columns: minmax(330px, 360px) minmax(0, 1fr) !important;
+        padding: 16px !important;
+        gap: 14px !important;
+    }
+
+    .msg-sidebar-v2 {
+        min-width: 330px !important;
+        max-width: 360px !important;
+    }
+
+    .msg-bubble-content-v2 {
+        max-width: min(440px, 65%) !important;
+    }
+}
+
+/* للموبايل */
+@media (max-width: 900px) {
+    .msg-page-v2 {
+        grid-template-columns: 1fr !important;
+    }
+
+    .msg-sidebar-v2 {
+        min-width: 0 !important;
+        max-width: none !important;
+        height: auto !important;
+        max-height: 420px !important;
+    }
+
+    .msg-chat-v2 {
+        height: 650px !important;
+    }
+
+    .msg-bubble-content-v2 {
+        max-width: 85% !important;
+    }
+}
+
+/* =========================================================
+   Admin messages V5 readability fix
+   إصلاح ظهور نص الرسائل في اللايت/الدارك بدون تغيير المنطق
+========================================================= */
+.msg-page-v2 {
+    max-width: 1180px !important;
+    margin-inline: auto !important;
+}
+
+.msg-chat-panel-v2,
+.msg-sidebar-v2 {
+    color: var(--msg-text) !important;
+}
+
+.msg-chat-body-v2 {
+    background:
+        radial-gradient(circle at 20% 18%, rgba(77, 168, 218, 0.05), transparent 28%),
+        radial-gradient(circle at 82% 76%, rgba(29, 158, 117, 0.06), transparent 31%),
+        rgba(248, 252, 251, 0.72) !important;
+}
+
+body[data-theme="dark"] .msg-chat-body-v2,
+body.dark .msg-chat-body-v2,
+body.theme-dark .msg-chat-body-v2 {
+    background:
+        radial-gradient(circle at 20% 18%, rgba(77, 168, 218, 0.08), transparent 30%),
+        radial-gradient(circle at 82% 76%, rgba(45, 211, 173, 0.08), transparent 31%),
+        rgba(3, 20, 23, 0.72) !important;
+}
+
+.msg-bubble-content-v2,
+.msg-bubble-content-v2 p,
+.msg-bubble-content-v2 span {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.msg-bubble-v2--user .msg-bubble-content-v2,
+.msg-bubble-v2--user .msg-bubble-content-v2 p {
+    color: #18333B !important;
+}
+
+.msg-bubble-v2--user .msg-bubble-content-v2 span {
+    color: rgba(24, 51, 59, 0.56) !important;
+}
+
+body[data-theme="dark"] .msg-bubble-v2--user .msg-bubble-content-v2,
+body[data-theme="dark"] .msg-bubble-v2--user .msg-bubble-content-v2 p,
+body.dark .msg-bubble-v2--user .msg-bubble-content-v2,
+body.dark .msg-bubble-v2--user .msg-bubble-content-v2 p,
+body.theme-dark .msg-bubble-v2--user .msg-bubble-content-v2,
+body.theme-dark .msg-bubble-v2--user .msg-bubble-content-v2 p {
+    color: #effffb !important;
+}
+
+body[data-theme="dark"] .msg-bubble-v2--user .msg-bubble-content-v2 span,
+body.dark .msg-bubble-v2--user .msg-bubble-content-v2 span,
+body.theme-dark .msg-bubble-v2--user .msg-bubble-content-v2 span {
+    color: rgba(234, 255, 248, 0.58) !important;
+}
+
+.msg-bubble-v2--admin .msg-bubble-content-v2,
+.msg-bubble-v2--admin .msg-bubble-content-v2 p,
+.msg-bubble-v2--admin .msg-bubble-content-v2 span {
+    color: #ffffff !important;
+}
+
+.msg-conv-item-v2,
+.msg-conv-item-v2 * {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.msg-conv-top-v2 strong,
+.msg-conv-preview-v2,
+.msg-conv-email-v2 {
+    color: var(--msg-text) !important;
+}
+
+.msg-conv-top-v2 small,
+.msg-conv-meta-v2 {
+    color: var(--msg-muted) !important;
+}

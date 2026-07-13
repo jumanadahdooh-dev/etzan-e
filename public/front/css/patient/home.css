@@ -1,0 +1,2033 @@
+@charset "UTF-8";
+
+/* ==================================================
+   Etzan Patient Home v2
+   ملف خاص بالصفحة الرئيسية فقط
+   المسار: public/front/css/patient/home.css
+================================================== */
+
+/* ==================================================
+   1) Variables + Dark Mode
+================================================== */
+:root {
+    --home-v2-card: rgba(255, 255, 255, 0.88);
+    --home-v2-soft: rgba(255, 255, 255, 0.58);
+    --home-v2-border: rgba(24, 51, 59, 0.08);
+    --home-v2-border-strong: rgba(24, 51, 59, 0.14);
+    --home-v2-shadow: 0 18px 48px rgba(24, 51, 59, 0.065);
+    --home-v2-shadow-strong: 0 24px 70px rgba(24, 51, 59, 0.10);
+    --home-v2-green: #1D9E75;
+    --home-v2-green-dark: #15795A;
+    --home-v2-blue: #4DA8DA;
+    --home-v2-purple: #7C6ED6;
+    --home-v2-warning: #F4B860;
+    --home-v2-danger: #E36A5C;
+}
+
+html[data-theme="dark"] {
+    --bg: #071514;
+    --bg-soft: #0B1C1B;
+    --card: rgba(255, 255, 255, 0.065);
+    --card-solid: #102321;
+    --text: #F4FAF8;
+    --muted: #9CB5AF;
+    --border: rgba(255, 255, 255, 0.085);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --green-soft: rgba(52, 211, 153, 0.12);
+    --blue-soft: rgba(56, 189, 248, 0.12);
+    --home-v2-card: rgba(255, 255, 255, 0.065);
+    --home-v2-soft: rgba(255, 255, 255, 0.045);
+    --home-v2-border: rgba(255, 255, 255, 0.09);
+    --home-v2-border-strong: rgba(255, 255, 255, 0.15);
+    --home-v2-shadow: 0 22px 55px rgba(0, 0, 0, 0.28);
+    --home-v2-shadow-strong: 0 28px 80px rgba(0, 0, 0, 0.36);
+}
+
+/* ==================================================
+   2) Page Shell
+================================================== */
+body.patient-app {
+    background:
+        radial-gradient(circle at 9% 6%, rgba(77, 168, 218, 0.13), transparent 30%),
+        radial-gradient(circle at 92% 0%, rgba(29, 158, 117, 0.15), transparent 34%),
+        linear-gradient(135deg, var(--bg) 0%, var(--bg-soft) 100%) !important;
+}
+
+html[data-theme="dark"] body.patient-app {
+    background:
+        radial-gradient(circle at 10% 8%, rgba(52, 211, 153, 0.10), transparent 30%),
+        radial-gradient(circle at 88% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+        linear-gradient(135deg, #071514 0%, #0B1C1B 100%) !important;
+}
+
+.patient-content {
+    width: 100%;
+    max-width: 1480px !important;
+    margin-inline: auto !important;
+    padding: 28px 34px 28px !important;
+}
+
+.patient-home-page,
+.home-v2 {
+    width: 100%;
+    display: grid;
+    gap: 18px;
+}
+
+/* ==================================================
+   3) Shared Components
+================================================== */
+.home-v2-card,
+.home-v2-summary-card,
+.home-v2-hero,
+.home-v2-activation {
+    background: var(--home-v2-card);
+    border: 1px solid var(--home-v2-border);
+    box-shadow: var(--home-v2-shadow);
+    backdrop-filter: blur(18px);
+}
+
+.home-v2-card {
+    border-radius: 28px;
+    padding: 20px;
+}
+
+.home-v2-card-head,
+.home-v2-section-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.home-v2-card-head span,
+.home-v2-section-head span,
+.home-v2-kicker {
+    color: var(--primary-dark);
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 950;
+}
+
+.home-v2-card-head h2,
+.home-v2-section-head h2 {
+    margin: 3px 0 0;
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1.35;
+    font-weight: 950;
+}
+
+.home-v2-card-head > i {
+    width: 38px;
+    height: 38px;
+    padding: 9px;
+    border-radius: 16px;
+    color: var(--primary-dark);
+    background: var(--green-soft);
+}
+
+.home-v2-card-head a,
+.home-v2-card-link {
+    color: var(--primary-dark);
+    font-size: 12px;
+    font-weight: 950;
+}
+
+.home-v2-card-link {
+    min-height: 42px;
+    padding: 0 14px;
+    margin-top: 14px;
+    border-radius: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(29, 158, 117, 0.10);
+    border: 1px solid rgba(29, 158, 117, 0.14);
+}
+
+.home-v2-card-link:hover {
+    color: #fff;
+    background: var(--primary);
+}
+
+.home-v2-card-link i {
+    width: 16px;
+    height: 16px;
+}
+
+.home-v2-primary-btn,
+.home-v2-soft-btn {
+    min-height: 44px;
+    padding: 0 17px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 950;
+    transition: 0.18s ease;
+}
+
+.home-v2-primary-btn {
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    box-shadow: 0 14px 28px rgba(29, 158, 117, 0.20);
+}
+
+.home-v2-primary-btn:hover {
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.home-v2-soft-btn {
+    color: var(--primary-dark);
+    background: var(--home-v2-soft);
+    border: 1px solid rgba(29, 158, 117, 0.15);
+}
+
+.home-v2-soft-btn:hover {
+    color: #fff;
+    background: var(--primary);
+}
+
+.home-v2-primary-btn i,
+.home-v2-soft-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.home-v2-empty {
+    min-height: 160px;
+    padding: 18px;
+    border-radius: 22px;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 7px;
+    text-align: center;
+    color: var(--muted);
+    background: var(--home-v2-soft);
+    border: 1px dashed var(--home-v2-border-strong);
+}
+
+.home-v2-empty.compact {
+    min-height: 132px;
+}
+
+.home-v2-empty i {
+    width: 30px;
+    height: 30px;
+    color: var(--primary);
+}
+
+.home-v2-empty strong {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.home-v2-empty span {
+    max-width: 260px;
+    font-size: 12px;
+    line-height: 1.7;
+    font-weight: 750;
+}
+
+/* ==================================================
+   4) Hero
+================================================== */
+.home-v2-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 246px;
+    padding: 30px 34px;
+    border-radius: 34px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 230px;
+    gap: 28px;
+    align-items: center;
+    background:
+        radial-gradient(circle at 10% 14%, rgba(255, 255, 255, 0.74), transparent 28%),
+        radial-gradient(circle at 88% 10%, rgba(29, 158, 117, 0.13), transparent 30%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.13), rgba(77, 168, 218, 0.075));
+}
+
+.home-v2-hero::before {
+    content: "";
+    position: absolute;
+    inset: -110px auto auto 24%;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+    filter: blur(5px);
+}
+
+.home-v2-hero-copy,
+.home-v2-hero-panel {
+    position: relative;
+    z-index: 2;
+}
+
+.home-v2-kicker {
+    width: fit-content;
+    min-height: 34px;
+    padding: 0 13px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    background: var(--home-v2-soft);
+    border: 1px solid rgba(29, 158, 117, 0.14);
+}
+
+.home-v2-kicker span {
+    width: 24px;
+    height: 24px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.home-v2-kicker i {
+    width: 14px;
+    height: 14px;
+}
+
+.home-v2-hero h1 {
+    max-width: 820px;
+    margin: 14px 0 8px;
+    color: var(--text);
+    font-size: clamp(31px, 3vw, 50px);
+    line-height: 1.25;
+    font-weight: 950;
+    letter-spacing: -0.5px;
+}
+
+.home-v2-hero p {
+    max-width: 780px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14.5px;
+    line-height: 1.9;
+    font-weight: 800;
+}
+
+.home-v2-missing,
+.home-v2-actions {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.home-v2-missing strong,
+.home-v2-missing span {
+    min-height: 34px;
+    padding: 0 12px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.home-v2-missing strong {
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.36);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-missing span {
+    color: var(--primary-dark);
+    background: var(--home-v2-soft);
+    border: 1px solid rgba(29, 158, 117, 0.14);
+}
+
+.home-v2-missing i {
+    width: 15px;
+    height: 15px;
+}
+
+.home-v2-hero-panel {
+    padding: 18px;
+    border-radius: 28px;
+    display: grid;
+    justify-items: center;
+    gap: 13px;
+    text-align: center;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+.home-v2-hero-panel-copy strong {
+    display: block;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.home-v2-hero-panel-copy small {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+    font-weight: 800;
+}
+
+/* ==================================================
+   5) Rings / Progress
+================================================== */
+.home-v2-ring {
+    --size: 126px;
+    --thickness: 11px;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background:
+        conic-gradient(
+            var(--primary) calc(var(--value) * 1%),
+            rgba(24, 51, 59, 0.09) 0
+        );
+}
+
+.home-v2-ring.small {
+    --size: 112px;
+    --thickness: 10px;
+}
+
+.home-v2-ring > div {
+    width: calc(var(--size) - var(--thickness) * 2);
+    height: calc(var(--size) - var(--thickness) * 2);
+    border-radius: inherit;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: inset 0 0 0 1px var(--home-v2-border);
+}
+
+.home-v2-ring strong {
+    color: var(--text);
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 950;
+}
+
+.home-v2-ring span {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+}
+
+html[data-theme="dark"] .home-v2-ring {
+    background:
+        conic-gradient(
+            #34D399 calc(var(--value) * 1%),
+            rgba(255, 255, 255, 0.10) 0
+        );
+}
+
+html[data-theme="dark"] .home-v2-ring > div {
+    background: #102321;
+}
+
+/* ==================================================
+   6) Summary Row
+================================================== */
+.home-v2-summary-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.home-v2-summary-card {
+    min-height: 112px;
+    padding: 14px;
+    border-radius: 24px;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    align-items: start;
+    gap: 12px;
+    transition: 0.18s ease;
+}
+
+.home-v2-summary-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(29, 158, 117, 0.18);
+}
+
+.home-v2-summary-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 17px;
+    display: grid;
+    place-items: center;
+    color: var(--primary-dark);
+    background: var(--green-soft);
+}
+
+.home-v2-summary-icon i {
+    width: 19px;
+    height: 19px;
+}
+
+.home-v2-summary-card small,
+.home-v2-summary-card em {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+    font-style: normal;
+    font-weight: 800;
+}
+
+.home-v2-summary-card strong {
+    display: block;
+    margin: 2px 0;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.45;
+    font-weight: 950;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.home-v2-mini-progress {
+    height: 6px;
+    margin-top: 10px;
+    overflow: hidden;
+    border-radius: 999px;
+    display: block;
+    background: rgba(24, 51, 59, 0.08);
+}
+
+.home-v2-mini-progress b {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+/* ==================================================
+   7) Main Grid
+================================================== */
+.home-v2-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+.home-v2-appointment-card,
+.home-v2-progress-card,
+.home-v2-calories-card {
+    grid-column: span 4;
+    min-height: 260px;
+}
+
+.home-v2-tasks-card {
+    grid-column: span 5;
+    min-height: 330px;
+}
+
+.home-v2-chart-card {
+    grid-column: span 7;
+    min-height: 330px;
+}
+
+.home-v2-updates-card,
+.home-v2-message-card {
+    grid-column: span 6;
+    min-height: 260px;
+}
+
+/* ==================================================
+   8) Appointment Card
+================================================== */
+.home-v2-appointment-list {
+    display: grid;
+    gap: 10px;
+}
+
+.home-v2-appointment-list div {
+    min-height: 56px;
+    padding: 12px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-appointment-list span {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.home-v2-appointment-list strong {
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 950;
+}
+
+/* ==================================================
+   9) Progress Card
+================================================== */
+.home-v2-progress-body {
+    min-height: 150px;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 14px;
+    text-align: center;
+}
+
+.home-v2-progress-body p {
+    max-width: 240px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 12.5px;
+    line-height: 1.8;
+    font-weight: 800;
+}
+
+/* ==================================================
+   10) Calories Card
+================================================== */
+.home-v2-calorie-value {
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+}
+
+.home-v2-calorie-value strong {
+    color: var(--text);
+    font-size: 42px;
+    line-height: 1;
+    font-weight: 950;
+}
+
+.home-v2-calorie-value span {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.home-v2-calorie-bar {
+    height: 9px;
+    margin: 16px 0;
+    overflow: hidden;
+    border-radius: 999px;
+    background: rgba(24, 51, 59, 0.08);
+}
+
+.home-v2-calorie-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.home-v2-calorie-meta {
+    display: grid;
+    grid-template-columns: 0.7fr 1.3fr;
+    gap: 10px;
+}
+
+.home-v2-calorie-meta div {
+    min-height: 58px;
+    padding: 12px;
+    border-radius: 18px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-calorie-meta small {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.home-v2-calorie-meta strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 950;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==================================================
+   11) Tasks
+================================================== */
+.home-v2-task-list {
+    display: grid;
+    gap: 11px;
+}
+
+.home-v2-task {
+    min-height: 58px;
+    padding: 12px;
+    border-radius: 18px;
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    align-items: center;
+    gap: 10px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-task i {
+    width: 20px;
+    height: 20px;
+    color: rgba(102, 124, 132, 0.58);
+}
+
+.home-v2-task.is-done i {
+    color: var(--primary);
+}
+
+.home-v2-task strong {
+    display: block;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 950;
+}
+
+.home-v2-task small {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+/* ==================================================
+   12) Chart
+================================================== */
+.home-v2-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 4px;
+    border-radius: 14px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-tabs button {
+    min-width: 64px;
+    height: 30px;
+    border-radius: 11px;
+    color: var(--muted);
+    background: transparent;
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.home-v2-tabs button.is-active {
+    color: var(--primary-dark);
+    background: var(--green-soft);
+}
+
+.home-v2-bars {
+    height: 230px;
+    padding: 18px 14px 8px;
+    border-radius: 22px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+    align-items: end;
+    gap: 12px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-bar-item {
+    height: 100%;
+    display: grid;
+    align-items: end;
+    justify-items: center;
+    gap: 8px;
+}
+
+.home-v2-bar-item span {
+    width: 100%;
+    max-width: 38px;
+    min-height: 8px;
+    border-radius: 999px 999px 8px 8px;
+    background: linear-gradient(180deg, var(--primary), var(--secondary));
+    box-shadow: 0 12px 24px rgba(29, 158, 117, 0.16);
+}
+
+.home-v2-bar-item small {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.chart-empty {
+    min-height: 230px;
+}
+
+/* ==================================================
+   13) Updates + Message
+================================================== */
+.home-v2-update-list {
+    display: grid;
+    gap: 10px;
+}
+
+.home-v2-update {
+    min-height: 66px;
+    padding: 11px;
+    border-radius: 18px;
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    align-items: center;
+    gap: 11px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-update.is-unread {
+    border-color: rgba(29, 158, 117, 0.22);
+    box-shadow: inset -3px 0 0 var(--primary);
+}
+
+.home-v2-update > span {
+    width: 42px;
+    height: 42px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    color: var(--primary-dark);
+    background: var(--green-soft);
+}
+
+.home-v2-update i {
+    width: 18px;
+    height: 18px;
+}
+
+.home-v2-update strong {
+    display: block;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 950;
+}
+
+.home-v2-update small {
+    display: -webkit-box;
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+    font-weight: 750;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.home-v2-last-message {
+    min-height: 150px;
+    padding: 16px;
+    border-radius: 22px;
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: start;
+    gap: 13px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-last-message > span {
+    width: 52px;
+    height: 52px;
+    border-radius: 19px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    color: var(--primary-dark);
+    background: var(--green-soft);
+}
+
+.home-v2-last-message img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-v2-last-message i {
+    width: 22px;
+    height: 22px;
+}
+
+.home-v2-last-message strong {
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.home-v2-last-message p {
+    display: -webkit-box;
+    margin: 7px 0;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.75;
+    font-weight: 750;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.home-v2-last-message small {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+/* ==================================================
+   14) Activation Steps
+================================================== */
+.home-v2-activation {
+    padding: 20px;
+    border-radius: 30px;
+}
+
+.home-v2-section-head strong {
+    min-width: 64px;
+    height: 42px;
+    padding: 0 12px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    color: var(--primary-dark);
+    background: var(--green-soft);
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.home-v2-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.home-v2-step {
+    min-height: 150px;
+    padding: 14px;
+    border-radius: 22px;
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-step > span {
+    width: 48px;
+    height: 48px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    color: var(--primary-dark);
+    background: var(--green-soft);
+}
+
+.home-v2-step > span i {
+    width: 21px;
+    height: 21px;
+}
+
+.home-v2-step em {
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    color: var(--primary-dark);
+    background: rgba(29, 158, 117, 0.10);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 950;
+}
+
+.home-v2-step strong {
+    display: block;
+    margin-top: 9px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 950;
+}
+
+.home-v2-step small {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11.5px;
+    line-height: 1.7;
+    font-weight: 750;
+}
+
+.home-v2-step.is-done > span {
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.home-v2-step.is-current {
+    border-color: rgba(29, 158, 117, 0.22);
+    box-shadow: inset 0 0 0 1px rgba(29, 158, 117, 0.08);
+}
+
+.home-v2-step.is-locked {
+    opacity: 0.72;
+}
+
+/* ==================================================
+   15) Articles
+================================================== */
+.home-v2-articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.home-v2-article {
+    position: relative;
+    min-height: 142px;
+    overflow: hidden;
+    border-radius: 22px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-article img {
+    width: 100%;
+    height: 142px;
+    object-fit: cover;
+    opacity: 0.72;
+}
+
+.home-v2-article::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.94), rgba(255,255,255,0.55), rgba(255,255,255,0.08));
+}
+
+.home-v2-article div {
+    position: absolute;
+    z-index: 2;
+    inset: 16px 16px auto auto;
+    width: 68%;
+}
+
+.home-v2-article span {
+    min-height: 25px;
+    padding: 0 10px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    color: var(--primary-dark);
+    background: var(--green-soft);
+    font-size: 11px;
+    font-weight: 950;
+}
+
+.home-v2-article h3 {
+    margin: 9px 0 5px;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.65;
+    font-weight: 950;
+}
+
+.home-v2-article p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+html[data-theme="dark"] .home-v2-article::after {
+    background: linear-gradient(90deg, rgba(16,35,33,0.95), rgba(16,35,33,0.62), rgba(16,35,33,0.12));
+}
+
+/* ==================================================
+   16) Modal
+================================================== */
+.home-v2-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 220;
+    padding: 24px;
+    display: grid;
+    place-items: center;
+    background: rgba(15, 23, 24, 0.38);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: 0.22s ease;
+}
+
+.home-v2-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.home-v2-modal-panel {
+    position: relative;
+    width: min(720px, 100%);
+    padding: 24px;
+    border-radius: 30px;
+    background: var(--card-solid);
+    border: 1px solid var(--home-v2-border);
+    box-shadow: var(--home-v2-shadow-strong);
+}
+
+.home-v2-modal-close {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    color: var(--text);
+    background: var(--home-v2-soft);
+}
+
+.home-v2-modal-close i {
+    width: 19px;
+    height: 19px;
+}
+
+.home-v2-modal-head {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 14px;
+}
+
+.home-v2-modal-head > span {
+    width: 54px;
+    height: 54px;
+    border-radius: 20px;
+    display: grid;
+    place-items: center;
+    color: var(--primary-dark);
+    background: var(--green-soft);
+}
+
+.home-v2-modal-head i {
+    width: 24px;
+    height: 24px;
+}
+
+.home-v2-modal-head small {
+    color: var(--primary-dark);
+    font-size: 12px;
+    font-weight: 950;
+}
+
+.home-v2-modal-head h3 {
+    margin: 2px 0 0;
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 950;
+}
+
+.home-v2-modal-panel > p {
+    margin: 0 0 16px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.9;
+    font-weight: 800;
+}
+
+.home-v2-modal-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.home-v2-modal-list div {
+    padding: 14px;
+    border-radius: 20px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-modal-list i {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-dark);
+}
+
+.home-v2-modal-list strong {
+    display: block;
+    margin-top: 8px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 950;
+}
+
+.home-v2-modal-list span {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11.5px;
+    line-height: 1.7;
+    font-weight: 750;
+}
+
+.home-v2-modal-actions {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ==================================================
+   17) Dark Mode Polishing
+================================================== */
+html[data-theme="dark"] .home-v2-hero {
+    background:
+        radial-gradient(circle at 10% 14%, rgba(255, 255, 255, 0.045), transparent 28%),
+        radial-gradient(circle at 88% 10%, rgba(52, 211, 153, 0.10), transparent 30%),
+        linear-gradient(135deg, rgba(52, 211, 153, 0.10), rgba(56, 189, 248, 0.055));
+}
+
+html[data-theme="dark"] .home-v2-hero::before {
+    background: rgba(255, 255, 255, 0.045);
+}
+
+html[data-theme="dark"] .home-v2-card,
+html[data-theme="dark"] .home-v2-summary-card,
+html[data-theme="dark"] .home-v2-activation,
+html[data-theme="dark"] .home-v2-modal-panel {
+    background: rgba(255, 255, 255, 0.065);
+    border-color: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.28);
+}
+
+html[data-theme="dark"] .home-v2-soft-btn,
+html[data-theme="dark"] .home-v2-kicker,
+html[data-theme="dark"] .home-v2-hero-panel,
+html[data-theme="dark"] .home-v2-summary-card,
+html[data-theme="dark"] .home-v2-appointment-list div,
+html[data-theme="dark"] .home-v2-calorie-meta div,
+html[data-theme="dark"] .home-v2-task,
+html[data-theme="dark"] .home-v2-update,
+html[data-theme="dark"] .home-v2-last-message,
+html[data-theme="dark"] .home-v2-step,
+html[data-theme="dark"] .home-v2-empty,
+html[data-theme="dark"] .home-v2-modal-list div {
+    background: rgba(255, 255, 255, 0.045);
+    border-color: rgba(255, 255, 255, 0.09);
+}
+
+html[data-theme="dark"] .home-v2-article div h3,
+html[data-theme="dark"] .home-v2-card-head h2,
+html[data-theme="dark"] .home-v2-section-head h2,
+html[data-theme="dark"] .home-v2-summary-card strong,
+html[data-theme="dark"] .home-v2-task strong,
+html[data-theme="dark"] .home-v2-update strong,
+html[data-theme="dark"] .home-v2-last-message strong,
+html[data-theme="dark"] .home-v2-empty strong {
+    color: #F4FAF8;
+}
+
+html[data-theme="dark"] .home-v2-hero p,
+html[data-theme="dark"] .home-v2-card small,
+html[data-theme="dark"] .home-v2-update small,
+html[data-theme="dark"] .home-v2-last-message small,
+html[data-theme="dark"] .home-v2-empty span {
+    color: #9CB5AF;
+}
+
+/* ==================================================
+   18) Responsive
+================================================== */
+@media (max-width: 1450px) {
+    .home-v2-grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+
+    .home-v2-appointment-card,
+    .home-v2-progress-card,
+    .home-v2-calories-card,
+    .home-v2-updates-card,
+    .home-v2-message-card {
+        grid-column: span 2;
+    }
+
+    .home-v2-tasks-card,
+    .home-v2-chart-card {
+        grid-column: span 3;
+    }
+}
+
+@media (max-width: 1200px) {
+    .home-v2-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .home-v2-hero-panel {
+        grid-template-columns: 130px 1fr;
+        text-align: start;
+        justify-items: start;
+    }
+
+    .home-v2-summary-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .home-v2-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .home-v2-appointment-card,
+    .home-v2-progress-card,
+    .home-v2-calories-card,
+    .home-v2-tasks-card,
+    .home-v2-chart-card,
+    .home-v2-updates-card,
+    .home-v2-message-card {
+        grid-column: span 1;
+    }
+
+    .home-v2-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 820px) {
+    .patient-content {
+        padding: 20px 16px 24px !important;
+    }
+
+    .home-v2-hero {
+        padding: 24px 18px;
+        border-radius: 28px;
+        text-align: center;
+    }
+
+    .home-v2-kicker,
+    .home-v2-missing,
+    .home-v2-actions {
+        justify-content: center;
+        margin-inline: auto;
+    }
+
+    .home-v2-hero h1 {
+        font-size: 29px;
+    }
+
+    .home-v2-hero-panel,
+    .home-v2-summary-row,
+    .home-v2-grid,
+    .home-v2-steps,
+    .home-v2-articles-grid,
+    .home-v2-modal-list {
+        grid-template-columns: 1fr;
+    }
+
+    .home-v2-hero-panel {
+        text-align: center;
+        justify-items: center;
+    }
+
+    .home-v2-summary-card {
+        min-height: 104px;
+    }
+
+    .home-v2-card {
+        padding: 17px;
+        border-radius: 24px;
+    }
+
+    .home-v2-calorie-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .home-v2-modal {
+        padding: 14px;
+    }
+
+    .home-v2-modal-panel {
+        padding: 20px;
+        border-radius: 26px;
+    }
+}
+
+
+
+/* ==================================================
+   Profile Menu Visibility Fix
+================================================== */
+.topbar-profile {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.profile-menu[data-profile-menu] {
+    position: absolute !important;
+    top: calc(100% + 12px) !important;
+    left: 0 !important;
+    right: auto !important;
+    z-index: 999999 !important;
+
+    width: 292px !important;
+    padding: 12px !important;
+    border-radius: 24px !important;
+
+    background: var(--card-solid, #ffffff) !important;
+    border: 1px solid var(--border, rgba(24, 51, 59, 0.08)) !important;
+    box-shadow: 0 22px 60px rgba(24, 51, 59, 0.14) !important;
+
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(8px) scale(0.98) !important;
+    transition: 0.2s ease !important;
+}
+
+.profile-menu[data-profile-menu].is-open,
+.topbar-profile.is-open .profile-menu[data-profile-menu] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+html[data-theme="dark"] .profile-menu[data-profile-menu] {
+    background: #102321 !important;
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* ==================================================
+   19) Dashboard Replacement Cards
+   بدائل كروت الإشعارات والرسائل داخل الرئيسية:
+   - أولوية اليوم
+   - جاهزية اليوم
+   - آخر قياس صحي
+   - خطة الطبيب
+================================================== */
+
+/* ---------- 19.1 Grid Placement ---------- */
+.home-v2-priority-card,
+.home-v2-readiness-card,
+.home-v2-measurement-card,
+.home-v2-doctor-plan-card {
+    grid-column: span 6;
+    min-height: 260px;
+}
+
+/* ---------- 19.2 Today Priority Card ---------- */
+.home-v2-priority-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.home-v2-priority-card::before {
+    content: "";
+    position: absolute;
+    inset: auto -60px -80px auto;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(29, 158, 117, 0.16), transparent 68%);
+    pointer-events: none;
+}
+
+.home-v2-priority-card.is-warning::before {
+    background: radial-gradient(circle, rgba(244, 184, 96, 0.18), transparent 68%);
+}
+
+.home-v2-priority-card.is-info::before {
+    background: radial-gradient(circle, rgba(77, 168, 218, 0.18), transparent 68%);
+}
+
+.home-v2-priority-card.is-success::before {
+    background: radial-gradient(circle, rgba(29, 158, 117, 0.20), transparent 68%);
+}
+
+.home-v2-priority-body {
+    position: relative;
+    min-height: 146px;
+    display: grid;
+    align-content: space-between;
+    gap: 18px;
+}
+
+.home-v2-priority-body p {
+    max-width: 520px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.9;
+    font-weight: 850;
+}
+
+/* ---------- 19.3 Daily Readiness Card ---------- */
+.home-v2-readiness-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.home-v2-readiness-item {
+    min-height: 74px;
+    padding: 13px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-readiness-item > span {
+    width: 42px;
+    height: 42px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    color: var(--home-v2-green-dark);
+    background: rgba(29, 158, 117, 0.10);
+}
+
+.home-v2-readiness-item.is-warning > span {
+    color: #A66A11;
+    background: rgba(244, 184, 96, 0.16);
+}
+
+.home-v2-readiness-item.is-info > span {
+    color: #2175A3;
+    background: rgba(77, 168, 218, 0.14);
+}
+
+.home-v2-readiness-item.is-muted > span {
+    color: var(--muted);
+    background: rgba(24, 51, 59, 0.06);
+}
+
+.home-v2-readiness-item svg {
+    width: 19px;
+    height: 19px;
+}
+
+.home-v2-readiness-item strong {
+    display: block;
+    color: var(--text);
+    font-size: 12.5px;
+    font-weight: 950;
+}
+
+.home-v2-readiness-item small {
+    display: block;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+    font-weight: 850;
+}
+
+/* ---------- 19.4 Last Health Measurement ---------- */
+.home-v2-measurement-body {
+    display: grid;
+    gap: 18px;
+}
+
+.home-v2-measurement-value {
+    padding: 18px;
+    border-radius: 24px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 10px;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.72), transparent 45%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.10), rgba(77, 168, 218, 0.08));
+    border: 1px solid rgba(29, 158, 117, 0.12);
+}
+
+.home-v2-measurement-value strong {
+    color: var(--text);
+    font-size: 42px;
+    line-height: 1;
+    font-weight: 950;
+}
+
+.home-v2-measurement-value span {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.home-v2-measurement-meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.home-v2-measurement-meta div {
+    padding: 12px;
+    border-radius: 18px;
+    background: var(--home-v2-soft);
+    border: 1px solid var(--home-v2-border);
+}
+
+.home-v2-measurement-meta small {
+    display: block;
+    color: var(--muted);
+    font-size: 10.5px;
+    font-weight: 850;
+}
+
+.home-v2-measurement-meta strong {
+    display: block;
+    margin-top: 5px;
+    color: var(--text);
+    font-size: 12.5px;
+    font-weight: 950;
+}
+
+/* ---------- 19.5 Doctor Plan Card ---------- */
+.home-v2-doctor-note {
+    min-height: 135px;
+    padding: 16px;
+    border-radius: 24px;
+    display: grid;
+    grid-template-columns: 46px 1fr;
+    gap: 14px;
+    align-items: start;
+    background:
+        radial-gradient(circle at 12% 14%, rgba(255, 255, 255, 0.66), transparent 40%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.09), rgba(77, 168, 218, 0.07));
+    border: 1px solid rgba(29, 158, 117, 0.12);
+}
+
+.home-v2-doctor-note > span {
+    width: 46px;
+    height: 46px;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    color: var(--home-v2-green-dark);
+    background: rgba(29, 158, 117, 0.12);
+}
+
+.home-v2-doctor-note p {
+    margin: 0;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.9;
+    font-weight: 850;
+}
+
+/* ---------- 19.6 Dark Mode ---------- */
+html[data-theme="dark"] .home-v2-readiness-item,
+html[data-theme="dark"] .home-v2-measurement-meta div {
+    background: rgba(255, 255, 255, 0.045);
+    border-color: rgba(255, 255, 255, 0.09);
+}
+
+html[data-theme="dark"] .home-v2-measurement-value,
+html[data-theme="dark"] .home-v2-doctor-note {
+    background:
+        radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.055), transparent 42%),
+        linear-gradient(135deg, rgba(52, 211, 153, 0.09), rgba(56, 189, 248, 0.055));
+    border-color: rgba(255, 255, 255, 0.09);
+}
+
+html[data-theme="dark"] .home-v2-readiness-item.is-muted > span {
+    background: rgba(255, 255, 255, 0.055);
+}
+
+/* ---------- 19.7 Responsive Updates ---------- */
+@media (max-width: 1450px) {
+    .home-v2-priority-card,
+    .home-v2-readiness-card,
+    .home-v2-measurement-card,
+    .home-v2-doctor-plan-card {
+        grid-column: span 3;
+    }
+}
+
+@media (max-width: 1200px) {
+    .home-v2-priority-card,
+    .home-v2-readiness-card,
+    .home-v2-measurement-card,
+    .home-v2-doctor-plan-card {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 820px) {
+    .home-v2-readiness-grid,
+    .home-v2-measurement-meta {
+        grid-template-columns: 1fr;
+    }
+
+    .home-v2-doctor-note {
+        grid-template-columns: 1fr;
+        text-align: center;
+        justify-items: center;
+    }
+}
+
+.patient-live-toast-close {
+    display: none !important;
+}
+
+
+
+/* ==================================================
+   FIX DARK/LIGHT AFTER NOTIFICATIONS READ
+   ================================================== */
+
+html[data-theme="dark"] .notification-popover,
+body[data-theme="dark"] .notification-popover,
+.dark .notification-popover,
+.dark-mode .notification-popover {
+    background: #242630 !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.38) !important;
+    color: #f4fbfa !important;
+}
+
+html[data-theme="dark"] .notification-popover::before,
+body[data-theme="dark"] .notification-popover::before,
+.dark .notification-popover::before,
+.dark-mode .notification-popover::before {
+    background: #242630 !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+html[data-theme="dark"] .notification-popover-head,
+html[data-theme="dark"] .notification-popover-footer,
+body[data-theme="dark"] .notification-popover-head,
+body[data-theme="dark"] .notification-popover-footer,
+.dark .notification-popover-head,
+.dark .notification-popover-footer,
+.dark-mode .notification-popover-head,
+.dark-mode .notification-popover-footer {
+    background: #242630 !important;
+    color: #f4fbfa !important;
+}
+
+html[data-theme="dark"] .notification-popover-head span,
+html[data-theme="dark"] .notification-popover-head strong,
+html[data-theme="dark"] .notification-popover-footer a,
+body[data-theme="dark"] .notification-popover-head span,
+body[data-theme="dark"] .notification-popover-head strong,
+body[data-theme="dark"] .notification-popover-footer a,
+.dark .notification-popover-head span,
+.dark .notification-popover-head strong,
+.dark .notification-popover-footer a,
+.dark-mode .notification-popover-head span,
+.dark-mode .notification-popover-head strong,
+.dark-mode .notification-popover-footer a {
+    color: #f4fbfa !important;
+}
+
+html[data-theme="dark"] .notification-popover-item,
+body[data-theme="dark"] .notification-popover-item,
+.dark .notification-popover-item,
+.dark-mode .notification-popover-item {
+    background: rgba(255, 255, 255, 0.045) !important;
+    border-color: rgba(255, 255, 255, 0.075) !important;
+    color: #f4fbfa !important;
+}
+
+html[data-theme="dark"] .notification-popover-item strong,
+body[data-theme="dark"] .notification-popover-item strong,
+.dark .notification-popover-item strong,
+.dark-mode .notification-popover-item strong {
+    color: #ffffff !important;
+}
+
+html[data-theme="dark"] .notification-popover-item p,
+html[data-theme="dark"] .notification-popover-item small,
+body[data-theme="dark"] .notification-popover-item p,
+body[data-theme="dark"] .notification-popover-item small,
+.dark .notification-popover-item p,
+.dark .notification-popover-item small,
+.dark-mode .notification-popover-item p,
+.dark-mode .notification-popover-item small {
+    color: #aeb8bb !important;
+}
+
+html[data-theme="dark"] .notification-popover-empty,
+body[data-theme="dark"] .notification-popover-empty,
+.dark .notification-popover-empty,
+.dark-mode .notification-popover-empty {
+    color: #f4fbfa !important;
+    background: rgba(255, 255, 255, 0.045) !important;
+}
+
+html[data-theme="dark"] .mark-all-read-btn,
+body[data-theme="dark"] .mark-all-read-btn,
+.dark .mark-all-read-btn,
+.dark-mode .mark-all-read-btn {
+    color: #24C58F !important;
+    background: rgba(36, 197, 143, 0.12) !important;
+    border: 1px solid rgba(36, 197, 143, 0.22) !important;
+}
+/* =========================================================
+   Etzan Daily Content Cards
+   حكمة اليوم + رسالة اليوم داخل الصفحة الرئيسية للمريض
+========================================================= */
+.home-v2-daily-content {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 18px 0 22px;
+}
+
+.home-v2-daily-card {
+    position: relative;
+    min-height: 178px;
+    display: grid;
+    grid-template-columns: 66px minmax(0, 1fr) 44px;
+    align-items: center;
+    gap: 16px;
+    padding: 22px;
+    border-radius: 30px;
+    overflow: hidden;
+    border: 1px solid rgba(29, 158, 117, 0.16);
+    background:
+        radial-gradient(circle at 88% 12%, rgba(29, 158, 117, 0.14), transparent 34%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(239, 250, 247, 0.88));
+    box-shadow: 0 18px 46px rgba(18, 61, 71, 0.07);
+}
+
+.home-v2-daily-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -70px -90px auto;
+    width: 210px;
+    height: 210px;
+    border-radius: 999px;
+    background: rgba(77, 168, 218, 0.10);
+    pointer-events: none;
+}
+
+.home-v2-daily-card--motivation {
+    background:
+        radial-gradient(circle at 14% 10%, rgba(77, 168, 218, 0.14), transparent 34%),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(238, 248, 252, 0.90));
+}
+
+.home-v2-daily-icon {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 22px;
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.12);
+    border: 1px solid rgba(29, 158, 117, 0.16);
+    box-shadow: 0 14px 34px rgba(29, 158, 117, 0.10);
+}
+
+.home-v2-daily-card--motivation .home-v2-daily-icon {
+    color: #287EAA;
+    background: rgba(77, 168, 218, 0.12);
+    border-color: rgba(77, 168, 218, 0.16);
+}
+
+.home-v2-daily-icon svg,
+.home-v2-daily-icon i {
+    width: 27px;
+    height: 27px;
+}
+
+.home-v2-daily-copy {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+}
+
+.home-v2-daily-copy span {
+    display: block;
+    margin-bottom: 7px;
+    color: #15795A;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.home-v2-daily-card--motivation .home-v2-daily-copy span {
+    color: #287EAA;
+}
+
+.home-v2-daily-copy h2 {
+    margin: 0 0 8px;
+    color: #18333B;
+    font-size: clamp(20px, 2.5vw, 28px);
+    line-height: 1.25;
+    font-weight: 900;
+    letter-spacing: -0.4px;
+}
+
+.home-v2-daily-copy p {
+    margin: 0;
+    color: #647b84;
+    font-size: 13px;
+    line-height: 1.9;
+    font-weight: 700;
+}
+
+.home-v2-daily-link {
+    position: relative;
+    z-index: 1;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    color: #15795A;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(29, 158, 117, 0.14);
+    transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.home-v2-daily-link:hover {
+    transform: translateX(-3px);
+    background: #ffffff;
+}
+
+.home-v2-daily-link svg,
+.home-v2-daily-link i {
+    width: 18px;
+    height: 18px;
+}
+
+html.dark .home-v2-daily-card,
+body.dark .home-v2-daily-card,
+body.dark-mode .home-v2-daily-card,
+[data-theme="dark"] .home-v2-daily-card {
+    background:
+        radial-gradient(circle at 88% 12%, rgba(45, 211, 173, 0.15), transparent 34%),
+        linear-gradient(135deg, rgba(10, 38, 42, 0.95), rgba(6, 24, 28, 0.96)) !important;
+    border-color: rgba(105, 232, 199, 0.18) !important;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.30) !important;
+}
+
+html.dark .home-v2-daily-card--motivation,
+body.dark .home-v2-daily-card--motivation,
+body.dark-mode .home-v2-daily-card--motivation,
+[data-theme="dark"] .home-v2-daily-card--motivation {
+    background:
+        radial-gradient(circle at 14% 10%, rgba(77, 168, 218, 0.13), transparent 34%),
+        linear-gradient(135deg, rgba(9, 34, 42, 0.95), rgba(6, 23, 29, 0.96)) !important;
+}
+
+html.dark .home-v2-daily-icon,
+body.dark .home-v2-daily-icon,
+body.dark-mode .home-v2-daily-icon,
+[data-theme="dark"] .home-v2-daily-icon {
+    color: #dffff7 !important;
+    background: rgba(45, 211, 173, 0.13) !important;
+    border-color: rgba(105, 232, 199, 0.18) !important;
+}
+
+html.dark .home-v2-daily-card--motivation .home-v2-daily-icon,
+body.dark .home-v2-daily-card--motivation .home-v2-daily-icon,
+body.dark-mode .home-v2-daily-card--motivation .home-v2-daily-icon,
+[data-theme="dark"] .home-v2-daily-card--motivation .home-v2-daily-icon {
+    color: #dff6ff !important;
+    background: rgba(77, 168, 218, 0.13) !important;
+    border-color: rgba(120, 210, 245, 0.18) !important;
+}
+
+html.dark .home-v2-daily-copy span,
+body.dark .home-v2-daily-copy span,
+body.dark-mode .home-v2-daily-copy span,
+[data-theme="dark"] .home-v2-daily-copy span {
+    color: #63e4c4 !important;
+}
+
+html.dark .home-v2-daily-card--motivation .home-v2-daily-copy span,
+body.dark .home-v2-daily-card--motivation .home-v2-daily-copy span,
+body.dark-mode .home-v2-daily-card--motivation .home-v2-daily-copy span,
+[data-theme="dark"] .home-v2-daily-card--motivation .home-v2-daily-copy span {
+    color: #9fe5ff !important;
+}
+
+html.dark .home-v2-daily-copy h2,
+body.dark .home-v2-daily-copy h2,
+body.dark-mode .home-v2-daily-copy h2,
+[data-theme="dark"] .home-v2-daily-copy h2 {
+    color: #effffb !important;
+}
+
+html.dark .home-v2-daily-copy p,
+body.dark .home-v2-daily-copy p,
+body.dark-mode .home-v2-daily-copy p,
+[data-theme="dark"] .home-v2-daily-copy p {
+    color: rgba(234, 255, 248, 0.74) !important;
+}
+
+html.dark .home-v2-daily-link,
+body.dark .home-v2-daily-link,
+body.dark-mode .home-v2-daily-link,
+[data-theme="dark"] .home-v2-daily-link {
+    color: #dffff7 !important;
+    background: rgba(3, 22, 25, 0.58) !important;
+    border-color: rgba(105, 232, 199, 0.14) !important;
+}
+
+@media (max-width: 900px) {
+    .home-v2-daily-content {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .home-v2-daily-card {
+        grid-template-columns: 54px minmax(0, 1fr);
+        padding: 18px;
+        border-radius: 24px;
+    }
+
+    .home-v2-daily-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 18px;
+    }
+
+    .home-v2-daily-link {
+        grid-column: 1 / -1;
+        width: 100%;
+        height: 42px;
+        margin-top: 2px;
+    }
+}

@@ -1,0 +1,1873 @@
+/* =========================================================
+   Etzan Admin Layout - Clean Sidebar + Fixed Topbar
+   File: public/front/css/admin/admin.css
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+
+:root{
+  --ad-primary:#1D9E75;--ad-primary-dark:#13795a;--ad-primary-soft:rgba(29,158,117,.12);
+  --ad-secondary:#4DA8DA;--ad-secondary-soft:rgba(77,168,218,.12);
+  --ad-danger:#ef4444;--ad-danger-dark:#b91c1c;--ad-danger-soft:rgba(239,68,68,.10);
+  /* Light mode: نفس ألوان إتزان (أخضر) المستخدمة بباقي الموقع، بس نظيفة ومريحة */
+  --ad-bg:#F6FBF9;--ad-card:#ffffff;--ad-card-2:#F3F8F5;--ad-title:#123A32;--ad-text:#1F463D;--ad-muted:#6C837D;
+  --ad-line:rgba(20,120,92,.13);--ad-line-strong:rgba(20,120,92,.22);
+  --ad-shadow:0 18px 50px rgba(16,73,61,.09);--ad-shadow-soft:0 10px 26px rgba(16,73,61,.06);
+  --ad-sidebar-w:272px;--ad-sidebar-sm:86px;--ad-topbar-h:76px;
+}
+html[data-theme="dark"],body[data-theme="dark"],body.dark,body.theme-dark{
+  /* Dark mode: أسود حقيقي كأساس */
+  --ad-bg:#000000;--ad-card:#141416;--ad-card-2:#0A0A0B;--ad-title:#F5F6F7;--ad-text:#E3E4E7;--ad-muted:#9AA0AC;
+  --ad-line:rgba(255,255,255,.08);--ad-line-strong:rgba(255,255,255,.14);
+  --ad-primary:#34d399;--ad-primary-dark:#20b486;--ad-primary-soft:rgba(52,211,153,.14);--ad-secondary-soft:rgba(77,168,218,.13);
+  --ad-shadow:0 24px 70px rgba(0,0,0,.55);--ad-shadow-soft:0 14px 34px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}*::before,*::after{box-sizing:border-box}html,body,body.admin-body{width:100%;max-width:100%;overflow-x:hidden!important}html{scroll-behavior:smooth}
+body.admin-body{margin:0;min-height:100vh;direction:rtl;font-family:'Cairo','Tajawal',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ad-text);background:radial-gradient(circle at 85% 0%,rgba(29,158,117,.12),transparent 30%),radial-gradient(circle at 8% 12%,rgba(77,168,218,.09),transparent 34%),var(--ad-bg)!important}
+body.admin-body.dark,body.admin-body.theme-dark,body.admin-body[data-theme="dark"]{background:radial-gradient(circle at 85% 0%,rgba(52,211,153,.10),transparent 32%),radial-gradient(circle at 8% 10%,rgba(77,168,218,.07),transparent 34%),#000000!important}
+a{color:inherit;text-decoration:none}button,input,select,textarea{font-family:inherit}button{cursor:pointer}body.admin-sidebar-open{overflow:hidden!important}
+
+.admin-shell{display:block!important;min-height:100dvh!important;width:100%!important;direction:rtl!important;background:transparent!important}
+.admin-main{width:calc(100% - var(--ad-sidebar-w))!important;margin-right:var(--ad-sidebar-w)!important;margin-left:0!important;padding-top:var(--ad-topbar-h)!important;min-height:100vh!important;display:flex!important;flex-direction:column!important;transition:width .22s ease,margin-right .22s ease!important}
+.admin-shell.is-sidebar-collapsed .admin-main,body.admin-sidebar-collapsed .admin-main{width:calc(100% - var(--ad-sidebar-sm))!important;margin-right:var(--ad-sidebar-sm)!important}
+.admin-content{width:100%!important;max-width:1500px!important;margin:0 auto!important;padding:26px 28px 56px!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow-x:hidden!important}
+.admin-mobile-overlay{position:fixed;inset:0;z-index:1180;background:rgba(2,18,17,.54);backdrop-filter:blur(10px);opacity:0;visibility:hidden;pointer-events:none;transition:.2s ease}.admin-mobile-overlay.is-active{opacity:1;visibility:visible;pointer-events:auto}
+
+/* Sidebar */
+.admin-sidebar{position:fixed!important;top:0!important;right:0!important;bottom:0!important;left:auto!important;width:var(--ad-sidebar-w)!important;height:100dvh!important;z-index:1200!important;overflow:visible!important;color:var(--ad-text)!important;background:radial-gradient(circle at 40% 0%,rgba(29,158,117,.09),transparent 30%),linear-gradient(180deg,#fff,#F5FAF8)!important;border-left:1px solid var(--ad-line)!important;box-shadow:-12px 0 34px rgba(16,73,61,.07)!important;transition:width .22s ease,transform .24s ease,opacity .18s ease!important}
+.admin-sidebar.is-collapsed{width:var(--ad-sidebar-sm)!important}
+html[data-theme="dark"] .admin-sidebar,body[data-theme="dark"] .admin-sidebar,body.dark .admin-sidebar,body.theme-dark .admin-sidebar{background:radial-gradient(circle at 38% 0%,rgba(52,211,153,.09),transparent 32%),linear-gradient(180deg,#0A0A0B,#000000)!important;border-left-color:rgba(255,255,255,.08)!important;box-shadow:-12px 0 34px rgba(0,0,0,.5)!important}
+.admin-sidebar::before,.admin-sidebar::after{display:none!important;content:none!important}.admin-sidebar__inner{height:100dvh!important;width:100%!important;display:flex!important;flex-direction:column!important;padding:20px 14px 16px!important;overflow:hidden!important}.admin-sidebar__inner::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}
+.admin-sidebar__top{min-height:72px!important;display:flex!important;align-items:center!important;gap:10px!important;padding:0 0 16px!important;margin-bottom:14px!important;border-bottom:1px solid var(--ad-line)!important}
+.admin-brand{flex:1 1 auto!important;min-width:0!important;display:flex!important;align-items:center!important;gap:10px!important;padding:0!important;border:0!important;background:transparent!important;color:inherit!important;text-align:right!important}
+.admin-brand__logo{position:relative!important;width:52px!important;height:52px!important;min-width:52px!important;display:grid!important;place-items:center!important;overflow:hidden!important;border-radius:18px!important;color:#fff!important;background:linear-gradient(135deg,var(--ad-primary),var(--ad-primary-dark))!important;box-shadow:0 16px 32px rgba(29,158,117,.24)!important;transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important}
+.admin-brand__logo-main,.admin-brand__logo-open{position:absolute!important;inset:0!important;display:grid!important;place-items:center!important;transition:opacity .18s ease,transform .18s ease!important}.admin-brand__logo-open{opacity:0!important;transform:scale(.72) rotate(-12deg)!important}
+.admin-brand__text{min-width:0!important;display:block!important}.admin-brand__text strong{display:block!important;color:var(--ad-title)!important;font-size:19px!important;font-weight:950!important;line-height:1.25!important}.admin-brand__text small{display:block!important;color:var(--ad-muted)!important;font-size:11px!important;font-weight:800!important;margin-top:2px!important}
+
+/* Collapse button - icon only, not X */
+.admin-sidebar-toggle{width:46px!important;height:46px!important;min-width:46px!important;display:inline-grid!important;place-items:center!important;padding:0!important;margin:0!important;border-radius:16px!important;border:1px solid var(--ad-line-strong)!important;background:linear-gradient(135deg,var(--ad-primary-soft),var(--ad-secondary-soft))!important;color:var(--ad-primary-dark)!important;box-shadow:none!important;transition:.18s ease!important}.admin-sidebar-toggle:hover{background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary))!important;color:#fff!important;transform:translateY(-2px)!important;border-color:transparent!important}.admin-sidebar-toggle__text{display:none!important}.admin-sidebar-toggle__icon{position:relative!important;width:25px!important;height:21px!important;display:block!important;color:currentColor!important}.admin-sidebar-toggle__icon span{position:absolute!important;display:block!important;pointer-events:none!important}.admin-sidebar-toggle__icon span:nth-child(1){inset:2px 3px!important;border:2px solid currentColor!important;border-radius:7px!important}.admin-sidebar-toggle__icon span:nth-child(2){top:5px!important;bottom:5px!important;right:8px!important;width:2px!important;border-radius:99px!important;background:currentColor!important;opacity:.86!important}.admin-sidebar-toggle__icon span:nth-child(3){width:8px!important;height:8px!important;left:6px!important;top:6px!important;border-top:2px solid currentColor!important;border-right:2px solid currentColor!important;transform:rotate(45deg)!important}
+
+.admin-sidebar__nav{flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;padding:4px 0 12px!important;scrollbar-width:none!important;-ms-overflow-style:none!important}.admin-sidebar__nav::-webkit-scrollbar{width:0!important;height:0!important;display:none!important}.admin-nav-group{margin:0 0 12px!important}.admin-nav-group__label{display:block!important;padding:8px 10px 7px!important;color:var(--ad-muted)!important;font-size:11px!important;font-weight:950!important;letter-spacing:.2px!important}.admin-nav{display:grid!important;gap:8px!important}.admin-nav__link{min-height:52px!important;width:100%!important;display:flex!important;align-items:center!important;gap:10px!important;padding:8px 10px!important;border-radius:18px!important;border:1px solid transparent!important;background:transparent!important;color:var(--ad-muted)!important;transition:.22s ease!important}.admin-nav__link:hover,.admin-nav__link.is-active{color:var(--ad-primary-dark)!important;background:linear-gradient(135deg,rgba(29,158,117,.14),rgba(77,168,218,.08))!important;border-color:var(--ad-line)!important;box-shadow:0 12px 26px rgba(29,158,117,.08)!important}.admin-nav__icon{width:40px!important;height:40px!important;min-width:40px!important;display:grid!important;place-items:center!important;border-radius:15px!important;background:var(--ad-primary-soft)!important;color:var(--ad-primary-dark)!important;transition:.22s ease!important}.admin-nav__link:hover .admin-nav__icon,.admin-nav__link.is-active .admin-nav__icon{color:#fff!important;background:linear-gradient(135deg,var(--ad-primary),var(--ad-primary-dark))!important}.admin-nav__label{min-width:0;font-size:13.5px!important;font-weight:950!important;line-height:1.35!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}.admin-nav__badge{margin-inline-start:auto!important;min-width:22px!important;height:22px!important;display:grid!important;place-items:center!important;padding:0 7px!important;border-radius:999px!important;background:var(--ad-danger)!important;color:#fff!important;font-size:11px!important;font-weight:950!important}.admin-nav__badge--warn{background:#f59e0b!important}
+
+.admin-sidebar__footer{flex:0 0 auto!important;margin:0!important;padding-top:12px!important;background:linear-gradient(180deg,transparent,#f7fcfa 35%)!important}html[data-theme="dark"] .admin-sidebar__footer,body[data-theme="dark"] .admin-sidebar__footer,body.dark .admin-sidebar__footer,body.theme-dark .admin-sidebar__footer{background:linear-gradient(180deg,transparent,#07181b 35%)!important}.admin-sidebar__status{min-height:58px!important;display:flex!important;align-items:center!important;gap:10px!important;padding:12px!important;border-radius:18px!important;background:linear-gradient(135deg,var(--ad-primary-soft),var(--ad-secondary-soft))!important;border:1px solid var(--ad-line-strong)!important}.admin-sidebar__status-dot{width:10px!important;height:10px!important;border-radius:50%!important;background:#31d6a9!important;box-shadow:0 0 0 6px rgba(49,214,169,.12)!important}.admin-sidebar__status-text strong{display:block!important;color:var(--ad-title)!important;font-size:12px!important;font-weight:950!important}.admin-sidebar__status-text small{display:block!important;color:var(--ad-muted)!important;font-size:10px!important;font-weight:800!important}
+
+/* Collapsed: only logo, no button under it */
+.admin-sidebar.is-collapsed .admin-sidebar__inner{padding:18px 10px 16px!important}.admin-sidebar.is-collapsed .admin-sidebar__top{min-height:78px!important;justify-content:center!important;align-items:center!important;padding:8px 0 18px!important;gap:0!important}.admin-sidebar.is-collapsed .admin-brand{width:100%!important;justify-content:center!important;cursor:pointer!important}.admin-sidebar.is-collapsed .admin-brand__logo{width:54px!important;height:54px!important;min-width:54px!important;border-radius:19px!important}.admin-sidebar.is-collapsed .admin-brand:hover .admin-brand__logo{transform:translateY(-2px)!important;box-shadow:0 18px 34px rgba(29,158,117,.28)!important;background:linear-gradient(135deg,var(--ad-secondary),var(--ad-primary))!important}.admin-sidebar.is-collapsed .admin-brand:hover .admin-brand__logo-main,.admin-sidebar.is-collapsed .admin-brand:focus-visible .admin-brand__logo-main{opacity:0!important;transform:scale(.72) rotate(12deg)!important}.admin-sidebar.is-collapsed .admin-brand:hover .admin-brand__logo-open,.admin-sidebar.is-collapsed .admin-brand:focus-visible .admin-brand__logo-open{opacity:1!important;transform:scale(1) rotate(0)!important}.admin-sidebar.is-collapsed .admin-sidebar-toggle{display:none!important}.admin-sidebar.is-collapsed .admin-brand__text,.admin-sidebar.is-collapsed .admin-nav-group__label,.admin-sidebar.is-collapsed .admin-nav__label,.admin-sidebar.is-collapsed .admin-nav__badge,.admin-sidebar.is-collapsed .admin-sidebar__status-text{display:none!important}.admin-sidebar.is-collapsed .admin-nav{justify-items:center!important}.admin-sidebar.is-collapsed .admin-nav__link{width:58px!important;min-height:58px!important;justify-content:center!important;padding:8px!important;border-radius:20px!important}.admin-sidebar.is-collapsed .admin-sidebar__status{justify-content:center!important;min-height:46px!important;padding:0!important;border-radius:16px!important}
+
+.admin-sidebar-tooltip{position:fixed!important;top:0;right:calc(var(--ad-sidebar-sm) + 14px);transform:translateY(-50%) translateX(8px);min-width:max-content;max-width:min(260px,calc(100vw - 120px));padding:11px 14px;border-radius:14px;background:#102f2a;color:#fff;font-size:13px;font-weight:950;line-height:1.2;white-space:nowrap;box-shadow:0 18px 42px rgba(0,0,0,.20);opacity:0;visibility:hidden;pointer-events:none;z-index:99999;transition:.16s ease}.admin-sidebar-tooltip.is-visible{opacity:1;visibility:visible;transform:translateY(-50%) translateX(0)}html[data-theme="dark"] .admin-sidebar-tooltip,body[data-theme="dark"] .admin-sidebar-tooltip,body.dark .admin-sidebar-tooltip,body.theme-dark .admin-sidebar-tooltip{background:#effffb!important;color:#092326!important}
+
+/* Fixed topbar */
+.admin-topbar{position:fixed!important;top:0!important;right:var(--ad-sidebar-w)!important;left:0!important;width:auto!important;height:var(--ad-topbar-h)!important;min-height:var(--ad-topbar-h)!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;padding:12px 28px!important;color:var(--ad-text)!important;background:rgba(255,255,255,.94)!important;border:0!important;border-bottom:1px solid var(--ad-line)!important;border-radius:0!important;box-shadow:0 12px 30px rgba(18,61,71,.07)!important;backdrop-filter:blur(18px) saturate(1.18)!important;-webkit-backdrop-filter:blur(18px) saturate(1.18)!important;overflow:visible!important;z-index:1100!important}.admin-shell.is-sidebar-collapsed .admin-topbar,body.admin-sidebar-collapsed .admin-topbar{right:var(--ad-sidebar-sm)!important}html[data-theme="dark"] .admin-topbar,body[data-theme="dark"] .admin-topbar,body.dark .admin-topbar,body.theme-dark .admin-topbar{background:rgba(7,25,28,.94)!important;border-bottom-color:rgba(135,255,213,.14)!important;box-shadow:0 16px 40px rgba(0,0,0,.34)!important}.admin-topbar__right,.admin-topbar__left{height:100%!important;display:flex!important;align-items:center!important;gap:12px!important;min-width:0!important;overflow:visible!important}.admin-topbar__title strong{display:block!important;color:var(--ad-title)!important;font-size:16px!important;font-weight:950!important}.admin-topbar__title span{display:block!important;color:var(--ad-muted)!important;font-size:12px!important;font-weight:800!important;margin-top:2px!important}.admin-mobile-menu-btn{width:50px!important;height:50px!important;min-width:50px!important;display:none!important;place-items:center!important;border:1px solid var(--ad-line-strong)!important;border-radius:18px!important;background:var(--ad-card)!important;color:var(--ad-primary-dark)!important;box-shadow:var(--ad-shadow-soft)!important}
+
+/* Search + dropdowns */
+.admin-global-search{position:relative!important;width:min(370px,31vw)!important;height:50px!important;display:flex!important;align-items:center!important;gap:10px!important;padding:0 14px!important;border-radius:18px!important;background:var(--ad-card)!important;border:1px solid var(--ad-line-strong)!important;box-shadow:var(--ad-shadow-soft)!important;overflow:visible!important}.admin-global-search>i{color:var(--ad-primary)!important}.admin-global-search input{width:100%!important;border:0!important;outline:0!important;background:transparent!important;color:var(--ad-text)!important;font-size:12px!important;font-weight:800!important}.admin-search__shortcut{color:var(--ad-muted)!important;font-size:11px!important;font-weight:900!important;line-height:1.1!important}.admin-notif-btn,.admin-profile-trigger{width:50px!important;height:50px!important;min-width:50px!important;display:grid!important;place-items:center!important;border:1px solid var(--ad-line-strong)!important;border-radius:18px!important;background:var(--ad-card)!important;color:var(--ad-primary-dark)!important;box-shadow:var(--ad-shadow-soft)!important;transition:.18s ease!important}.admin-notif-btn:hover,.admin-profile-trigger:hover,.admin-mobile-menu-btn:hover{background:linear-gradient(135deg,var(--ad-primary),var(--ad-primary-dark))!important;color:#fff!important;border-color:transparent!important;transform:translateY(-2px)!important}.admin-profile-trigger__avatar{width:40px!important;height:40px!important;display:grid!important;place-items:center!important;border-radius:15px!important;color:#fff!important;font-weight:950!important;background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary))!important}.admin-notif-wrap,.admin-profile-menu{position:relative!important;overflow:visible!important}.admin-notif-badge{position:absolute!important;top:-4px!important;left:-4px!important;min-width:20px!important;height:20px!important;display:grid!important;place-items:center!important;border-radius:999px!important;background:var(--ad-danger)!important;color:#fff!important;font-size:10px!important;font-weight:950!important}
+.admin-search-panel,.admin-profile-dropdown,.admin-notif-dropdown{position:absolute!important;top:calc(100% + 12px)!important;left:0!important;right:auto!important;border-radius:22px!important;background:rgba(255,255,255,.98)!important;border:1px solid var(--ad-line-strong)!important;box-shadow:0 26px 70px rgba(15,55,51,.18)!important;backdrop-filter:blur(18px) saturate(1.15)!important;-webkit-backdrop-filter:blur(18px) saturate(1.15)!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;transform:translateY(8px)!important;transition:.18s ease!important;z-index:9999!important;overflow:hidden!important}html[data-theme="dark"] .admin-search-panel,html[data-theme="dark"] .admin-profile-dropdown,html[data-theme="dark"] .admin-notif-dropdown,body[data-theme="dark"] .admin-search-panel,body[data-theme="dark"] .admin-profile-dropdown,body[data-theme="dark"] .admin-notif-dropdown,body.dark .admin-search-panel,body.dark .admin-profile-dropdown,body.dark .admin-notif-dropdown,body.theme-dark .admin-search-panel,body.theme-dark .admin-profile-dropdown,body.theme-dark .admin-notif-dropdown{background:rgba(12,39,42,.98)!important;border-color:rgba(135,255,213,.18)!important;box-shadow:0 28px 76px rgba(0,0,0,.45)!important}.admin-search-panel{right:0!important;left:auto!important;width:min(420px,92vw)!important;max-height:360px!important;padding:10px!important;overflow-y:auto!important}.admin-global-search.is-open .admin-search-panel,.admin-search-panel.is-open,.admin-profile-menu.is-open .admin-profile-dropdown,.admin-profile-dropdown.is-open,.admin-notif-wrap.is-open .admin-notif-dropdown,.admin-notif-dropdown.is-open{opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:translateY(0)!important}.admin-search-panel a{display:grid!important;grid-template-columns:38px minmax(0,1fr)!important;gap:10px!important;align-items:center!important;padding:10px!important;border-radius:16px!important;color:var(--ad-text)!important}.admin-search-panel a:hover{background:var(--ad-primary-soft)!important}.admin-search-panel a i{width:38px!important;height:38px!important;display:grid!important;place-items:center!important;border-radius:14px!important;background:var(--ad-primary-soft)!important;color:var(--ad-primary)!important}.admin-search-panel a span{display:block!important;color:var(--ad-title)!important;font-size:13px!important;font-weight:950!important}.admin-search-panel a small{display:block!important;margin-top:2px!important;color:var(--ad-muted)!important;font-size:11px!important;font-weight:800!important}.admin-search-empty{min-height:82px!important;display:none;align-items:center!important;justify-content:center!important;color:var(--ad-muted)!important;font-size:13px!important;font-weight:900!important}
+.admin-profile-dropdown{width:min(292px,92vw)!important;padding:12px!important}.admin-profile-dropdown__head{display:flex!important;align-items:center!important;gap:10px!important;padding:12px!important;margin-bottom:10px!important;border-radius:18px!important;background:linear-gradient(135deg,var(--ad-primary-soft),var(--ad-secondary-soft))!important;border:1px solid var(--ad-line)!important}.admin-profile-dropdown__head>span{width:40px!important;height:40px!important;display:grid!important;place-items:center!important;border-radius:15px!important;color:#fff!important;font-weight:950!important;background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary))!important}.admin-profile-dropdown__head strong{display:block!important;color:var(--ad-title)!important;font-size:13px!important;font-weight:950!important}.admin-profile-dropdown__head small{display:block!important;color:var(--ad-muted)!important;font-size:11px!important;font-weight:800!important}.admin-profile-option{width:100%!important;min-height:46px!important;display:flex!important;align-items:center!important;gap:10px!important;padding:0 12px!important;border:0!important;border-radius:16px!important;margin-top:6px!important;background:transparent!important;color:var(--ad-text)!important;font-size:13px!important;font-weight:900!important;transition:.18s ease!important}.admin-profile-option:hover{background:var(--ad-primary-soft)!important;color:var(--ad-primary-dark)!important;transform:translateY(-1px)!important}.admin-profile-option i{width:28px!important;height:28px!important;display:grid!important;place-items:center!important;border-radius:10px!important;background:var(--ad-primary-soft)!important}
+.admin-logout-form{margin:10px 0 0!important;padding:10px 0 0!important;border-top:1px solid var(--ad-line)!important}.admin-logout-action{width:100%!important;min-height:58px!important;display:flex!important;align-items:center!important;gap:11px!important;padding:10px 12px!important;border:0!important;border-radius:18px!important;background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.04))!important;color:var(--ad-danger)!important;text-align:right!important;transition:.18s ease!important}.admin-logout-action__icon{width:38px!important;height:38px!important;min-width:38px!important;display:grid!important;place-items:center!important;border-radius:14px!important;color:#fff!important;background:linear-gradient(135deg,var(--ad-danger),var(--ad-danger-dark))!important;box-shadow:0 12px 26px rgba(239,68,68,.22)!important}.admin-logout-action__text strong{display:block!important;color:inherit!important;font-size:13px!important;font-weight:950!important}.admin-logout-action__text small{display:block!important;color:rgba(239,68,68,.72)!important;font-size:10.5px!important;font-weight:800!important;margin-top:2px!important}.admin-logout-action:hover{transform:translateY(-2px)!important;background:linear-gradient(135deg,var(--ad-danger),var(--ad-danger-dark))!important;color:#fff!important;box-shadow:0 18px 38px rgba(239,68,68,.26)!important}.admin-logout-action:hover .admin-logout-action__icon{background:rgba(255,255,255,.18)!important;box-shadow:none!important}.admin-logout-action:hover small{color:rgba(255,255,255,.82)!important}
+.admin-notif-dropdown{width:min(352px,calc(100vw - 40px))!important}.admin-notif-dropdown__head,.admin-notif-dropdown__footer{padding:14px 16px!important;display:flex!important;align-items:center!important;justify-content:space-between!important;border-bottom:1px solid var(--ad-line)!important;color:var(--ad-title)!important}.admin-notif-dropdown__head{background:linear-gradient(135deg,var(--ad-primary-soft),var(--ad-secondary-soft))!important}.admin-notif-dropdown__footer{border-top:1px solid var(--ad-line)!important;border-bottom:0!important}.admin-notif-dropdown__footer a{color:var(--ad-primary-dark)!important;font-size:13px!important;font-weight:900!important}.admin-notif-dropdown__body{padding:14px!important;max-height:330px;overflow:auto}.admin-notif-empty{min-height:92px!important;display:grid!important;place-items:center!important;gap:8px!important;color:var(--ad-muted)!important;background:var(--ad-primary-soft)!important;border:1px dashed var(--ad-line-strong)!important;border-radius:18px!important;font-size:13px!important;font-weight:900!important}
+
+@media(max-width:1180px){.admin-main,.admin-shell.is-sidebar-collapsed .admin-main,body.admin-sidebar-collapsed .admin-main{width:100%!important;margin-right:0!important;padding-top:var(--ad-topbar-h)!important}.admin-sidebar,.admin-sidebar.is-collapsed{position:fixed!important;top:0!important;right:0!important;bottom:0!important;width:min(310px,calc(100vw - 24px))!important;transform:translateX(110%)!important;opacity:0!important;visibility:hidden!important;z-index:1300!important}.admin-sidebar.is-open{transform:translateX(0)!important;opacity:1!important;visibility:visible!important}.admin-sidebar.is-collapsed .admin-sidebar__top{min-height:70px!important;justify-content:space-between!important}.admin-sidebar.is-collapsed .admin-brand{justify-content:flex-start!important}.admin-sidebar.is-collapsed .admin-brand__text,.admin-sidebar.is-collapsed .admin-nav-group__label,.admin-sidebar.is-collapsed .admin-nav__label,.admin-sidebar.is-collapsed .admin-nav__badge,.admin-sidebar.is-collapsed .admin-sidebar__status-text{display:block!important}.admin-sidebar.is-collapsed .admin-sidebar-toggle{display:inline-grid!important}.admin-sidebar.is-collapsed .admin-nav{justify-items:stretch!important}.admin-sidebar.is-collapsed .admin-nav__link{width:100%!important;justify-content:flex-start!important}.admin-mobile-menu-btn{display:grid!important}.admin-topbar,.admin-shell.is-sidebar-collapsed .admin-topbar,body.admin-sidebar-collapsed .admin-topbar{right:0!important;left:0!important;width:100%!important;padding-inline:16px!important}.admin-content{padding-inline:16px!important}.admin-global-search{width:min(320px,40vw)!important}.admin-sidebar-tooltip{display:none!important}}
+@media(max-width:760px){:root{--ad-topbar-h:72px}.admin-topbar{height:var(--ad-topbar-h)!important;min-height:var(--ad-topbar-h)!important;padding-inline:12px!important;gap:10px!important}.admin-topbar__title strong{font-size:14px!important}.admin-topbar__title span{font-size:11px!important}.admin-global-search,.admin-notif-btn,.admin-profile-trigger,.admin-mobile-menu-btn{width:46px!important;height:46px!important;min-width:46px!important;border-radius:16px!important}.admin-global-search{padding-inline:0!important;justify-content:center!important}.admin-global-search input,.admin-global-search .admin-search__shortcut{display:none!important}.admin-global-search:focus-within,.admin-global-search.is-open{width:min(320px,74vw)!important;padding:0 13px!important}.admin-global-search:focus-within input,.admin-global-search.is-open input{display:block!important}.admin-profile-trigger__avatar{width:36px!important;height:36px!important}.admin-profile-dropdown,.admin-notif-dropdown{width:min(310px,92vw)!important}.admin-content{padding:18px 12px 40px!important}}
+
+/* =========================================================
+   PROFILE DROPDOWN FINAL DESIGN
+   شكل أيقونة الأدمن + القائمة المنسدلة + زر الخروج + البحث
+   ========================================================= */
+
+/* زر الأدمن في الهيدر */
+.admin-profile-trigger{
+    position:relative !important;
+    width:58px !important;
+    height:50px !important;
+    min-width:58px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 !important;
+    border-radius:18px !important;
+    border:1px solid var(--ad-line-strong) !important;
+    background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.80), transparent 34%),
+        linear-gradient(180deg,var(--ad-card),var(--ad-card-2)) !important;
+    color:var(--ad-primary-dark) !important;
+    box-shadow:var(--ad-shadow-soft) !important;
+    overflow:visible !important;
+}
+
+.admin-profile-trigger::before{
+    display:none !important;
+}
+
+.admin-profile-trigger:hover,
+.admin-profile-menu.is-open .admin-profile-trigger{
+    transform:none !important;
+    border-color:transparent !important;
+    background:transparent !important;
+}
+
+.admin-profile-menu.is-open .admin-avatar-icon-v2{
+    transform:scale(1.12) !important;
+    color:var(--ad-primary-dark) !important;
+}
+html[data-theme="dark"] .admin-profile-menu.is-open .admin-avatar-icon-v2,
+body[data-theme="dark"] .admin-profile-menu.is-open .admin-avatar-icon-v2{
+    color:#34d399 !important;
+}
+
+.admin-profile-trigger:hover::before,
+.admin-profile-menu.is-open .admin-profile-trigger::before{
+    opacity:1 !important;
+}
+
+.admin-profile-trigger__avatar{
+    width:40px !important;
+    height:40px !important;
+    display:grid !important;
+    place-items:center !important;
+    border-radius:15px !important;
+    color:#fff !important;
+    font-size:14px !important;
+    font-weight:950 !important;
+    background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary)) !important;
+    box-shadow:0 12px 24px rgba(29,158,117,.20) !important;
+}
+
+.admin-profile-trigger__dot{
+    position:absolute !important;
+    right:9px !important;
+    bottom:7px !important;
+    width:10px !important;
+    height:10px !important;
+    border-radius:50% !important;
+    background:#31d6a9 !important;
+    border:2px solid var(--ad-card) !important;
+    box-shadow:0 0 0 4px rgba(49,214,169,.12) !important;
+}
+
+.admin-profile-trigger__chevron{
+    position:absolute !important;
+    left:6px !important;
+    bottom:6px !important;
+    width:18px !important;
+    height:18px !important;
+    display:grid !important;
+    place-items:center !important;
+    border-radius:8px !important;
+    color:var(--ad-primary-dark) !important;
+    background:var(--ad-primary-soft) !important;
+    font-size:10px !important;
+    transition:.18s ease !important;
+}
+
+.admin-profile-menu.is-open .admin-profile-trigger__chevron{
+    color:#fff !important;
+    background:linear-gradient(135deg,var(--ad-primary),var(--ad-primary-dark)) !important;
+}
+
+/* القائمة المنسدلة */
+.admin-profile-dropdown{
+    width:min(320px,92vw) !important;
+    padding:12px !important;
+    border-radius:24px !important;
+    background:rgba(255,255,255,.98) !important;
+    border:1px solid var(--ad-line-strong) !important;
+    box-shadow:0 30px 80px rgba(15,55,51,.20) !important;
+    backdrop-filter:blur(18px) saturate(1.18) !important;
+    -webkit-backdrop-filter:blur(18px) saturate(1.18) !important;
+}
+
+.admin-profile-dropdown__head{
+    display:flex !important;
+    align-items:center !important;
+    gap:11px !important;
+    padding:13px !important;
+    margin-bottom:10px !important;
+    border-radius:20px !important;
+    background:
+        radial-gradient(circle at 10% 0%, rgba(255,255,255,.80), transparent 34%),
+        linear-gradient(135deg,var(--ad-primary-soft),var(--ad-secondary-soft)) !important;
+    border:1px solid var(--ad-line) !important;
+}
+
+.admin-profile-dropdown__head > span{
+    width:44px !important;
+    height:44px !important;
+    min-width:44px !important;
+    display:grid !important;
+    place-items:center !important;
+    border-radius:16px !important;
+    color:#fff !important;
+    font-weight:950 !important;
+    background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary)) !important;
+    box-shadow:0 12px 24px rgba(29,158,117,.20) !important;
+}
+
+.admin-profile-dropdown__head strong{
+    display:block !important;
+    color:var(--ad-title) !important;
+    font-size:13.5px !important;
+    font-weight:950 !important;
+    line-height:1.3 !important;
+}
+
+.admin-profile-dropdown__head small{
+    display:block !important;
+    color:var(--ad-muted) !important;
+    font-size:11px !important;
+    font-weight:800 !important;
+    margin-top:3px !important;
+    direction:ltr !important;
+    text-align:right !important;
+    max-width:210px !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+}
+
+/* عناصر القائمة */
+.admin-profile-option{
+    width:100% !important;
+    min-height:52px !important;
+    display:grid !important;
+    grid-template-columns:38px minmax(0,1fr) auto !important;
+    align-items:center !important;
+    gap:10px !important;
+    padding:8px 10px !important;
+    margin-top:6px !important;
+    border:0 !important;
+    border-radius:17px !important;
+    background:transparent !important;
+    color:var(--ad-text) !important;
+    text-align:right !important;
+    transition:.18s ease !important;
+}
+
+.admin-profile-option:hover{
+    background:linear-gradient(135deg,var(--ad-primary-soft),rgba(77,168,218,.08)) !important;
+    color:var(--ad-primary-dark) !important;
+    transform:translateY(-1px) !important;
+}
+
+.admin-profile-option__icon{
+    width:38px !important;
+    height:38px !important;
+    display:grid !important;
+    place-items:center !important;
+    border-radius:14px !important;
+    color:var(--ad-primary-dark) !important;
+    background:var(--ad-primary-soft) !important;
+}
+
+.admin-profile-option__body{
+    min-width:0 !important;
+    display:block !important;
+}
+
+.admin-profile-option__body strong{
+    display:block !important;
+    color:var(--ad-title) !important;
+    font-size:13px !important;
+    font-weight:950 !important;
+    line-height:1.25 !important;
+}
+
+.admin-profile-option__arrow{
+    width:26px !important;
+    height:26px !important;
+    display:grid !important;
+    place-items:center !important;
+    color:var(--ad-muted) !important;
+    font-size:12px !important;
+}
+
+/* Theme option بدون كلمة تفعيل */
+.admin-theme-option.is-dark .admin-profile-option__icon{
+    color:#facc15 !important;
+    background:rgba(250,204,21,.14) !important;
+}
+
+.admin-theme-switch{
+    position:relative !important;
+    width:42px !important;
+    height:24px !important;
+    border-radius:999px !important;
+    background:rgba(100,127,120,.18) !important;
+    border:1px solid rgba(100,127,120,.16) !important;
+    transition:.18s ease !important;
+}
+
+.admin-theme-switch i{
+    position:absolute !important;
+    top:3px !important;
+    right:3px !important;
+    width:18px !important;
+    height:18px !important;
+    border-radius:50% !important;
+    background:#fff !important;
+    box-shadow:0 4px 10px rgba(0,0,0,.16) !important;
+    transition:.18s ease !important;
+}
+
+.admin-theme-option.is-dark .admin-theme-switch{
+    background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary)) !important;
+    border-color:transparent !important;
+}
+
+.admin-theme-option.is-dark .admin-theme-switch i{
+    right:19px !important;
+}
+
+/* تسجيل الخروج: ليس زر داخل مربع، بل أكشن واضح وأنيق */
+.admin-logout-form{
+    margin:12px -2px 0 !important;
+    padding:12px 0 0 !important;
+    border-top:1px solid var(--ad-line) !important;
+}
+
+.admin-logout-action{
+    width:100% !important;
+    min-height:60px !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:12px !important;
+    padding:10px 12px !important;
+    border:0 !important;
+    border-radius:20px !important;
+    background:
+        radial-gradient(circle at 8% 8%, rgba(255,255,255,.55), transparent 34%),
+        linear-gradient(135deg,rgba(239,68,68,.13),rgba(239,68,68,.055)) !important;
+    color:var(--ad-danger) !important;
+    text-align:right !important;
+    transition:.18s ease !important;
+}
+
+.admin-logout-action__icon{
+    width:42px !important;
+    height:42px !important;
+    min-width:42px !important;
+    display:grid !important;
+    place-items:center !important;
+    border-radius:16px !important;
+    color:#fff !important;
+    background:linear-gradient(135deg,var(--ad-danger),var(--ad-danger-dark)) !important;
+    box-shadow:0 14px 28px rgba(239,68,68,.24) !important;
+}
+
+.admin-logout-action__text strong{
+    display:block !important;
+    color:inherit !important;
+    font-size:13.5px !important;
+    font-weight:950 !important;
+    line-height:1.25 !important;
+}
+
+.admin-logout-action__text small{
+    display:block !important;
+    color:rgba(239,68,68,.72) !important;
+    font-size:10.5px !important;
+    font-weight:850 !important;
+    margin-top:3px !important;
+}
+
+.admin-logout-action:hover{
+    transform:translateY(-2px) !important;
+    color:#fff !important;
+    background:linear-gradient(135deg,var(--ad-danger),var(--ad-danger-dark)) !important;
+    box-shadow:0 20px 44px rgba(239,68,68,.28) !important;
+}
+
+.admin-logout-action:hover .admin-logout-action__icon{
+    background:rgba(255,255,255,.18) !important;
+    box-shadow:none !important;
+}
+
+.admin-logout-action:hover small{
+    color:rgba(255,255,255,.82) !important;
+}
+
+/* Search dropdown تحسين */
+.admin-search-panel{
+    padding:12px !important;
+    border-radius:24px !important;
+}
+
+.admin-search-panel a{
+    min-height:54px !important;
+    border-radius:17px !important;
+    transition:.16s ease !important;
+}
+
+.admin-search-panel a:hover{
+    transform:translateY(-1px) !important;
+}
+
+/* Dark */
+html[data-theme="dark"] .admin-profile-dropdown,
+html[data-theme="dark"] .admin-search-panel,
+html[data-theme="dark"] .admin-notif-dropdown,
+body[data-theme="dark"] .admin-profile-dropdown,
+body[data-theme="dark"] .admin-search-panel,
+body[data-theme="dark"] .admin-notif-dropdown,
+body.dark .admin-profile-dropdown,
+body.dark .admin-search-panel,
+body.dark .admin-notif-dropdown,
+body.theme-dark .admin-profile-dropdown,
+body.theme-dark .admin-search-panel,
+body.theme-dark .admin-notif-dropdown{
+    background:rgba(12,39,42,.98) !important;
+    border-color:rgba(135,255,213,.18) !important;
+}
+
+html[data-theme="dark"] .admin-profile-trigger,
+body[data-theme="dark"] .admin-profile-trigger,
+body.dark .admin-profile-trigger,
+body.theme-dark .admin-profile-trigger{
+    background:linear-gradient(180deg,var(--ad-card),var(--ad-card-2)) !important;
+}
+
+html[data-theme="dark"] .admin-profile-trigger__dot,
+body[data-theme="dark"] .admin-profile-trigger__dot,
+body.dark .admin-profile-trigger__dot,
+body.theme-dark .admin-profile-trigger__dot{
+    border-color:var(--ad-card) !important;
+}
+
+html[data-theme="dark"] .admin-theme-switch,
+body[data-theme="dark"] .admin-theme-switch,
+body.dark .admin-theme-switch,
+body.theme-dark .admin-theme-switch{
+    background:rgba(255,255,255,.10) !important;
+    border-color:rgba(255,255,255,.12) !important;
+}
+
+html[data-theme="dark"] .admin-theme-switch i,
+body[data-theme="dark"] .admin-theme-switch i,
+body.dark .admin-theme-switch i,
+body.theme-dark .admin-theme-switch i{
+    background:#dffdf5 !important;
+}
+
+
+
+
+
+/* Search JS compatibility: hide unmatched results even if links have display:grid!important */
+.admin-search-panel [data-search-text].is-search-hidden,
+.admin-search-panel [data-search-text][hidden]{
+    display:none !important;
+}
+
+.admin-search-empty,
+.admin-search-empty[hidden],
+[data-search-empty],
+[data-search-empty][hidden]{
+    display:none !important;
+}
+
+.admin-search-empty.is-visible,
+[data-search-empty].is-visible{
+    display:flex !important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR / TOPBAR / DROPDOWNS POLISH PASS
+   بدون تغيير ألوان البراند، بس تحسين مؤشر العنصر النشط، الحركات،
+   وتوهج البحث، وتناسق القوائم المنسدلة بالوضعين
+   ============================================================================ */
+
+/* --- مؤشر واضح للعنصر النشط بالقائمة الجانبية: خط جانبي بدل الاعتماد على الخلفية بس --- */
+.admin-nav__link{position:relative!important;overflow:hidden!important;transition:.25s cubic-bezier(.2,.8,.2,1)!important}
+.admin-nav__link::before{content:"";position:absolute;inset-inline-start:0;top:50%;transform:translateY(-50%) scaleY(0);width:3px;height:60%;border-radius:999px;background:linear-gradient(180deg,var(--ad-primary),var(--ad-secondary));transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.admin-nav__link.is-active::before{transform:translateY(-50%) scaleY(1)}
+.admin-nav__link:hover{transform:translateX(-2px)}
+.admin-nav__icon{transition:.25s cubic-bezier(.2,.8,.2,1)!important}
+.admin-nav__link:hover .admin-nav__icon{transform:scale(1.08)}
+
+/* --- شريط البحث: توهج تركيز أوضح وأنعم --- */
+.admin-global-search{transition:.25s cubic-bezier(.2,.8,.2,1)!important}
+.admin-global-search:focus-within{border-color:var(--ad-primary)!important;box-shadow:0 0 0 4px rgba(29,158,117,.14),var(--ad-shadow-soft)!important}
+.admin-global-search>i{transition:color .2s ease}
+.admin-global-search:focus-within>i{color:var(--ad-primary-dark)!important}
+
+/* --- القوائم المنسدلة: حركة فتح أنعم شوي وظل أوضح --- */
+.admin-search-panel,.admin-profile-dropdown,.admin-notif-dropdown{
+    transition:opacity .22s cubic-bezier(.2,.8,.2,1),transform .22s cubic-bezier(.2,.8,.2,1),visibility .22s!important;
+}
+
+/* --- تأكيد: الوضع الداكن أسود حقيقي بكل مكان بالسايدبار والتوبار والقوائم --- */
+html[data-theme="dark"] .admin-sidebar,
+body[data-theme="dark"] .admin-sidebar,
+body.dark .admin-sidebar,
+body.theme-dark .admin-sidebar{background:#000!important}
+html[data-theme="dark"] .admin-topbar,
+body[data-theme="dark"] .admin-topbar,
+body.dark .admin-topbar,
+body.theme-dark .admin-topbar{background:rgba(0,0,0,.92)!important;-webkit-backdrop-filter:blur(18px)!important;backdrop-filter:blur(18px)!important}
+html[data-theme="dark"] .admin-search-panel,
+html[data-theme="dark"] .admin-profile-dropdown,
+html[data-theme="dark"] .admin-notif-dropdown,
+body[data-theme="dark"] .admin-search-panel,
+body[data-theme="dark"] .admin-profile-dropdown,
+body[data-theme="dark"] .admin-notif-dropdown{background:rgba(11,11,11,.98)!important;border-color:rgba(255,255,255,.08)!important}
+html[data-theme="dark"] .admin-global-search,
+html[data-theme="dark"] .admin-notif-btn,
+html[data-theme="dark"] .admin-profile-trigger,
+body[data-theme="dark"] .admin-global-search,
+body[data-theme="dark"] .admin-notif-btn,
+body[data-theme="dark"] .admin-profile-trigger{background:#0b0b0b!important;border-color:rgba(255,255,255,.08)!important}
+
+/* ============================================================================
+   ETZAN ADMIN — TOPBAR + DROPDOWN REBUILD (Stripe-style soft cards)
+   ============================================================================ */
+
+/* التوپبار: خلفية نظيفة، حدود خفيفة، بلا عناصر نصية زايدة */
+.admin-topbar{
+    background:var(--ad-card)!important;
+    border-bottom:1px solid var(--ad-line)!important;
+    box-shadow:0 1px 0 rgba(16,24,43,.03)!important;
+}
+html[data-theme="dark"] .admin-topbar,
+body[data-theme="dark"] .admin-topbar,
+body.dark .admin-topbar,
+body.theme-dark .admin-topbar{
+    background:#0b0b0b!important;
+    border-bottom-color:rgba(255,255,255,.07)!important;
+    box-shadow:none!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+}
+
+/* البحث: نظيف، حدّ خفيف، بلا حدود سميكة */
+.admin-global-search{
+    background:var(--ad-card)!important;
+    border:1px solid var(--ad-line)!important;
+    box-shadow:none!important;
+}
+.admin-global-search:focus-within{
+    border-color:var(--ad-primary)!important;
+    box-shadow:0 0 0 3px rgba(29,158,117,.10)!important;
+}
+html[data-theme="dark"] .admin-global-search,
+body[data-theme="dark"] .admin-global-search{
+    background:#111!important;
+    border-color:rgba(255,255,255,.08)!important;
+}
+
+/* الجرس وزر البروفايل: حدّ خفيف بدل خلفية بارزة */
+.admin-notif-btn{
+    background:var(--ad-card)!important;
+    border:1px solid var(--ad-line)!important;
+    box-shadow:none!important;
+    color:var(--ad-muted)!important;
+}
+.admin-notif-btn:hover{
+    background:var(--ad-card)!important;
+    color:var(--ad-primary-dark)!important;
+    border-color:var(--ad-primary)!important;
+    transform:none!important;
+}
+html[data-theme="dark"] .admin-notif-btn,
+body[data-theme="dark"] .admin-notif-btn{background:#111!important;border-color:rgba(255,255,255,.08)!important;color:#9aa!important}
+
+/* أيقونة الأدمن: بلا خلفية ملوّنة، بس أيقونة بسيطة بحلقة رفيعة */
+.admin-profile-trigger{
+    background:transparent!important;
+    border:1px solid var(--ad-line)!important;
+    box-shadow:none!important;
+}
+.admin-profile-trigger:hover{
+    background:var(--ad-primary-soft)!important;
+    border-color:var(--ad-primary)!important;
+    color:var(--ad-primary-dark)!important;
+    transform:none!important;
+}
+.admin-profile-trigger__avatar--plain{
+    background:transparent!important;
+    color:var(--ad-muted)!important;
+    font-size:16px!important;
+}
+.admin-profile-trigger:hover .admin-profile-trigger__avatar--plain{color:var(--ad-primary-dark)!important}
+html[data-theme="dark"] .admin-profile-trigger,
+body[data-theme="dark"] .admin-profile-trigger{border-color:rgba(255,255,255,.08)!important}
+html[data-theme="dark"] .admin-profile-trigger__avatar--plain,
+body[data-theme="dark"] .admin-profile-trigger__avatar--plain{color:#9aa!important}
+
+/* القوائم المنسدلة: بطاقة بيضاء ناعمة، حدّ خفيف، ظل هادئ (مو زجاجي مبالغ) */
+.admin-profile-dropdown,
+.admin-notif-dropdown,
+.admin-search-panel{
+    background:var(--ad-card)!important;
+    border:1px solid var(--ad-line)!important;
+    box-shadow:0 12px 40px rgba(16,24,43,.10)!important;
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+    border-radius:16px!important;
+}
+html[data-theme="dark"] .admin-profile-dropdown,
+html[data-theme="dark"] .admin-notif-dropdown,
+html[data-theme="dark"] .admin-search-panel,
+body[data-theme="dark"] .admin-profile-dropdown,
+body[data-theme="dark"] .admin-notif-dropdown,
+body[data-theme="dark"] .admin-search-panel{
+    background:#0b0b0b!important;
+    border-color:rgba(255,255,255,.08)!important;
+    box-shadow:0 16px 46px rgba(0,0,0,.5)!important;
+}
+
+/* رأس القائمة: أيقونة بسيطة بدل مربع ملوّن */
+.admin-profile-dropdown__head{display:flex!important;align-items:center!important;gap:12px!important;padding:16px!important;border-bottom:1px solid var(--ad-line)!important}
+.admin-profile-dropdown__avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--ad-line);color:var(--ad-muted);font-size:16px;flex:0 0 auto}
+.admin-profile-dropdown__head strong{display:block;color:var(--ad-title);font-size:14px;font-weight:900}
+.admin-profile-dropdown__head small{display:block;color:var(--ad-muted);font-size:12px;font-weight:700;margin-top:2px}
+
+/* خيارات القائمة: صف بسيط، بلا خلفية بارزة */
+.admin-profile-option{
+    display:flex!important;
+    align-items:center!important;
+    gap:10px!important;
+    width:100%!important;
+    padding:12px 16px!important;
+    background:transparent!important;
+    border:0!important;
+    color:var(--ad-text)!important;
+    font-size:13.5px!important;
+    font-weight:800!important;
+    transition:.18s ease!important;
+}
+.admin-profile-option:hover{background:var(--ad-primary-soft)!important;color:var(--ad-primary-dark)!important}
+.admin-profile-option i{width:18px;text-align:center;color:var(--ad-muted)}
+.admin-profile-option:hover i{color:var(--ad-primary-dark)}
+
+/* مفتاح تبديل حقيقي بشمس وقمر */
+.admin-toggle-switch{
+    margin-inline-start:auto;
+    width:46px;height:22px;
+    border-radius:999px;
+    background:var(--ad-line-strong);
+    position:relative;
+    flex:0 0 auto;
+    transition:background .25s ease;
+}
+.admin-toggle-switch__sun,
+.admin-toggle-switch__moon{
+    position:absolute;
+    top:50%;transform:translateY(-50%);
+    font-size:9px;
+    color:#fff;
+    z-index:1;
+}
+.admin-toggle-switch__sun{inset-inline-end:5px;color:#f5a623}
+.admin-toggle-switch__moon{inset-inline-start:5px;color:#cbd5e1}
+.admin-toggle-switch__knob{
+    position:absolute;top:2px;inset-inline-start:2px;
+    width:18px;height:18px;border-radius:50%;
+    background:#fff;
+    box-shadow:0 1px 4px rgba(0,0,0,.3);
+    transition:transform .3s cubic-bezier(.2,.8,.2,1);
+    z-index:2;
+}
+#adminThemeToggle.is-on .admin-toggle-switch{background:var(--ad-primary)}
+#adminThemeToggle.is-on .admin-toggle-switch__knob{transform:translateX(-24px)}
+
+/* تسجيل الخروج: نص بسيط بلون أحمر بدل صندوق أحمر كبير */
+.admin-logout-form{padding:8px 8px 12px}
+.admin-logout-action{
+    display:flex!important;
+    align-items:center!important;
+    gap:10px!important;
+    width:100%!important;
+    padding:12px 8px!important;
+    background:transparent!important;
+    border:0!important;
+    border-radius:10px!important;
+    color:var(--ad-danger)!important;
+    font-size:13.5px!important;
+    font-weight:850!important;
+    transition:.18s ease!important;
+}
+.admin-logout-action:hover{background:var(--ad-danger-soft)!important}
+.admin-logout-action__icon{width:18px;text-align:center;color:var(--ad-danger)}
+.admin-logout-action__text small{display:block;color:var(--ad-muted);font-size:11px;font-weight:700;margin-top:1px}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR REBUILD (Linear-inspired, بألوان إتزان)
+   مسافات ضيقة وأنيقة، أيقونات رفيعة، بلا خلفيات ضخمة، فخامة بالبساطة
+   ============================================================================ */
+
+.admin-sidebar{
+    background:var(--ad-card)!important;
+    border-left:1px solid var(--ad-line)!important;
+    box-shadow:none!important;
+}
+html[data-theme="dark"] .admin-sidebar,
+body[data-theme="dark"] .admin-sidebar,
+body.dark .admin-sidebar,
+body.theme-dark .admin-sidebar{
+    background:#000!important;
+    border-left-color:rgba(255,255,255,.06)!important;
+}
+
+/* الشعار: أصغر وأنيق، بلا صندوق ضخم */
+.admin-brand__logo{
+    width:34px!important;height:34px!important;min-width:34px!important;
+    border-radius:9px!important;
+    background:var(--ad-primary)!important;
+    box-shadow:none!important;
+}
+.admin-brand__text strong{font-size:14px!important;font-weight:900!important}
+.admin-brand__text small{font-size:10.5px!important;color:var(--ad-muted)!important}
+.admin-sidebar__top{padding-bottom:14px!important;margin-bottom:6px!important;border-bottom:1px solid var(--ad-line)!important}
+
+/* تسميات المجموعات: صغيرة، خافتة، حروف متباعدة شوي زي Linear */
+.admin-nav-group__label{
+    font-size:10px!important;
+    font-weight:800!important;
+    letter-spacing:.6px!important;
+    color:var(--ad-muted)!important;
+    opacity:.75!important;
+    padding:6px 10px 5px!important;
+}
+.admin-nav-group{margin-bottom:6px!important}
+.admin-nav{gap:1px!important}
+
+/* روابط التنقل: أضيق، أنعم، بلا تدرّج لوني ضخم بالهوفر */
+.admin-nav__link{
+    min-height:36px!important;
+    padding:7px 10px!important;
+    border-radius:8px!important;
+    border:1px solid transparent!important;
+    gap:9px!important;
+}
+.admin-nav__link:hover,
+.admin-nav__link.is-active{
+    background:var(--ad-primary-soft)!important;
+    border-color:transparent!important;
+    box-shadow:none!important;
+}
+.admin-nav__link.is-active{font-weight:900!important}
+.admin-nav__link:hover{transform:none!important}
+
+/* الأيقونة: بلا صندوق ملوّن، بس لون خافت يتغيّر عالنشط */
+.admin-nav__icon{
+    width:18px!important;height:18px!important;min-width:18px!important;
+    border-radius:0!important;
+    background:transparent!important;
+    color:var(--ad-muted)!important;
+    font-size:14px!important;
+}
+.admin-nav__link:hover .admin-nav__icon,
+.admin-nav__link.is-active .admin-nav__icon{
+    background:transparent!important;
+    color:var(--ad-primary-dark)!important;
+    transform:none!important;
+}
+.admin-nav__link.is-active{color:var(--ad-primary-dark)!important}
+.admin-nav__label{font-size:13px!important;font-weight:750!important}
+.admin-nav__link.is-active .admin-nav__label{font-weight:900!important}
+
+/* مؤشر النشط: خط رفيع جداً بالحافة، إحساس Linear بالضبط */
+.admin-nav__link::before{width:2px!important}
+
+/* شارة الأرقام: أصغر وأنحف */
+.admin-nav__badge{
+    min-width:18px!important;height:18px!important;
+    font-size:10px!important;
+    background:var(--ad-primary)!important;
+}
+
+/* الفوتر: بسيط جداً، بلا بطاقة بارزة */
+.admin-sidebar__status{
+    background:transparent!important;
+    border:1px solid var(--ad-line)!important;
+    padding:8px 10px!important;
+    border-radius:8px!important;
+}
+.admin-sidebar__status-dot{width:6px!important;height:6px!important}
+.admin-sidebar__status-text strong{font-size:11.5px!important}
+.admin-sidebar__status-text small{font-size:10px!important}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR V2: أيقونات مريحة 20px + Pill نشط بتوهج + Accordion
+   ============================================================================ */
+
+/* أيقونات أكبر وأوضح (20px) بدل الرفيعة جداً */
+.admin-nav__link{
+    min-height:44px!important;
+    padding:9px 12px!important;
+    border-radius:12px!important;
+    gap:12px!important;
+}
+.admin-nav__icon{
+    width:22px!important;height:22px!important;min-width:22px!important;
+    font-size:18px!important;
+}
+.admin-nav__label{font-size:13.5px!important}
+
+/* حالة نشطة: Pill ناعم بتوهج بدل خط رفيع بس */
+.admin-nav__link.is-active{
+    background:rgba(var(--ad-primary-rgb,29,158,117),.12)!important;
+    box-shadow:0 0 0 1px rgba(var(--ad-primary-rgb,29,158,117),.16),0 8px 20px rgba(var(--ad-primary-rgb,29,158,117),.10)!important;
+}
+.admin-nav__link:hover{
+    background:rgba(var(--ad-primary-rgb,29,158,117),.07)!important;
+}
+.admin-nav__link::before{width:3px!important;border-radius:0 4px 4px 0!important}
+
+/* --- الـ Accordion (الإعدادات وأي قائمة فرعية مستقبلية) --- */
+.admin-nav__link--parent{width:100%!important;cursor:pointer!important}
+.admin-nav__chevron{
+    margin-inline-start:auto!important;
+    font-size:10px!important;
+    color:var(--ad-muted)!important;
+    transition:transform .25s cubic-bezier(.2,.8,.2,1)!important;
+}
+.admin-nav__accordion.is-open .admin-nav__chevron{transform:rotate(180deg)!important}
+
+.admin-nav__submenu{
+    display:grid!important;
+    grid-template-rows:0fr!important;
+    transition:grid-template-rows .3s cubic-bezier(.2,.8,.2,1)!important;
+}
+.admin-nav__accordion.is-open .admin-nav__submenu{grid-template-rows:1fr!important}
+.admin-nav__submenu-inner{overflow:hidden!important;min-height:0!important}
+
+.admin-nav__submenu{
+    padding-inline-start:20px!important;
+    position:relative;
+}
+.admin-nav__submenu::after{
+    content:"";
+    position:absolute;
+    inset-inline-start:21px;
+    top:2px;bottom:10px;
+    width:1px;
+    background:var(--ad-line-strong);
+}
+.admin-nav__sublink{
+    display:flex!important;
+    align-items:center!important;
+    gap:9px!important;
+    padding:7px 10px 7px 4px!important;
+    margin-top:2px!important;
+    border-radius:8px!important;
+    color:var(--ad-muted)!important;
+    font-size:12.5px!important;
+    font-weight:750!important;
+    position:relative;
+    transition:.18s ease!important;
+}
+.admin-nav__sublink:hover{background:var(--ad-primary-soft)!important;color:var(--ad-primary-dark)!important}
+.admin-nav__sublink i{font-size:12px!important;width:14px;text-align:center;color:var(--ad-muted)}
+.admin-nav__sublink:hover i{color:var(--ad-primary-dark)!important}
+.admin-nav__sublink-dot{
+    position:absolute;
+    inset-inline-start:-15px;
+    width:5px;height:5px;
+    border-radius:50%;
+    background:var(--ad-line-strong);
+}
+.admin-nav__sublink:hover .admin-nav__sublink-dot{background:var(--ad-primary)!important}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR V3: أيقونات دائرية أنظف + شارة ملتصقة بالأيقونة
+   ============================================================================ */
+
+/* أيقونة دائرية ناعمة بدل المربع الملوّن الكبير */
+.admin-nav__icon{
+    position:relative!important;
+    width:40px!important;height:40px!important;min-width:40px!important;
+    border-radius:50%!important;
+    background:rgba(var(--ad-primary-rgb,29,158,117),.09)!important;
+    color:var(--ad-muted)!important;
+    font-size:19px!important;
+}
+.admin-nav__link:hover .admin-nav__icon,
+.admin-nav__link.is-active .admin-nav__icon{
+    background:rgba(var(--ad-primary-rgb,29,158,117),.16)!important;
+    color:var(--ad-primary-dark)!important;
+}
+
+/* الشارة: ملتصقة بزاوية الأيقونة بدل ما تطفو لطرف الصف البعيد */
+.admin-nav__link{position:relative!important}
+.admin-nav__badge{
+    position:absolute!important;
+    inset-inline-start:26px!important;
+    top:2px!important;
+    margin-inline-start:0!important;
+    min-width:18px!important;height:18px!important;
+    font-size:9.5px!important;
+    padding:0 5px!important;
+    border:2px solid var(--ad-card)!important;
+    box-sizing:content-box!important;
+}
+html[data-theme="dark"] .admin-nav__badge,
+body[data-theme="dark"] .admin-nav__badge{border-color:#000!important}
+
+/* تأكيد: زر القائمة المنسدلة (الإعدادات) ما بينكسر أبداً مهما صار بالـ submenu */
+.admin-nav__accordion{display:block!important;width:100%!important}
+.admin-nav__link--parent{display:flex!important;visibility:visible!important;opacity:1!important;height:auto!important;min-height:52px!important}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR V4: خط حدّ متوهّج + تنظيم ببطاقات + أيقونات متدرجة
+   ============================================================================ */
+
+/* --- خط فاصل واضح بلمعة بلون إتزان بنهاية السايدبار (حل مشكلة "أسود على أسود") --- */
+/* ملاحظة: .admin-sidebar أصلاً position:fixed (معرّف بالأعلى) وهاد كافي
+   كـ containing block لعنصر ::after الزخرفي — ما في داعي نغيّر الـ position هون. */
+.admin-sidebar::after{
+    content:""!important;
+    display:block!important;
+    position:absolute;
+    inset-inline-end:0;
+    top:0;bottom:0;
+    width:1px;
+    background:linear-gradient(180deg,transparent,rgba(var(--ad-primary-rgb,29,158,117),.55) 15%,rgba(var(--ad-secondary-rgb,77,168,218),.45) 50%,rgba(var(--ad-primary-rgb,29,158,117),.55) 85%,transparent);
+    box-shadow:0 0 12px rgba(var(--ad-primary-rgb,29,158,117),.35);
+}
+
+/* --- نفس اللمعة تحت التوپبار --- */
+/* .admin-topbar أصلاً position:fixed (معرّف بالأعلى) — كافي لعنصر ::after الزخرفي */
+.admin-topbar::after{
+    content:"";
+    position:absolute;
+    inset-inline-start:0;inset-inline-end:0;
+    bottom:0;
+    height:1px;
+    background:linear-gradient(90deg,transparent,rgba(var(--ad-primary-rgb,29,158,117),.5) 20%,rgba(var(--ad-secondary-rgb,77,168,218),.4) 50%,rgba(var(--ad-primary-rgb,29,158,117),.5) 80%,transparent);
+    box-shadow:0 1px 10px rgba(var(--ad-primary-rgb,29,158,117),.25);
+}
+
+/* --- تنظيم القائمة الجانبية ببطاقات منفصلة بدل قائمة متدفقة --- */
+.admin-nav-group{
+    background:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    padding:0!important;
+    margin:0 0 14px!important;
+}
+.admin-nav-group__label{padding:6px 8px 8px!important}
+
+/* --- أيقونات بتدرّج لوني عند التفعيل بدل لون واحد مسطّح --- */
+.admin-nav__link.is-active .admin-nav__icon,
+.admin-nav__link:hover .admin-nav__icon{
+    background:linear-gradient(135deg,rgba(var(--ad-primary-rgb,29,158,117),.22),rgba(var(--ad-secondary-rgb,77,168,218),.16))!important;
+}
+.admin-nav__link.is-active .admin-nav__icon i{
+    background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* --- الموبايل: نفس الفخامة، مسافات أوسع شوي، خلفية أغمق قليلاً للتباين --- */
+@media(max-width:1180px){
+    .admin-sidebar{box-shadow:-20px 0 60px rgba(0,0,0,.35)!important}
+    .admin-nav__link{min-height:56px!important}
+}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR V5: إصلاح الانهيار + لمعة زجاجية عند الهوفر + أمان عرض
+   ============================================================================ */
+
+/* أمان: بلا سكرول أفقي إطلاقاً مهما صار */
+html,body,.admin-shell{overflow-x:hidden!important;max-width:100vw!important}
+.admin-sidebar,.admin-topbar{max-width:100vw!important}
+
+/* لمعة زجاجية خفيفة تعبر رابط القائمة عند الهوفر (Light Sweep) */
+.admin-nav__link{position:relative!important;overflow:hidden!important}
+.admin-nav__link::after{
+    content:"";
+    position:absolute;
+    inset-block:0;
+    inset-inline-start:-40%;
+    width:35%;
+    background:linear-gradient(115deg,transparent,rgba(255,255,255,.16),transparent);
+    transform:skewX(-15deg);
+    transition:inset-inline-start .55s ease;
+    pointer-events:none;
+}
+.admin-nav__link:hover::after{inset-inline-start:120%}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR V6: إصلاح تقصّ نص القائمة الفرعية + تمييز الصفحة الحالية
+   ============================================================================ */
+
+/* منع تقصّ النص حرف حرف بالقائمة الفرعية — سطر واحد نظيف دايماً */
+.admin-nav__sublink{
+    white-space:nowrap!important;
+    overflow:hidden!important;
+}
+.admin-nav__sublink span{
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    min-width:0!important;
+}
+
+/* أيقونة القائمة الفرعية: دائرية ناعمة بدل أيقونة عادية بلا خلفية */
+.admin-nav__sublink i{
+    width:26px!important;height:26px!important;
+    display:inline-flex!important;
+    align-items:center!important;justify-content:center!important;
+    border-radius:50%!important;
+    background:rgba(var(--ad-primary-rgb,29,158,117),.08)!important;
+    font-size:12px!important;
+}
+.admin-nav__sublink:hover i{background:rgba(var(--ad-primary-rgb,29,158,117),.18)!important}
+
+/* تمييز واضح للصفحة الفرعية النشطة حالياً (مو بس hover) */
+.admin-nav__sublink.is-current{
+    background:rgba(var(--ad-primary-rgb,29,158,117),.14)!important;
+    color:var(--ad-primary-dark)!important;
+    font-weight:900!important;
+}
+.admin-nav__sublink.is-current i{
+    background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary))!important;
+    color:#fff!important;
+}
+.admin-nav__sublink.is-current .admin-nav__sublink-dot{
+    background:var(--ad-primary)!important;
+    box-shadow:0 0 0 3px rgba(var(--ad-primary-rgb,29,158,117),.25)!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR V7: قائمة فرعية بأيقونات بس + تولتيب أنيق عند الهوفر
+   بدل ما نحشر نص بمساحة ضيقة، الأيقونة بس ظاهرة، والاسم بيطلع بطاقة صغيرة
+   واضحة ومميزة لما تحوّمي/تركّزي عليها
+   ============================================================================ */
+
+.admin-nav__sublink{
+    justify-content:center!important;
+    gap:0!important;
+    padding:9px!important;
+    position:relative;
+}
+.admin-nav__sublink i{
+    width:30px!important;height:30px!important;
+    font-size:13px!important;
+}
+
+/* التولتيب: بطاقة صغيرة واضحة بتطلع جنب الأيقونة عند الهوفر أو الفوكس */
+/* تولتيب القائمة الفرعية صار يستخدم نفس نظام التولتيب المشترك (JS) */
+
+/* الأيقونة النشطة/الحالية تبرز حتى بدون هوفر */
+.admin-nav__sublink.is-current i{
+    background:linear-gradient(135deg,var(--ad-primary),var(--ad-secondary))!important;
+    color:#fff!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — SIDEBAR V8: نص ظاهر لما القائمة مفتوحة، أيقونة+تولتيب لما مسكّرة
+   ============================================================================ */
+
+/* الوضع الافتراضي (القائمة مفتوحة): أيقونة + النص جنب بعض بسطر واحد */
+.admin-nav__sublink{
+    justify-content:flex-start!important;
+    gap:9px!important;
+    padding:7px 10px 7px 4px!important;
+}
+.admin-nav__sublink i{
+    width:26px!important;height:26px!important;
+    font-size:12px!important;
+}
+.admin-nav__sublink-label{
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    min-width:0!important;
+    font-size:12.5px!important;
+    font-weight:750!important;
+}
+/* التولتيب متوقف تماماً بالوضع المفتوح (مش محتاجينه، النص ظاهر أصلاً) */
+
+/* لما القائمة مسكّرة (Collapsed): نخفي النص ونظهر الأيقونة بس + تولتيب عند الهوفر */
+.admin-sidebar.is-collapsed .admin-nav__sublink{
+    justify-content:center!important;
+    padding:9px!important;
+}
+.admin-sidebar.is-collapsed .admin-nav__sublink-label{
+    display:none!important;
+}
+.admin-sidebar.is-collapsed .admin-nav__sublink i{
+    width:30px!important;height:30px!important;
+    font-size:13px!important;
+}
+
+/* بالموبايل (القائمة دايماً "مفتوحة" بصرياً لما تنسحب) نفس منطق المفتوحة */
+@media(max-width:1180px){
+    .admin-sidebar.is-collapsed .admin-nav__sublink-label{display:block!important}
+    .admin-sidebar.is-collapsed .admin-nav__sublink{justify-content:flex-start!important;padding:7px 10px 7px 4px!important}
+}
+
+/* ============================================================================
+   ETZAN ADMIN — TOOLTIP REDESIGN: شكل موحّد أنيق بكل مكان (أيقونات رئيسية وفرعية)
+   ============================================================================ */
+
+.admin-sidebar-tooltip{
+    background:var(--ad-title)!important;
+    color:#fff!important;
+    padding:9px 14px!important;
+    border-radius:10px!important;
+    font-size:12.5px!important;
+    font-weight:800!important;
+    box-shadow:0 14px 34px rgba(0,0,0,.30)!important;
+    border:1px solid rgba(255,255,255,.08)!important;
+}
+.admin-sidebar-tooltip::before{
+    content:"";
+    position:absolute;
+    inset-inline-start:-5px;
+    top:50%;
+    transform:translateY(-50%) rotate(45deg);
+    width:9px;height:9px;
+    background:inherit;
+    border-inline-start:inherit;
+    border-block-start:inherit;
+}
+html[data-theme="dark"] .admin-sidebar-tooltip,
+body[data-theme="dark"] .admin-sidebar-tooltip{
+    background:#151515!important;
+    color:#f2f2f2!important;
+    border-color:rgba(255,255,255,.08)!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — TOPBAR V2: عنوان خفيف + بحث بالنص + تبسيط
+   ============================================================================ */
+
+.admin-topbar{
+    display:grid!important;
+    grid-template-columns:auto 1fr auto!important;
+    align-items:center!important;
+}
+.admin-topbar__right{display:flex!important;align-items:center!important;gap:10px!important;min-width:0!important}
+.admin-topbar__center{display:flex!important;justify-content:center!important;padding-inline:16px!important;min-width:0!important}
+.admin-topbar__left{display:flex!important;align-items:center!important;gap:12px!important;justify-content:flex-end!important}
+
+.admin-topbar__title{
+    font-size:13.5px!important;
+    font-weight:600!important;
+    color:var(--ad-muted)!important;
+    white-space:nowrap!important;
+}
+
+.admin-topbar__center .admin-global-search{
+    width:min(420px,100%)!important;
+}
+
+@media(max-width:900px){
+    .admin-topbar{grid-template-columns:auto 1fr auto!important}
+    .admin-topbar__title{display:none!important}
+}
+
+/* تبسيط زر الخروج بعد ما شلنا السطر الفرعي */
+.admin-logout-action__text strong{font-weight:850!important}
+
+/* ============================================================================
+   ETZAN ADMIN — TOPBAR: لمعة زجاجية خفيفة عند الهوفر (بحث/بروفايل/جرس)
+   ============================================================================ */
+
+.admin-global-search,
+.admin-notif-btn,
+.admin-profile-trigger{
+    position:relative!important;
+    overflow:hidden!important;
+}
+.admin-global-search::after,
+.admin-notif-btn::after,
+.admin-profile-trigger::after{
+    content:"";
+    position:absolute;
+    inset-block:0;
+    inset-inline-start:-45%;
+    width:35%;
+    background:linear-gradient(115deg,transparent,rgba(255,255,255,.35),transparent);
+    transform:skewX(-15deg);
+    transition:inset-inline-start .6s ease;
+    pointer-events:none;
+    z-index:1;
+}
+.admin-global-search:hover::after,
+.admin-notif-btn:hover::after,
+.admin-profile-trigger:hover::after{
+    inset-inline-start:130%;
+}
+html[data-theme="dark"] .admin-global-search::after,
+html[data-theme="dark"] .admin-notif-btn::after,
+html[data-theme="dark"] .admin-profile-trigger::after,
+body[data-theme="dark"] .admin-global-search::after,
+body[data-theme="dark"] .admin-notif-btn::after,
+body[data-theme="dark"] .admin-profile-trigger::after{
+    background:linear-gradient(115deg,transparent,rgba(255,255,255,.10),transparent)!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — PROFILE DROPDOWN: تطبيق حرفي للصورة المرجعية
+   لوحة داكنة موحّدة (بألوان إتزان) + سهم واصل + أيقونات خطية بيضاء
+   + عنصر أول مميز بشريط لوني، بلا هيدر أفاتار/إيميل
+   ============================================================================ */
+
+.admin-profile-dropdown--dark{
+    background:linear-gradient(165deg,#0d2b26,#081a17)!important;
+    border:0!important;
+    border-radius:16px!important;
+    padding:8px!important;
+    box-shadow:0 20px 50px rgba(0,0,0,.35)!important;
+    overflow:visible!important;
+}
+
+/* السهم الواصل بين الأيقونة والقائمة */
+.admin-profile-dropdown--dark::before{
+    content:"";
+    position:absolute;
+    top:-7px;
+    inset-inline-end:18px;
+    width:14px;height:14px;
+    background:#0d2b26;
+    transform:rotate(45deg);
+    border-radius:3px;
+}
+
+/* الخيارات: نص أبيض، أيقونة خطية بلا خلفية دائرية */
+.admin-profile-dropdown--dark .admin-profile-option{
+    color:#eafff6!important;
+    border-radius:10px!important;
+    padding:11px 12px!important;
+}
+.admin-profile-dropdown--dark .admin-profile-option i{
+    width:20px!important;
+    font-size:15px!important;
+    color:#eafff6!important;
+}
+.admin-profile-dropdown--dark .admin-profile-option:hover{
+    background:rgba(255,255,255,.08)!important;
+    color:#fff!important;
+}
+.admin-profile-dropdown--dark .admin-profile-option:hover i{color:#fff!important}
+
+/* العنصر المميز (الوضع الداكن): خلفية أفتح شوي + شريط لوني بالحافة */
+.admin-profile-dropdown--dark .admin-profile-option.is-featured{
+    position:relative;
+    background:rgba(255,255,255,.06)!important;
+}
+.admin-profile-dropdown--dark .admin-profile-option.is-featured::before{
+    content:"";
+    position:absolute;
+    inset-inline-start:0;
+    top:8px;bottom:8px;
+    width:3px;
+    border-radius:999px;
+    background:var(--ad-primary);
+}
+
+/* تسجيل الخروج: نص أحمر واضح بالوضعين الفاتح والداكن */
+.admin-profile-dropdown--dark .admin-logout-action{
+    width:100%!important;
+    color:var(--ad-danger)!important;
+    background:transparent!important;
+}
+.admin-profile-dropdown--dark .admin-logout-action i{color:var(--ad-danger)!important}
+.admin-profile-dropdown--dark .admin-logout-action:hover{
+    background:rgba(239,68,68,.12)!important;
+    color:var(--ad-danger)!important;
+}
+.admin-profile-dropdown--dark .admin-logout-action:hover i{color:var(--ad-danger)!important}
+html[data-theme="dark"] .admin-profile-dropdown--dark .admin-logout-action,
+body[data-theme="dark"] .admin-profile-dropdown--dark .admin-logout-action{color:#ff6b6b!important}
+html[data-theme="dark"] .admin-profile-dropdown--dark .admin-logout-action i,
+body[data-theme="dark"] .admin-profile-dropdown--dark .admin-logout-action i{color:#ff6b6b!important}
+.admin-logout-form{padding:0!important}
+
+/* مفتاح الوضع الداكن داخل اللوحة الغامقة: نتأكد الألوان متناسقة */
+.admin-profile-dropdown--dark .admin-toggle-switch{background:rgba(255,255,255,.18)!important}
+.admin-profile-dropdown--dark #adminThemeToggle.is-on .admin-toggle-switch{background:var(--ad-primary)!important}
+
+/* ============================================================================
+   ETZAN ADMIN — تصحيح: هوية إتزان أساس (مش نسخ حرفي)، بلا صناديق حول الأيقونات
+   ============================================================================ */
+
+/* أيقونة الأدمن والجرس: بلا مربع/حدّ حولها، أيقونة بسيطة بس */
+.admin-profile-trigger,
+.admin-notif-btn{
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+}
+.admin-profile-trigger:hover,
+.admin-notif-btn:hover{
+    background:var(--ad-primary-soft)!important;
+    border:0!important;
+}
+html[data-theme="dark"] .admin-profile-trigger,
+html[data-theme="dark"] .admin-notif-btn,
+body[data-theme="dark"] .admin-profile-trigger,
+body[data-theme="dark"] .admin-notif-btn{
+    background:transparent!important;
+    border:0!important;
+}
+html[data-theme="dark"] .admin-profile-trigger:hover,
+html[data-theme="dark"] .admin-notif-btn:hover,
+body[data-theme="dark"] .admin-profile-trigger:hover,
+body[data-theme="dark"] .admin-notif-btn:hover{
+    background:rgba(var(--ad-primary-rgb,29,158,117),.14)!important;
+}
+
+/* القائمة المنسدلة: ترجع تستجيب لهوية إتزان (فاتح/داكن) بدل لون غامق ثابت،
+   بس نحافظ على نفس الفكرة: سهم واصل + أيقونات خطية + عنصر أول مميز بشريط */
+.admin-profile-dropdown--dark{
+    background:var(--ad-card)!important;
+    border:1px solid var(--ad-line)!important;
+}
+.admin-profile-dropdown--dark::before{
+    background:var(--ad-card)!important;
+    border-inline-start:1px solid var(--ad-line);
+    border-block-start:1px solid var(--ad-line);
+}
+html[data-theme="dark"] .admin-profile-dropdown--dark,
+body[data-theme="dark"] .admin-profile-dropdown--dark{
+    background:#0b0b0b!important;
+    border-color:rgba(255,255,255,.08)!important;
+}
+html[data-theme="dark"] .admin-profile-dropdown--dark::before,
+body[data-theme="dark"] .admin-profile-dropdown--dark::before{
+    background:#0b0b0b!important;
+    border-color:rgba(255,255,255,.08);
+}
+
+.admin-profile-dropdown--dark .admin-profile-option,
+.admin-profile-dropdown--dark .admin-profile-option i{
+    color:var(--ad-text)!important;
+}
+.admin-profile-dropdown--dark .admin-profile-option:hover,
+.admin-profile-dropdown--dark .admin-profile-option:hover i{
+    color:var(--ad-primary-dark)!important;
+}
+.admin-profile-dropdown--dark .admin-logout-action,
+.admin-profile-dropdown--dark .admin-logout-action i{
+    color:var(--ad-text)!important;
+}
+.admin-profile-dropdown--dark .admin-logout-action:hover,
+.admin-profile-dropdown--dark .admin-logout-action:hover i{
+    color:var(--ad-danger)!important;
+}
+.admin-profile-dropdown--dark .admin-toggle-switch{background:var(--ad-line-strong)!important}
+
+/* ============================================================================
+   ETZAN ADMIN — أيقونات التوپبار (الجرس + الأدمن): بلا صندوق، أيقونة عادية بس
+   نفس فكرة المرجع (أيقونات حرة بلا خلفية مربّعة) بس بهوية إتزان
+   ============================================================================ */
+
+.admin-notif-btn,
+.admin-profile-trigger{
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    width:42px!important;height:42px!important;min-width:42px!important;
+}
+.admin-notif-btn:hover,
+.admin-profile-trigger:hover{
+    background:rgba(var(--ad-primary-rgb,29,158,117),.10)!important;
+    color:var(--ad-primary-dark)!important;
+    border-color:transparent!important;
+    transform:none!important;
+    box-shadow:none!important;
+}
+.admin-profile-trigger__avatar--plain{
+    background:transparent!important;
+    color:var(--ad-muted)!important;
+    font-size:18px!important;
+    width:auto!important;height:auto!important;
+}
+.admin-profile-trigger:hover .admin-profile-trigger__avatar--plain{color:var(--ad-primary-dark)!important}
+
+html[data-theme="dark"] .admin-notif-btn,
+html[data-theme="dark"] .admin-profile-trigger,
+body[data-theme="dark"] .admin-notif-btn,
+body[data-theme="dark"] .admin-profile-trigger{
+    background:transparent!important;
+    color:#9aa!important;
+}
+html[data-theme="dark"] .admin-notif-btn:hover,
+html[data-theme="dark"] .admin-profile-trigger:hover,
+body[data-theme="dark"] .admin-notif-btn:hover,
+body[data-theme="dark"] .admin-profile-trigger:hover{
+    background:rgba(255,255,255,.08)!important;
+    color:#fff!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — تأكيد نهائي: الجرس وأيقونة الأدمن بلا أي صندوق مهما كان السياق
+   ============================================================================ */
+.admin-notif-wrap .admin-notif-btn,
+.admin-profile-menu .admin-profile-trigger,
+header .admin-notif-btn,
+header .admin-profile-trigger{
+    background-color:transparent!important;
+    background-image:none!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    outline:0!important;
+}
+.admin-notif-wrap .admin-notif-btn:hover{
+    background-color:rgba(var(--ad-primary-rgb,29,158,117),.10)!important;
+    border-radius:50%!important;
+}
+.admin-profile-menu .admin-profile-trigger:hover{
+    background-color:transparent!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — أيقونة الأدمن: تصميم جديد كلياً بكلاس جديد (حل نهائي لمشكلة الكاش)
+   دائرة بحدّ رفيع بس، بلا أي تعبئة لونية، عشان نتأكد بالعين إذا التحديث وصل
+   ============================================================================ */
+.admin-avatar-icon-v2{
+    width:auto;
+    height:auto;
+    border-radius:0;
+    display:grid;
+    place-items:center;
+    background:transparent;
+    border:0;
+    color:var(--ad-muted);
+    font-size:26px;
+    transition:color .22s ease,transform .22s ease,filter .22s ease;
+}
+.admin-avatar-icon-v2 svg,
+.admin-notif-btn__svg{
+    width:38px;
+    height:38px;
+    display:block;
+    color:var(--ad-muted);
+    transition:color .22s ease,transform .22s ease;
+}
+.admin-profile-trigger:hover .admin-avatar-icon-v2{
+    background:transparent;
+    color:var(--ad-primary-dark);
+    border:0;
+    transform:scale(1.05);
+    filter:none;
+}
+html[data-theme="dark"] .admin-avatar-icon-v2,
+body[data-theme="dark"] .admin-avatar-icon-v2{
+    border:0;
+    color:#9aa;
+}
+html[data-theme="dark"] .admin-profile-trigger:hover .admin-avatar-icon-v2,
+body[data-theme="dark"] .admin-profile-trigger:hover .admin-avatar-icon-v2{
+    background:transparent;
+    color:#34d399;
+    transform:scale(1.05);
+    filter:none;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — الجرس: نفس معاملة أيقونة الأدمن بالضبط (بلا صندوق، أكبر، تكبر بالفتح)
+   ============================================================================ */
+.admin-notif-wrap .admin-notif-btn{
+    width:auto!important;height:auto!important;min-width:0!important;
+    background:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    color:var(--ad-muted)!important;
+    font-size:26px!important;
+    padding:6px!important;
+    transition:color .22s ease,transform .22s ease,filter .22s ease!important;
+}
+.admin-notif-wrap .admin-notif-btn i{font-size:26px!important}
+.admin-notif-wrap .admin-notif-btn:hover{
+    background:transparent!important;
+    color:var(--ad-primary-dark)!important;
+    transform:scale(1.08)!important;
+    filter:none!important;
+}
+.admin-notif-wrap.is-open .admin-notif-btn{
+    transform:scale(1.12)!important;
+    color:var(--ad-primary-dark)!important;
+    background:transparent!important;
+}
+.admin-notif-btn::before,.admin-notif-btn::after{display:none!important}
+
+html[data-theme="dark"] .admin-notif-wrap .admin-notif-btn,
+body[data-theme="dark"] .admin-notif-wrap .admin-notif-btn{color:#9aa!important}
+html[data-theme="dark"] .admin-notif-wrap .admin-notif-btn:hover,
+html[data-theme="dark"] .admin-notif-wrap.is-open .admin-notif-btn,
+body[data-theme="dark"] .admin-notif-wrap .admin-notif-btn:hover,
+body[data-theme="dark"] .admin-notif-wrap.is-open .admin-notif-btn{color:#34d399!important}
+
+/* الشارة الحمراء تضل بمكانها الصح فوق الأيقونة الأكبر */
+.admin-notif-badge{top:-6px!important;left:-8px!important}
+
+/* ============================================================================
+   ETZAN ADMIN — تكبير نهائي + إزالة قصوى لأي خلفية (أعلى تخصيص ممكن بالملف)
+   ============================================================================ */
+html body .admin-topbar .admin-notif-wrap button.admin-notif-btn,
+html body .admin-topbar .admin-profile-menu button.admin-profile-trigger{
+    background:transparent!important;
+    background-color:transparent!important;
+    background-image:none!important;
+    border:0!important;
+    box-shadow:none!important;
+    outline:0!important;
+    width:auto!important;
+    height:auto!important;
+    padding:4px!important;
+}
+html body .admin-topbar .admin-notif-wrap button.admin-notif-btn i,
+html body .admin-topbar .admin-profile-menu .admin-avatar-icon-v2{
+    font-size:32px!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — عناصر الإشعارات الحقيقية بالقائمة المنسدلة
+   ============================================================================ */
+.admin-notif-loading{min-height:92px;display:grid;place-items:center;color:var(--ad-primary);font-size:20px}
+.admin-notif-item{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:10px;border-radius:14px;
+    color:var(--ad-text)!important;
+    margin-bottom:4px;
+    transition:.18s ease;
+}
+.admin-notif-item:hover{background:var(--ad-primary-soft)!important}
+.admin-notif-item.is-unread{background:rgba(var(--ad-primary-rgb,29,158,117),.06)}
+.admin-notif-item__icon{
+    width:34px;height:34px;min-width:34px;
+    display:grid;place-items:center;
+    border-radius:10px;
+    background:var(--ad-primary-soft);
+    color:var(--ad-primary-dark);
+    font-size:14px;
+}
+.admin-notif-item__body{display:flex;flex-direction:column;min-width:0}
+.admin-notif-item__body strong{font-size:13px;color:var(--ad-title);font-weight:900}
+.admin-notif-item__body small{font-size:12px;color:var(--ad-muted);font-weight:700;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-notif-item__body em{font-style:normal;font-size:10.5px;color:var(--ad-muted);margin-top:4px}
+
+/* ============================================================================
+   ETZAN ADMIN — إصلاح نهائي شامل: نفس الحجم بالظبط + شارة كاملة الظهور + صفر صندوق
+   ============================================================================ */
+
+/* نفس الحجم بالضبط للاثنين عبر قاعدة واحدة مشتركة */
+.admin-notif-wrap .admin-notif-btn,
+.admin-notif-wrap .admin-notif-btn i,
+.admin-profile-menu .admin-avatar-icon-v2{
+    font-size:30px!important;
+    line-height:1!important;
+}
+
+/* ضمان الظهور الكامل للشارة الحمراء بلا أي قصّ من أي عنصر أب */
+header.admin-topbar,
+.admin-topbar__left,
+.admin-notif-wrap,
+.admin-profile-menu{
+    overflow:visible!important;
+}
+
+.admin-notif-badge{
+    position:absolute!important;
+    top:-4px!important;
+    left:-10px!important;
+    min-width:22px!important;
+    height:22px!important;
+    padding:0 5px!important;
+    display:grid!important;
+    place-items:center!important;
+    border-radius:999px!important;
+    background:var(--ad-danger)!important;
+    color:#fff!important;
+    font-size:11px!important;
+    font-weight:950!important;
+    line-height:1!important;
+    box-shadow:0 0 0 2px var(--ad-card)!important;
+    z-index:5!important;
+    white-space:nowrap!important;
+}
+html[data-theme="dark"] .admin-notif-badge,
+body[data-theme="dark"] .admin-notif-badge{
+    box-shadow:0 0 0 2px #000!important;
+}
+
+/* تأكيد قاطع أخير: صفر حدود/ظل/خلفية عالجرس بكل الحالات */
+.admin-notif-wrap .admin-notif-btn,
+.admin-notif-wrap .admin-notif-btn:hover,
+.admin-notif-wrap.is-open .admin-notif-btn,
+.admin-notif-wrap .admin-notif-btn:focus,
+.admin-notif-wrap .admin-notif-btn:active{
+    border:0!important;
+    box-shadow:none!important;
+    outline:0!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — ضمان تقني قاطع: نفس المتغيّر بالضبط لحجم الأيقونتين
+   ============================================================================ */
+:root{ --etzan-topbar-icon-size: 30px; }
+
+.admin-notif-wrap .admin-notif-btn,
+.admin-notif-wrap .admin-notif-btn i,
+.admin-profile-menu .admin-avatar-icon-v2,
+.admin-profile-menu .admin-avatar-icon-v2 i{
+    font-size: var(--etzan-topbar-icon-size) !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — الجرس: صفر أي شكل بأي حالة إطلاقاً (إزالة كاملة نهائية)
+   بلا خلفية، بلا دائرة، بلا ظل، بلا حركة تكبير — بس تغيير لون النص فقط
+   ============================================================================ */
+.admin-notif-wrap,
+.admin-notif-wrap *{
+    border-radius:0!important;
+}
+.admin-notif-wrap .admin-notif-btn,
+.admin-notif-wrap .admin-notif-btn:hover,
+.admin-notif-wrap .admin-notif-btn:focus,
+.admin-notif-wrap .admin-notif-btn:active,
+.admin-notif-wrap.is-open .admin-notif-btn{
+    background:none!important;
+    background-color:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    outline:0!important;
+    filter:none!important;
+    transform:none!important;
+}
+.admin-notif-wrap .admin-notif-btn:hover,
+.admin-notif-wrap.is-open .admin-notif-btn{
+    color:var(--ad-primary-dark)!important;
+}
+/* الشارة تضل دائرة (هاي طبيعية ومطلوبة)، بس نتأكد إنها مو مقصوصة */
+.admin-notif-badge{
+    border-radius:999px!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — شارة الإشعارات: مساحة كافية لأي رقم (رقمين أو أكتر) بلا قصّ
+   ============================================================================ */
+.admin-notif-badge{
+    min-width:24px!important;
+    height:24px!important;
+    padding:0 6px!important;
+    font-size:11.5px!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+    line-height:1!important;
+    letter-spacing:-.3px!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — تكبير إضافي + صفر padding (المساحة اللي حوالين الأيقونة بالضبط
+   بحجم الأيقونة نفسها، بلا مساحة إضافية ممكن تدي إحساس "مربع/دائرة")
+   ============================================================================ */
+:root{ --etzan-topbar-icon-size: 36px; }
+
+.admin-notif-wrap .admin-notif-btn,
+.admin-profile-menu .admin-profile-trigger{
+    padding:0!important;
+    margin:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    line-height:0!important;
+}
+.admin-notif-wrap .admin-notif-btn i,
+.admin-profile-menu .admin-avatar-icon-v2{
+    display:inline-block!important;
+    padding:0!important;
+    margin:0!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — اكتشاف الجذر الحقيقي: المتصفح بيضيف شكل افتراضي لعناصر
+   <button> (appearance) ما كنا شايلينه — هاد يفسّر "المربع" يلي ما كان يروح
+   مهما شلنا background/border، لأنه شكل المتصفح الافتراضي مش من الـ CSS تبعنا
+   ============================================================================ */
+.admin-notif-wrap .admin-notif-btn,
+.admin-profile-menu .admin-profile-trigger{
+    appearance:none!important;
+    -webkit-appearance:none!important;
+    -moz-appearance:none!important;
+    width:auto!important;
+    height:auto!important;
+    min-width:0!important;
+    min-height:0!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — أيقونات SVG مباشرة (بديل نهائي لخط الأيقونات لضمان الشكل)
+   ============================================================================ */
+.admin-notif-wrap .admin-notif-btn:hover .admin-notif-btn__svg,
+.admin-notif-wrap.is-open .admin-notif-btn__svg{
+    color:var(--ad-primary-dark)!important;
+}
+html[data-theme="dark"] .admin-notif-btn__svg,
+body[data-theme="dark"] .admin-notif-btn__svg{color:#9aa!important}
+html[data-theme="dark"] .admin-notif-wrap .admin-notif-btn:hover .admin-notif-btn__svg,
+html[data-theme="dark"] .admin-notif-wrap.is-open .admin-notif-btn__svg,
+body[data-theme="dark"] .admin-notif-wrap .admin-notif-btn:hover .admin-notif-btn__svg,
+body[data-theme="dark"] .admin-notif-wrap.is-open .admin-notif-btn__svg{color:#34d399!important}
+
+.admin-notif-btn{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:auto!important;height:auto!important;
+    padding:2px!important;
+    position:relative!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — شارة الإشعارات: جنب الجرس مباشرة (بلا طفو، بلا احتمال قصّ)
+   ============================================================================ */
+.admin-notif-btn__wrap{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:3px!important;
+    position:static!important;
+}
+.admin-notif-badge{
+    position:static!important;
+    top:auto!important;
+    left:auto!important;
+    inset-inline-start:auto!important;
+    margin-inline-start:-4px!important;
+    align-self:flex-start!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — التصميم النهائي الموحّد لأيقونتي الجرس والمستخدم
+   نظام واحد نظيف: صندوق بحجم ثابت مضبوط + أيقونة Heroicons داخله
+   + شارة بزاوية مضمونة المساحة دايماً (النمط الاحترافي القياسي)
+   ============================================================================ */
+
+.admin-icon-btn__box{
+    position:relative!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:44px!important;
+    height:44px!important;
+}
+
+.admin-icon-btn__svg{
+    width:26px!important;
+    height:26px!important;
+    color:var(--ad-muted)!important;
+    transition:color .2s ease,transform .2s ease!important;
+}
+
+.admin-notif-btn,
+.admin-profile-trigger{
+    background:transparent!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    outline:0!important;
+    padding:0!important;
+    width:auto!important;
+    height:auto!important;
+    display:inline-flex!important;
+    align-items:center!important;
+}
+
+.admin-notif-btn:hover .admin-icon-btn__svg,
+.admin-profile-trigger:hover .admin-icon-btn__svg,
+.admin-notif-wrap.is-open .admin-icon-btn__svg,
+.admin-profile-menu.is-open .admin-icon-btn__svg{
+    color:var(--ad-primary-dark)!important;
+    transform:scale(1.08)!important;
+}
+
+html[data-theme="dark"] .admin-icon-btn__svg,
+body[data-theme="dark"] .admin-icon-btn__svg{color:#9aa!important}
+html[data-theme="dark"] .admin-notif-btn:hover .admin-icon-btn__svg,
+html[data-theme="dark"] .admin-profile-trigger:hover .admin-icon-btn__svg,
+html[data-theme="dark"] .admin-notif-wrap.is-open .admin-icon-btn__svg,
+html[data-theme="dark"] .admin-profile-menu.is-open .admin-icon-btn__svg,
+body[data-theme="dark"] .admin-notif-btn:hover .admin-icon-btn__svg,
+body[data-theme="dark"] .admin-profile-trigger:hover .admin-icon-btn__svg,
+body[data-theme="dark"] .admin-notif-wrap.is-open .admin-icon-btn__svg,
+body[data-theme="dark"] .admin-profile-menu.is-open .admin-icon-btn__svg{color:#34d399!important}
+
+/* الشارة: زاوية علوية بمساحة محجوزة ومضمونة داخل صندوق 44x44، صفر احتمال قصّ */
+.admin-icon-btn__box .admin-notif-badge{
+    position:absolute!important;
+    top:0!important;
+    left:0!important;
+    right:auto!important;
+    margin:0!important;
+    min-width:19px!important;
+    width:auto!important;
+    height:19px!important;
+    padding:0 5px!important;
+    display:grid!important;
+    place-items:center!important;
+    border-radius:999px!important;
+    background:var(--ad-danger)!important;
+    color:#fff!important;
+    font-size:10.5px!important;
+    font-weight:950!important;
+    line-height:1!important;
+    box-shadow:0 0 0 2px var(--ad-card)!important;
+    z-index:5!important;
+}
+html[data-theme="dark"] .admin-icon-btn__box .admin-notif-badge,
+body[data-theme="dark"] .admin-icon-btn__box .admin-notif-badge{box-shadow:0 0 0 2px #000!important}
+
+/* ============================================================================
+   ETZAN ADMIN — حركة هوفر واضحة وحلوة: دائرة ناعمة خلف الأيقونة + حركة رفع خفيفة
+   ============================================================================ */
+.admin-icon-btn__box{
+    border-radius:50%!important;
+    transition:background .22s cubic-bezier(.2,.8,.2,1)!important;
+}
+.admin-notif-btn:hover .admin-icon-btn__box,
+.admin-profile-trigger:hover .admin-icon-btn__box,
+.admin-notif-wrap.is-open .admin-icon-btn__box,
+.admin-profile-menu.is-open .admin-icon-btn__box{
+    background:rgba(var(--ad-primary-rgb,29,158,117),.10)!important;
+}
+html[data-theme="dark"] .admin-notif-btn:hover .admin-icon-btn__box,
+html[data-theme="dark"] .admin-profile-trigger:hover .admin-icon-btn__box,
+html[data-theme="dark"] .admin-notif-wrap.is-open .admin-icon-btn__box,
+html[data-theme="dark"] .admin-profile-menu.is-open .admin-icon-btn__box,
+body[data-theme="dark"] .admin-notif-btn:hover .admin-icon-btn__box,
+body[data-theme="dark"] .admin-profile-trigger:hover .admin-icon-btn__box,
+body[data-theme="dark"] .admin-notif-wrap.is-open .admin-icon-btn__box,
+body[data-theme="dark"] .admin-profile-menu.is-open .admin-icon-btn__box{
+    background:rgba(52,211,153,.14)!important;
+}
+
+/* حركة رفع + دوران خفيف للأيقونة نفسها لإحساس أكثر حيوية */
+.admin-icon-btn__svg{
+    transition:color .2s ease,transform .28s cubic-bezier(.34,1.56,.64,1)!important;
+}
+.admin-notif-btn:hover .admin-icon-btn__svg,
+.admin-profile-trigger:hover .admin-icon-btn__svg{
+    transform:scale(1.15) rotate(-6deg)!important;
+}
+.admin-notif-wrap.is-open .admin-icon-btn__svg,
+.admin-profile-menu.is-open .admin-icon-btn__svg{
+    transform:scale(1.1) rotate(0deg)!important;
+}
+
+/* ============================================================================
+   ETZAN ADMIN — نتائج البحث الحقيقية بقاعدة البيانات
+   ============================================================================ */
+.admin-search-live__loading{padding:16px;text-align:center;color:var(--ad-primary);font-size:18px}
+.admin-search-live__label{padding:8px 14px 4px;font-size:11px;font-weight:800;color:var(--ad-muted);letter-spacing:.3px}
+.admin-search-live__item{
+    display:flex!important;align-items:center!important;gap:10px!important;
+    padding:9px 14px!important;
+    color:var(--ad-text)!important;
+    transition:.15s ease!important;
+}
+.admin-search-live__item:hover{background:var(--ad-primary-soft)!important}
+.admin-search-live__item i{width:20px;text-align:center;color:var(--ad-primary-dark);font-size:14px}
+.admin-search-live__item strong{display:block;font-size:13px;font-weight:850;color:var(--ad-title)}
+.admin-search-live__item small{display:block;font-size:11px;color:var(--ad-muted);margin-top:1px}
+.admin-search-live:not(:empty){border-bottom:1px solid var(--ad-line);margin-bottom:6px;padding-bottom:6px}

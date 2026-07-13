@@ -1,0 +1,622 @@
+/* =========================================================
+   ETZAN THEME
+   يحافظ على ألوان البراند المختارة من الإعدادات
+   ويغيّر فقط الأسطح والخلفيات والنصوص
+========================================================= */
+
+html[data-theme="light"],
+:root {
+    color-scheme: light;
+
+    --primary: var(--brand-primary, #2b8a6e);
+    --primary-dark: color-mix(in srgb, var(--brand-primary, #2b8a6e) 82%, black);
+    --secondary: var(--brand-secondary, #dff3e8);
+
+    --accent-soft: color-mix(in srgb, var(--brand-primary, #2b8a6e) 14%, transparent);
+    --accent-border: color-mix(in srgb, var(--brand-primary, #2b8a6e) 28%, transparent);
+
+    --theme-bg: #f6fbf9;
+    --theme-bg-soft: #eef7f3;
+    --theme-surface: #ffffff;
+    --theme-surface-2: #f8fcfa;
+    --theme-card: #ffffff;
+    --theme-card-soft: #f3f8f5;
+
+    --theme-text: #19342d;
+    --theme-text-soft: #35554c;
+    --theme-muted: #6c837d;
+
+    --theme-border: rgba(25, 52, 45, 0.10);
+    --theme-shadow: 0 16px 40px rgba(22, 44, 38, 0.08);
+    --theme-shadow-hover: 0 20px 55px rgba(22, 44, 38, 0.14);
+
+    --theme-overlay: linear-gradient(
+        180deg,
+        rgba(13, 22, 19, 0.00) 0%,
+        rgba(13, 22, 19, 0.38) 100%
+    );
+}
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+
+    /* نفس ألوان البراند - ما بنغيرها */
+    --primary: var(--brand-primary, #2b8a6e);
+    --primary-dark: color-mix(in srgb, var(--brand-primary, #2b8a6e) 82%, black);
+    --secondary: var(--brand-secondary, #dff3e8);
+
+    --accent-soft: color-mix(in srgb, var(--brand-primary, #2b8a6e) 18%, transparent);
+    --accent-border: color-mix(in srgb, var(--brand-primary, #2b8a6e) 34%, transparent);
+
+    --theme-bg: #0d1512;
+    --theme-bg-soft: #121d19;
+    --theme-surface: #15211d;
+    --theme-surface-2: #192721;
+    --theme-card: #16241f;
+    --theme-card-soft: #1b2b25;
+
+    --theme-text: #f2f7f4;
+    --theme-text-soft: #dbe7e2;
+    --theme-muted: #9fb2ab;
+
+    --theme-border: rgba(255, 255, 255, 0.08);
+    --theme-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
+    --theme-shadow-hover: 0 24px 60px rgba(0, 0, 0, 0.42);
+
+    --theme-overlay: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.00) 0%,
+        rgba(0, 0, 0, 0.45) 100%
+    );
+}
+
+@media (prefers-color-scheme: dark) {
+    html[data-theme="system"] {
+        color-scheme: dark;
+
+        --primary: var(--brand-primary, #2b8a6e);
+        --primary-dark: color-mix(in srgb, var(--brand-primary, #2b8a6e) 82%, black);
+        --secondary: var(--brand-secondary, #dff3e8);
+
+        --accent-soft: color-mix(in srgb, var(--brand-primary, #2b8a6e) 18%, transparent);
+        --accent-border: color-mix(in srgb, var(--brand-primary, #2b8a6e) 34%, transparent);
+
+        --theme-bg: #0d1512;
+        --theme-bg-soft: #121d19;
+        --theme-surface: #15211d;
+        --theme-surface-2: #192721;
+        --theme-card: #16241f;
+        --theme-card-soft: #1b2b25;
+
+        --theme-text: #f2f7f4;
+        --theme-text-soft: #dbe7e2;
+        --theme-muted: #9fb2ab;
+
+        --theme-border: rgba(255, 255, 255, 0.08);
+        --theme-shadow: 0 20px 50px rgba(0, 0, 0, 0.30);
+        --theme-shadow-hover: 0 24px 60px rgba(0, 0, 0, 0.42);
+
+        --theme-overlay: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.00) 0%,
+            rgba(0, 0, 0, 0.45) 100%
+        );
+    }
+}
+
+/* =========================================================
+   Base
+========================================================= */
+
+html,
+body {
+    background: var(--theme-bg);
+    color: var(--theme-text);
+}
+
+body {
+    transition: background-color .25s ease, color .25s ease;
+}
+
+a,
+button,
+input,
+textarea,
+select,
+i,
+svg,
+img,
+div,
+section,
+article {
+    transition:
+        background-color .25s ease,
+        color .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease,
+        filter .25s ease,
+        opacity .25s ease;
+}
+
+h1, h2, h3, h4, h5, h6,
+.hero-title,
+.section-heading h2,
+.features-head h2,
+.services-head h2,
+.doctors-stack-head h2,
+.etzan-articles-head h2,
+.etzan-quiz-head h2,
+.etzan-faq-head h2,
+.etzan-cta-content h2,
+.admin-page-head h1,
+.settings-card-head h2,
+.home-settings-group-head h3,
+.auth-card h1,
+.auth-card h2,
+.login-card h1,
+.login-card h2,
+.register-card h1,
+.register-card h2 {
+    color: var(--theme-text) !important;
+}
+
+p,
+span,
+small,
+label,
+.hero-text,
+.section-heading p,
+.features-head p,
+.services-head p,
+.doctors-stack-head p,
+.etzan-articles-head p,
+.etzan-quiz-head p,
+.etzan-faq-head p,
+.etzan-cta-content p,
+.admin-page-head p,
+.settings-card-head p,
+.home-settings-group-head span,
+.auth-card p,
+.login-card p,
+.register-card p {
+    color: var(--theme-muted);
+}
+
+/* الأيقونات تاخذ لون النص */
+i,
+svg,
+.icon,
+.fa-solid,
+.fa-regular,
+.fa-brands {
+    color: currentColor;
+}
+
+/* =========================================================
+   Public Layout
+========================================================= */
+
+html[data-theme] .main-header,
+html[data-theme] .navbar,
+html[data-theme] main,
+html[data-theme] .etzan-footer,
+html[data-theme] .site-footer,
+html[data-theme] .site-header {
+    background: var(--theme-bg) !important;
+    color: var(--theme-text) !important;
+    border-color: var(--theme-border) !important;
+}
+
+html[data-theme] .nav-link,
+html[data-theme] .brand-text h4,
+html[data-theme] .logo-text,
+html[data-theme] .etzan-footer h3,
+html[data-theme] .etzan-footer-logo {
+    color: var(--theme-text) !important;
+}
+
+html[data-theme] .brand-text span,
+html[data-theme] .etzan-footer p,
+html[data-theme] .etzan-footer a,
+html[data-theme] .etzan-footer li,
+html[data-theme] .etzan-footer span {
+    color: var(--theme-muted) !important;
+}
+
+html[data-theme] .nav-link:hover,
+html[data-theme] .nav-link.active {
+    color: var(--primary) !important;
+}
+
+/* أقسام الصفحة الرئيسية */
+html[data-theme] .hero-section,
+html[data-theme] .how-it-works,
+html[data-theme] .features-showcase-section,
+html[data-theme] .services-section,
+html[data-theme] .doctors-stack-section,
+html[data-theme] .etzan-articles-section,
+html[data-theme] .etzan-quiz-section,
+html[data-theme] .etzan-faq-section,
+html[data-theme] .etzan-cta-section {
+    background:
+        radial-gradient(circle at top right, rgba(121, 214, 175, 0.08), transparent 25%),
+        radial-gradient(circle at bottom left, rgba(126, 187, 229, 0.08), transparent 25%),
+        linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-soft) 100%) !important;
+    color: var(--theme-text) !important;
+}
+
+/* كروت الموقع */
+html[data-theme] .hero-frame,
+html[data-theme] .floating-card,
+html[data-theme] .how-it-works-scene,
+html[data-theme] .step-card,
+html[data-theme] .floating-icon,
+html[data-theme] .feature-card-box,
+html[data-theme] .feature-doctor-card,
+html[data-theme] .feature-doctor-bubble,
+html[data-theme] .feature-highlight-chip,
+html[data-theme] .service-card,
+html[data-theme] .doctors-stack-info-card,
+html[data-theme] .doctors-stack-stage,
+html[data-theme] .doctor-stack-card,
+html[data-theme] .doctor-info-meta-item,
+html[data-theme] .doctor-info-tag,
+html[data-theme] .doctor-join-box,
+html[data-theme] .doctor-join-icon,
+html[data-theme] .etzan-featured-article,
+html[data-theme] .etzan-featured-category,
+html[data-theme] .etzan-article-card,
+html[data-theme] .etzan-quiz-character-card,
+html[data-theme] .etzan-quiz-bubble,
+html[data-theme] .etzan-quiz-mini-card,
+html[data-theme] .etzan-quiz-box,
+html[data-theme] .etzan-quiz-option,
+html[data-theme] .etzan-quiz-result-tags span,
+html[data-theme] .etzan-faq-answer-card,
+html[data-theme] .etzan-faq-point,
+html[data-theme] .etzan-faq-trust-box,
+html[data-theme] .etzan-faq-trust-icon,
+html[data-theme] .etzan-faq-question,
+html[data-theme] .etzan-faq-question-number,
+html[data-theme] .etzan-faq-question-arrow,
+html[data-theme] .etzan-cta-box,
+html[data-theme] .etzan-cta-point,
+html[data-theme] .etzan-cta-visual-card,
+html[data-theme] .etzan-cta-floating-card {
+    background: var(--theme-card) !important;
+    color: var(--theme-text) !important;
+    border: 1px solid var(--theme-border) !important;
+    box-shadow: var(--theme-shadow) !important;
+}
+
+/* الخلفيات الداخلية */
+html[data-theme] .hero-slider,
+html[data-theme] .doctor-card-image,
+html[data-theme] .etzan-featured-image-wrap,
+html[data-theme] .etzan-article-thumb,
+html[data-theme] .etzan-quiz-progress-track {
+    background: var(--theme-card-soft) !important;
+}
+
+/* badges */
+html[data-theme] .hero-badge,
+html[data-theme] .section-badge,
+html[data-theme] .features-badge,
+html[data-theme] .feature-mini-label,
+html[data-theme] .services-badge,
+html[data-theme] .service-mini-badge,
+html[data-theme] .doctors-stack-badge,
+html[data-theme] .doctor-info-label,
+html[data-theme] .doctor-card-status,
+html[data-theme] .etzan-articles-badge,
+html[data-theme] .etzan-article-mini-cat,
+html[data-theme] .etzan-quiz-badge,
+html[data-theme] .etzan-quiz-mini-label,
+html[data-theme] .etzan-quiz-result-badge,
+html[data-theme] .etzan-faq-badge,
+html[data-theme] .etzan-faq-answer-badge,
+html[data-theme] .etzan-cta-badge {
+    background: rgba(121, 214, 175, 0.13) !important;
+    color: var(--primary) !important;
+    border: 1px solid rgba(121, 214, 175, 0.22) !important;
+}
+
+/* الأزرار والخيارات */
+html[data-theme] .hero-btn-outline,
+html[data-theme] .slider-arrow,
+html[data-theme] .feature-arrow,
+html[data-theme] .doctor-stack-arrow,
+html[data-theme] .doctor-main-btn-outline,
+html[data-theme] .etzan-filter-btn,
+html[data-theme] .etzan-quiz-prev,
+html[data-theme] .etzan-quiz-btn-outline,
+html[data-theme] .etzan-cta-btn-outline {
+    background: var(--theme-card-soft) !important;
+    color: var(--primary) !important;
+    border-color: rgba(121, 214, 175, 0.30) !important;
+}
+
+/* =========================================================
+   Dashboard / Admin
+========================================================= */
+
+html[data-theme] body.admin-body,
+html[data-theme] .admin-shell,
+html[data-theme] .admin-layout,
+html[data-theme] .admin-main,
+html[data-theme] .admin-content,
+html[data-theme] .admin-page,
+html[data-theme] .admin-settings-page {
+    background: var(--theme-bg) !important;
+    color: var(--theme-text) !important;
+}
+
+html[data-theme] .admin-topbar,
+html[data-theme] .admin-sidebar,
+html[data-theme] .admin-sidebar__inner,
+html[data-theme] .admin-search,
+html[data-theme] .admin-userbox,
+html[data-theme] .admin-notif-dropdown,
+html[data-theme] .admin-sidebar__status,
+html[data-theme] .settings-panel,
+html[data-theme] .settings-content,
+html[data-theme] .home-settings-group,
+html[data-theme] .admin-card,
+html[data-theme] .dashboard-card,
+html[data-theme] .stat-card,
+html[data-theme] .table-card,
+html[data-theme] .admin-table-card,
+html[data-theme] .settings-card,
+html[data-theme] .settings-field {
+    background: var(--theme-card) !important;
+    color: var(--theme-text) !important;
+    border: 1px solid var(--theme-border) !important;
+    box-shadow: var(--theme-shadow) !important;
+}
+
+html[data-theme] .admin-topbar__title strong,
+html[data-theme] .admin-brand__text strong,
+html[data-theme] .admin-userbox__info strong,
+html[data-theme] .settings-field label {
+    color: var(--theme-text) !important;
+}
+
+html[data-theme] .admin-topbar__title span,
+html[data-theme] .admin-brand__text span,
+html[data-theme] .admin-userbox__info span,
+html[data-theme] .admin-nav-group__label,
+html[data-theme] .admin-search__shortcut {
+    color: var(--theme-muted) !important;
+}
+
+html[data-theme] .admin-nav__link,
+html[data-theme] .admin-topbar-settings,
+html[data-theme] .admin-notif-btn,
+html[data-theme] .admin-logout-btn,
+html[data-theme] .admin-mobile-menu-btn,
+html[data-theme] .admin-sidebar-toggle {
+    color: var(--theme-muted) !important;
+}
+
+html[data-theme] .admin-nav__link:hover,
+html[data-theme] .admin-nav__link.is-active,
+html[data-theme] .admin-topbar-settings:hover,
+html[data-theme] .admin-topbar-settings.is-active {
+    background: rgba(121, 214, 175, 0.13) !important;
+    color: var(--primary) !important;
+    border-color: rgba(121, 214, 175, 0.22) !important;
+}
+
+/* الجداول */
+html[data-theme] table,
+html[data-theme] .admin-table {
+    background: var(--theme-card) !important;
+    color: var(--theme-text) !important;
+}
+
+html[data-theme] thead,
+html[data-theme] th {
+    background: var(--theme-card-soft) !important;
+    color: var(--theme-text) !important;
+}
+
+html[data-theme] td {
+    color: var(--theme-text-soft) !important;
+    border-color: var(--theme-border) !important;
+}
+
+/* الحقول */
+html[data-theme] input,
+html[data-theme] textarea,
+html[data-theme] select,
+html[data-theme] .admin-search input,
+html[data-theme] .settings-field input,
+html[data-theme] .settings-field textarea,
+html[data-theme] .settings-field select,
+html[data-theme] .auth-card input,
+html[data-theme] .auth-card select,
+html[data-theme] .auth-card textarea,
+html[data-theme] .login-card input,
+html[data-theme] .register-card input {
+    background: var(--theme-card-soft) !important;
+    color: var(--theme-text) !important;
+    border: 1px solid var(--theme-border) !important;
+}
+
+html[data-theme] input::placeholder,
+html[data-theme] textarea::placeholder {
+    color: var(--theme-muted) !important;
+}
+
+/* tabs */
+html[data-theme] .settings-tab,
+html[data-theme] .home-section-tab,
+html[data-theme] .theme-option span {
+    background: var(--theme-card-soft) !important;
+    color: var(--theme-muted) !important;
+    border: 1px solid var(--theme-border) !important;
+}
+
+html[data-theme] .settings-tab.is-active,
+html[data-theme] .home-section-tab.is-active,
+html[data-theme] .theme-option input:checked + span {
+    background: rgba(121, 214, 175, 0.13) !important;
+    color: var(--primary) !important;
+    border-color: rgba(121, 214, 175, 0.24) !important;
+}
+
+/* =========================================================
+   Login / Register / Auth
+========================================================= */
+
+html[data-theme] .auth-page,
+html[data-theme] .login-page,
+html[data-theme] .register-page,
+html[data-theme] .auth-wrapper,
+html[data-theme] .login-wrapper,
+html[data-theme] .register-wrapper {
+    background:
+        radial-gradient(circle at top right, rgba(121, 214, 175, 0.08), transparent 24%),
+        linear-gradient(180deg, var(--theme-bg) 0%, var(--theme-bg-soft) 100%) !important;
+    color: var(--theme-text) !important;
+}
+
+html[data-theme] .auth-card,
+html[data-theme] .login-card,
+html[data-theme] .register-card,
+html[data-theme] .auth-box,
+html[data-theme] .login-box,
+html[data-theme] .register-box {
+    background: var(--theme-card) !important;
+    color: var(--theme-text) !important;
+    border: 1px solid var(--theme-border) !important;
+    box-shadow: var(--theme-shadow) !important;
+}
+
+/* =========================================================
+   Images Hover / Overlay
+========================================================= */
+
+.image-hover-shadow,
+.hero-slide,
+.doctor-card-image img,
+.etzan-article-thumb img,
+.etzan-featured-image-wrap img,
+.feature-doctor-character img,
+.etzan-quiz-character img,
+.hero-slider img {
+    display: block;
+    width: 100%;
+    border-radius: inherit;
+}
+
+.hero-slider,
+.doctor-card-image,
+.etzan-article-thumb,
+.etzan-featured-image-wrap,
+.feature-doctor-character,
+.etzan-quiz-character {
+    position: relative;
+    overflow: hidden;
+    border-radius: 22px;
+}
+
+.hero-slider::after,
+.doctor-card-image::after,
+.etzan-article-thumb::after,
+.etzan-featured-image-wrap::after,
+.feature-doctor-character::after,
+.etzan-quiz-character::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--theme-overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+}
+
+.hero-slider:hover::after,
+.doctor-card-image:hover::after,
+.etzan-article-thumb:hover::after,
+.etzan-featured-image-wrap:hover::after,
+.feature-doctor-character:hover::after,
+.etzan-quiz-character:hover::after {
+    opacity: 1;
+}
+
+.hero-slider:hover img,
+.doctor-card-image:hover img,
+.etzan-article-thumb:hover img,
+.etzan-featured-image-wrap:hover img,
+.feature-doctor-character:hover img,
+.etzan-quiz-character:hover img {
+    transform: scale(1.04);
+    filter: brightness(0.88);
+}
+
+/* =========================================================
+   Hover polish
+========================================================= */
+
+html[data-theme] .service-card:hover,
+html[data-theme] .feature-card-box:hover,
+html[data-theme] .doctor-stack-card:hover,
+html[data-theme] .etzan-article-card:hover,
+html[data-theme] .etzan-faq-question:hover,
+html[data-theme] .admin-card:hover,
+html[data-theme] .stat-card:hover,
+html[data-theme] .dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--theme-shadow-hover) !important;
+}
+
+/* الشعار والصور الأساسية بدون تغميق مزعج */
+.brand-logo img,
+.admin-brand__logo,
+.logo img {
+    filter: none !important;
+}
+
+/* ===============================
+   Fix settings theme options in dark mode
+================================ */
+
+html[data-theme="dark"] .theme-options {
+    background: transparent !important;
+}
+
+html[data-theme="dark"] .theme-option span {
+    background: #1b2b25 !important;
+    color: #a9bab2 !important;
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark"] .theme-option span i {
+    color: #a9bab2 !important;
+}
+
+html[data-theme="dark"] .theme-option input:checked + span {
+    background: rgba(121, 214, 175, 0.15) !important;
+    color: #79d6af !important;
+    border-color: rgba(121, 214, 175, 0.35) !important;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22) !important;
+}
+
+html[data-theme="dark"] .theme-option input:checked + span i {
+    color: #79d6af !important;
+}
+
+/* لو مربع المظهر نفسه ضل أبيض */
+html[data-theme="dark"] .settings-field,
+html[data-theme="dark"] .settings-colors,
+html[data-theme="dark"] .settings-upload-row {
+    background: #16241f !important;
+    color: #f2f7f4 !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+
+

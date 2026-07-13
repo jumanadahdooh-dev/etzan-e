@@ -1,0 +1,222 @@
+/* ============================================================================
+   إتزان | صفحة طلبات الاستشارة — نفس نظام تصميم الداشبورد بالضبط
+   يستخدم نفس متغيرات --d-* المعرّفة داخل .ddash (light + dark تلقائياً)
+   ============================================================================ */
+
+/* ══════════ مودال سبب الرفض ══════════ */
+.dreq-modal-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.5); backdrop-filter: blur(4px);
+    padding: 20px;
+    opacity: 0; visibility: hidden;
+    transition: opacity .15s ease, visibility .15s ease;
+}
+.dreq-modal-overlay.is-open { opacity: 1; visibility: visible; }
+
+.dreq-modal {
+    background: var(--d-card);
+    border: 1px solid var(--d-border);
+    border-radius: 18px;
+    padding: 22px 24px;
+    width: 100%; max-width: 420px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.25);
+}
+.dreq-modal h3 { font-size: 1rem; font-weight: 800; color: var(--d-title); margin: 0 0 6px; }
+.dreq-modal p { font-size: .8rem; color: var(--d-muted); font-weight: 600; margin: 0 0 14px; line-height: 1.6; }
+.dreq-modal textarea {
+    width: 100%; padding: 10px 12px; border-radius: 12px;
+    border: 1px solid var(--d-border); background: var(--d-soft-bg);
+    font-size: .85rem; font-weight: 600; color: var(--d-title);
+    resize: vertical; font-family: inherit;
+}
+.dreq-modal textarea:focus { outline: 0; border-color: var(--d-rose); }
+.dreq-modal__actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; }
+.dreq-head { margin-bottom: 4px; }
+.dreq-head p { font-size: .86rem; color: var(--d-muted); font-weight: 650; margin: 0; }
+
+/* ══════════ الملف الطبي: حالات + أدوية ══════════ */
+.dpat-conditions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.dpat-tag {
+    margin: 0 !important;
+    padding: 6px 14px !important;
+    font-size: .78rem !important;
+    display: inline-flex !important;
+}
+
+.dpat-info-list { display: flex; flex-direction: column; gap: 10px; }
+.dpat-info-row {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    padding: 12px 14px; border-radius: 12px;
+    background: var(--d-soft-bg);
+}
+.dpat-info-row__label {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: .8rem; font-weight: 800; color: var(--d-text);
+    white-space: nowrap;
+}
+.dpat-info-row__label i { width: 15px; height: 15px; color: var(--d-rose); }
+.dpat-info-row__value {
+    font-size: .82rem; font-weight: 700; color: var(--d-title);
+    text-align: left; line-height: 1.6;
+}
+.dpat-search { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.dpat-search__wrap {
+    flex: 1; max-width: 420px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 14px; border-radius: 12px;
+    background: var(--d-card); border: 1px solid var(--d-border);
+}
+.dpat-search__wrap i { width: 16px; height: 16px; color: var(--d-muted); }
+.dpat-search__wrap input {
+    flex: 1; border: 0; outline: 0; background: transparent;
+    font-size: .86rem; font-weight: 650; color: var(--d-title);
+}
+.dpat-search__wrap input::placeholder { color: var(--d-muted); }
+
+/* ══════════ زر العودة ══════════ */
+.dreq-back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 11px;
+    background: var(--d-card);
+    border: 1px solid var(--d-border);
+    color: var(--d-text) !important;
+    font-size: .82rem; font-weight: 750;
+    text-decoration: none !important;
+    box-shadow: var(--d-shadow);
+    transition: .18s ease;
+}
+.dreq-back-btn:hover {
+    border-color: var(--d-green);
+    color: var(--d-green) !important;
+    transform: translateX(3px);
+}
+
+/* ══════════ البطاقة البارزة (أقدم طلب معلّق) ══════════ */
+.dreq-featured {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+    background: rgba(245, 158, 11, .07);
+    border: 1px solid rgba(245, 158, 11, .28);
+    border-radius: 18px;
+    padding: 18px 22px;
+}
+html[data-theme="dark"] .dreq-featured {
+    background: rgba(245, 158, 11, .1);
+    border-color: rgba(245, 158, 11, .3);
+}
+
+.dreq-featured__info { display: flex; align-items: center; gap: 13px; }
+.dreq-featured__eyebrow { display: block; font-size: .72rem; font-weight: 800; color: #b45309; margin-bottom: 3px; }
+html[data-theme="dark"] .dreq-featured__eyebrow { color: #fbbf24; }
+.dreq-featured__info strong { display: block; font-size: 1.02rem; font-weight: 800; color: var(--d-title); }
+.dreq-featured__tags { display: flex !important; gap: 8px !important; margin-top: 6px; flex-wrap: wrap; }
+.dreq-featured__tags .ddash-pill { margin: 0 !important; }
+.dreq-featured__tags .ddash-pill + .ddash-pill { margin-inline-start: 8px !important; }
+
+.dreq-featured__actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* زر أيقونة دائري أنيق لعرض التفاصيل */
+.dreq-icon-btn {
+    width: 38px; height: 38px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: var(--d-soft-bg);
+    border: 1px solid var(--d-border);
+    color: var(--d-text) !important;
+    text-decoration: none !important;
+    transition: .18s ease;
+}
+.dreq-icon-btn i { width: 17px; height: 17px; }
+.dreq-icon-btn:hover {
+    background: var(--d-green);
+    border-color: var(--d-green);
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -6px rgba(29,158,117,.45);
+}
+
+/* ══════════ أزرار الإجراءات ══════════ */
+.dreq-btn {
+    padding: 8px 20px; border-radius: 11px; font-size: .82rem; font-weight: 850;
+    border: 0; cursor: pointer; transition: .18s ease; white-space: nowrap;
+}
+.dreq-btn--success { background: var(--d-green); color: #fff; }
+.dreq-btn--success:hover { background: #157a5c; transform: translateY(-1px); }
+.dreq-btn--danger { background: transparent; color: var(--d-rose); border: 1px solid rgba(244, 63, 94, .3); }
+.dreq-btn--danger:hover { background: rgba(244, 63, 94, .08); }
+.dreq-btn--muted { background: var(--d-soft-bg); color: var(--d-muted); }
+.dreq-btn--muted:hover { background: rgba(148, 163, 184, .18); }
+
+/* ══════════ قائمة بطاقات الطلبات ══════════ */
+.dreq-list { display: flex; flex-direction: column; gap: 14px; }
+.dreq-card {
+    background: var(--d-card);
+    border: 1px solid var(--d-border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: var(--d-shadow);
+    transition: box-shadow .2s ease, transform .2s ease;
+}
+.dreq-card:hover { box-shadow: var(--d-shadow-hover); transform: translateY(-1px); }
+
+.dreq-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+.dreq-card__who { display: flex; align-items: center; gap: 11px; }
+.dreq-card__who strong { display: block; font-size: .92rem; font-weight: 800; color: var(--d-title); }
+.dreq-card__who small { display: block; font-size: .74rem; color: var(--d-muted); font-weight: 650; margin-top: 2px; }
+
+.dreq-card__tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.dreq-card__actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-top: 10px; border-top: 1px solid var(--d-border); }
+.dreq-card__actions form { display: inline; }
+
+@media (max-width: 640px) {
+    .dreq-featured { flex-direction: column; align-items: stretch; }
+    .dreq-featured__actions { justify-content: flex-end; }
+}
+
+/* ══════════ صورة المريض الحقيقية (بدل الحرف لو موجودة) ══════════ */
+.ddash-avatar-photo {
+    width: 40px; height: 40px; min-width: 40px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--d-border);
+}
+
+/* ══════════ صفحة الإشعارات ══════════ */
+.dnotif-item {
+    display: flex; align-items: flex-start; gap: 13px;
+    padding: 14px 8px;
+    text-decoration: none !important;
+    border-top: 1px solid var(--d-border);
+    transition: background .15s ease;
+}
+.dnotif-item:first-of-type { border-top: 0; }
+.dnotif-item:hover { background: var(--d-soft-bg); }
+.dnotif-item.is-unread { background: rgba(59,130,246,.04); }
+html[data-theme="dark"] .dnotif-item.is-unread { background: rgba(59,130,246,.08); }
+
+.dnotif-item__body { flex: 1; min-width: 0; }
+.dnotif-item__top { display: flex; align-items: center; gap: 7px; }
+.dnotif-item__top strong { font-size: .88rem; font-weight: 800; color: var(--d-title); }
+.dnotif-item__body p { font-size: .8rem; color: var(--d-text); font-weight: 600; margin: 3px 0; line-height: 1.6; }
+.dnotif-item__body small { font-size: .72rem; color: var(--d-muted); font-weight: 650; }
+
+/* ══════════ نموذج تحديد هدف السعرات ══════════ */
+.dpat-goal-form { display: flex; flex-direction: column; gap: 12px; }
+.dpat-goal-form__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.dpat-goal-form__row { display: flex; flex-direction: column; gap: 5px; }
+.dpat-goal-form__row label { font-size: .74rem; font-weight: 750; color: var(--d-text); }
+.dpat-goal-form__row input,
+.dpat-goal-form__row textarea {
+    padding: 9px 12px; border-radius: 10px;
+    border: 1px solid var(--d-border); background: var(--d-soft-bg);
+    font-size: .84rem; font-weight: 700; color: var(--d-title);
+    font-family: inherit;
+}
+.dpat-goal-form__row input:focus,
+.dpat-goal-form__row textarea:focus { outline: 0; border-color: var(--d-amber); }
+.dpat-goal-form__row textarea { resize: vertical; }

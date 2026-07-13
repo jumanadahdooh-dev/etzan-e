@@ -1,0 +1,5148 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
+
+:root {
+    --appt-primary: #15916f;
+    --appt-primary-2: #1d9e75;
+    --appt-primary-dark: #0f6f55;
+    --appt-secondary: #4da8da;
+    --appt-ink: #12333f;
+    --appt-muted: #657b84;
+    --appt-soft: #effaf7;
+    --appt-soft-2: #f7fbfa;
+    --appt-line: rgba(19, 131, 101, 0.18);
+    --appt-line-2: rgba(19, 51, 63, 0.09);
+    --appt-card: rgba(255, 255, 255, 0.82);
+    --appt-white: #ffffff;
+    --appt-warning: #a86a00;
+    --appt-warning-bg: #fff7dc;
+    --appt-danger: #b42318;
+    --appt-danger-bg: #fff1ef;
+    --appt-shadow: 0 22px 55px rgba(18, 61, 71, 0.09);
+    --appt-shadow-soft: 0 14px 35px rgba(18, 61, 71, 0.07);
+    --appt-radius-xl: 34px;
+    --appt-radius-lg: 24px;
+    --appt-radius-md: 18px;
+}
+
+html.dark,
+body.dark,
+body.dark-mode,
+[data-theme="dark"] {
+    --appt-ink: #edf8f6;
+    --appt-muted: #a8c1c7;
+    --appt-soft: rgba(23, 68, 64, 0.38);
+    --appt-soft-2: #0d1d22;
+    --appt-line: rgba(87, 210, 178, 0.22);
+    --appt-line-2: rgba(255, 255, 255, 0.08);
+    --appt-card: rgba(16, 35, 40, 0.82);
+    --appt-white: #11262c;
+    --appt-warning-bg: rgba(255, 184, 77, 0.11);
+    --appt-danger-bg: rgba(255, 113, 100, 0.12);
+    --appt-shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
+    --appt-shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.22);
+}
+
+.appt-page,
+.appt-page * {
+    box-sizing: border-box;
+}
+
+.appt-page {
+    direction: rtl;
+    width: min(1120px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 22px 0 52px;
+    color: var(--appt-ink);
+    font-family: var(--patient-font-family, var(--app-font-family, 'Cairo', 'Tajawal', Arial, sans-serif));
+    background:
+        radial-gradient(circle at 88% 3%, rgba(77, 168, 218, 0.10), transparent 34%),
+        radial-gradient(circle at 7% 18%, rgba(29, 158, 117, 0.09), transparent 35%);
+}
+
+.appt-page a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.appt-alert {
+    width: min(860px, 100%);
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    border-radius: 18px;
+    border: 1px solid var(--appt-line);
+    background: var(--appt-card);
+    box-shadow: var(--appt-shadow-soft);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.appt-alert svg,
+.appt-alert i {
+    width: 18px;
+    height: 18px;
+    color: var(--appt-primary);
+    flex: 0 0 auto;
+}
+
+.appt-alert.is-error {
+    color: var(--appt-danger);
+    background: var(--appt-danger-bg);
+    border-color: rgba(180, 35, 24, 0.18);
+}
+
+.appt-alert.is-error svg,
+.appt-alert.is-error i {
+    color: var(--appt-danger);
+}
+
+.appt-hero {
+    position: relative;
+    min-height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 30px 36px;
+    margin-bottom: 24px;
+    border: 1px solid var(--appt-line);
+    border-radius: var(--appt-radius-xl);
+    background:
+        radial-gradient(circle at 17% 20%, rgba(255,255,255,.96), rgba(255,255,255,.55) 27%, transparent 43%),
+        linear-gradient(135deg, rgba(240, 252, 248, 0.96), rgba(232, 247, 250, 0.83));
+    box-shadow: var(--appt-shadow);
+    overflow: hidden;
+}
+
+html.dark .appt-hero,
+body.dark .appt-hero,
+body.dark-mode .appt-hero,
+[data-theme="dark"] .appt-hero {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.09), transparent 35%),
+        linear-gradient(135deg, rgba(18, 45, 48, 0.96), rgba(15, 34, 43, 0.90));
+}
+
+.appt-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -70px -95px auto;
+    width: 250px;
+    height: 250px;
+    border-radius: 999px;
+    background: rgba(29, 158, 117, 0.09);
+    filter: blur(4px);
+}
+
+.appt-hero-copy {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    text-align: right;
+}
+
+.appt-kicker,
+.appt-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 32px;
+    padding: 7px 13px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    border: 1px solid var(--appt-line);
+    background: rgba(255, 255, 255, 0.74);
+    color: var(--appt-primary-dark);
+}
+
+.appt-kicker svg,
+.appt-status-pill svg,
+.appt-kicker i,
+.appt-status-pill i {
+    width: 15px;
+    height: 15px;
+}
+
+.appt-status-pill {
+    margin-top: 14px;
+}
+
+.appt-status-pill.is-pending {
+    color: var(--appt-warning);
+    background: var(--appt-warning-bg);
+    border-color: rgba(238, 174, 49, 0.28);
+}
+
+.appt-status-pill.is-approved,
+.appt-status-pill.is-starting,
+.appt-status-pill.is-completed {
+    color: var(--appt-primary-dark);
+    background: rgba(229, 250, 243, 0.95);
+}
+
+.appt-status-pill.is-rejected,
+.appt-status-pill.is-missed {
+    color: var(--appt-danger);
+    background: var(--appt-danger-bg);
+}
+
+.appt-hero h1 {
+    margin: 13px 0 7px;
+    font-size: clamp(31px, 4.2vw, 54px);
+    line-height: 1.08;
+    letter-spacing: -1.3px;
+    font-weight: 900;
+    color: var(--appt-ink);
+}
+
+.appt-hero p {
+    margin: 0;
+    max-width: 650px;
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--appt-muted);
+    font-weight: 600;
+}
+
+.appt-doctor-card {
+    position: relative;
+    z-index: 1;
+    width: 255px;
+    min-height: 98px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.82);
+    box-shadow: 0 18px 40px rgba(18, 61, 71, 0.09);
+}
+
+html.dark .appt-doctor-card,
+body.dark .appt-doctor-card,
+body.dark-mode .appt-doctor-card,
+[data-theme="dark"] .appt-doctor-card {
+    background: rgba(13, 29, 34, 0.76);
+}
+
+.doctor-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    overflow: hidden;
+    flex: 0 0 auto;
+    background: var(--appt-soft);
+    display: grid;
+    place-items: center;
+}
+
+.doctor-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.appt-doctor-card span {
+    display: block;
+    color: var(--appt-primary-dark);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.appt-doctor-card h2 {
+    margin: 3px 0 1px;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.appt-doctor-card p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--appt-muted);
+}
+
+.appt-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.appt-side-card {
+    display: none !important;
+}
+
+.appt-form-card,
+.appt-current-card,
+.appt-locked-card {
+    position: relative;
+    width: min(860px, 100%);
+    margin-inline: auto;
+    padding: 28px;
+    border-radius: 30px;
+    border: 1px solid var(--appt-line-2);
+    background: rgba(255, 255, 255, 0.62);
+    box-shadow: 0 18px 40px rgba(18, 61, 71, 0.055);
+    backdrop-filter: blur(14px);
+}
+
+html.dark .appt-form-card,
+html.dark .appt-current-card,
+html.dark .appt-locked-card,
+body.dark .appt-form-card,
+body.dark .appt-current-card,
+body.dark .appt-locked-card,
+body.dark-mode .appt-form-card,
+body.dark-mode .appt-current-card,
+body.dark-mode .appt-locked-card,
+[data-theme="dark"] .appt-form-card,
+[data-theme="dark"] .appt-current-card,
+[data-theme="dark"] .appt-locked-card {
+    background: rgba(14, 31, 36, 0.70);
+}
+
+.appt-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.appt-card-head > i,
+.appt-card-head > svg {
+    width: 42px;
+    height: 42px;
+    padding: 11px;
+    border-radius: 15px;
+    color: var(--appt-primary);
+    background: rgba(29, 158, 117, 0.12);
+    border: 1px solid var(--appt-line);
+}
+
+.appt-card-head span,
+.appt-subhead span,
+.appt-month-checker-copy span,
+.appt-current-note span,
+.appt-meeting-content span,
+.appt-post-box span {
+    display: block;
+    color: var(--appt-primary-dark);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.appt-card-head h2 {
+    margin: 4px 0 0;
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.25;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+}
+
+.appt-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.appt-field {
+    display: block;
+    position: relative;
+}
+
+.appt-field-wide {
+    grid-column: 1 / -1;
+}
+
+.appt-field > span,
+.appt-date-field > span {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--appt-primary-dark);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.appt-input,
+.appt-field textarea {
+    width: 100%;
+    min-height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid var(--appt-line-2);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.74);
+    color: var(--appt-ink);
+    padding: 0 16px;
+    outline: 0;
+    transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease, background .2s ease;
+}
+
+html.dark .appt-input,
+html.dark .appt-field textarea,
+body.dark .appt-input,
+body.dark .appt-field textarea,
+body.dark-mode .appt-input,
+body.dark-mode .appt-field textarea,
+[data-theme="dark"] .appt-input,
+[data-theme="dark"] .appt-field textarea {
+    background: rgba(17, 39, 44, 0.74);
+}
+
+.appt-input:focus-within,
+.appt-input:hover,
+.appt-field textarea:focus {
+    border-color: rgba(29, 158, 117, 0.38);
+    box-shadow: 0 0 0 4px rgba(29, 158, 117, 0.08);
+}
+
+.appt-input svg,
+.appt-input i {
+    width: 18px;
+    height: 18px;
+    color: var(--appt-primary);
+    flex: 0 0 auto;
+}
+
+.appt-input select,
+.appt-input input {
+    width: 100%;
+    height: 54px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--appt-ink);
+    font-family: inherit;
+    font-weight: 800;
+}
+
+.appt-date-trigger {
+    cursor: pointer;
+    justify-content: space-between;
+    text-align: right;
+}
+
+.appt-date-trigger small {
+    margin-inline-start: auto;
+    color: var(--appt-muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.appt-date-value {
+    color: var(--appt-ink) !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    margin: 0 !important;
+}
+
+.appt-date-message {
+    display: none;
+    margin-top: 8px;
+    color: var(--appt-primary-dark);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.appt-date-message.is-visible {
+    display: block;
+}
+
+.appt-field small,
+.appt-error {
+    display: block;
+    margin-top: 7px;
+    color: var(--appt-danger);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.appt-field textarea {
+    display: block;
+    min-height: 120px;
+    resize: vertical;
+    line-height: 1.9;
+    padding: 16px 18px;
+    font-family: inherit;
+    font-weight: 700;
+}
+
+.appt-date-field {
+    position: relative;
+    z-index: 20;
+}
+
+.appt-calendar-card {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: min(390px, 92vw);
+    padding: 18px;
+    border-radius: 24px;
+    border: 1px solid var(--appt-line);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 25px 65px rgba(18, 61, 71, 0.14);
+    transform: translateY(10px) scale(.98);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+    z-index: 80;
+}
+
+html.dark .appt-calendar-card,
+body.dark .appt-calendar-card,
+body.dark-mode .appt-calendar-card,
+[data-theme="dark"] .appt-calendar-card {
+    background: rgba(14, 31, 36, 0.98);
+}
+
+[data-appt-form].is-calendar-open .appt-calendar-card {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.appt-calendar-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.appt-calendar-head span {
+    color: var(--appt-primary-dark);
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.appt-calendar-head h3 {
+    margin: 2px 0 0;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.appt-calendar-head small {
+    color: var(--appt-muted);
+    font-size: 11px;
+    font-weight: 800;
+    text-align: left;
+}
+
+.appt-calendar-weekdays,
+.appt-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 7px;
+}
+
+.appt-calendar-weekdays {
+    margin-bottom: 8px;
+}
+
+.appt-calendar-weekdays span {
+    text-align: center;
+    color: var(--appt-muted);
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.appt-calendar-day {
+    position: relative;
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--appt-ink);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    transition: transform .18s ease, background .18s ease, color .18s ease, opacity .18s ease;
+}
+
+.appt-calendar-day:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: rgba(29, 158, 117, 0.10);
+}
+
+.appt-calendar-day.is-selected {
+    color: #fff;
+    background: linear-gradient(135deg, var(--appt-primary-2), var(--appt-primary-dark));
+    box-shadow: 0 12px 24px rgba(21, 145, 111, 0.22);
+}
+
+.appt-calendar-day.is-today:not(.is-selected) {
+    background: rgba(77, 168, 218, 0.10);
+    color: var(--appt-secondary);
+}
+
+.appt-calendar-day.is-has-appointment::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    right: 50%;
+    bottom: 5px;
+    transform: translateX(50%);
+    background: var(--appt-primary-2);
+}
+
+.appt-calendar-day.is-selected::after {
+    background: #fff;
+}
+
+.appt-calendar-day.is-muted,
+.appt-calendar-day.is-disabled,
+.appt-calendar-day:disabled {
+    opacity: .38;
+    cursor: not-allowed;
+}
+
+.appt-calendar-day.is-full:not(.is-selected) {
+    background: var(--appt-warning-bg);
+    color: var(--appt-warning);
+}
+
+.appt-calendar-day.is-no-schedule:not(.is-selected) {
+    background: rgba(18, 51, 63, 0.045);
+    color: var(--appt-muted);
+}
+
+.appt-calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    margin-top: 13px;
+    padding-top: 12px;
+    border-top: 1px solid var(--appt-line-2);
+}
+
+.appt-calendar-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--appt-muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--appt-primary-2);
+}
+
+.legend-dot.is-disabled { background: #a3b4bb; }
+.legend-dot.is-today { background: var(--appt-secondary); }
+.legend-dot.is-appointment { background: var(--appt-primary-dark); }
+
+.appt-slots-box {
+    margin: 24px 0 18px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.appt-subhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--appt-line);
+}
+
+.appt-subhead strong {
+    font-size: clamp(20px, 2.3vw, 28px);
+    line-height: 1.3;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+}
+
+.appt-time-picker-shell {
+    display: grid;
+    gap: 14px;
+}
+
+.appt-slot-group {
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+
+.slot-group-title {
+    height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 16px;
+    border-radius: 999px;
+    color: var(--appt-primary-dark);
+    background: rgba(225, 247, 241, 0.88);
+    border: 1px solid var(--appt-line);
+    font-size: 13px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.slot-group-title svg,
+.slot-group-title i {
+    width: 16px;
+    height: 16px;
+    color: var(--appt-primary);
+}
+
+.slot-count,
+.slot-chevron {
+    display: none !important;
+}
+
+.slot-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.slot-btn {
+    position: relative;
+    min-width: 94px;
+    min-height: 46px;
+    border: 1px solid rgba(21, 145, 111, 0.20);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.78);
+    color: var(--appt-ink);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 16px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 900;
+    box-shadow: 0 10px 24px rgba(18, 61, 71, 0.045);
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease, color .18s ease;
+}
+
+html.dark .slot-btn,
+body.dark .slot-btn,
+body.dark-mode .slot-btn,
+[data-theme="dark"] .slot-btn {
+    background: rgba(20, 45, 50, 0.78);
+}
+
+.slot-btn::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #30b99a;
+    box-shadow: 0 0 0 5px rgba(48, 185, 154, 0.09);
+}
+
+.slot-btn:hover:not(:disabled):not(.is-unavailable):not(.is-full) {
+    transform: translateY(-2px);
+    border-color: rgba(21, 145, 111, 0.42);
+    box-shadow: 0 14px 30px rgba(18, 61, 71, 0.08);
+}
+
+.slot-btn small {
+    display: none;
+}
+
+.slot-btn.is-active {
+    min-width: 118px;
+    color: #fff;
+    background: linear-gradient(135deg, #25bd91, #0f7d5e);
+    border-color: transparent;
+    box-shadow: 0 20px 38px rgba(17, 143, 107, 0.28);
+}
+
+.slot-btn.is-active::before {
+    background: #fff;
+    box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.18);
+}
+
+.slot-btn.is-active::after {
+    content: "مختار";
+    font-size: 11px;
+    font-weight: 900;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+.slot-btn:disabled,
+.slot-btn.is-unavailable,
+.slot-btn.is-full,
+.slot-btn[aria-disabled="true"] {
+    opacity: .45;
+    cursor: not-allowed;
+    filter: grayscale(.2);
+}
+
+.appt-empty-slots {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 22px;
+    border: 1px solid rgba(180, 35, 24, 0.13);
+    background: var(--appt-danger-bg);
+    color: var(--appt-danger);
+}
+
+.appt-empty-slots svg,
+.appt-empty-slots i {
+    width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+}
+
+.appt-empty-slots strong,
+.appt-empty-slots span {
+    display: block;
+    font-weight: 900;
+}
+
+.appt-empty-slots span {
+    margin-top: 2px;
+    font-size: 12px;
+    opacity: .85;
+}
+
+.appt-error[data-slot-unavailable-message] {
+    display: none;
+    color: var(--appt-warning);
+}
+
+.appt-error[data-slot-unavailable-message].is-visible {
+    display: block;
+}
+
+.appt-form-actions,
+.appt-locked-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.appt-primary-btn,
+.appt-outline-btn,
+.appt-meeting-btn {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 0 20px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+.appt-primary-btn,
+.appt-meeting-btn {
+    color: #fff;
+    background: linear-gradient(135deg, var(--appt-primary-2), var(--appt-primary-dark));
+    box-shadow: 0 16px 30px rgba(21, 145, 111, 0.20);
+}
+
+.appt-outline-btn {
+    color: var(--appt-primary-dark);
+    background: rgba(232, 250, 245, 0.82);
+    border-color: var(--appt-line);
+}
+
+.appt-primary-btn:hover,
+.appt-outline-btn:hover,
+.appt-meeting-btn:hover {
+    transform: translateY(-2px);
+}
+
+.appt-primary-btn svg,
+.appt-outline-btn svg,
+.appt-meeting-btn svg,
+.appt-primary-btn i,
+.appt-outline-btn i,
+.appt-meeting-btn i {
+    width: 17px;
+    height: 17px;
+}
+
+.appt-current-status {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid var(--appt-line-2);
+    margin-bottom: 14px;
+}
+
+.appt-current-status svg,
+.appt-current-status i {
+    width: 38px;
+    height: 38px;
+    padding: 10px;
+    border-radius: 14px;
+    background: rgba(29, 158, 117, 0.12);
+    color: var(--appt-primary);
+    flex: 0 0 auto;
+}
+
+.appt-current-status strong {
+    display: block;
+    font-size: 17px;
+    font-weight: 900;
+}
+
+.appt-current-status span {
+    display: block;
+    margin-top: 3px;
+    color: var(--appt-muted);
+    font-size: 13px;
+    line-height: 1.8;
+    font-weight: 700;
+}
+
+.appt-current-status.is-pending svg,
+.appt-current-status.is-pending i {
+    color: var(--appt-warning);
+    background: var(--appt-warning-bg);
+}
+
+.appt-current-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+}
+
+.appt-current-grid > div {
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.64);
+    border: 1px solid var(--appt-line-2);
+}
+
+html.dark .appt-current-status,
+html.dark .appt-current-grid > div,
+body.dark .appt-current-status,
+body.dark .appt-current-grid > div,
+body.dark-mode .appt-current-status,
+body.dark-mode .appt-current-grid > div,
+[data-theme="dark"] .appt-current-status,
+[data-theme="dark"] .appt-current-grid > div {
+    background: rgba(17, 39, 44, 0.62);
+}
+
+.appt-current-grid span {
+    display: block;
+    color: var(--appt-primary-dark);
+    font-size: 12px;
+    font-weight: 900;
+    margin-bottom: 5px;
+}
+
+.appt-current-grid strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.appt-month-checker {
+    position: absolute;
+    top: 26px;
+    left: 28px;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.appt-month-checker-copy {
+    display: none;
+}
+
+.appt-month-trigger {
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 15px;
+    border-radius: 999px;
+    border: 1px solid var(--appt-line);
+    background: rgba(232, 250, 245, 0.92);
+    color: var(--appt-primary-dark);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 12px 26px rgba(18, 61, 71, 0.06);
+}
+
+.appt-month-trigger svg,
+.appt-month-trigger i {
+    width: 16px;
+    height: 16px;
+}
+
+.appt-month-popover {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    width: min(390px, 92vw);
+    padding: 18px;
+    border-radius: 24px;
+    border: 1px solid var(--appt-line);
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 24px 60px rgba(18, 61, 71, 0.15);
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transform: translateY(8px) scale(.98);
+    transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+}
+
+html.dark .appt-month-popover,
+body.dark .appt-month-popover,
+body.dark-mode .appt-month-popover,
+[data-theme="dark"] .appt-month-popover {
+    background: rgba(14, 31, 36, 0.98);
+}
+
+.appt-month-checker.is-open .appt-month-popover {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.appt-month-result {
+    margin: 12px 0 0;
+    padding: 11px 13px;
+    border-radius: 15px;
+    background: rgba(232, 250, 245, 0.82);
+    color: var(--appt-primary-dark);
+    font-size: 12px;
+    line-height: 1.7;
+    font-weight: 800;
+}
+
+.appt-month-result.is-visible {
+    animation: apptFadeIn .2s ease;
+}
+
+@keyframes apptFadeIn {
+    from { opacity: .45; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.appt-current-note {
+    margin-top: 14px;
+    padding: 15px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--appt-line-2);
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.appt-current-note p {
+    margin: 6px 0 0;
+    color: var(--appt-ink);
+    font-size: 13px;
+    line-height: 1.9;
+    font-weight: 700;
+}
+
+.appt-waiting-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 16px;
+    padding: 18px 20px;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid rgba(238, 174, 49, 0.22);
+    background:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, .75), transparent 26%),
+        linear-gradient(135deg, rgba(255, 248, 222, .90), rgba(238, 252, 248, .90));
+}
+
+.appt-waiting-box::after {
+    content: "";
+    position: absolute;
+    inset: auto 20px 0 20px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(29,158,117,.55), transparent);
+    animation: apptLoading 1.8s ease-in-out infinite;
+}
+
+@keyframes apptLoading {
+    0%, 100% { transform: translateX(22%); opacity: .35; }
+    50% { transform: translateX(-22%); opacity: 1; }
+}
+
+.appt-waiting-box svg,
+.appt-waiting-box i {
+    width: 44px;
+    height: 44px;
+    padding: 11px;
+    border-radius: 16px;
+    color: var(--appt-warning);
+    background: rgba(255,255,255,.75);
+    flex: 0 0 auto;
+}
+
+.appt-waiting-box strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.appt-waiting-box p {
+    margin: 4px 0 0;
+    color: var(--appt-muted);
+    font-size: 13px;
+    line-height: 1.8;
+    font-weight: 700;
+}
+
+.appt-meeting-box,
+.appt-post-box,
+.appt-suggestion-box {
+    display: flex;
+    gap: 14px;
+    margin-top: 16px;
+    padding: 18px;
+    border-radius: 22px;
+    border: 1px solid var(--appt-line);
+    background: rgba(240, 252, 248, 0.68);
+}
+
+.appt-meeting-icon,
+.appt-post-icon,
+.appt-locked-icon {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    color: var(--appt-primary);
+    background: rgba(29, 158, 117, 0.12);
+    flex: 0 0 auto;
+}
+
+.appt-meeting-icon svg,
+.appt-post-icon svg,
+.appt-locked-icon svg,
+.appt-meeting-icon i,
+.appt-post-icon i,
+.appt-locked-icon i {
+    width: 24px;
+    height: 24px;
+}
+
+.appt-meeting-content h3,
+.appt-post-box h3,
+.appt-locked-card h2 {
+    margin: 4px 0 5px;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.appt-meeting-content p,
+.appt-post-box p,
+.appt-locked-card p {
+    margin: 0;
+    color: var(--appt-muted);
+    font-size: 13px;
+    line-height: 1.85;
+    font-weight: 700;
+}
+
+.appt-meeting-note {
+    margin: 10px 0;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.55);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.appt-locked-card {
+    text-align: center;
+}
+
+.appt-locked-icon {
+    margin: 0 auto 12px;
+}
+
+.appt-flow {
+    display: grid;
+    gap: 10px;
+}
+
+.appt-flow > div,
+.appt-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.appt-flow > div > span {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(29, 158, 117, .12);
+    color: var(--appt-primary-dark);
+    font-weight: 900;
+}
+
+.appt-note {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 16px;
+    background: rgba(77, 168, 218, .08);
+    color: var(--appt-muted);
+    font-size: 12px;
+    line-height: 1.8;
+    font-weight: 700;
+}
+
+.appt-note svg,
+.appt-note i {
+    width: 17px;
+    height: 17px;
+    color: var(--appt-secondary);
+    flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+    .appt-page {
+        width: min(100% - 22px, 720px);
+        padding-top: 14px;
+    }
+
+    .appt-hero {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        padding: 24px;
+        min-height: auto;
+    }
+
+    .appt-doctor-card {
+        width: 100%;
+    }
+
+    .appt-form-card,
+    .appt-current-card,
+    .appt-locked-card {
+        padding: 22px;
+        border-radius: 26px;
+    }
+
+    .appt-form-grid,
+    .appt-current-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .appt-slot-group {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .slot-group-title {
+        width: fit-content;
+    }
+
+    .slot-buttons {
+        gap: 9px;
+    }
+
+    .slot-btn {
+        min-width: calc(50% - 5px);
+    }
+
+    .appt-month-checker {
+        position: static;
+        justify-content: flex-start;
+        margin: 12px 0;
+    }
+
+    .appt-month-popover {
+        left: auto;
+        right: 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .appt-page {
+        width: min(100% - 14px, 430px);
+        padding-bottom: 34px;
+    }
+
+    .appt-hero h1 {
+        font-size: 30px;
+    }
+
+    .appt-hero,
+    .appt-form-card,
+    .appt-current-card,
+    .appt-locked-card {
+        border-radius: 22px;
+    }
+
+    .appt-card-head {
+        align-items: flex-start;
+    }
+
+    .appt-card-head h2 {
+        font-size: 24px;
+    }
+
+    .appt-subhead {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .appt-subhead strong {
+        font-size: 22px;
+    }
+
+    .slot-btn {
+        min-width: 100%;
+    }
+
+    .appt-calendar-card,
+    .appt-month-popover {
+        position: fixed;
+        right: 10px;
+        left: 10px;
+        top: auto;
+        bottom: 12px;
+        width: auto;
+        max-height: calc(100vh - 40px);
+        overflow: auto;
+        border-radius: 24px;
+        z-index: 999;
+    }
+
+    [data-appt-form].is-calendar-open::before,
+    .appt-month-checker.is-open::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(6, 20, 24, .25);
+        z-index: 998;
+    }
+
+    .appt-form-actions {
+        justify-content: stretch;
+    }
+
+    .appt-primary-btn,
+    .appt-outline-btn,
+    .appt-meeting-btn {
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   Etzan appointments v8: hidden polished calendar + clock picker
+   ========================================================= */
+.appt-page,
+.appt-page * {
+    font-family: var(--font-family, var(--app-font, "Cairo", "Tajawal", system-ui, sans-serif)) !important;
+}
+
+.appt-form-card,
+.appt-current-card {
+    overflow: visible !important;
+}
+
+.appt-date-trigger {
+    min-height: 56px;
+    border-radius: 20px !important;
+    background: rgba(255,255,255,.84) !important;
+    border-color: rgba(29, 158, 117, .18) !important;
+    box-shadow: 0 14px 34px rgba(18,61,71,.055) !important;
+}
+
+.appt-date-trigger small {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(225,247,241,.92);
+    color: var(--appt-primary-dark) !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+}
+
+.appt-calendar-card,
+.appt-month-popover {
+    border-radius: 30px !important;
+    border: 1px solid rgba(29,158,117,.18) !important;
+    background:
+        radial-gradient(circle at 15% 0%, rgba(77,168,218,.14), transparent 34%),
+        radial-gradient(circle at 85% 8%, rgba(29,158,117,.13), transparent 36%),
+        rgba(255,255,255,.98) !important;
+    box-shadow: 0 30px 80px rgba(18,61,71,.18) !important;
+    backdrop-filter: blur(18px);
+}
+
+.appt-calendar-card {
+    width: min(470px, calc(100vw - 32px)) !important;
+    padding: 22px !important;
+}
+
+.appt-calendar-head h3,
+.appt-calendar-head span,
+.appt-calendar-head small,
+.appt-calendar-head b {
+    font-family: inherit !important;
+}
+
+.appt-calendar-weekdays span {
+    height: 30px;
+    border-radius: 12px;
+    color: var(--appt-muted);
+    background: rgba(232,250,245,.62);
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.appt-calendar-day {
+    border-radius: 16px !important;
+    min-height: 42px !important;
+    font-size: 13px !important;
+    transition: transform .16s ease, background .16s ease, color .16s ease, box-shadow .16s ease, border-color .16s ease !important;
+}
+
+.appt-calendar-day.is-available:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 22px rgba(18,61,71,.08);
+}
+
+.appt-calendar-day.is-selected {
+    background: linear-gradient(135deg, #27c795, #0d7d5d) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: 0 16px 30px rgba(17,143,107,.25) !important;
+}
+
+.appt-calendar-day.is-has-appointment:not(.is-selected)::after,
+.appt-calendar-day.is-today:not(.is-selected)::after {
+    bottom: 5px !important;
+}
+
+.appt-date-message.is-visible {
+    display: inline-flex;
+    width: auto;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: rgba(225,247,241,.7);
+    color: var(--appt-primary-dark);
+}
+
+.appt-clock-box {
+    position: relative;
+    margin: 28px 0 18px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+}
+
+.appt-clock-box .appt-subhead {
+    margin-bottom: 14px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid rgba(29,158,117,.13) !important;
+}
+
+.appt-clock-box .appt-subhead strong {
+    font-size: clamp(22px, 2.4vw, 34px) !important;
+    letter-spacing: -.6px;
+}
+
+.appt-time-choice-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, .48fr);
+    gap: 14px;
+    align-items: stretch;
+}
+
+.appt-time-choice-card,
+.appt-nearest-time {
+    appearance: none;
+    border: 1px solid rgba(29,158,117,.16);
+    border-radius: 28px;
+    min-height: 92px;
+    padding: 18px 20px;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.94), rgba(245,252,250,.88));
+    color: var(--appt-ink);
+    font-family: inherit;
+    text-align: right;
+    cursor: pointer;
+    box-shadow: 0 18px 42px rgba(18,61,71,.075);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.appt-time-choice-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+        "kicker icon"
+        "time icon"
+        "hint icon";
+    column-gap: 18px;
+    overflow: hidden;
+}
+
+.appt-time-choice-card::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: -45px;
+    top: 50%;
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    border: 10px solid rgba(29,158,117,.08);
+    transform: translateY(-50%);
+}
+
+.appt-time-choice-card::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 17px;
+    top: 50%;
+    width: 42px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, var(--appt-primary));
+    transform-origin: right center;
+    transform: translateY(-50%) rotate(var(--clock-angle, 0deg));
+}
+
+.appt-time-choice-kicker,
+.appt-nearest-time span {
+    grid-area: kicker;
+    color: var(--appt-primary-dark);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.appt-time-choice-card strong,
+.appt-nearest-time strong {
+    grid-area: time;
+    display: block;
+    margin-top: 5px;
+    color: var(--appt-ink);
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1;
+    font-weight: 950;
+    letter-spacing: -.5px;
+}
+
+.appt-time-choice-card small,
+.appt-nearest-time small {
+    grid-area: hint;
+    margin-top: 9px;
+    color: var(--appt-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.appt-time-choice-card > i,
+.appt-time-choice-card > svg {
+    grid-area: icon;
+    align-self: center;
+    justify-self: end;
+    width: 46px;
+    height: 46px;
+    padding: 12px;
+    border-radius: 18px;
+    color: var(--appt-primary-dark);
+    background: rgba(225,247,241,.95);
+}
+
+.appt-nearest-time {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.appt-time-choice-card:hover,
+.appt-nearest-time:hover {
+    transform: translateY(-3px);
+    border-color: rgba(29,158,117,.32);
+    box-shadow: 0 24px 54px rgba(18,61,71,.11);
+}
+
+.appt-time-popover {
+    position: fixed;
+    inset: 0;
+    z-index: 9990;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 22px;
+    background: rgba(9, 30, 36, .30);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .22s ease, visibility .22s ease;
+}
+
+.appt-clock-box.is-time-open .appt-time-popover {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.appt-time-popover-card {
+    width: min(920px, 100%);
+    max-height: calc(100vh - 44px);
+    overflow: auto;
+    border-radius: 34px;
+    border: 1px solid rgba(29,158,117,.18);
+    background:
+        radial-gradient(circle at 5% 10%, rgba(77,168,218,.13), transparent 32%),
+        radial-gradient(circle at 92% 0%, rgba(29,158,117,.15), transparent 36%),
+        rgba(255,255,255,.98);
+    box-shadow: 0 34px 90px rgba(4,25,31,.26);
+    padding: 24px;
+    transform: translateY(16px) scale(.98);
+    transition: transform .22s ease;
+}
+
+.appt-clock-box.is-time-open .appt-time-popover-card {
+    transform: translateY(0) scale(1);
+}
+
+.appt-picker-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.appt-picker-head span {
+    color: var(--appt-primary-dark);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.appt-picker-head h3 {
+    margin: 3px 0 0;
+    color: var(--appt-ink);
+    font-size: clamp(24px, 3vw, 38px);
+    font-weight: 950;
+    letter-spacing: -.7px;
+}
+
+.appt-picker-close {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(29,158,117,.16);
+    border-radius: 16px;
+    background: rgba(225,247,241,.86);
+    color: var(--appt-primary-dark);
+    cursor: pointer;
+}
+
+.appt-clock-layout {
+    display: grid;
+    grid-template-columns: 310px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.appt-clock-face {
+    position: sticky;
+    top: 8px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    margin: 0 auto;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.96) 0 42%, transparent 43%),
+        conic-gradient(from 0deg, rgba(29,158,117,.13), rgba(77,168,218,.10), rgba(29,158,117,.13));
+    border: 1px solid rgba(29,158,117,.18);
+    box-shadow: inset 0 0 0 14px rgba(255,255,255,.58), 0 22px 54px rgba(18,61,71,.10);
+}
+
+.appt-clock-face::before {
+    content: "";
+    position: absolute;
+    inset: 24px;
+    border-radius: 50%;
+    border: 1px dashed rgba(29,158,117,.18);
+}
+
+.clock-number {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: var(--appt-primary-dark);
+    background: rgba(225,247,241,.9);
+    font-size: 13px;
+    font-weight: 950;
+}
+
+.clock-number.n12 { top: 16px; left: 50%; transform: translateX(-50%); }
+.clock-number.n3 { right: 16px; top: 50%; transform: translateY(-50%); }
+.clock-number.n6 { bottom: 16px; left: 50%; transform: translateX(-50%); }
+.clock-number.n9 { left: 16px; top: 50%; transform: translateY(-50%); }
+
+.clock-hand {
+    position: absolute;
+    width: 4px;
+    height: 96px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, var(--appt-primary), rgba(29,158,117,.1));
+    left: calc(50% - 2px);
+    top: 54px;
+    transform-origin: 50% 96px;
+    transform: rotate(var(--clock-angle, 0deg));
+    box-shadow: 0 10px 26px rgba(29,158,117,.26);
+}
+
+.clock-center-dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    border: 5px solid var(--appt-primary);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 8px 20px rgba(29,158,117,.22);
+}
+
+.appt-clock-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.appt-clock-center span,
+.appt-clock-center small {
+    color: var(--appt-muted);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.appt-clock-center strong {
+    margin: 5px 0 6px;
+    color: var(--appt-ink);
+    font-size: 36px;
+    font-weight: 950;
+    line-height: 1;
+}
+
+.appt-clock-options {
+    display: grid;
+    gap: 14px;
+}
+
+.appt-clock-options-head {
+    padding: 13px 15px;
+    border-radius: 20px;
+    background: rgba(232,250,245,.68);
+    border: 1px solid rgba(29,158,117,.12);
+}
+
+.appt-clock-options-head span {
+    display: block;
+    color: var(--appt-primary-dark);
+    font-size: 13px;
+    font-weight: 950;
+}
+
+.appt-clock-options-head small {
+    color: var(--appt-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.appt-clock-period {
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+}
+
+.appt-clock-period .slot-group-title {
+    min-height: 42px;
+    height: auto;
+    justify-content: flex-start;
+    padding: 10px 13px;
+    white-space: normal;
+}
+
+.appt-clock-options .slot-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+    gap: 9px;
+}
+
+.appt-clock-options .slot-btn {
+    min-width: 0 !important;
+    width: 100%;
+    min-height: 48px;
+    border-radius: 17px;
+    background: rgba(255,255,255,.86);
+    box-shadow: 0 10px 26px rgba(18,61,71,.055);
+}
+
+.appt-clock-options .slot-btn.is-active {
+    min-width: 0 !important;
+    background: linear-gradient(135deg, #26bf91, #0f8060) !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+}
+
+.appt-clock-options .slot-btn.is-active::after {
+    content: "✓" !important;
+    width: 20px;
+    height: 20px;
+    display: inline-grid;
+    place-items: center;
+    padding: 0 !important;
+}
+
+.appt-month-checker {
+    top: 18px !important;
+    left: 20px !important;
+}
+
+.appt-month-trigger {
+    height: 44px !important;
+    padding: 0 16px !important;
+    background: rgba(255,255,255,.86) !important;
+    box-shadow: 0 14px 34px rgba(18,61,71,.07) !important;
+}
+
+.appt-month-popover {
+    width: min(465px, calc(100vw - 32px)) !important;
+    padding: 22px !important;
+}
+
+.appt-waiting-box {
+    border: 1px solid rgba(29,158,117,.16) !important;
+    background:
+        linear-gradient(135deg, rgba(232,250,245,.92), rgba(255,255,255,.74)) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 14px 34px rgba(18,61,71,.055) !important;
+}
+
+.appt-waiting-box > i,
+.appt-waiting-box > svg {
+    width: 46px !important;
+    height: 46px !important;
+    padding: 12px;
+    border-radius: 17px;
+    color: var(--appt-primary-dark) !important;
+    background: rgba(255,255,255,.8);
+}
+
+html.dark .appt-calendar-card,
+html.dark .appt-month-popover,
+html.dark .appt-time-popover-card,
+body.dark .appt-calendar-card,
+body.dark .appt-month-popover,
+body.dark .appt-time-popover-card,
+body.dark-mode .appt-calendar-card,
+body.dark-mode .appt-month-popover,
+body.dark-mode .appt-time-popover-card,
+[data-theme="dark"] .appt-calendar-card,
+[data-theme="dark"] .appt-month-popover,
+[data-theme="dark"] .appt-time-popover-card {
+    background:
+        radial-gradient(circle at 5% 10%, rgba(77,168,218,.13), transparent 32%),
+        radial-gradient(circle at 92% 0%, rgba(29,158,117,.15), transparent 36%),
+        rgba(13, 30, 35, .98) !important;
+}
+
+html.dark .appt-time-choice-card,
+html.dark .appt-nearest-time,
+html.dark .appt-clock-options .slot-btn,
+body.dark .appt-time-choice-card,
+body.dark .appt-nearest-time,
+body.dark .appt-clock-options .slot-btn,
+body.dark-mode .appt-time-choice-card,
+body.dark-mode .appt-nearest-time,
+body.dark-mode .appt-clock-options .slot-btn,
+[data-theme="dark"] .appt-time-choice-card,
+[data-theme="dark"] .appt-nearest-time,
+[data-theme="dark"] .appt-clock-options .slot-btn {
+    background: rgba(17, 39, 44, .88) !important;
+}
+
+html.dark .appt-clock-face,
+body.dark .appt-clock-face,
+body.dark-mode .appt-clock-face,
+[data-theme="dark"] .appt-clock-face {
+    background:
+        radial-gradient(circle at 50% 50%, rgba(17, 39, 44, .96) 0 42%, transparent 43%),
+        conic-gradient(from 0deg, rgba(29,158,117,.18), rgba(77,168,218,.10), rgba(29,158,117,.18));
+}
+
+@media (max-width: 820px) {
+    .appt-calendar-card {
+        position: fixed !important;
+        top: auto !important;
+        right: 12px !important;
+        left: 12px !important;
+        bottom: 14px !important;
+        width: auto !important;
+        max-height: calc(100vh - 80px);
+        overflow: auto;
+        transform: translateY(26px) scale(.98) !important;
+        z-index: 9991 !important;
+    }
+
+    [data-appt-form].is-calendar-open .appt-calendar-card {
+        transform: translateY(0) scale(1) !important;
+    }
+
+    .appt-time-choice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .appt-time-popover {
+        align-items: flex-end;
+        padding: 12px;
+    }
+
+    .appt-time-popover-card {
+        border-radius: 28px 28px 22px 22px;
+        padding: 18px;
+    }
+
+    .appt-clock-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .appt-clock-face {
+        position: relative;
+        width: min(260px, 78vw);
+        height: min(260px, 78vw);
+    }
+
+    .appt-clock-period {
+        grid-template-columns: 1fr;
+    }
+
+    .appt-clock-period .slot-group-title {
+        justify-content: center;
+    }
+
+    .appt-month-checker {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        margin: 10px 0 14px !important;
+        justify-content: flex-start;
+    }
+
+    .appt-month-popover {
+        left: 0 !important;
+        right: auto !important;
+    }
+}
+
+@media (max-width: 560px) {
+    .appt-picker-head h3 {
+        font-size: 24px;
+    }
+
+    .appt-clock-options .slot-buttons {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .appt-time-choice-card strong,
+    .appt-nearest-time strong {
+        font-size: 30px;
+    }
+}
+
+
+/* =========================================================
+   Etzan appointments v9: orbit time picker polish
+   ========================================================= */
+.appt-page,
+.appt-page * {
+    font-family: var(--patient-font-family, var(--app-font-family, var(--font-family), "Cairo", "Tajawal", system-ui, sans-serif)) !important;
+}
+
+.appt-date-message:empty {
+    display: none !important;
+}
+
+.appt-orbit-time-box {
+    position: relative;
+    margin: 30px 0 20px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.appt-orbit-time-box .appt-subhead {
+    margin-bottom: 14px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid rgba(29,158,117,.14) !important;
+}
+
+.appt-orbit-time-box .appt-subhead strong {
+    font-size: clamp(24px, 2.8vw, 38px) !important;
+    letter-spacing: -.7px;
+}
+
+.appt-time-launch-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(170px, .32fr);
+    gap: 12px;
+    align-items: stretch;
+}
+
+.appt-time-launch,
+.appt-time-suggestion {
+    appearance: none;
+    border: 1px solid rgba(29,158,117,.16);
+    border-radius: 26px;
+    background:
+        radial-gradient(circle at 8% 0%, rgba(77,168,218,.10), transparent 35%),
+        linear-gradient(135deg, rgba(255,255,255,.94), rgba(246,253,251,.88));
+    color: var(--appt-ink);
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 18px 44px rgba(18,61,71,.07);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.appt-time-launch {
+    min-height: 96px;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    text-align: right;
+}
+
+.time-launch-icon {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    border-radius: 20px;
+    background: rgba(225,247,241,.92);
+    border: 1px solid rgba(29,158,117,.15);
+    color: var(--appt-primary-dark);
+}
+
+.time-launch-icon svg,
+.time-launch-icon i {
+    width: 23px;
+    height: 23px;
+}
+
+.time-launch-copy small,
+.appt-time-suggestion span {
+    display: block;
+    color: var(--appt-primary-dark);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.time-launch-copy strong,
+.appt-time-suggestion strong {
+    display: block;
+    margin-top: 4px;
+    color: var(--appt-ink);
+    font-size: clamp(27px, 3.2vw, 40px);
+    font-weight: 950;
+    line-height: 1;
+    letter-spacing: -.7px;
+}
+
+.time-launch-action {
+    min-width: 84px;
+    height: 38px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--appt-primary);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 900;
+    box-shadow: 0 14px 28px rgba(21,145,111,.22);
+}
+
+.appt-time-suggestion {
+    min-height: 96px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.appt-time-suggestion strong {
+    font-size: 30px;
+}
+
+.appt-time-launch:hover,
+.appt-time-suggestion:hover {
+    transform: translateY(-2px);
+    border-color: rgba(29,158,117,.30);
+    box-shadow: 0 24px 54px rgba(18,61,71,.11);
+}
+
+.appt-orbit-popover-card {
+    width: min(760px, 100%) !important;
+    padding: 24px !important;
+    overflow: hidden !important;
+}
+
+.appt-period-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 6px 0 18px;
+}
+
+.appt-period-tab {
+    appearance: none;
+    min-height: 42px;
+    padding: 8px 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(29,158,117,.16);
+    background: rgba(255,255,255,.78);
+    color: var(--appt-primary-dark);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background .18s ease, color .18s ease, transform .18s ease, border-color .18s ease;
+}
+
+.appt-period-tab svg,
+.appt-period-tab i {
+    width: 16px;
+    height: 16px;
+}
+
+.appt-period-tab.is-active {
+    background: linear-gradient(135deg, #27bf92, #0f7d5f);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 16px 34px rgba(21,145,111,.23);
+}
+
+.appt-orbit-stage {
+    position: relative;
+    min-height: 430px;
+    display: grid;
+    place-items: center;
+}
+
+.appt-orbit-panel {
+    display: none;
+    width: 100%;
+}
+
+.appt-orbit-panel.is-active {
+    display: grid;
+    place-items: center;
+}
+
+.appt-orbit-dial {
+    --orbit-radius: 164px;
+    position: relative;
+    width: min(430px, 78vw);
+    height: min(430px, 78vw);
+    border-radius: 50%;
+    margin: 0 auto;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,.98) 0 35%, transparent 36%),
+        radial-gradient(circle at 50% 50%, rgba(232,250,245,.78) 0 52%, transparent 53%),
+        conic-gradient(from 25deg, rgba(29,158,117,.18), rgba(77,168,218,.10), rgba(29,158,117,.16), rgba(77,168,218,.12), rgba(29,158,117,.18));
+    border: 1px solid rgba(29,158,117,.18);
+    box-shadow:
+        inset 0 0 0 16px rgba(255,255,255,.55),
+        0 28px 70px rgba(18,61,71,.11);
+}
+
+.appt-orbit-dial::before {
+    content: "";
+    position: absolute;
+    inset: 48px;
+    border-radius: 50%;
+    border: 1px dashed rgba(29,158,117,.20);
+}
+
+.appt-orbit-dial::after {
+    content: "";
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    background: var(--appt-primary);
+    box-shadow: 0 0 0 8px rgba(29,158,117,.10), 0 16px 34px rgba(29,158,117,.25);
+    transform: translate(-50%, -50%);
+}
+
+.appt-orbit-center {
+    position: absolute;
+    inset: 29%;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,.92);
+    border: 1px solid rgba(29,158,117,.13);
+    box-shadow: 0 20px 46px rgba(18,61,71,.09);
+    pointer-events: none;
+}
+
+.appt-orbit-center span,
+.appt-orbit-center small {
+    color: var(--appt-muted);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.appt-orbit-center strong {
+    margin: 6px 0;
+    color: var(--appt-ink);
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 950;
+    line-height: 1;
+    letter-spacing: -.8px;
+}
+
+.orbit-slot.slot-btn {
+    position: absolute !important;
+    z-index: 4;
+    left: 50%;
+    top: 50%;
+    width: 92px !important;
+    min-width: 92px !important;
+    min-height: 46px !important;
+    padding: 0 12px !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.94) !important;
+    transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-1 * var(--orbit-radius))) rotate(calc(-1 * var(--slot-angle)));
+    box-shadow: 0 14px 32px rgba(18,61,71,.08) !important;
+}
+
+.orbit-slot.slot-btn::before {
+    width: 7px !important;
+    height: 7px !important;
+    top: 8px !important;
+    right: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%);
+}
+
+.orbit-slot.slot-btn .slot-time,
+.orbit-slot.slot-btn span {
+    font-size: 15px !important;
+    font-weight: 950 !important;
+}
+
+.orbit-slot.slot-btn small {
+    display: none !important;
+}
+
+.orbit-slot.slot-btn.is-active {
+    background: linear-gradient(135deg, #26bf91, #0f8060) !important;
+    color: #fff !important;
+    transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-1 * var(--orbit-radius))) rotate(calc(-1 * var(--slot-angle))) scale(1.13);
+    box-shadow: 0 18px 42px rgba(21,145,111,.30) !important;
+}
+
+.orbit-slot.slot-btn.is-active::after {
+    content: "✓" !important;
+    width: 18px !important;
+    height: 18px !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    padding: 0 !important;
+    margin-inline-start: 6px;
+    background: rgba(255,255,255,.22);
+}
+
+/* Make appointment status page less boxed and more focused */
+.appt-current-card {
+    width: min(820px, 100%) !important;
+}
+
+.appt-month-checker {
+    position: absolute !important;
+    top: 22px !important;
+    left: 22px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.appt-month-checker-copy {
+    display: none !important;
+}
+
+.appt-month-trigger {
+    height: 42px !important;
+    padding: 0 15px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+}
+
+.appt-month-popover {
+    top: 52px !important;
+    left: 0 !important;
+    right: auto !important;
+    width: min(430px, calc(100vw - 36px)) !important;
+}
+
+html.dark .appt-time-launch,
+html.dark .appt-time-suggestion,
+html.dark .appt-period-tab,
+html.dark .appt-orbit-center,
+html.dark .orbit-slot.slot-btn,
+body.dark .appt-time-launch,
+body.dark .appt-time-suggestion,
+body.dark .appt-period-tab,
+body.dark .appt-orbit-center,
+body.dark .orbit-slot.slot-btn,
+body.dark-mode .appt-time-launch,
+body.dark-mode .appt-time-suggestion,
+body.dark-mode .appt-period-tab,
+body.dark-mode .appt-orbit-center,
+body.dark-mode .orbit-slot.slot-btn,
+[data-theme="dark"] .appt-time-launch,
+[data-theme="dark"] .appt-time-suggestion,
+[data-theme="dark"] .appt-period-tab,
+[data-theme="dark"] .appt-orbit-center,
+[data-theme="dark"] .orbit-slot.slot-btn {
+    background: rgba(17, 39, 44, .88) !important;
+}
+
+html.dark .appt-orbit-dial,
+body.dark .appt-orbit-dial,
+body.dark-mode .appt-orbit-dial,
+[data-theme="dark"] .appt-orbit-dial {
+    background:
+        radial-gradient(circle at 50% 50%, rgba(17,39,44,.96) 0 35%, transparent 36%),
+        radial-gradient(circle at 50% 50%, rgba(23,68,64,.42) 0 52%, transparent 53%),
+        conic-gradient(from 25deg, rgba(29,158,117,.22), rgba(77,168,218,.13), rgba(29,158,117,.18), rgba(77,168,218,.15), rgba(29,158,117,.22));
+}
+
+@media (max-width: 820px) {
+    .appt-time-launch-row {
+        grid-template-columns: 1fr;
+    }
+
+    .appt-orbit-popover-card {
+        border-radius: 30px 30px 22px 22px !important;
+        overflow: auto !important;
+        max-height: calc(100vh - 24px) !important;
+    }
+
+    .appt-orbit-stage {
+        min-height: auto;
+        padding: 4px 0 2px;
+    }
+
+    .appt-orbit-dial {
+        --orbit-radius: 0px;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        border-radius: 28px;
+        padding: 128px 14px 16px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        background: rgba(245,252,250,.76);
+        box-shadow: none;
+    }
+
+    .appt-orbit-dial::before,
+    .appt-orbit-dial::after {
+        display: none;
+    }
+
+    .appt-orbit-center {
+        inset: 14px 14px auto 14px;
+        height: 100px;
+        border-radius: 22px;
+    }
+
+    .orbit-slot.slot-btn,
+    .orbit-slot.slot-btn.is-active {
+        position: relative !important;
+        left: auto;
+        top: auto;
+        width: 100% !important;
+        min-width: 0 !important;
+        transform: none !important;
+    }
+
+    .appt-month-checker {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        margin: 8px 0 16px !important;
+    }
+
+    .appt-month-popover {
+        left: auto !important;
+        right: 0 !important;
+    }
+}
+
+@media (max-width: 560px) {
+    .appt-time-launch {
+        grid-template-columns: 48px minmax(0, 1fr);
+    }
+
+    .time-launch-action {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .appt-orbit-dial {
+        grid-template-columns: 1fr;
+    }
+
+    .appt-period-tabs {
+        justify-content: stretch;
+    }
+
+    .appt-period-tab {
+        flex: 1 1 100%;
+    }
+}
+
+/* =========================================================
+   Etzan appointments v10 fixes
+   - clean dark mode
+   - no visible "تقويم" word in date field
+   - hidden big calendar popover placed correctly
+   - clock icon opens a real time picker
+   - no nearest-time card
+   ========================================================= */
+
+:root {
+    --appt-dark-bg: #071719;
+    --appt-dark-panel: #0d2428;
+    --appt-dark-panel-2: #102b30;
+    --appt-dark-border: rgba(112, 226, 196, 0.20);
+    --appt-dark-text: #effdfa;
+    --appt-dark-muted: #aac5c9;
+    --appt-dark-soft: rgba(34, 174, 137, 0.12);
+}
+
+html.dark .appt-page,
+body.dark .appt-page,
+body.dark-mode .appt-page,
+[data-theme="dark"] .appt-page {
+    color: var(--appt-dark-text) !important;
+    background:
+        radial-gradient(circle at 82% 6%, rgba(29, 158, 117, 0.18), transparent 34%),
+        radial-gradient(circle at 8% 20%, rgba(77, 168, 218, 0.10), transparent 35%),
+        linear-gradient(180deg, #08191c 0%, #071416 100%) !important;
+}
+
+html.dark .appt-form-card,
+html.dark .appt-current-card,
+html.dark .appt-locked-card,
+body.dark .appt-form-card,
+body.dark .appt-current-card,
+body.dark .appt-locked-card,
+body.dark-mode .appt-form-card,
+body.dark-mode .appt-current-card,
+body.dark-mode .appt-locked-card,
+[data-theme="dark"] .appt-form-card,
+[data-theme="dark"] .appt-current-card,
+[data-theme="dark"] .appt-locked-card {
+    background: linear-gradient(180deg, rgba(15, 38, 43, 0.92), rgba(10, 28, 32, 0.92)) !important;
+    border-color: var(--appt-dark-border) !important;
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.34) !important;
+}
+
+html.dark .appt-form-card::before,
+html.dark .appt-current-card::before,
+body.dark .appt-form-card::before,
+body.dark .appt-current-card::before,
+body.dark-mode .appt-form-card::before,
+body.dark-mode .appt-current-card::before,
+[data-theme="dark"] .appt-form-card::before,
+[data-theme="dark"] .appt-current-card::before {
+    opacity: 0.35 !important;
+}
+
+html.dark .appt-card-head h2,
+html.dark .appt-current-card h2,
+html.dark .appt-hero h1,
+body.dark .appt-card-head h2,
+body.dark .appt-current-card h2,
+body.dark .appt-hero h1,
+body.dark-mode .appt-card-head h2,
+body.dark-mode .appt-current-card h2,
+body.dark-mode .appt-hero h1,
+[data-theme="dark"] .appt-card-head h2,
+[data-theme="dark"] .appt-current-card h2,
+[data-theme="dark"] .appt-hero h1 {
+    color: var(--appt-dark-text) !important;
+}
+
+html.dark .appt-hero p,
+html.dark .appt-current-status span,
+html.dark .appt-current-note p,
+body.dark .appt-hero p,
+body.dark .appt-current-status span,
+body.dark .appt-current-note p,
+body.dark-mode .appt-hero p,
+body.dark-mode .appt-current-status span,
+body.dark-mode .appt-current-note p,
+[data-theme="dark"] .appt-hero p,
+[data-theme="dark"] .appt-current-status span,
+[data-theme="dark"] .appt-current-note p {
+    color: var(--appt-dark-muted) !important;
+}
+
+html.dark .appt-input,
+html.dark .appt-current-status,
+html.dark .appt-current-grid > div,
+html.dark .appt-current-note,
+html.dark .appt-field textarea,
+body.dark .appt-input,
+body.dark .appt-current-status,
+body.dark .appt-current-grid > div,
+body.dark .appt-current-note,
+body.dark .appt-field textarea,
+body.dark-mode .appt-input,
+body.dark-mode .appt-current-status,
+body.dark-mode .appt-current-grid > div,
+body.dark-mode .appt-current-note,
+body.dark-mode .appt-field textarea,
+[data-theme="dark"] .appt-input,
+[data-theme="dark"] .appt-current-status,
+[data-theme="dark"] .appt-current-grid > div,
+[data-theme="dark"] .appt-current-note,
+[data-theme="dark"] .appt-field textarea {
+    background: rgba(9, 28, 32, 0.86) !important;
+    border-color: rgba(112, 226, 196, 0.18) !important;
+    color: var(--appt-dark-text) !important;
+}
+
+html.dark .appt-field textarea::placeholder,
+body.dark .appt-field textarea::placeholder,
+body.dark-mode .appt-field textarea::placeholder,
+[data-theme="dark"] .appt-field textarea::placeholder {
+    color: rgba(210, 236, 235, 0.52) !important;
+}
+
+/* Date field: no label word, only icon + selected date. */
+.appt-date-trigger {
+    min-height: 58px !important;
+    padding: 0 18px !important;
+    gap: 12px !important;
+    justify-content: flex-start !important;
+    cursor: pointer;
+}
+
+.appt-date-trigger > small {
+    display: none !important;
+}
+
+.appt-date-trigger .appt-date-value {
+    flex: 1 1 auto;
+    text-align: start;
+    font-weight: 900;
+    color: var(--appt-ink);
+}
+
+html.dark .appt-date-trigger .appt-date-value,
+body.dark .appt-date-trigger .appt-date-value,
+body.dark-mode .appt-date-trigger .appt-date-value,
+[data-theme="dark"] .appt-date-trigger .appt-date-value {
+    color: var(--appt-dark-text) !important;
+}
+
+.appt-date-trigger::after {
+    content: "";
+    width: 9px;
+    height: 9px;
+    border-inline-end: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    opacity: 0.55;
+    margin-inline-start: auto;
+}
+
+/* Calendar popover must belong to the date field and be readable. */
+.appt-date-field {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.appt-date-field .appt-calendar-card {
+    position: absolute !important;
+    inset-inline-end: 0 !important;
+    top: calc(100% + 14px) !important;
+    width: min(540px, calc(100vw - 44px)) !important;
+    max-width: none !important;
+    z-index: 120 !important;
+    padding: 22px !important;
+    border-radius: 30px !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(10px) scale(0.98) !important;
+    pointer-events: none !important;
+    box-shadow: 0 26px 70px rgba(18, 61, 71, 0.18) !important;
+}
+
+[data-appt-form].is-calendar-open .appt-date-field .appt-calendar-card {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+    pointer-events: auto !important;
+}
+
+html.dark .appt-date-field .appt-calendar-card,
+body.dark .appt-date-field .appt-calendar-card,
+body.dark-mode .appt-date-field .appt-calendar-card,
+[data-theme="dark"] .appt-date-field .appt-calendar-card {
+    background: linear-gradient(180deg, rgba(16, 43, 48, 0.98), rgba(9, 28, 32, 0.98)) !important;
+    border: 1px solid var(--appt-dark-border) !important;
+    box-shadow: 0 34px 90px rgba(0, 0, 0, 0.44) !important;
+}
+
+html.dark .appt-calendar-head h3,
+html.dark .appt-calendar-weekdays span,
+body.dark .appt-calendar-head h3,
+body.dark .appt-calendar-weekdays span,
+body.dark-mode .appt-calendar-head h3,
+body.dark-mode .appt-calendar-weekdays span,
+[data-theme="dark"] .appt-calendar-head h3,
+[data-theme="dark"] .appt-calendar-weekdays span {
+    color: var(--appt-dark-text) !important;
+}
+
+html.dark .appt-calendar-day,
+body.dark .appt-calendar-day,
+body.dark-mode .appt-calendar-day,
+[data-theme="dark"] .appt-calendar-day {
+    background: rgba(8, 26, 29, 0.78) !important;
+    border-color: rgba(112, 226, 196, 0.12) !important;
+    color: var(--appt-dark-text) !important;
+}
+
+html.dark .appt-calendar-day.is-muted,
+html.dark .appt-calendar-day.is-disabled,
+body.dark .appt-calendar-day.is-muted,
+body.dark .appt-calendar-day.is-disabled,
+body.dark-mode .appt-calendar-day.is-muted,
+body.dark-mode .appt-calendar-day.is-disabled,
+[data-theme="dark"] .appt-calendar-day.is-muted,
+[data-theme="dark"] .appt-calendar-day.is-disabled {
+    opacity: 0.42 !important;
+    color: rgba(225, 244, 242, 0.62) !important;
+}
+
+/* Month checker: placed as a small clean tool, popover below it. */
+.appt-current-card {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.appt-month-checker {
+    width: fit-content !important;
+    max-width: 100% !important;
+    margin: 0 0 18px !important;
+    padding: 0 !important;
+    position: relative !important;
+    z-index: 50 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.appt-month-checker-copy {
+    display: none !important;
+}
+
+.appt-month-trigger {
+    min-height: 42px !important;
+    padding: 0 15px !important;
+    border-radius: 999px !important;
+    background: rgba(235, 251, 246, 0.96) !important;
+    border: 1px solid rgba(29, 158, 117, 0.25) !important;
+    box-shadow: 0 12px 30px rgba(18, 61, 71, 0.08) !important;
+    color: var(--appt-primary-dark) !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+}
+
+html.dark .appt-month-trigger,
+body.dark .appt-month-trigger,
+body.dark-mode .appt-month-trigger,
+[data-theme="dark"] .appt-month-trigger {
+    background: rgba(34, 174, 137, 0.14) !important;
+    border-color: rgba(112, 226, 196, 0.28) !important;
+    color: #dbfff5 !important;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.25) !important;
+}
+
+.appt-month-popover {
+    position: absolute !important;
+    inset-inline-start: 0 !important;
+    top: calc(100% + 12px) !important;
+    width: min(470px, calc(100vw - 44px)) !important;
+    padding: 22px !important;
+    border-radius: 30px !important;
+    z-index: 170 !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(8px) scale(0.98) !important;
+    box-shadow: 0 28px 80px rgba(18, 61, 71, 0.18) !important;
+}
+
+.appt-month-checker.is-open .appt-month-popover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+html.dark .appt-month-popover,
+body.dark .appt-month-popover,
+body.dark-mode .appt-month-popover,
+[data-theme="dark"] .appt-month-popover {
+    background: linear-gradient(180deg, rgba(16, 43, 48, 0.98), rgba(9, 28, 32, 0.98)) !important;
+    border-color: var(--appt-dark-border) !important;
+    box-shadow: 0 34px 92px rgba(0, 0, 0, 0.48) !important;
+}
+
+/* Time section: one clean trigger, no nearest-time card, modal clock picker. */
+.appt-orbit-time-box {
+    margin-top: 30px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    position: relative !important;
+}
+
+.appt-orbit-time-box .appt-subhead {
+    margin-bottom: 14px !important;
+    padding-bottom: 12px !important;
+    border-bottom: 1px solid var(--appt-line) !important;
+}
+
+.appt-orbit-time-box .appt-subhead span {
+    display: none !important;
+}
+
+.appt-orbit-time-box .appt-subhead strong {
+    font-size: clamp(25px, 3vw, 38px) !important;
+    line-height: 1.18 !important;
+    letter-spacing: -0.9px !important;
+}
+
+.appt-time-launch-row {
+    display: block !important;
+}
+
+.appt-time-suggestion {
+    display: none !important;
+}
+
+.appt-time-launch {
+    width: min(470px, 100%) !important;
+    min-height: 82px !important;
+    display: grid !important;
+    grid-template-columns: 58px minmax(0, 1fr) 44px !important;
+    align-items: center !important;
+    gap: 15px !important;
+    padding: 13px 15px !important;
+    border-radius: 28px !important;
+    background:
+        radial-gradient(circle at 88% 18%, rgba(29, 158, 117, 0.15), transparent 36%),
+        rgba(255, 255, 255, 0.78) !important;
+    border: 1px solid rgba(29, 158, 117, 0.20) !important;
+    box-shadow: 0 18px 45px rgba(18, 61, 71, 0.08) !important;
+    text-align: right !important;
+    cursor: pointer !important;
+}
+
+.appt-time-launch:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 22px 55px rgba(18, 61, 71, 0.12) !important;
+}
+
+.time-launch-icon {
+    width: 54px !important;
+    height: 54px !important;
+    border-radius: 18px !important;
+    background: linear-gradient(135deg, rgba(226, 249, 242, 0.98), rgba(205, 242, 235, 0.94)) !important;
+    color: var(--appt-primary-dark) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.time-launch-copy small {
+    display: block !important;
+    margin-bottom: 4px !important;
+    color: var(--appt-primary-dark) !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+}
+
+.time-launch-copy strong {
+    display: block !important;
+    color: var(--appt-ink) !important;
+    font-size: 28px !important;
+    line-height: 1 !important;
+    font-weight: 950 !important;
+    letter-spacing: -0.5px !important;
+}
+
+.time-launch-action {
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 16px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(29, 158, 117, 0.12) !important;
+    color: var(--appt-primary-dark) !important;
+}
+
+.time-launch-action svg,
+.time-launch-action i {
+    width: 19px !important;
+    height: 19px !important;
+}
+
+html.dark .appt-time-launch,
+body.dark .appt-time-launch,
+body.dark-mode .appt-time-launch,
+[data-theme="dark"] .appt-time-launch {
+    background:
+        radial-gradient(circle at 88% 18%, rgba(46, 210, 166, 0.14), transparent 38%),
+        rgba(9, 28, 32, 0.88) !important;
+    border-color: rgba(112, 226, 196, 0.18) !important;
+    box-shadow: 0 20px 52px rgba(0, 0, 0, 0.26) !important;
+}
+
+html.dark .time-launch-icon,
+body.dark .time-launch-icon,
+body.dark-mode .time-launch-icon,
+[data-theme="dark"] .time-launch-icon {
+    background: rgba(46, 210, 166, 0.14) !important;
+    color: #d9fff4 !important;
+}
+
+html.dark .time-launch-copy small,
+body.dark .time-launch-copy small,
+body.dark-mode .time-launch-copy small,
+[data-theme="dark"] .time-launch-copy small {
+    color: #7be4c5 !important;
+}
+
+html.dark .time-launch-copy strong,
+body.dark .time-launch-copy strong,
+body.dark-mode .time-launch-copy strong,
+[data-theme="dark"] .time-launch-copy strong {
+    color: var(--appt-dark-text) !important;
+}
+
+html.dark .time-launch-action,
+body.dark .time-launch-action,
+body.dark-mode .time-launch-action,
+[data-theme="dark"] .time-launch-action {
+    background: rgba(46, 210, 166, 0.12) !important;
+    color: #dcfff7 !important;
+}
+
+.appt-time-popover {
+    position: fixed !important;
+    inset: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    z-index: 300 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 24px !important;
+    background: rgba(9, 28, 32, 0.46) !important;
+    backdrop-filter: blur(10px) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: none !important;
+}
+
+.appt-orbit-time-box.is-time-open .appt-time-popover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.appt-orbit-popover-card {
+    width: min(640px, 100%) !important;
+    max-height: min(86vh, 720px) !important;
+    overflow: auto !important;
+    padding: 28px !important;
+    border-radius: 34px !important;
+    background:
+        radial-gradient(circle at 16% 10%, rgba(255,255,255,.95), rgba(255,255,255,.55) 32%, transparent 55%),
+        linear-gradient(180deg, rgba(249, 255, 253, 0.98), rgba(239, 250, 247, 0.98)) !important;
+    border: 1px solid rgba(29, 158, 117, 0.20) !important;
+    box-shadow: 0 32px 90px rgba(0, 0, 0, 0.22) !important;
+}
+
+html.dark .appt-orbit-popover-card,
+body.dark .appt-orbit-popover-card,
+body.dark-mode .appt-orbit-popover-card,
+[data-theme="dark"] .appt-orbit-popover-card {
+    background:
+        radial-gradient(circle at 18% 8%, rgba(68, 236, 190, 0.10), transparent 42%),
+        linear-gradient(180deg, rgba(18, 48, 53, 0.98), rgba(8, 25, 29, 0.98)) !important;
+    border-color: rgba(112, 226, 196, 0.22) !important;
+    color: var(--appt-dark-text) !important;
+    box-shadow: 0 36px 100px rgba(0, 0, 0, 0.55) !important;
+}
+
+.appt-picker-head {
+    margin-bottom: 18px !important;
+}
+
+.appt-picker-head h3 {
+    font-size: clamp(26px, 4vw, 42px) !important;
+    letter-spacing: -1px !important;
+}
+
+html.dark .appt-picker-head h3,
+body.dark .appt-picker-head h3,
+body.dark-mode .appt-picker-head h3,
+[data-theme="dark"] .appt-picker-head h3 {
+    color: var(--appt-dark-text) !important;
+}
+
+.appt-picker-close {
+    width: 46px !important;
+    height: 46px !important;
+    border-radius: 16px !important;
+    color: var(--appt-primary-dark) !important;
+    background: rgba(222, 247, 240, 0.95) !important;
+    border: 1px solid rgba(29, 158, 117, 0.22) !important;
+}
+
+html.dark .appt-picker-close,
+body.dark .appt-picker-close,
+body.dark-mode .appt-picker-close,
+[data-theme="dark"] .appt-picker-close {
+    color: #dffff7 !important;
+    background: rgba(46, 210, 166, 0.12) !important;
+    border-color: rgba(112, 226, 196, 0.20) !important;
+}
+
+.appt-period-tabs {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    margin-bottom: 22px !important;
+    flex-wrap: wrap !important;
+}
+
+.appt-period-tab {
+    min-height: 44px !important;
+    padding: 0 16px !important;
+    border-radius: 999px !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    color: var(--appt-primary-dark) !important;
+    background: rgba(235, 251, 246, 0.9) !important;
+    border: 1px solid rgba(29, 158, 117, 0.22) !important;
+}
+
+.appt-period-tab.is-active {
+    background: linear-gradient(135deg, var(--appt-primary-2), var(--appt-primary-dark)) !important;
+    color: #fff !important;
+    box-shadow: 0 14px 34px rgba(21, 145, 111, 0.22) !important;
+}
+
+html.dark .appt-period-tab,
+body.dark .appt-period-tab,
+body.dark-mode .appt-period-tab,
+[data-theme="dark"] .appt-period-tab {
+    background: rgba(46, 210, 166, 0.10) !important;
+    color: #d8fff4 !important;
+    border-color: rgba(112, 226, 196, 0.18) !important;
+}
+
+html.dark .appt-period-tab.is-active,
+body.dark .appt-period-tab.is-active,
+body.dark-mode .appt-period-tab.is-active,
+[data-theme="dark"] .appt-period-tab.is-active {
+    background: linear-gradient(135deg, #28c99c, #0f8f6d) !important;
+    color: #05231d !important;
+}
+
+.appt-orbit-stage {
+    min-height: 470px !important;
+    display: grid !important;
+    place-items: center !important;
+}
+
+.appt-orbit-panel {
+    width: 100% !important;
+}
+
+.appt-orbit-dial {
+    --orbit-radius: 174px !important;
+    position: relative !important;
+    width: min(450px, calc(100vw - 84px)) !important;
+    height: min(450px, calc(100vw - 84px)) !important;
+    min-width: 330px !important;
+    min-height: 330px !important;
+    margin: 0 auto !important;
+    border-radius: 50% !important;
+    background:
+        radial-gradient(circle at center, rgba(255,255,255,.95) 0 28%, rgba(232, 251, 246, 0.88) 29% 58%, rgba(255,255,255,.56) 59% 100%) !important;
+    border: 1px solid rgba(29, 158, 117, 0.24) !important;
+    box-shadow: inset 0 0 0 22px rgba(255,255,255,0.42), 0 24px 60px rgba(18,61,71,.10) !important;
+}
+
+html.dark .appt-orbit-dial,
+body.dark .appt-orbit-dial,
+body.dark-mode .appt-orbit-dial,
+[data-theme="dark"] .appt-orbit-dial {
+    background:
+        radial-gradient(circle at center, rgba(16, 44, 49, 0.98) 0 28%, rgba(18, 62, 61, 0.72) 29% 58%, rgba(8, 27, 31, 0.72) 59% 100%) !important;
+    border-color: rgba(112, 226, 196, 0.25) !important;
+    box-shadow: inset 0 0 0 22px rgba(255,255,255,0.025), 0 26px 70px rgba(0,0,0,.32) !important;
+}
+
+.appt-orbit-center {
+    width: 185px !important;
+    height: 185px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    background: rgba(255,255,255,0.90) !important;
+    border: 1px solid rgba(29, 158, 117, 0.16) !important;
+    box-shadow: 0 16px 42px rgba(18,61,71,.08) !important;
+}
+
+.appt-orbit-center strong {
+    font-size: 33px !important;
+    line-height: 1 !important;
+}
+
+html.dark .appt-orbit-center,
+body.dark .appt-orbit-center,
+body.dark-mode .appt-orbit-center,
+[data-theme="dark"] .appt-orbit-center {
+    background: rgba(8, 28, 32, 0.92) !important;
+    border-color: rgba(112, 226, 196, 0.17) !important;
+    box-shadow: 0 18px 48px rgba(0,0,0,.25) !important;
+}
+
+html.dark .appt-orbit-center strong,
+body.dark .appt-orbit-center strong,
+body.dark-mode .appt-orbit-center strong,
+[data-theme="dark"] .appt-orbit-center strong {
+    color: var(--appt-dark-text) !important;
+}
+
+.orbit-slot.slot-btn {
+    width: 94px !important;
+    min-height: 48px !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,0.92) !important;
+    color: var(--appt-ink) !important;
+    border: 1px solid rgba(29, 158, 117, 0.22) !important;
+    box-shadow: 0 14px 34px rgba(18,61,71,.10) !important;
+}
+
+.orbit-slot.slot-btn::before {
+    width: 8px !important;
+    height: 8px !important;
+    background: #2bb896 !important;
+    box-shadow: none !important;
+}
+
+.orbit-slot.slot-btn.is-active {
+    background: linear-gradient(135deg, var(--appt-primary-2), var(--appt-primary-dark)) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+html.dark .orbit-slot.slot-btn,
+body.dark .orbit-slot.slot-btn,
+body.dark-mode .orbit-slot.slot-btn,
+[data-theme="dark"] .orbit-slot.slot-btn {
+    background: rgba(11, 37, 42, 0.96) !important;
+    color: var(--appt-dark-text) !important;
+    border-color: rgba(112, 226, 196, 0.20) !important;
+    box-shadow: 0 16px 38px rgba(0,0,0,.24) !important;
+}
+
+html.dark .orbit-slot.slot-btn.is-active,
+body.dark .orbit-slot.slot-btn.is-active,
+body.dark-mode .orbit-slot.slot-btn.is-active,
+[data-theme="dark"] .orbit-slot.slot-btn.is-active {
+    background: linear-gradient(135deg, #2bd0a4, #10906d) !important;
+    color: #05251d !important;
+}
+
+.appt-waiting-box {
+    background: linear-gradient(135deg, rgba(235, 251, 246, 0.92), rgba(247, 252, 250, 0.92)) !important;
+    border-color: rgba(29, 158, 117, 0.17) !important;
+}
+
+html.dark .appt-waiting-box,
+body.dark .appt-waiting-box,
+body.dark-mode .appt-waiting-box,
+[data-theme="dark"] .appt-waiting-box {
+    background: linear-gradient(135deg, rgba(46, 210, 166, 0.11), rgba(12, 34, 38, 0.92)) !important;
+    border-color: rgba(112, 226, 196, 0.20) !important;
+}
+
+@media (max-width: 720px) {
+    .appt-date-field .appt-calendar-card,
+    .appt-month-popover {
+        position: fixed !important;
+        inset: auto 12px 12px 12px !important;
+        width: auto !important;
+        max-height: 78vh !important;
+        overflow: auto !important;
+        transform: translateY(24px) scale(1) !important;
+    }
+
+    [data-appt-form].is-calendar-open .appt-date-field .appt-calendar-card,
+    .appt-month-checker.is-open .appt-month-popover {
+        transform: translateY(0) scale(1) !important;
+    }
+
+    .appt-date-field .appt-calendar-card::before,
+    .appt-month-popover::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(7, 20, 22, 0.34);
+        z-index: -1;
+    }
+
+    .appt-time-launch {
+        width: 100% !important;
+    }
+
+    .appt-orbit-popover-card {
+        padding: 22px 16px !important;
+        border-radius: 28px !important;
+    }
+
+    .appt-orbit-stage {
+        min-height: 430px !important;
+    }
+
+    .appt-orbit-dial {
+        --orbit-radius: 135px !important;
+        width: min(360px, calc(100vw - 56px)) !important;
+        height: min(360px, calc(100vw - 56px)) !important;
+        min-width: 300px !important;
+        min-height: 300px !important;
+    }
+
+    .appt-orbit-center {
+        width: 142px !important;
+        height: 142px !important;
+    }
+
+    .appt-orbit-center strong {
+        font-size: 22px !important;
+    }
+
+    .orbit-slot.slot-btn {
+        width: 78px !important;
+        min-height: 42px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* =========================================================
+   Etzan appointments v11
+   - remove page background behind content
+   - modal calendar for date + month viewer
+   - time is selected from one clock icon / field
+   - stronger dark mode and mobile polish
+   ========================================================= */
+
+.appt-page {
+    background: transparent !important;
+    isolation: isolate;
+}
+
+html.dark .appt-page,
+body.dark .appt-page,
+body.dark-mode .appt-page,
+[data-theme="dark"] .appt-page {
+    background: transparent !important;
+}
+
+/* Less boxed page feel, keep content cards polished. */
+.appt-layout {
+    align-items: start !important;
+}
+
+.appt-side-card {
+    display: none !important;
+}
+
+.appt-form-card,
+.appt-current-card {
+    overflow: visible !important;
+}
+
+html.dark .appt-form-card,
+html.dark .appt-current-card,
+html.dark .appt-locked-card,
+body.dark .appt-form-card,
+body.dark .appt-current-card,
+body.dark .appt-locked-card,
+body.dark-mode .appt-form-card,
+body.dark-mode .appt-current-card,
+body.dark-mode .appt-locked-card,
+[data-theme="dark"] .appt-form-card,
+[data-theme="dark"] .appt-current-card,
+[data-theme="dark"] .appt-locked-card {
+    background: rgba(10, 31, 35, 0.94) !important;
+    border-color: rgba(102, 235, 198, 0.18) !important;
+    box-shadow: 0 24px 62px rgba(0, 0, 0, 0.34) !important;
+}
+
+html.dark .appt-form-card::before,
+html.dark .appt-current-card::before,
+body.dark .appt-form-card::before,
+body.dark .appt-current-card::before,
+body.dark-mode .appt-form-card::before,
+body.dark-mode .appt-current-card::before,
+[data-theme="dark"] .appt-form-card::before,
+[data-theme="dark"] .appt-current-card::before {
+    display: none !important;
+}
+
+/* Make all dark inputs / notes readable, no white/gray blocks. */
+html.dark .appt-input,
+html.dark .appt-field textarea,
+html.dark .appt-current-status,
+html.dark .appt-current-grid > div,
+html.dark .appt-current-note,
+html.dark .appt-waiting-box,
+html.dark .appt-alert,
+body.dark .appt-input,
+body.dark .appt-field textarea,
+body.dark .appt-current-status,
+body.dark .appt-current-grid > div,
+body.dark .appt-current-note,
+body.dark .appt-waiting-box,
+body.dark .appt-alert,
+body.dark-mode .appt-input,
+body.dark-mode .appt-field textarea,
+body.dark-mode .appt-current-status,
+body.dark-mode .appt-current-grid > div,
+body.dark-mode .appt-current-note,
+body.dark-mode .appt-waiting-box,
+body.dark-mode .appt-alert,
+[data-theme="dark"] .appt-input,
+[data-theme="dark"] .appt-field textarea,
+[data-theme="dark"] .appt-current-status,
+[data-theme="dark"] .appt-current-grid > div,
+[data-theme="dark"] .appt-current-note,
+[data-theme="dark"] .appt-waiting-box,
+[data-theme="dark"] .appt-alert {
+    background: rgba(8, 27, 31, 0.88) !important;
+    border-color: rgba(105, 232, 199, 0.16) !important;
+    color: #eefdf9 !important;
+}
+
+html.dark .appt-current-note *,
+html.dark .appt-waiting-box *,
+html.dark .appt-current-grid *,
+body.dark .appt-current-note *,
+body.dark .appt-waiting-box *,
+body.dark .appt-current-grid *,
+body.dark-mode .appt-current-note *,
+body.dark-mode .appt-waiting-box *,
+body.dark-mode .appt-current-grid *,
+[data-theme="dark"] .appt-current-note *,
+[data-theme="dark"] .appt-waiting-box *,
+[data-theme="dark"] .appt-current-grid * {
+    color: inherit !important;
+}
+
+html.dark .appt-field textarea::placeholder,
+body.dark .appt-field textarea::placeholder,
+body.dark-mode .appt-field textarea::placeholder,
+[data-theme="dark"] .appt-field textarea::placeholder {
+    color: rgba(222, 247, 242, 0.56) !important;
+}
+
+/* Date field: show only icon + date/placeholder. No extra word. */
+.appt-date-trigger small,
+.appt-date-trigger > small {
+    display: none !important;
+}
+
+.appt-date-trigger {
+    min-height: 58px !important;
+    display: grid !important;
+    grid-template-columns: 42px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 0 12px 0 16px !important;
+    text-align: start !important;
+}
+
+.appt-date-trigger::after {
+    display: none !important;
+}
+
+.appt-date-trigger > i,
+.appt-date-trigger > svg {
+    width: 42px !important;
+    height: 42px !important;
+    padding: 11px !important;
+    border-radius: 16px !important;
+    background: rgba(29, 158, 117, 0.12) !important;
+    color: var(--appt-primary-dark) !important;
+}
+
+.appt-date-value {
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    color: var(--appt-ink) !important;
+}
+
+html.dark .appt-date-trigger > i,
+html.dark .appt-date-trigger > svg,
+body.dark .appt-date-trigger > i,
+body.dark .appt-date-trigger > svg,
+body.dark-mode .appt-date-trigger > i,
+body.dark-mode .appt-date-trigger > svg,
+[data-theme="dark"] .appt-date-trigger > i,
+[data-theme="dark"] .appt-date-trigger > svg {
+    background: rgba(50, 214, 169, 0.14) !important;
+    color: #dffff7 !important;
+}
+
+html.dark .appt-date-value,
+body.dark .appt-date-value,
+body.dark-mode .appt-date-value,
+[data-theme="dark"] .appt-date-value {
+    color: #eefdf9 !important;
+}
+
+/* Calendar opens as a true modal, not over text. */
+[data-appt-form].is-calendar-open::before,
+.appt-month-checker.is-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 250;
+    background: rgba(6, 21, 24, 0.52);
+    backdrop-filter: blur(10px);
+}
+
+.appt-date-field .appt-calendar-card,
+.appt-month-popover {
+    position: fixed !important;
+    inset: 50% auto auto 50% !important;
+    width: min(620px, calc(100vw - 34px)) !important;
+    max-height: min(82vh, 760px) !important;
+    overflow: auto !important;
+    z-index: 260 !important;
+    padding: clamp(18px, 3vw, 28px) !important;
+    border-radius: 34px !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translate(-50%, -48%) scale(0.96) !important;
+    transition: opacity .22s ease, transform .22s ease, visibility .22s ease !important;
+    background:
+        radial-gradient(circle at 10% 0%, rgba(255,255,255,.98), rgba(255,255,255,.58) 34%, transparent 58%),
+        linear-gradient(180deg, rgba(250,255,253,.98), rgba(239,250,247,.98)) !important;
+    border: 1px solid rgba(29, 158, 117, 0.20) !important;
+    box-shadow: 0 34px 100px rgba(7, 28, 36, 0.28) !important;
+}
+
+[data-appt-form].is-calendar-open .appt-date-field .appt-calendar-card,
+.appt-month-checker.is-open .appt-month-popover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+
+html.dark .appt-date-field .appt-calendar-card,
+html.dark .appt-month-popover,
+body.dark .appt-date-field .appt-calendar-card,
+body.dark .appt-month-popover,
+body.dark-mode .appt-date-field .appt-calendar-card,
+body.dark-mode .appt-month-popover,
+[data-theme="dark"] .appt-date-field .appt-calendar-card,
+[data-theme="dark"] .appt-month-popover {
+    background:
+        radial-gradient(circle at 12% 0%, rgba(83, 236, 192, 0.10), transparent 45%),
+        linear-gradient(180deg, rgba(15, 45, 50, 0.98), rgba(7, 25, 29, 0.98)) !important;
+    border-color: rgba(105, 232, 199, 0.23) !important;
+    box-shadow: 0 40px 110px rgba(0, 0, 0, 0.62) !important;
+}
+
+.appt-calendar-head {
+    align-items: flex-start !important;
+    gap: 14px !important;
+    margin-bottom: 18px !important;
+}
+
+.appt-calendar-head span {
+    color: var(--appt-primary-dark) !important;
+    font-weight: 900 !important;
+}
+
+.appt-calendar-head h3 {
+    font-size: clamp(25px, 4vw, 38px) !important;
+    color: var(--appt-ink) !important;
+}
+
+html.dark .appt-calendar-head span,
+html.dark .appt-calendar-head h3,
+html.dark .appt-calendar-head small,
+html.dark .appt-calendar-weekdays span,
+body.dark .appt-calendar-head span,
+body.dark .appt-calendar-head h3,
+body.dark .appt-calendar-head small,
+body.dark .appt-calendar-weekdays span,
+body.dark-mode .appt-calendar-head span,
+body.dark-mode .appt-calendar-head h3,
+body.dark-mode .appt-calendar-head small,
+body.dark-mode .appt-calendar-weekdays span,
+[data-theme="dark"] .appt-calendar-head span,
+[data-theme="dark"] .appt-calendar-head h3,
+[data-theme="dark"] .appt-calendar-head small,
+[data-theme="dark"] .appt-calendar-weekdays span {
+    color: #eafff9 !important;
+}
+
+.appt-calendar-grid {
+    gap: 10px !important;
+}
+
+.appt-calendar-day {
+    min-height: 50px !important;
+    border-radius: 16px !important;
+    font-weight: 900 !important;
+}
+
+html.dark .appt-calendar-day,
+body.dark .appt-calendar-day,
+body.dark-mode .appt-calendar-day,
+[data-theme="dark"] .appt-calendar-day {
+    background: rgba(8, 29, 33, 0.88) !important;
+    color: #edfdfa !important;
+    border-color: rgba(105, 232, 199, 0.13) !important;
+}
+
+/* Month calendar button location: neat inside the current card top. */
+.appt-current-card {
+    padding-top: 74px !important;
+}
+
+.appt-current-card .appt-month-checker {
+    position: absolute !important;
+    inset-block-start: 24px !important;
+    inset-inline-start: 24px !important;
+    margin: 0 !important;
+    z-index: 90 !important;
+}
+
+.appt-month-trigger {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 42px !important;
+    padding: 0 15px !important;
+    white-space: nowrap !important;
+}
+
+.appt-month-popover .appt-calendar-grid.is-viewer .appt-calendar-day.is-has-appointment {
+    box-shadow: inset 0 0 0 2px rgba(29, 158, 117, 0.36) !important;
+}
+
+.appt-month-result {
+    margin-top: 16px !important;
+    border-radius: 18px !important;
+}
+
+/* Time launch: one clear icon field. The icon is the action. */
+.appt-orbit-time-box {
+    margin-top: 24px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.appt-orbit-time-box .appt-subhead {
+    margin-bottom: 12px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid var(--appt-line) !important;
+}
+
+.appt-time-launch-row {
+    display: flex !important;
+    justify-content: flex-start !important;
+}
+
+.appt-time-launch {
+    width: min(430px, 100%) !important;
+    min-height: 70px !important;
+    display: grid !important;
+    grid-template-columns: 58px minmax(0, 1fr) !important;
+    gap: 14px !important;
+    align-items: center !important;
+    padding: 10px 12px 10px 18px !important;
+    border-radius: 24px !important;
+    text-align: start !important;
+    cursor: pointer !important;
+    background: rgba(255, 255, 255, 0.82) !important;
+    border: 1px solid rgba(29, 158, 117, 0.20) !important;
+    box-shadow: 0 16px 42px rgba(18, 61, 71, 0.08) !important;
+}
+
+.appt-time-launch:hover {
+    transform: translateY(-2px) !important;
+    border-color: rgba(29, 158, 117, 0.36) !important;
+}
+
+.time-launch-icon {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 18px !important;
+    display: grid !important;
+    place-items: center !important;
+    background: linear-gradient(135deg, var(--appt-primary-2), var(--appt-primary-dark)) !important;
+    color: #fff !important;
+    box-shadow: 0 14px 30px rgba(21, 145, 111, 0.25) !important;
+}
+
+.time-launch-copy small {
+    display: block !important;
+    margin-bottom: 5px !important;
+    color: var(--appt-primary-dark) !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+}
+
+.time-launch-copy strong {
+    display: block !important;
+    font-size: clamp(23px, 4vw, 31px) !important;
+    line-height: 1 !important;
+    font-weight: 950 !important;
+    color: var(--appt-ink) !important;
+}
+
+.time-launch-action {
+    display: none !important;
+}
+
+html.dark .appt-time-launch,
+body.dark .appt-time-launch,
+body.dark-mode .appt-time-launch,
+[data-theme="dark"] .appt-time-launch {
+    background: rgba(8, 28, 32, 0.90) !important;
+    border-color: rgba(105, 232, 199, 0.19) !important;
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.26) !important;
+}
+
+html.dark .time-launch-copy strong,
+body.dark .time-launch-copy strong,
+body.dark-mode .time-launch-copy strong,
+[data-theme="dark"] .time-launch-copy strong {
+    color: #eefdf9 !important;
+}
+
+html.dark .time-launch-copy small,
+body.dark .time-launch-copy small,
+body.dark-mode .time-launch-copy small,
+[data-theme="dark"] .time-launch-copy small {
+    color: #75e4c4 !important;
+}
+
+/* Time modal as a polished centered clock picker. */
+.appt-time-popover {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 320 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 22px !important;
+    background: rgba(6, 21, 24, 0.54) !important;
+    backdrop-filter: blur(10px) !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+.appt-orbit-time-box.is-time-open .appt-time-popover {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.appt-orbit-popover-card {
+    width: min(650px, 100%) !important;
+    max-height: min(86vh, 760px) !important;
+    overflow: auto !important;
+    padding: clamp(20px, 3vw, 30px) !important;
+    border-radius: 34px !important;
+}
+
+.appt-orbit-stage {
+    min-height: 460px !important;
+}
+
+.appt-orbit-dial {
+    --orbit-radius: 172px !important;
+    width: min(440px, calc(100vw - 82px)) !important;
+    height: min(440px, calc(100vw - 82px)) !important;
+    min-width: 330px !important;
+    min-height: 330px !important;
+}
+
+.appt-orbit-center {
+    width: 176px !important;
+    height: 176px !important;
+}
+
+.orbit-slot.slot-btn {
+    cursor: pointer !important;
+    user-select: none !important;
+    touch-action: manipulation !important;
+}
+
+.orbit-slot.slot-btn:hover {
+    transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-1 * var(--orbit-radius))) rotate(calc(-1 * var(--slot-angle))) scale(1.08) !important;
+}
+
+.orbit-slot.slot-btn.is-active {
+    transform: translate(-50%, -50%) rotate(var(--slot-angle)) translateY(calc(-1 * var(--orbit-radius))) rotate(calc(-1 * var(--slot-angle))) scale(1.14) !important;
+}
+
+/* Make selects/dropdowns better in dark. */
+html.dark select,
+html.dark option,
+body.dark select,
+body.dark option,
+body.dark-mode select,
+body.dark-mode option,
+[data-theme="dark"] select,
+[data-theme="dark"] option {
+    background: #0a2227 !important;
+    color: #eefdf9 !important;
+}
+
+@media (max-width: 780px) {
+    .appt-page {
+        width: 100% !important;
+        padding: 14px 12px 34px !important;
+    }
+
+    .appt-hero {
+        min-height: auto !important;
+        padding: 24px 18px !important;
+        border-radius: 28px !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .appt-doctor-card {
+        width: 100% !important;
+    }
+
+    .appt-form-card,
+    .appt-current-card {
+        padding: 22px 16px !important;
+        border-radius: 28px !important;
+    }
+
+    .appt-current-card {
+        padding-top: 84px !important;
+    }
+
+    .appt-current-card .appt-month-checker {
+        inset-block-start: 18px !important;
+        inset-inline-start: 16px !important;
+    }
+
+    .appt-date-field .appt-calendar-card,
+    .appt-month-popover {
+        inset: auto 10px 10px 10px !important;
+        width: auto !important;
+        max-height: 82vh !important;
+        transform: translateY(24px) scale(1) !important;
+        border-radius: 28px 28px 24px 24px !important;
+    }
+
+    [data-appt-form].is-calendar-open .appt-date-field .appt-calendar-card,
+    .appt-month-checker.is-open .appt-month-popover {
+        transform: translateY(0) scale(1) !important;
+    }
+
+    .appt-calendar-grid {
+        gap: 7px !important;
+    }
+
+    .appt-calendar-day {
+        min-height: 42px !important;
+        border-radius: 13px !important;
+        font-size: 13px !important;
+    }
+
+    .appt-time-launch {
+        width: 100% !important;
+        grid-template-columns: 54px minmax(0, 1fr) !important;
+    }
+
+    .appt-time-popover {
+        align-items: flex-end !important;
+        padding: 10px !important;
+    }
+
+    .appt-orbit-popover-card {
+        width: 100% !important;
+        max-height: 88vh !important;
+        border-radius: 30px 30px 24px 24px !important;
+    }
+
+    .appt-period-tabs {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    .appt-period-tab {
+        min-width: 0 !important;
+        padding: 0 8px !important;
+        font-size: 12px !important;
+    }
+
+    .appt-orbit-stage {
+        min-height: 385px !important;
+    }
+
+    .appt-orbit-dial {
+        --orbit-radius: 124px !important;
+        width: min(330px, calc(100vw - 48px)) !important;
+        height: min(330px, calc(100vw - 48px)) !important;
+        min-width: 286px !important;
+        min-height: 286px !important;
+    }
+
+    .appt-orbit-center {
+        width: 132px !important;
+        height: 132px !important;
+    }
+
+    .appt-orbit-center strong {
+        font-size: 22px !important;
+    }
+
+    .orbit-slot.slot-btn {
+        width: 72px !important;
+        min-width: 72px !important;
+        min-height: 38px !important;
+        font-size: 12px !important;
+        padding: 0 8px !important;
+    }
+}
+
+@media (max-width: 430px) {
+    .appt-period-tabs {
+        grid-template-columns: 1fr !important;
+    }
+
+    .appt-orbit-dial {
+        --orbit-radius: 108px !important;
+        min-width: 260px !important;
+        min-height: 260px !important;
+    }
+
+    .appt-orbit-center {
+        width: 118px !important;
+        height: 118px !important;
+    }
+
+    .orbit-slot.slot-btn {
+        width: 66px !important;
+        min-width: 66px !important;
+    }
+}
+
+
+/* =========================================================
+   Etzan appointments v12 final polish
+   - hero and main card same width
+   - cleaner modal calendar with close button
+   - dark mode aligned with Etzan dashboard
+   - fixed clock picker trigger + stable time selection
+   ========================================================= */
+
+.appt-page {
+    width: min(1120px, calc(100% - 32px)) !important;
+    margin-inline: auto !important;
+    background: transparent !important;
+}
+
+.appt-hero,
+.appt-layout,
+.appt-alert,
+.appt-locked-card {
+    width: 100% !important;
+    max-width: 1120px !important;
+    margin-inline: auto !important;
+}
+
+.appt-form-card,
+.appt-current-card {
+    width: 100% !important;
+    max-width: 1120px !important;
+    margin-inline: auto !important;
+}
+
+.appt-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+}
+
+/* Make current-month tool part of the appointment card, not floating in a weird spot. */
+.appt-current-card {
+    padding-top: 30px !important;
+}
+
+.appt-current-card .appt-month-checker {
+    position: static !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    margin: 16px 0 18px !important;
+    z-index: auto !important;
+}
+
+.appt-month-trigger {
+    min-height: 46px !important;
+    border-radius: 999px !important;
+    padding: 0 18px !important;
+    background: linear-gradient(135deg, rgba(235, 251, 246, .98), rgba(245, 252, 250, .98)) !important;
+    border: 1px solid rgba(29, 158, 117, .22) !important;
+    color: var(--appt-primary-dark) !important;
+    box-shadow: 0 12px 26px rgba(18, 61, 71, .07) !important;
+}
+
+/* Modal overlay and card: calendar appears centered and polished. */
+[data-appt-form].is-calendar-open::before,
+.appt-month-checker.is-open::before {
+    background: rgba(8, 26, 30, .46) !important;
+    backdrop-filter: blur(14px) !important;
+}
+
+.appt-date-field .appt-calendar-card,
+.appt-month-popover {
+    width: min(680px, calc(100vw - 36px)) !important;
+    max-height: min(84vh, 780px) !important;
+    padding: clamp(22px, 3.5vw, 34px) !important;
+    border-radius: 34px !important;
+    background:
+        radial-gradient(circle at 18% 0%, rgba(255,255,255,.98), rgba(255,255,255,.58) 28%, transparent 56%),
+        linear-gradient(180deg, rgba(252, 255, 254, .98), rgba(238, 250, 247, .98)) !important;
+    border: 1px solid rgba(29, 158, 117, .20) !important;
+    box-shadow: 0 36px 110px rgba(5, 34, 42, .28) !important;
+}
+
+.appt-calendar-head {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+}
+
+.appt-calendar-close {
+    width: 44px !important;
+    height: 44px !important;
+    flex: 0 0 44px !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    border: 1px solid rgba(29, 158, 117, .20) !important;
+    border-radius: 16px !important;
+    background: rgba(232, 250, 245, .92) !important;
+    color: var(--appt-primary-dark) !important;
+    cursor: pointer !important;
+    transition: .2s ease !important;
+}
+
+.appt-calendar-close:hover {
+    transform: translateY(-2px) !important;
+    background: rgba(214, 245, 237, .98) !important;
+}
+
+.appt-calendar-close svg,
+.appt-calendar-close i {
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.appt-calendar-weekdays {
+    margin-bottom: 10px !important;
+}
+
+.appt-calendar-weekdays span {
+    border-radius: 14px !important;
+    background: rgba(235, 251, 246, .82) !important;
+    min-height: 34px !important;
+    display: grid !important;
+    place-items: center !important;
+}
+
+.appt-calendar-grid {
+    gap: 11px !important;
+}
+
+.appt-calendar-day {
+    min-height: 54px !important;
+    border-radius: 18px !important;
+    background: rgba(255,255,255,.72) !important;
+}
+
+.appt-calendar-day.is-selected {
+    background: linear-gradient(135deg, var(--appt-primary-2), var(--appt-primary-dark)) !important;
+    color: #fff !important;
+    box-shadow: 0 14px 32px rgba(21, 145, 111, .22) !important;
+}
+
+/* Date input stays clean: only date and calendar icon. */
+.appt-date-trigger {
+    grid-template-columns: minmax(0, 1fr) 46px !important;
+    direction: rtl !important;
+}
+
+.appt-date-trigger > i,
+.appt-date-trigger > svg {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+}
+
+.appt-date-value {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+}
+
+/* Clock trigger: icon opens the clock, selected time appears after choosing. */
+.appt-orbit-time-box .appt-subhead strong {
+    font-size: clamp(26px, 3vw, 38px) !important;
+}
+
+.appt-time-launch-row {
+    justify-content: flex-start !important;
+}
+
+.appt-time-launch {
+    width: min(420px, 100%) !important;
+    grid-template-columns: minmax(0, 1fr) 56px !important;
+    direction: rtl !important;
+    border-radius: 24px !important;
+    background: rgba(255,255,255,.78) !important;
+    overflow: hidden !important;
+}
+
+.appt-time-launch::before,
+.appt-time-launch::after {
+    display: none !important;
+    content: none !important;
+}
+
+.time-launch-icon {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 18px !important;
+}
+
+.time-launch-copy {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+}
+
+.time-launch-action {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.appt-orbit-popover-card {
+    width: min(700px, 100%) !important;
+    background:
+        radial-gradient(circle at 14% 0%, rgba(255,255,255,.94), transparent 42%),
+        linear-gradient(180deg, rgba(250,255,253,.98), rgba(238,250,247,.98)) !important;
+}
+
+/* Dark mode: no white/gray blocks, cleaner contrast. */
+html.dark .appt-hero,
+body.dark .appt-hero,
+body.dark-mode .appt-hero,
+[data-theme="dark"] .appt-hero,
+html.dark .appt-form-card,
+html.dark .appt-current-card,
+body.dark .appt-form-card,
+body.dark .appt-current-card,
+body.dark-mode .appt-form-card,
+body.dark-mode .appt-current-card,
+[data-theme="dark"] .appt-form-card,
+[data-theme="dark"] .appt-current-card {
+    background:
+        radial-gradient(circle at 12% 0%, rgba(57, 210, 169, .08), transparent 38%),
+        linear-gradient(180deg, rgba(11, 35, 40, .96), rgba(7, 24, 28, .96)) !important;
+    border-color: rgba(105, 232, 199, .18) !important;
+    box-shadow: 0 24px 70px rgba(0,0,0,.34) !important;
+}
+
+html.dark .appt-date-field .appt-calendar-card,
+html.dark .appt-month-popover,
+html.dark .appt-orbit-popover-card,
+body.dark .appt-date-field .appt-calendar-card,
+body.dark .appt-month-popover,
+body.dark .appt-orbit-popover-card,
+body.dark-mode .appt-date-field .appt-calendar-card,
+body.dark-mode .appt-month-popover,
+body.dark-mode .appt-orbit-popover-card,
+[data-theme="dark"] .appt-date-field .appt-calendar-card,
+[data-theme="dark"] .appt-month-popover,
+[data-theme="dark"] .appt-orbit-popover-card {
+    background:
+        radial-gradient(circle at 16% 0%, rgba(68, 236, 190, .12), transparent 44%),
+        linear-gradient(180deg, rgba(13, 45, 50, .98), rgba(5, 22, 26, .98)) !important;
+    border-color: rgba(105, 232, 199, .24) !important;
+    box-shadow: 0 42px 120px rgba(0,0,0,.64) !important;
+}
+
+html.dark .appt-calendar-weekdays span,
+body.dark .appt-calendar-weekdays span,
+body.dark-mode .appt-calendar-weekdays span,
+[data-theme="dark"] .appt-calendar-weekdays span {
+    background: rgba(48, 219, 174, .10) !important;
+    color: #cffff2 !important;
+}
+
+html.dark .appt-calendar-day,
+body.dark .appt-calendar-day,
+body.dark-mode .appt-calendar-day,
+[data-theme="dark"] .appt-calendar-day {
+    background: rgba(8, 31, 35, .90) !important;
+    border-color: rgba(105, 232, 199, .14) !important;
+    color: #effdfa !important;
+}
+
+html.dark .appt-calendar-close,
+body.dark .appt-calendar-close,
+body.dark-mode .appt-calendar-close,
+[data-theme="dark"] .appt-calendar-close,
+html.dark .appt-month-trigger,
+body.dark .appt-month-trigger,
+body.dark-mode .appt-month-trigger,
+[data-theme="dark"] .appt-month-trigger {
+    background: rgba(45, 211, 166, .13) !important;
+    border-color: rgba(105, 232, 199, .24) !important;
+    color: #eafff9 !important;
+}
+
+html.dark .appt-time-launch,
+body.dark .appt-time-launch,
+body.dark-mode .appt-time-launch,
+[data-theme="dark"] .appt-time-launch {
+    background: rgba(8, 29, 33, .90) !important;
+    border-color: rgba(105, 232, 199, .20) !important;
+    box-shadow: 0 18px 46px rgba(0,0,0,.28) !important;
+}
+
+html.dark .appt-current-note,
+html.dark .appt-field textarea,
+html.dark .appt-input,
+body.dark .appt-current-note,
+body.dark .appt-field textarea,
+body.dark .appt-input,
+body.dark-mode .appt-current-note,
+body.dark-mode .appt-field textarea,
+body.dark-mode .appt-input,
+[data-theme="dark"] .appt-current-note,
+[data-theme="dark"] .appt-field textarea,
+[data-theme="dark"] .appt-input {
+    background: rgba(7, 26, 30, .92) !important;
+    border-color: rgba(105, 232, 199, .18) !important;
+    color: #effdfa !important;
+}
+
+@media (max-width: 780px) {
+    .appt-page {
+        width: min(100% - 20px, 1120px) !important;
+        padding: 12px 0 34px !important;
+    }
+
+    .appt-hero,
+    .appt-form-card,
+    .appt-current-card {
+        border-radius: 26px !important;
+    }
+
+    .appt-date-field .appt-calendar-card,
+    .appt-month-popover,
+    .appt-orbit-popover-card {
+        width: auto !important;
+        inset: auto 10px 10px 10px !important;
+        max-height: 86vh !important;
+        border-radius: 28px 28px 22px 22px !important;
+        transform: translateY(24px) scale(1) !important;
+    }
+
+    [data-appt-form].is-calendar-open .appt-date-field .appt-calendar-card,
+    .appt-month-checker.is-open .appt-month-popover {
+        transform: translateY(0) scale(1) !important;
+    }
+
+    .appt-time-popover {
+        align-items: flex-end !important;
+        padding: 10px !important;
+    }
+
+    .appt-calendar-grid {
+        gap: 7px !important;
+    }
+
+    .appt-calendar-day {
+        min-height: 42px !important;
+        border-radius: 14px !important;
+    }
+
+    .appt-time-launch {
+        width: 100% !important;
+        min-height: 68px !important;
+    }
+}
+
+/* =========================================================
+   Etzan appointments v13 fixes
+   - Month calendar button moved to the top tools area
+   - Dark colors are Etzan teal instead of gray
+   - Hide ugly native scrollbars inside notes/modals
+   - Calendar modal has dark teal overlay and cleaner contrast
+   ========================================================= */
+
+/* Keep the page background clean in dark mode, including the empty area below content. */
+html.dark,
+body.dark,
+body.dark-mode,
+[data-theme="dark"] {
+    background: #061416 !important;
+}
+
+html.dark body,
+body.dark,
+body.dark-mode,
+body:has(.appt-page) {
+    scrollbar-color: rgba(105, 232, 199, .22) transparent;
+}
+
+/* Hide the ugly white scrollbar shown inside textarea and appointment modals. */
+.appt-field textarea,
+.appt-orbit-popover-card,
+.appt-date-field .appt-calendar-card,
+.appt-month-popover {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+}
+
+.appt-field textarea::-webkit-scrollbar,
+.appt-orbit-popover-card::-webkit-scrollbar,
+.appt-date-field .appt-calendar-card::-webkit-scrollbar,
+.appt-month-popover::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+}
+
+.appt-field textarea {
+    resize: none !important;
+    overflow: auto !important;
+}
+
+/* Put the monthly calendar action in the card header, not floating in the middle. */
+.appt-card-head-tools {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    flex: 0 0 auto !important;
+}
+
+.appt-card-head-tools .appt-month-checker {
+    position: relative !important;
+    inset: auto !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 120 !important;
+}
+
+.appt-current-card .appt-month-checker {
+    position: relative !important;
+    inset: auto !important;
+    width: auto !important;
+    margin: 0 !important;
+}
+
+.appt-card-head-tools .appt-month-trigger,
+.appt-month-trigger {
+    min-height: 44px !important;
+    padding: 0 17px !important;
+    border-radius: 999px !important;
+    background: linear-gradient(135deg, rgba(33, 184, 142, .16), rgba(77, 168, 218, .10)) !important;
+    border: 1px solid rgba(29, 158, 117, .26) !important;
+    color: var(--appt-primary-dark) !important;
+    box-shadow: none !important;
+}
+
+.appt-card-head-tools .appt-month-trigger:hover,
+.appt-month-trigger:hover {
+    transform: translateY(-2px) !important;
+    background: linear-gradient(135deg, rgba(33, 184, 142, .23), rgba(77, 168, 218, .14)) !important;
+}
+
+html.dark .appt-card-head-tools .appt-month-trigger,
+html.dark .appt-month-trigger,
+body.dark .appt-card-head-tools .appt-month-trigger,
+body.dark .appt-month-trigger,
+body.dark-mode .appt-card-head-tools .appt-month-trigger,
+body.dark-mode .appt-month-trigger,
+[data-theme="dark"] .appt-card-head-tools .appt-month-trigger,
+[data-theme="dark"] .appt-month-trigger {
+    background: linear-gradient(135deg, rgba(46, 210, 166, .18), rgba(77, 168, 218, .08)) !important;
+    border-color: rgba(105, 232, 199, .30) !important;
+    color: #dffff7 !important;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, .20) !important;
+}
+
+.appt-head-status-icon {
+    width: 44px !important;
+    height: 44px !important;
+    display: inline-grid !important;
+    place-items: center !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(29, 158, 117, .22) !important;
+    background: rgba(29, 158, 117, .12) !important;
+    color: var(--appt-primary) !important;
+}
+
+.appt-head-status-icon svg,
+.appt-head-status-icon i {
+    width: 19px !important;
+    height: 19px !important;
+}
+
+html.dark .appt-head-status-icon,
+body.dark .appt-head-status-icon,
+body.dark-mode .appt-head-status-icon,
+[data-theme="dark"] .appt-head-status-icon {
+    background: rgba(46, 210, 166, .13) !important;
+    border-color: rgba(105, 232, 199, .24) !important;
+    color: #cffff2 !important;
+}
+
+/* Teal overlay, not gray. */
+[data-appt-form].is-calendar-open::before,
+.appt-month-checker.is-open::before {
+    background:
+        radial-gradient(circle at 28% 16%, rgba(46, 210, 166, .14), transparent 34%),
+        rgba(2, 17, 20, .70) !important;
+    backdrop-filter: blur(16px) saturate(120%) !important;
+}
+
+/* Month modal looks intentional in dark mode. */
+.appt-month-popover,
+.appt-date-field .appt-calendar-card {
+    overflow: auto !important;
+}
+
+html.dark .appt-month-popover,
+html.dark .appt-date-field .appt-calendar-card,
+body.dark .appt-month-popover,
+body.dark .appt-date-field .appt-calendar-card,
+body.dark-mode .appt-month-popover,
+body.dark-mode .appt-date-field .appt-calendar-card,
+[data-theme="dark"] .appt-month-popover,
+[data-theme="dark"] .appt-date-field .appt-calendar-card {
+    background:
+        radial-gradient(circle at 12% -6%, rgba(65, 234, 187, .16), transparent 42%),
+        radial-gradient(circle at 92% 10%, rgba(77, 168, 218, .10), transparent 34%),
+        linear-gradient(180deg, #0e3035 0%, #061a1e 100%) !important;
+    border-color: rgba(105, 232, 199, .30) !important;
+    box-shadow: 0 44px 120px rgba(0, 0, 0, .68) !important;
+}
+
+html.dark .appt-month-result,
+body.dark .appt-month-result,
+body.dark-mode .appt-month-result,
+[data-theme="dark"] .appt-month-result {
+    background: rgba(46, 210, 166, .12) !important;
+    border: 1px solid rgba(105, 232, 199, .18) !important;
+    color: #dbfff5 !important;
+}
+
+html.dark .appt-calendar-day.is-selected,
+body.dark .appt-calendar-day.is-selected,
+body.dark-mode .appt-calendar-day.is-selected,
+[data-theme="dark"] .appt-calendar-day.is-selected {
+    background: linear-gradient(135deg, #37dcb0, #10906d) !important;
+    color: #04231d !important;
+    box-shadow: 0 16px 36px rgba(36, 208, 160, .25) !important;
+}
+
+html.dark .appt-calendar-day.is-today:not(.is-selected),
+body.dark .appt-calendar-day.is-today:not(.is-selected),
+body.dark-mode .appt-calendar-day.is-today:not(.is-selected),
+[data-theme="dark"] .appt-calendar-day.is-today:not(.is-selected) {
+    background: rgba(77, 168, 218, .14) !important;
+    color: #aee8ff !important;
+}
+
+/* Dark mode controls should not look gray. */
+html.dark .appt-outline-btn,
+body.dark .appt-outline-btn,
+body.dark-mode .appt-outline-btn,
+[data-theme="dark"] .appt-outline-btn {
+    background: rgba(46, 210, 166, .15) !important;
+    border-color: rgba(105, 232, 199, .24) !important;
+    color: #dffff7 !important;
+}
+
+html.dark .appt-outline-btn:hover,
+body.dark .appt-outline-btn:hover,
+body.dark-mode .appt-outline-btn:hover,
+[data-theme="dark"] .appt-outline-btn:hover {
+    background: rgba(46, 210, 166, .22) !important;
+}
+
+html.dark .appt-waiting-box,
+body.dark .appt-waiting-box,
+body.dark-mode .appt-waiting-box,
+[data-theme="dark"] .appt-waiting-box {
+    background:
+        radial-gradient(circle at 6% 12%, rgba(46, 210, 166, .12), transparent 32%),
+        linear-gradient(135deg, rgba(10, 38, 42, .96), rgba(6, 26, 30, .96)) !important;
+    border-color: rgba(105, 232, 199, .22) !important;
+}
+
+html.dark .appt-waiting-box > i,
+html.dark .appt-waiting-box > svg,
+body.dark .appt-waiting-box > i,
+body.dark .appt-waiting-box > svg,
+body.dark-mode .appt-waiting-box > i,
+body.dark-mode .appt-waiting-box > svg,
+[data-theme="dark"] .appt-waiting-box > i,
+[data-theme="dark"] .appt-waiting-box > svg {
+    background: rgba(46, 210, 166, .14) !important;
+    color: #cffff2 !important;
+    border: 1px solid rgba(105, 232, 199, .20) !important;
+}
+
+html.dark .appt-form-actions,
+body.dark .appt-form-actions,
+body.dark-mode .appt-form-actions,
+[data-theme="dark"] .appt-form-actions {
+    background: transparent !important;
+}
+
+/* Better card header behavior on mobile. */
+@media (max-width: 780px) {
+    .appt-card-head {
+        align-items: flex-start !important;
+        gap: 14px !important;
+    }
+
+    .appt-card-head-tools {
+        flex-direction: row !important;
+        align-self: flex-start !important;
+        justify-content: flex-start !important;
+    }
+
+    .appt-card-head-tools .appt-month-trigger span {
+        display: none !important;
+    }
+
+    .appt-card-head-tools .appt-month-trigger {
+        width: 44px !important;
+        padding: 0 !important;
+    }
+
+    .appt-head-status-icon {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    .appt-month-popover,
+    .appt-date-field .appt-calendar-card {
+        max-height: 84vh !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .appt-calendar-head h3 {
+        font-size: 25px !important;
+    }
+
+    .appt-calendar-weekdays span {
+        font-size: 10px !important;
+        min-height: 30px !important;
+    }
+
+    .appt-calendar-day {
+        min-height: 39px !important;
+        border-radius: 12px !important;
+        font-size: 12px !important;
+    }
+}
+
+
+html.dark .appt-post-box,
+html.dark .appt-current-note,
+html.dark .appt-meeting-note,
+html.dark .appt-note,
+body.dark .appt-post-box,
+body.dark .appt-current-note,
+body.dark .appt-meeting-note,
+body.dark .appt-note,
+[data-theme="dark"] .appt-post-box,
+[data-theme="dark"] .appt-current-note,
+[data-theme="dark"] .appt-meeting-note,
+[data-theme="dark"] .appt-note {
+    background: rgba(7, 38, 36, 0.96) !important;
+    border: 1px solid rgba(45, 190, 160, 0.22) !important;
+    color: #eafff8 !important;
+    box-shadow: none !important;
+}
+
+html.dark .appt-post-box *,
+html.dark .appt-current-note *,
+body.dark .appt-post-box *,
+body.dark .appt-current-note *,
+[data-theme="dark"] .appt-post-box *,
+[data-theme="dark"] .appt-current-note * {
+    color: #eafff8 !important;
+}
+
+html.dark .appt-post-box span,
+html.dark .appt-current-note span,
+body.dark .appt-post-box span,
+body.dark .appt-current-note span,
+[data-theme="dark"] .appt-post-box span,
+[data-theme="dark"] .appt-current-note span {
+    color: #39d8b4 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   Etzan appointments - Dark mode final polish
+   ضعي هذا الكود في آخر appointments.css
+========================================================= */
+
+html.dark .appt-page,
+body.dark .appt-page,
+body.dark-mode .appt-page,
+[data-theme="dark"] .appt-page {
+    background:
+        radial-gradient(circle at top right, rgba(29, 158, 117, 0.12), transparent 34%),
+        radial-gradient(circle at bottom left, rgba(77, 168, 218, 0.08), transparent 36%),
+        #071918 !important;
+    color: #f3fffb !important;
+}
+
+/* إزالة الإحساس الرمادي من كل كروت الحالة */
+html.dark .appt-form-card,
+html.dark .appt-current-card,
+html.dark .appt-suggestion-box,
+html.dark .appt-meeting-box,
+html.dark .appt-post-box,
+html.dark .appt-current-note,
+html.dark .appt-note,
+html.dark .appt-waiting-box,
+html.dark .appt-calendar-card,
+body.dark .appt-form-card,
+body.dark .appt-current-card,
+body.dark .appt-suggestion-box,
+body.dark .appt-meeting-box,
+body.dark .appt-post-box,
+body.dark .appt-current-note,
+body.dark .appt-note,
+body.dark .appt-waiting-box,
+body.dark .appt-calendar-card,
+body.dark-mode .appt-form-card,
+body.dark-mode .appt-current-card,
+body.dark-mode .appt-suggestion-box,
+body.dark-mode .appt-meeting-box,
+body.dark-mode .appt-post-box,
+body.dark-mode .appt-current-note,
+body.dark-mode .appt-note,
+body.dark-mode .appt-waiting-box,
+body.dark-mode .appt-calendar-card,
+[data-theme="dark"] .appt-form-card,
+[data-theme="dark"] .appt-current-card,
+[data-theme="dark"] .appt-suggestion-box,
+[data-theme="dark"] .appt-meeting-box,
+[data-theme="dark"] .appt-post-box,
+[data-theme="dark"] .appt-current-note,
+[data-theme="dark"] .appt-note,
+[data-theme="dark"] .appt-waiting-box,
+[data-theme="dark"] .appt-calendar-card {
+    background:
+        linear-gradient(145deg, rgba(8, 44, 42, 0.96), rgba(5, 28, 29, 0.98)) !important;
+    border: 1px solid rgba(44, 211, 173, 0.20) !important;
+    color: #effffb !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24) !important;
+}
+
+/* كرت اقتراح الموعد الجديد */
+html.dark .appt-suggestion-box,
+body.dark .appt-suggestion-box,
+body.dark-mode .appt-suggestion-box,
+[data-theme="dark"] .appt-suggestion-box {
+    display: grid !important;
+    gap: 18px !important;
+    padding: 22px !important;
+    border-radius: 28px !important;
+    background:
+        radial-gradient(circle at 88% 20%, rgba(45, 211, 173, 0.18), transparent 34%),
+        linear-gradient(135deg, rgba(7, 54, 49, 0.98), rgba(6, 34, 35, 0.98)) !important;
+}
+
+/* عنوان الموعد المقترح يكون واضح */
+html.dark .appt-suggestion-box .appt-subhead,
+body.dark .appt-suggestion-box .appt-subhead,
+body.dark-mode .appt-suggestion-box .appt-subhead,
+[data-theme="dark"] .appt-suggestion-box .appt-subhead {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+}
+
+html.dark .appt-suggestion-box .appt-subhead span,
+body.dark .appt-suggestion-box .appt-subhead span,
+body.dark-mode .appt-suggestion-box .appt-subhead span,
+[data-theme="dark"] .appt-suggestion-box .appt-subhead span {
+    color: #36d7ae !important;
+}
+
+html.dark .appt-suggestion-box .appt-subhead strong,
+body.dark .appt-suggestion-box .appt-subhead strong,
+body.dark-mode .appt-suggestion-box .appt-subhead strong,
+[data-theme="dark"] .appt-suggestion-box .appt-subhead strong {
+    color: #ffffff !important;
+}
+
+/* مربعات التاريخ والوقت داخل الاقتراح */
+html.dark .appt-suggestion-box .appt-current-grid > div,
+body.dark .appt-suggestion-box .appt-current-grid > div,
+body.dark-mode .appt-suggestion-box .appt-current-grid > div,
+[data-theme="dark"] .appt-suggestion-box .appt-current-grid > div {
+    background: rgba(4, 25, 27, 0.88) !important;
+    border: 1px solid rgba(73, 223, 187, 0.18) !important;
+    border-radius: 22px !important;
+    box-shadow: none !important;
+}
+
+html.dark .appt-suggestion-box .appt-current-grid span,
+body.dark .appt-suggestion-box .appt-current-grid span,
+body.dark-mode .appt-suggestion-box .appt-current-grid span,
+[data-theme="dark"] .appt-suggestion-box .appt-current-grid span {
+    color: #39d8b4 !important;
+}
+
+html.dark .appt-suggestion-box .appt-current-grid strong,
+body.dark .appt-suggestion-box .appt-current-grid strong,
+body.dark-mode .appt-suggestion-box .appt-current-grid strong,
+[data-theme="dark"] .appt-suggestion-box .appt-current-grid strong {
+    color: #ffffff !important;
+}
+
+/* ملاحظات الطبيب */
+html.dark .appt-current-note,
+body.dark .appt-current-note,
+body.dark-mode .appt-current-note,
+[data-theme="dark"] .appt-current-note {
+    background: rgba(5, 31, 32, 0.92) !important;
+    border: 1px solid rgba(45, 211, 173, 0.20) !important;
+    border-radius: 22px !important;
+    padding: 18px 20px !important;
+}
+
+html.dark .appt-current-note span,
+body.dark .appt-current-note span,
+body.dark-mode .appt-current-note span,
+[data-theme="dark"] .appt-current-note span {
+    color: #39d8b4 !important;
+}
+
+html.dark .appt-current-note p,
+body.dark .appt-current-note p,
+body.dark-mode .appt-current-note p,
+[data-theme="dark"] .appt-current-note p {
+    color: #eafff8 !important;
+}
+
+/* بوكس انتظار رابط اللقاء */
+html.dark .appt-meeting-box,
+html.dark .appt-meeting-box.is-waiting,
+html.dark .appt-meeting-box.is-ready,
+body.dark .appt-meeting-box,
+body.dark .appt-meeting-box.is-waiting,
+body.dark .appt-meeting-box.is-ready,
+body.dark-mode .appt-meeting-box,
+body.dark-mode .appt-meeting-box.is-waiting,
+body.dark-mode .appt-meeting-box.is-ready,
+[data-theme="dark"] .appt-meeting-box,
+[data-theme="dark"] .appt-meeting-box.is-waiting,
+[data-theme="dark"] .appt-meeting-box.is-ready {
+    background:
+        radial-gradient(circle at 92% 30%, rgba(56, 216, 180, 0.17), transparent 32%),
+        rgba(5, 35, 35, 0.94) !important;
+    border: 1px solid rgba(56, 216, 180, 0.22) !important;
+    color: #effffb !important;
+}
+
+html.dark .appt-meeting-box *,
+body.dark .appt-meeting-box *,
+body.dark-mode .appt-meeting-box *,
+[data-theme="dark"] .appt-meeting-box * {
+    color: #effffb !important;
+}
+
+html.dark .appt-meeting-box span,
+body.dark .appt-meeting-box span,
+body.dark-mode .appt-meeting-box span,
+[data-theme="dark"] .appt-meeting-box span {
+    color: #39d8b4 !important;
+}
+
+/* إزالة الرمادي من أزرار قبول/رفض الاقتراح */
+html.dark .appt-suggestion-box .appt-primary-btn,
+body.dark .appt-suggestion-box .appt-primary-btn,
+body.dark-mode .appt-suggestion-box .appt-primary-btn,
+[data-theme="dark"] .appt-suggestion-box .appt-primary-btn {
+    background: linear-gradient(135deg, #19a97c, #087e62) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    box-shadow: 0 16px 34px rgba(25, 169, 124, 0.26) !important;
+}
+
+html.dark .appt-suggestion-box .appt-outline-btn,
+body.dark .appt-suggestion-box .appt-outline-btn,
+body.dark-mode .appt-suggestion-box .appt-outline-btn,
+[data-theme="dark"] .appt-suggestion-box .appt-outline-btn {
+    background: rgba(8, 45, 43, 0.96) !important;
+    color: #dffdf5 !important;
+    border: 1px solid rgba(55, 215, 178, 0.26) !important;
+    box-shadow: none !important;
+}
+
+/* إخفاء شكل السكرول القبيح */
+html.dark textarea,
+body.dark textarea,
+body.dark-mode textarea,
+[data-theme="dark"] textarea {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(57, 216, 180, 0.55) transparent;
+}
+
+html.dark textarea::-webkit-scrollbar,
+body.dark textarea::-webkit-scrollbar,
+body.dark-mode textarea::-webkit-scrollbar,
+[data-theme="dark"] textarea::-webkit-scrollbar {
+    width: 6px;
+}
+
+html.dark textarea::-webkit-scrollbar-track,
+body.dark textarea::-webkit-scrollbar-track,
+body.dark-mode textarea::-webkit-scrollbar-track,
+[data-theme="dark"] textarea::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+html.dark textarea::-webkit-scrollbar-thumb,
+body.dark textarea::-webkit-scrollbar-thumb,
+body.dark-mode textarea::-webkit-scrollbar-thumb,
+[data-theme="dark"] textarea::-webkit-scrollbar-thumb {
+    background: rgba(57, 216, 180, 0.55);
+    border-radius: 999px;
+}
+
+/* تحسين الموبايل */
+@media (max-width: 768px) {
+    html.dark .appt-suggestion-box,
+    body.dark .appt-suggestion-box,
+    body.dark-mode .appt-suggestion-box,
+    [data-theme="dark"] .appt-suggestion-box {
+        padding: 18px !important;
+        border-radius: 24px !important;
+    }
+
+    .appt-suggestion-box .appt-form-actions {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    .appt-suggestion-box .appt-form-actions form,
+    .appt-suggestion-box .appt-form-actions button {
+        width: 100% !important;
+    }
+}
+
+
+
+
+
+
+/* =========================================================
+   Etzan Month Calendar Experience
+   تقويم الانتظار + لوحة تفاصيل اليوم المختار
+========================================================= */
+
+body.appt-month-is-open {
+    overflow: hidden !important;
+}
+
+body > [data-appointment-checker].is-open {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    z-index: 2147483000 !important;
+    display: grid !important;
+    place-items: center !important;
+    padding: 28px !important;
+    margin: 0 !important;
+    background:
+        radial-gradient(circle at 50% 12%, rgba(45, 211, 173, 0.18), transparent 36%),
+        radial-gradient(circle at 12% 88%, rgba(77, 168, 218, 0.10), transparent 34%),
+        rgba(2, 15, 17, 0.66) !important;
+    backdrop-filter: blur(18px) saturate(125%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(125%) !important;
+}
+
+body > [data-appointment-checker].is-open > .appt-month-trigger {
+    display: none !important;
+}
+
+body > [data-appointment-checker].is-open::before {
+    display: none !important;
+    content: none !important;
+}
+
+body > [data-appointment-checker].is-open .appt-month-popover {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+
+    width: min(1040px, calc(100vw - 38px)) !important;
+    max-height: calc(100dvh - 64px) !important;
+    overflow: auto !important;
+
+    padding: 0 !important;
+    border-radius: 36px !important;
+    background:
+        radial-gradient(circle at 85% 0%, rgba(55, 220, 178, 0.20), transparent 36%),
+        linear-gradient(145deg, rgba(8, 53, 50, 0.99), rgba(4, 28, 30, 0.99)) !important;
+    border: 1px solid rgba(76, 230, 193, 0.30) !important;
+    box-shadow: 0 44px 130px rgba(0, 0, 0, 0.62) !important;
+    color: #f2fffb !important;
+    scrollbar-width: none !important;
+}
+
+body > [data-appointment-checker].is-open .appt-month-popover::-webkit-scrollbar {
+    display: none !important;
+}
+
+.appt-month-surface {
+    display: grid;
+    grid-template-columns: minmax(360px, 1.05fr) minmax(300px, 0.85fr);
+    gap: 20px;
+    padding: 28px;
+    direction: rtl;
+}
+
+.appt-month-calendar-pane,
+.appt-month-day-panel {
+    min-width: 0;
+    border-radius: 28px;
+    border: 1px solid rgba(105, 232, 199, 0.16);
+    background: rgba(3, 24, 27, 0.54);
+}
+
+.appt-month-calendar-pane {
+    padding: 22px;
+}
+
+.appt-month-day-panel {
+    position: relative;
+    overflow: hidden;
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    background:
+        radial-gradient(circle at 18% 12%, rgba(45, 211, 173, 0.18), transparent 34%),
+        linear-gradient(160deg, rgba(8, 59, 53, 0.82), rgba(3, 26, 29, 0.94));
+}
+
+.appt-month-day-panel::after {
+    content: "";
+    position: absolute;
+    inset: auto -70px -90px auto;
+    width: 210px;
+    height: 210px;
+    border-radius: 999px;
+    background: rgba(45, 211, 173, 0.13);
+    filter: blur(3px);
+}
+
+.appt-day-orb {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 24px;
+    background: linear-gradient(135deg, rgba(45, 211, 173, 0.24), rgba(77, 168, 218, 0.12));
+    border: 1px solid rgba(105, 232, 199, 0.22);
+    color: #dffff7;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+}
+
+.appt-day-orb svg,
+.appt-day-orb i {
+    width: 28px;
+    height: 28px;
+}
+
+.appt-day-kicker {
+    color: #42dcb6;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.appt-month-day-panel h3 {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(25px, 3vw, 38px);
+    line-height: 1.18;
+    font-weight: 950;
+    letter-spacing: -0.7px;
+}
+
+.appt-month-day-panel p {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    color: rgba(234, 255, 248, 0.78);
+    font-size: 13px;
+    line-height: 1.9;
+    font-weight: 800;
+}
+
+.appt-day-status-chip {
+    width: fit-content;
+    position: relative;
+    z-index: 1;
+    padding: 8px 13px;
+    border-radius: 999px;
+    color: #05231d;
+    background: #38dcb2;
+    font-size: 12px;
+    font-weight: 950;
+}
+
+.appt-day-detail-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.appt-day-detail-grid > div {
+    min-height: 74px;
+    padding: 13px 14px;
+    border-radius: 20px;
+    background: rgba(2, 19, 22, 0.58);
+    border: 1px solid rgba(105, 232, 199, 0.13);
+}
+
+.appt-day-detail-grid small {
+    display: block;
+    margin-bottom: 5px;
+    color: #49dcb7;
+    font-size: 11px;
+    font-weight: 950;
+}
+
+.appt-day-detail-grid strong {
+    display: block;
+    color: #effffb;
+    font-size: 14px;
+    line-height: 1.5;
+    font-weight: 900;
+}
+
+.appt-day-action-note {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+    padding: 13px 14px;
+    border-radius: 18px;
+    color: #eafff8;
+    background: rgba(45, 211, 173, 0.11);
+    border: 1px solid rgba(105, 232, 199, 0.14);
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.appt-day-action-note svg,
+.appt-day-action-note i {
+    width: 17px;
+    height: 17px;
+    color: #42dcb6;
+    flex: 0 0 auto;
+}
+
+body > [data-appointment-checker].is-open .appt-calendar-head h3,
+body > [data-appointment-checker].is-open .appt-calendar-head span,
+body > [data-appointment-checker].is-open .appt-calendar-head small,
+body > [data-appointment-checker].is-open .appt-calendar-weekdays span {
+    color: #eafff8 !important;
+}
+
+body > [data-appointment-checker].is-open .appt-calendar-weekdays span {
+    min-height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 14px;
+    background: rgba(58, 216, 180, 0.11) !important;
+}
+
+body > [data-appointment-checker].is-open .appt-calendar-grid {
+    gap: 10px !important;
+}
+
+body > [data-appointment-checker].is-open .appt-calendar-day {
+    min-height: 54px !important;
+    border-radius: 18px !important;
+    background: rgba(3, 28, 31, 0.86) !important;
+    border: 1px solid rgba(61, 218, 180, 0.13) !important;
+    color: #dffff7 !important;
+    box-shadow: none !important;
+}
+
+body > [data-appointment-checker].is-open .appt-calendar-day.is-selected {
+    background: linear-gradient(135deg, #2bd0a4, #10906d) !important;
+    color: #04231d !important;
+    border-color: transparent !important;
+    box-shadow: 0 16px 34px rgba(37, 201, 154, 0.26) !important;
+}
+
+body > [data-appointment-checker].is-open .appt-calendar-day.is-has-appointment {
+    border-color: rgba(42, 220, 176, 0.58) !important;
+}
+
+.appt-month-day-panel[data-detail-tone="empty"] .appt-day-status-chip {
+    color: #cffff2;
+    background: rgba(105, 232, 199, 0.12);
+    border: 1px solid rgba(105, 232, 199, 0.18);
+}
+
+.appt-month-day-panel[data-detail-tone="pending"] .appt-day-status-chip {
+    color: #fff4d2;
+    background: rgba(255, 184, 77, 0.16);
+    border: 1px solid rgba(255, 184, 77, 0.26);
+}
+
+.appt-month-day-panel[data-detail-tone="confirmed"] .appt-day-status-chip,
+.appt-month-day-panel[data-detail-tone="has-appointment"] .appt-day-status-chip {
+    color: #05231d;
+    background: #38dcb2;
+}
+
+.appt-month-day-panel[data-detail-tone="reschedule"] .appt-day-status-chip {
+    color: #dcf4ff;
+    background: rgba(77, 168, 218, 0.18);
+    border: 1px solid rgba(77, 168, 218, 0.30);
+}
+
+.appt-month-day-panel[data-detail-tone="missed"] .appt-day-status-chip {
+    color: #ffe1dd;
+    background: rgba(255, 113, 100, 0.14);
+    border: 1px solid rgba(255, 113, 100, 0.24);
+}
+
+@media (max-width: 860px) {
+    body > [data-appointment-checker].is-open {
+        align-items: end !important;
+        padding: 0 !important;
+    }
+
+    body > [data-appointment-checker].is-open .appt-month-popover {
+        width: 100% !important;
+        max-height: 92dvh !important;
+        border-radius: 32px 32px 0 0 !important;
+        border-inline: 0 !important;
+        border-bottom: 0 !important;
+    }
+
+    .appt-month-surface {
+        grid-template-columns: 1fr;
+        padding: 18px;
+    }
+
+    .appt-month-calendar-pane,
+    .appt-month-day-panel {
+        border-radius: 24px;
+        padding: 18px;
+    }
+
+    .appt-day-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    body > [data-appointment-checker].is-open .appt-calendar-day {
+        min-height: 42px !important;
+        border-radius: 13px !important;
+        font-size: 12px !important;
+    }
+}

@@ -1,0 +1,131 @@
+
+/* Product Details Section */
+.product-details {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 20px;
+    gap: 40px;
+    background-color: #F9F5F0;
+}
+
+.product-image img {
+    width: 100%;
+    height: auto;
+    max-width: 400px; /* تعيين أقصى عرض للصورة */
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+.product-info {
+    max-width: 500px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.product-info h2 {
+    font-size: 2rem;
+    color: #4A2C1D; /* Heading Text */
+    margin-bottom: 15px;
+}
+
+.product-info p {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.product-info h3 {
+    font-size: 1.5rem;
+    color: #4A2C1D; /* Heading Text */
+    margin-bottom: 10px;
+}
+
+.product-info ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.product-info ul li {
+    font-size: 1rem;
+    color: #777;
+}
+
+.product-info .cta-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #7A4A35; /* Primary Action */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.product-info .cta-button:hover {
+    background-color: #6F3B2C; /* Darker brown */
+}
+
+/* زر العودة إلى المينيو */
+.back-to-menu {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: #7A4A35; /* اللون البني */
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.back-to-menu:hover {
+    background-color: #6F3B2C; /* تغيير اللون عند التمرير */
+}
+
+/* ===== Dark Mode – Product Details ===== */
+
+body.dark-mode .product-details {
+    background-color: #1e1e1e;
+}
+
+/* Product Info Card */
+body.dark-mode .product-info {
+    background-color: #2a2a2a;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Headings */
+body.dark-mode .product-info h2,
+body.dark-mode .product-info h3 {
+    color: #f1d6c3;
+}
+
+/* Paragraphs & List */
+body.dark-mode .product-info p,
+body.dark-mode .product-info ul li {
+    color: #dcdcdc;
+}
+
+/* Buttons */
+body.dark-mode .product-info .cta-button,
+body.dark-mode .back-to-menu {
+    background-color: #c08a6a;
+    color: #1e1e1e;
+}
+
+body.dark-mode .product-info .cta-button:hover,
+body.dark-mode .back-to-menu:hover {
+    background-color: #a97456;
+}
+
+/* Product Image (لمسة خفيفة) */
+body.dark-mode .product-image img {
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+}

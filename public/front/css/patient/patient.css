@@ -1,0 +1,203 @@
+@charset "UTF-8";
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+}
+
+
+/* ==================================================
+   Global Patient Dropdown + Theme Fix
+   يشتغل على كل صفحات المريض
+================================================== */
+
+.topbar-profile {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.profile-menu[data-profile-menu] {
+    position: absolute !important;
+    top: calc(100% + 12px) !important;
+    left: 0 !important;
+    right: auto !important;
+    z-index: 999999 !important;
+
+    width: 292px !important;
+    padding: 12px !important;
+    border-radius: 24px !important;
+
+    background: var(--card-solid, #ffffff) !important;
+    border: 1px solid var(--border, rgba(24, 51, 59, 0.08)) !important;
+    box-shadow: 0 22px 60px rgba(24, 51, 59, 0.14) !important;
+
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: translateY(8px) scale(0.98) !important;
+    transition: 0.2s ease !important;
+}
+
+.profile-menu[data-profile-menu].is-open,
+.topbar-profile.is-open .profile-menu[data-profile-menu] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+html[data-theme="dark"] .profile-menu[data-profile-menu] {
+    background: #102321 !important;
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.35) !important;
+}
+
+html[data-theme="dark"] body.patient-app {
+    background:
+        radial-gradient(circle at 10% 8%, rgba(52, 211, 153, 0.10), transparent 30%),
+        radial-gradient(circle at 88% 0%, rgba(56, 189, 248, 0.08), transparent 34%),
+        linear-gradient(135deg, var(--bg) 0%, var(--bg-soft) 100%) !important;
+}
+
+html[data-theme="dark"] .simple-icon-btn,
+html[data-theme="dark"] .simple-avatar-btn,
+html[data-theme="dark"] .topbar-icon-btn,
+html[data-theme="dark"] .profile-avatar-btn {
+    background: rgba(255, 255, 255, 0.055) !important;
+    border-color: rgba(255, 255, 255, 0.085) !important;
+    color: var(--text) !important;
+}
+
+html[data-theme="dark"] .simple-icon-btn:hover,
+html[data-theme="dark"] .simple-avatar-btn:hover,
+html[data-theme="dark"] .topbar-icon-btn:hover,
+html[data-theme="dark"] .profile-avatar-btn:hover {
+    background: rgba(52, 211, 153, 0.12) !important;
+    color: var(--primary) !important;
+}
+
+.topbar-notification-wrap {
+    position: relative !important;
+    overflow: visible !important;
+}
+
+.notification-popover[data-notification-menu] {
+    z-index: 999998 !important;
+}
+
+/* ==================================================
+   Patient Live Toast Notification
+   ================================================== */
+
+.patient-live-toast-container {
+    position: fixed;
+    top: 92px;
+    inset-inline-end: 24px;
+    width: min(390px, calc(100vw - 32px));
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 999999;
+    pointer-events: none;
+}
+
+.patient-live-toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 14px 14px 12px;
+    border-radius: 22px;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(29, 158, 117, 0.18);
+    box-shadow: 0 22px 60px rgba(24, 51, 59, 0.18);
+    color: #18333B;
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+    transition: 0.22s ease;
+}
+
+.patient-live-toast.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.patient-live-toast-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: rgba(29, 158, 117, 0.12);
+    color: #15795A;
+}
+
+.patient-live-toast-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.patient-live-toast-copy strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 950;
+    margin-bottom: 4px;
+    color: #18333B;
+}
+
+.patient-live-toast-copy small {
+    display: block;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #647b84;
+}
+
+.patient-live-toast-close {
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(24, 51, 59, 0.07);
+    color: #18333B;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+}
+
+html[data-theme="dark"] .patient-live-toast,
+body[data-theme="dark"] .patient-live-toast {
+    background: rgba(36, 38, 48, 0.96);
+    border-color: rgba(36, 197, 143, 0.22);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.40);
+    color: #f4fbfa;
+}
+
+html[data-theme="dark"] .patient-live-toast-copy strong,
+body[data-theme="dark"] .patient-live-toast-copy strong {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .patient-live-toast-copy small,
+body[data-theme="dark"] .patient-live-toast-copy small {
+    color: #aeb8bb;
+}
+
+html[data-theme="dark"] .patient-live-toast-close,
+body[data-theme="dark"] .patient-live-toast-close {
+    background: rgba(255, 255, 255, 0.10);
+    color: #ffffff;
+}
+
+
+
+
+

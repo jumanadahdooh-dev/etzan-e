@@ -1,0 +1,590 @@
+.docd-page {
+    width: 100%;
+    display: grid;
+    gap: 22px;
+}
+
+.docd-back {
+    width: fit-content;
+    min-height: 46px;
+    padding: 0 16px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--text, #18333B);
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(24, 51, 59, 0.08);
+    text-decoration: none;
+    font-weight: 900;
+}
+
+.docd-hero {
+    border-radius: 34px;
+    padding: 20px;
+    background:
+        radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.88), transparent 34%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.13), rgba(77, 168, 218, 0.10));
+    border: 1px solid rgba(29, 158, 117, 0.14);
+}
+
+.docd-hero-card {
+    display: grid;
+    grid-template-columns: 190px minmax(0, 1fr) 260px;
+    gap: 22px;
+    align-items: center;
+}
+
+.docd-avatar-wrap {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    border-radius: 34px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.78);
+    border: 8px solid rgba(255, 255, 255, 0.58);
+    box-shadow: 0 20px 45px rgba(18, 61, 71, 0.10);
+}
+
+.docd-avatar-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.docd-avatar-wrap span {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    min-width: 58px;
+    height: 38px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, #1D9E75, #4DA8DA);
+    font-weight: 950;
+}
+
+.docd-kicker,
+.docd-card-head span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #15795A;
+    font-size: 12px;
+    font-weight: 950;
+}
+
+.docd-main-info h1 {
+    margin: 10px 0 8px;
+    color: var(--text, #18333B);
+    font-size: clamp(34px, 4vw, 60px);
+    line-height: 1.1;
+    font-weight: 950;
+}
+
+.docd-main-info p {
+    margin: 0;
+    color: var(--muted, #647b84);
+    font-size: 17px;
+    font-weight: 850;
+}
+
+.docd-badges {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.docd-badges span {
+    min-height: 38px;
+    padding: 0 13px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text, #18333B);
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(24, 51, 59, 0.06);
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.docd-action-box {
+    padding: 18px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.66);
+    border: 1px solid rgba(24, 51, 59, 0.06);
+    display: grid;
+    gap: 12px;
+}
+
+.docd-primary-btn {
+    width: 100%;
+    min-height: 52px;
+    border: 0;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    color: #fff;
+    background: linear-gradient(135deg, #1D9E75, #15795A);
+    font-weight: 950;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 18px 34px rgba(29, 158, 117, 0.20);
+}
+
+.docd-status {
+    min-height: 48px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13px;
+    font-weight: 900;
+    line-height: 1.6;
+}
+
+.docd-status-approved {
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.10);
+}
+
+.docd-status-pending {
+    color: #a16207;
+    background: rgba(245, 158, 11, 0.12);
+}
+
+.docd-status-warning {
+    color: #b42318;
+    background: rgba(239, 68, 68, 0.10);
+}
+
+.docd-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 22px;
+}
+
+.docd-card {
+    border-radius: 30px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(24, 51, 59, 0.07);
+    box-shadow: 0 18px 40px rgba(18, 61, 71, 0.07);
+}
+
+.docd-card-head h2 {
+    margin: 7px 0 0;
+    color: var(--text, #18333B);
+    font-size: 28px;
+    font-weight: 950;
+}
+
+.docd-card p {
+    margin: 16px 0 0;
+    color: var(--muted, #647b84);
+    line-height: 2;
+    font-weight: 800;
+}
+
+.docd-match-tags {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.docd-match-tags span {
+    padding: 9px 13px;
+    border-radius: 999px;
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.10);
+    font-size: 13px;
+    font-weight: 950;
+}
+
+.docd-services-grid,
+.docd-articles-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.docd-services-grid > div,
+.docd-articles-grid > article,
+.docd-articles-grid > a {
+    min-height: 145px;
+    padding: 18px;
+    border-radius: 24px;
+    background: rgba(248, 252, 251, 0.86);
+    border: 1px solid rgba(24, 51, 59, 0.06);
+    display: grid;
+    align-content: start;
+    gap: 10px;
+}
+
+.docd-services-grid i,
+.docd-services-grid svg {
+    width: 34px;
+    height: 34px;
+    padding: 8px;
+    border-radius: 14px;
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.10);
+}
+
+.docd-services-grid strong,
+.docd-articles-grid strong {
+    color: var(--text, #18333B);
+    font-size: 15px;
+    font-weight: 950;
+    line-height: 1.6;
+}
+
+.docd-services-grid span,
+.docd-articles-grid span {
+    color: var(--muted, #647b84);
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1.7;
+}
+
+.docd-empty {
+    min-height: 180px;
+    margin-top: 20px;
+    border-radius: 24px;
+    border: 1px dashed rgba(29, 158, 117, 0.22);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: var(--muted, #647b84);
+}
+
+.docd-empty strong {
+    color: var(--text, #18333B);
+    font-size: 18px;
+    font-weight: 950;
+}
+
+html[data-theme="dark"] .docd-back,
+html[data-theme="dark"] .docd-action-box,
+html[data-theme="dark"] .docd-card,
+html[data-theme="dark"] .docd-services-grid > div,
+html[data-theme="dark"] .docd-articles-grid > article,
+html[data-theme="dark"] .docd-articles-grid > a {
+    background: rgba(255, 255, 255, 0.055);
+    border-color: rgba(255, 255, 255, 0.10);
+}
+
+html[data-theme="dark"] .docd-main-info h1,
+html[data-theme="dark"] .docd-card-head h2,
+html[data-theme="dark"] .docd-services-grid strong,
+html[data-theme="dark"] .docd-articles-grid strong,
+html[data-theme="dark"] .docd-empty strong {
+    color: #eef7f5;
+}
+
+html[data-theme="dark"] .docd-main-info p,
+html[data-theme="dark"] .docd-card p,
+html[data-theme="dark"] .docd-services-grid span,
+html[data-theme="dark"] .docd-articles-grid span {
+    color: #9fb2ad;
+}
+
+@media (max-width: 1150px) {
+    .docd-hero-card {
+        grid-template-columns: 1fr;
+    }
+
+    .docd-avatar-wrap {
+        width: 160px;
+        height: 160px;
+    }
+
+    .docd-grid,
+    .docd-services-grid,
+    .docd-articles-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   Etzan Doctor Details - Clean Dark Mode Polish
+   أضيفي هذا البلوك في آخر ملف صفحة الطبيب
+   ========================================================= */
+
+html.dark .docd-page,
+body.dark .docd-page,
+body.dark-mode .docd-page,
+[data-theme="dark"] .docd-page,
+html[data-theme="dark"] .docd-page {
+    color: #eefdf9;
+}
+
+/* Hero: منع اللون الرمادي/المغسول في الدارك */
+html.dark .docd-hero,
+body.dark .docd-hero,
+body.dark-mode .docd-hero,
+[data-theme="dark"] .docd-hero,
+html[data-theme="dark"] .docd-hero {
+    background:
+        radial-gradient(circle at 14% 14%, rgba(54, 216, 176, 0.13), transparent 34%),
+        radial-gradient(circle at 86% 10%, rgba(77, 168, 218, 0.09), transparent 32%),
+        linear-gradient(135deg, rgba(8, 42, 44, 0.96), rgba(5, 23, 27, 0.98)) !important;
+    border-color: rgba(87, 226, 190, 0.22) !important;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34) !important;
+}
+
+/* كرت صورة الطبيب */
+html.dark .docd-avatar-wrap,
+body.dark .docd-avatar-wrap,
+body.dark-mode .docd-avatar-wrap,
+[data-theme="dark"] .docd-avatar-wrap,
+html[data-theme="dark"] .docd-avatar-wrap {
+    background: rgba(238, 255, 250, 0.08) !important;
+    border-color: rgba(238, 255, 250, 0.10) !important;
+    box-shadow: 0 24px 58px rgba(0, 0, 0, 0.34) !important;
+}
+
+/* كرت الإجراءات يسار الهيرو */
+html.dark .docd-action-box,
+body.dark .docd-action-box,
+body.dark-mode .docd-action-box,
+[data-theme="dark"] .docd-action-box,
+html[data-theme="dark"] .docd-action-box {
+    background:
+        radial-gradient(circle at 18% 12%, rgba(54, 216, 176, 0.12), transparent 36%),
+        rgba(7, 31, 34, 0.72) !important;
+    border-color: rgba(87, 226, 190, 0.20) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035), 0 18px 46px rgba(0, 0, 0, 0.20) !important;
+    backdrop-filter: blur(16px) !important;
+}
+
+/* زر الرجوع */
+html.dark .docd-back,
+body.dark .docd-back,
+body.dark-mode .docd-back,
+[data-theme="dark"] .docd-back,
+html[data-theme="dark"] .docd-back {
+    color: #eafff8 !important;
+    background: rgba(7, 31, 34, 0.76) !important;
+    border-color: rgba(87, 226, 190, 0.20) !important;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18) !important;
+}
+
+html.dark .docd-back:hover,
+body.dark .docd-back:hover,
+body.dark-mode .docd-back:hover,
+[data-theme="dark"] .docd-back:hover,
+html[data-theme="dark"] .docd-back:hover {
+    background: rgba(14, 61, 55, 0.86) !important;
+}
+
+/* النصوص الأساسية */
+html.dark .docd-main-info h1,
+html.dark .docd-card-head h2,
+html.dark .docd-services-grid strong,
+html.dark .docd-articles-grid strong,
+html.dark .docd-empty strong,
+body.dark .docd-main-info h1,
+body.dark .docd-card-head h2,
+body.dark .docd-services-grid strong,
+body.dark .docd-articles-grid strong,
+body.dark .docd-empty strong,
+body.dark-mode .docd-main-info h1,
+body.dark-mode .docd-card-head h2,
+body.dark-mode .docd-services-grid strong,
+body.dark-mode .docd-articles-grid strong,
+body.dark-mode .docd-empty strong,
+[data-theme="dark"] .docd-main-info h1,
+[data-theme="dark"] .docd-card-head h2,
+[data-theme="dark"] .docd-services-grid strong,
+[data-theme="dark"] .docd-articles-grid strong,
+[data-theme="dark"] .docd-empty strong,
+html[data-theme="dark"] .docd-main-info h1,
+html[data-theme="dark"] .docd-card-head h2,
+html[data-theme="dark"] .docd-services-grid strong,
+html[data-theme="dark"] .docd-articles-grid strong,
+html[data-theme="dark"] .docd-empty strong {
+    color: #f2fffb !important;
+}
+
+html.dark .docd-main-info p,
+html.dark .docd-card p,
+html.dark .docd-services-grid span,
+html.dark .docd-articles-grid span,
+body.dark .docd-main-info p,
+body.dark .docd-card p,
+body.dark .docd-services-grid span,
+body.dark .docd-articles-grid span,
+body.dark-mode .docd-main-info p,
+body.dark-mode .docd-card p,
+body.dark-mode .docd-services-grid span,
+body.dark-mode .docd-articles-grid span,
+[data-theme="dark"] .docd-main-info p,
+[data-theme="dark"] .docd-card p,
+[data-theme="dark"] .docd-services-grid span,
+[data-theme="dark"] .docd-articles-grid span,
+html[data-theme="dark"] .docd-main-info p,
+html[data-theme="dark"] .docd-card p,
+html[data-theme="dark"] .docd-services-grid span,
+html[data-theme="dark"] .docd-articles-grid span {
+    color: rgba(225, 246, 242, 0.72) !important;
+}
+
+/* العناوين الصغيرة الخضراء */
+html.dark .docd-kicker,
+html.dark .docd-card-head span,
+body.dark .docd-kicker,
+body.dark .docd-card-head span,
+body.dark-mode .docd-kicker,
+body.dark-mode .docd-card-head span,
+[data-theme="dark"] .docd-kicker,
+[data-theme="dark"] .docd-card-head span,
+html[data-theme="dark"] .docd-kicker,
+html[data-theme="dark"] .docd-card-head span {
+    color: #46ddb7 !important;
+}
+
+/* Badges: تقييم، خبرة، أونلاين، مريض محدد */
+html.dark .docd-badges span,
+body.dark .docd-badges span,
+body.dark-mode .docd-badges span,
+[data-theme="dark"] .docd-badges span,
+html[data-theme="dark"] .docd-badges span {
+    color: #eafff8 !important;
+    background: rgba(234, 255, 248, 0.10) !important;
+    border-color: rgba(87, 226, 190, 0.17) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.035) !important;
+}
+
+/* الكروت الرئيسية */
+html.dark .docd-card,
+body.dark .docd-card,
+body.dark-mode .docd-card,
+[data-theme="dark"] .docd-card,
+html[data-theme="dark"] .docd-card {
+    background:
+        radial-gradient(circle at 8% 0%, rgba(54, 216, 176, 0.09), transparent 34%),
+        linear-gradient(145deg, rgba(8, 32, 36, 0.90), rgba(5, 24, 28, 0.94)) !important;
+    border-color: rgba(87, 226, 190, 0.16) !important;
+    box-shadow: 0 22px 56px rgba(0, 0, 0, 0.24) !important;
+}
+
+/* كروت الخدمات والمقالات */
+html.dark .docd-services-grid > div,
+html.dark .docd-articles-grid > article,
+.docd-articles-grid > a,
+body.dark .docd-services-grid > div,
+body.dark .docd-articles-grid > article,
+.docd-articles-grid > a,
+body.dark-mode .docd-services-grid > div,
+body.dark-mode .docd-articles-grid > article,
+.docd-articles-grid > a,
+[data-theme="dark"] .docd-services-grid > div,
+[data-theme="dark"] .docd-articles-grid > article,
+.docd-articles-grid > a,
+html[data-theme="dark"] .docd-services-grid > div,
+html[data-theme="dark"] .docd-articles-grid > article,
+html[data-theme="dark"] .docd-articles-grid > a {
+    background: rgba(7, 28, 32, 0.76) !important;
+    border-color: rgba(87, 226, 190, 0.13) !important;
+    box-shadow: none !important;
+}
+
+/* أيقونات الخدمات */
+html.dark .docd-services-grid i,
+html.dark .docd-services-grid svg,
+body.dark .docd-services-grid i,
+body.dark .docd-services-grid svg,
+body.dark-mode .docd-services-grid i,
+body.dark-mode .docd-services-grid svg,
+[data-theme="dark"] .docd-services-grid i,
+[data-theme="dark"] .docd-services-grid svg,
+html[data-theme="dark"] .docd-services-grid i,
+html[data-theme="dark"] .docd-services-grid svg {
+    color: #46ddb7 !important;
+    background: rgba(54, 216, 176, 0.12) !important;
+    border: 1px solid rgba(87, 226, 190, 0.16) !important;
+}
+
+/* سبب المطابقة / tags */
+html.dark .docd-match-tags span,
+body.dark .docd-match-tags span,
+body.dark-mode .docd-match-tags span,
+[data-theme="dark"] .docd-match-tags span,
+html[data-theme="dark"] .docd-match-tags span {
+    color: #dffff7 !important;
+    background: rgba(54, 216, 176, 0.12) !important;
+    border: 1px solid rgba(87, 226, 190, 0.15) !important;
+}
+
+/* حالات الطبيب */
+html.dark .docd-status-approved,
+body.dark .docd-status-approved,
+body.dark-mode .docd-status-approved,
+[data-theme="dark"] .docd-status-approved,
+html[data-theme="dark"] .docd-status-approved {
+    color: #dffff7 !important;
+    background: rgba(54, 216, 176, 0.14) !important;
+    border: 1px solid rgba(87, 226, 190, 0.18) !important;
+}
+
+html.dark .docd-status-pending,
+body.dark .docd-status-pending,
+body.dark-mode .docd-status-pending,
+[data-theme="dark"] .docd-status-pending,
+html[data-theme="dark"] .docd-status-pending {
+    color: #ffe6aa !important;
+    background: rgba(245, 158, 11, 0.13) !important;
+    border: 1px solid rgba(245, 158, 11, 0.18) !important;
+}
+
+html.dark .docd-status-warning,
+body.dark .docd-status-warning,
+body.dark-mode .docd-status-warning,
+[data-theme="dark"] .docd-status-warning,
+html[data-theme="dark"] .docd-status-warning {
+    color: #ffd7d2 !important;
+    background: rgba(239, 68, 68, 0.13) !important;
+    border: 1px solid rgba(239, 68, 68, 0.18) !important;
+}
+
+/* Empty state */
+html.dark .docd-empty,
+body.dark .docd-empty,
+body.dark-mode .docd-empty,
+[data-theme="dark"] .docd-empty,
+html[data-theme="dark"] .docd-empty {
+    color: rgba(225, 246, 242, 0.70) !important;
+    background: rgba(7, 28, 32, 0.50) !important;
+    border-color: rgba(87, 226, 190, 0.20) !important;
+}
+
+/* زر حجز الموعد */
+html.dark .docd-primary-btn,
+body.dark .docd-primary-btn,
+body.dark-mode .docd-primary-btn,
+[data-theme="dark"] .docd-primary-btn,
+html[data-theme="dark"] .docd-primary-btn {
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #22b98e, #0d7d60) !important;
+    box-shadow: 0 18px 36px rgba(29, 158, 117, 0.24) !important;
+}
+
+html.dark .docd-primary-btn:hover,
+body.dark .docd-primary-btn:hover,
+body.dark-mode .docd-primary-btn:hover,
+[data-theme="dark"] .docd-primary-btn:hover,
+html[data-theme="dark"] .docd-primary-btn:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+}
+

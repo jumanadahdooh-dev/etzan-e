@@ -1,0 +1,169 @@
+/* ============================================================================
+   Etzan Admin — Shared Design Tokens (متغيرات مشتركة لكل صفحات الإدارة)
+   هاد الملف بيحمل نظام الألوان/الظلال/الانحناءات (--et-*) لأي صفحة إدارة،
+   بدل ما يضل كل ملف CSS يفترض إنه --et-* موجودة أوتوماتيكياً وهي مش معرّفة
+   إلا جوا dashboard.css. لازم ينحمّل قبل أي ملف CSS تاني بصفحات الإدارة.
+   ============================================================================ */
+
+/* ============================================================================
+   Etzan Admin Dashboard — Ultra Premium UI System
+   الملف: public/front/css/admin/dashboard.css
+   الرؤية: غرفة تحكم عربية فخمة بنظام ألوان مزدوج + Bento Grid + Glassmorphism
+   ============================================================================ */
+
+/* -----------------------------
+   01) Design Tokens
+------------------------------ */
+:root {
+    color-scheme: light;
+    --et-primary: #1D9E75;
+    --et-primary-rgb: 29, 158, 117;
+    --et-primary-2: #20d6a0;
+    --et-primary-3: #13795a;
+
+    --et-blue: #4DA8DA;
+    --et-blue-rgb: 77, 168, 218;
+    --et-purple: #8b5cf6;
+    --et-purple-rgb: 139, 92, 246;
+    --et-orange: #f3a325;
+    --et-orange-rgb: 243, 163, 37;
+    --et-red: #ef4444;
+    --et-red-rgb: 239, 68, 68;
+    --et-teal: #14b8a6;
+    --et-teal-rgb: 20, 184, 166;
+
+    --et-bg: #f6fbf9;
+    --et-bg-2: #eef8f4;
+    --et-surface: rgba(255, 255, 255, .78);
+    --et-surface-strong: rgba(255, 255, 255, .94);
+    --et-surface-soft: rgba(255, 255, 255, .56);
+    --et-card: rgba(255, 255, 255, .74);
+    --et-card-hover: rgba(255, 255, 255, .9);
+    --et-title: #051f1a;
+    --et-text: #163832;
+    --et-muted: #60756f;
+    --et-faint: #8ca19b;
+    --et-border: rgba(21, 155, 117, .16);
+    --et-border-2: rgba(6, 31, 27, .08);
+
+    --et-shadow-xs: 0 8px 24px rgba(6, 31, 27, .06);
+    --et-shadow-sm: 0 16px 44px rgba(6, 31, 27, .09);
+    --et-shadow-md: 0 28px 80px rgba(6, 31, 27, .13);
+    --et-shadow-glow: 0 0 0 1px rgba(var(--et-primary-rgb), .12), 0 24px 80px rgba(var(--et-primary-rgb), .18);
+    --et-glow: rgba(var(--et-primary-rgb), .28);
+
+    --et-radius-xs: 12px;
+    --et-radius-sm: 18px;
+    --et-radius-md: 24px;
+    --et-radius-lg: 32px;
+    --et-radius-xl: 42px;
+    --et-blur: 22px;
+    --et-blur-strong: 34px;
+
+    --et-grid-dot: rgba(21, 155, 117, .12);
+    --et-chart-grid: rgba(21, 155, 117, .10);
+    --et-chart-tooltip-bg: rgba(255, 255, 255, .82);
+    --et-chart-tooltip-border: rgba(21, 155, 117, .18);
+
+    --et-ease: cubic-bezier(.2, .8, .2, 1);
+    --et-ease-spring: cubic-bezier(.16, 1, .3, 1);
+    --et-topbar-offset: 0px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+        --et-bg: #000000;
+        --et-bg-2: #050505;
+        --et-surface: rgba(10, 18, 16, .62);
+        --et-surface-strong: rgba(12, 20, 18, .86);
+        --et-surface-soft: rgba(255, 255, 255, .045);
+        --et-card: rgba(255, 255, 255, .052);
+        --et-card-hover: rgba(255, 255, 255, .075);
+        --et-title: #f4fffb;
+        --et-text: #d9f2eb;
+        --et-muted: #91aaa3;
+        --et-faint: #61766f;
+        --et-border: rgba(21, 155, 117, .22);
+        --et-border-2: rgba(255, 255, 255, .08);
+        --et-shadow-xs: 0 12px 34px rgba(0, 0, 0, .28);
+        --et-shadow-sm: 0 22px 60px rgba(0, 0, 0, .42);
+        --et-shadow-md: 0 38px 110px rgba(0, 0, 0, .58);
+        --et-shadow-glow: 0 0 0 1px rgba(var(--et-primary-rgb), .22), 0 0 70px rgba(var(--et-primary-rgb), .18);
+        --et-glow: rgba(var(--et-primary-rgb), .34);
+        --et-grid-dot: rgba(21, 155, 117, .13);
+        --et-chart-grid: rgba(255, 255, 255, .055);
+        --et-chart-tooltip-bg: rgba(4, 10, 9, .84);
+        --et-chart-tooltip-border: rgba(21, 155, 117, .36);
+    }
+}
+
+html[data-theme="dark"],
+body.dark,
+body.dark-mode,
+body.theme-dark,
+[data-bs-theme="dark"] {
+    color-scheme: dark;
+    --et-bg: #000000;
+    --et-bg-2: #050505;
+    --et-surface: rgba(10, 18, 16, .62);
+    --et-surface-strong: rgba(12, 20, 18, .86);
+    --et-surface-soft: rgba(255, 255, 255, .045);
+    --et-card: rgba(255, 255, 255, .052);
+    --et-card-hover: rgba(255, 255, 255, .075);
+    --et-title: #f4fffb;
+    --et-text: #d9f2eb;
+    --et-muted: #91aaa3;
+    --et-faint: #61766f;
+    --et-border: rgba(21, 155, 117, .22);
+    --et-border-2: rgba(255, 255, 255, .08);
+    --et-shadow-xs: 0 12px 34px rgba(0, 0, 0, .28);
+    --et-shadow-sm: 0 22px 60px rgba(0, 0, 0, .42);
+    --et-shadow-md: 0 38px 110px rgba(0, 0, 0, .58);
+    --et-shadow-glow: 0 0 0 1px rgba(var(--et-primary-rgb), .22), 0 0 70px rgba(var(--et-primary-rgb), .18);
+    --et-glow: rgba(var(--et-primary-rgb), .34);
+    --et-grid-dot: rgba(21, 155, 117, .13);
+    --et-chart-grid: rgba(255, 255, 255, .055);
+    --et-chart-tooltip-bg: rgba(4, 10, 9, .84);
+    --et-chart-tooltip-border: rgba(21, 155, 117, .36);
+}
+
+html[data-theme="light"],
+body.light,
+body.light-mode,
+[data-bs-theme="light"] {
+    color-scheme: light;
+    --et-bg: #f6fbf9;
+    --et-bg-2: #eef8f4;
+    --et-surface: rgba(255, 255, 255, .78);
+    --et-surface-strong: rgba(255, 255, 255, .94);
+    --et-surface-soft: rgba(255, 255, 255, .56);
+    --et-card: rgba(255, 255, 255, .74);
+    --et-card-hover: rgba(255, 255, 255, .9);
+    --et-title: #051f1a;
+    --et-text: #163832;
+    --et-muted: #60756f;
+    --et-faint: #8ca19b;
+    --et-border: rgba(21, 155, 117, .16);
+    --et-border-2: rgba(6, 31, 27, .08);
+    --et-shadow-xs: 0 8px 24px rgba(6, 31, 27, .06);
+    --et-shadow-sm: 0 16px 44px rgba(6, 31, 27, .09);
+    --et-shadow-md: 0 28px 80px rgba(6, 31, 27, .13);
+    --et-shadow-glow: 0 0 0 1px rgba(var(--et-primary-rgb), .12), 0 24px 80px rgba(var(--et-primary-rgb), .18);
+    --et-glow: rgba(var(--et-primary-rgb), .28);
+    --et-grid-dot: rgba(21, 155, 117, .12);
+    --et-chart-grid: rgba(21, 155, 117, .10);
+    --et-chart-tooltip-bg: rgba(255, 255, 255, .82);
+    --et-chart-tooltip-border: rgba(21, 155, 117, .18);
+}
+
+/* حركات مشتركة لصفحات الإدارة (منقولة من dashboard.css عشان تشتغل بكل صفحة) */
+@keyframes etNumberRise {
+    from { opacity: 0; transform: translateY(14px) scale(.96); filter: blur(4px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+@keyframes etPulseDot {
+    0%   { box-shadow: 0 0 0 0 rgba(var(--et-primary-rgb), .55); }
+    70%  { box-shadow: 0 0 0 10px rgba(var(--et-primary-rgb), 0); }
+    100% { box-shadow: 0 0 0 0 rgba(var(--et-primary-rgb), 0); }
+}

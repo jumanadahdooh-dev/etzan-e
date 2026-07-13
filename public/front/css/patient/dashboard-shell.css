@@ -1,0 +1,19 @@
+@charset "UTF-8";
+
+img,
+svg {
+    max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+a {
+    text-decoration: none;
+}
+
+

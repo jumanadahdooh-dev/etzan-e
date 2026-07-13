@@ -1,0 +1,843 @@
+.notifications-page {
+    display: grid;
+    gap: 22px;
+}
+
+.notify-alert {
+    padding: 14px 16px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+}
+
+.notify-alert.is-success {
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.10);
+    border: 1px solid rgba(29, 158, 117, 0.16);
+}
+
+.notifications-hero {
+    padding: 28px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    background:
+        radial-gradient(circle at top right, rgba(77, 168, 218, 0.16), transparent 35%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.10), rgba(255, 255, 255, 0.90));
+    border: 1px solid rgba(24, 51, 59, 0.08);
+    box-shadow: 0 18px 40px rgba(18, 61, 71, 0.08);
+}
+
+.notifications-kicker {
+    width: fit-content;
+    padding: 9px 13px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.10);
+    font-size: 13px;
+    font-weight: 900;
+    margin-bottom: 12px;
+}
+
+.notifications-hero h1 {
+    margin: 0 0 8px;
+    color: #18333B;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 950;
+}
+
+.notifications-hero p {
+    max-width: 640px;
+    margin: 0;
+    color: #647b84;
+    line-height: 1.8;
+    font-weight: 750;
+}
+
+.notifications-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 18px;
+    align-items: start;
+}
+
+.notifications-list {
+    display: grid;
+    gap: 14px;
+}
+
+.notification-card {
+    padding: 18px;
+    border-radius: 26px;
+    display: grid;
+    grid-template-columns: 54px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(24, 51, 59, 0.07);
+    box-shadow: 0 12px 30px rgba(18, 61, 71, 0.06);
+}
+
+.notification-card.is-unread {
+    border-color: rgba(29, 158, 117, 0.20);
+    background: rgba(29, 158, 117, 0.06);
+}
+
+.notification-icon {
+    width: 54px;
+    height: 54px;
+    border-radius: 20px;
+    display: grid;
+    place-items: center;
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.10);
+}
+
+.notification-card.is-warning .notification-icon {
+    color: #9A6700;
+    background: rgba(245, 179, 1, 0.14);
+}
+
+.notification-card.is-danger .notification-icon {
+    color: #9B1C1C;
+    background: rgba(220, 38, 38, 0.10);
+}
+
+.notification-card.is-blue .notification-icon {
+    color: #2563EB;
+    background: rgba(37, 99, 235, 0.10);
+}
+
+.notification-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+}
+
+.notification-content h2 {
+    margin: 0;
+    color: #18333B;
+    font-size: 16px;
+    font-weight: 950;
+}
+
+.unread-dot {
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.12);
+    font-size: 11px;
+    font-weight: 900;
+}
+
+.notification-content p {
+    margin: 0;
+    color: #647b84;
+    line-height: 1.8;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.notification-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.notification-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #8a9ba1;
+    font-size: 11px;
+    font-weight: 850;
+}
+
+.notification-meta i {
+    width: 14px;
+    height: 14px;
+}
+
+.notification-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.notify-primary-btn,
+.notify-outline-btn {
+    min-height: 42px;
+    padding: 0 15px;
+    border-radius: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    border: 0;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 900;
+    transition: 0.25s ease;
+}
+
+.notify-primary-btn {
+    color: #fff;
+    background: linear-gradient(135deg, #1D9E75, #15795A);
+    box-shadow: 0 12px 24px rgba(29, 158, 117, 0.20);
+}
+
+.notify-outline-btn {
+    color: #18333B;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(24, 51, 59, 0.10);
+}
+
+.notify-outline-btn.mini {
+    min-height: 36px;
+    padding-inline: 12px;
+    font-size: 12px;
+}
+
+.notifications-side {
+    display: grid;
+    gap: 14px;
+}
+
+.side-card,
+.notifications-empty {
+    padding: 22px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(24, 51, 59, 0.07);
+    box-shadow: 0 12px 30px rgba(18, 61, 71, 0.06);
+}
+
+.side-icon,
+.notifications-empty span {
+    width: 52px;
+    height: 52px;
+    border-radius: 20px;
+    display: grid;
+    place-items: center;
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.10);
+    margin-bottom: 14px;
+}
+
+.side-card h3,
+.notifications-empty h2 {
+    margin: 0 0 8px;
+    color: #18333B;
+    font-size: 17px;
+    font-weight: 950;
+}
+
+.side-card p,
+.notifications-empty p {
+    margin: 0;
+    color: #647b84;
+    line-height: 1.8;
+    font-size: 13px;
+    font-weight: 750;
+}
+
+.notifications-empty {
+    min-height: 310px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+}
+
+.notifications-empty .notify-primary-btn {
+    margin-top: 10px;
+}
+
+html[data-theme="dark"] .notifications-hero,
+html[data-theme="dark"] .notification-card,
+html[data-theme="dark"] .side-card,
+html[data-theme="dark"] .notifications-empty {
+    background: rgba(255,255,255,.045);
+    border-color: rgba(255,255,255,.075);
+}
+
+html[data-theme="dark"] .notifications-hero h1,
+html[data-theme="dark"] .notification-content h2,
+html[data-theme="dark"] .side-card h3,
+html[data-theme="dark"] .notifications-empty h2 {
+    color: #EEF7F5;
+}
+
+html[data-theme="dark"] .notifications-hero p,
+html[data-theme="dark"] .notification-content p,
+html[data-theme="dark"] .side-card p,
+html[data-theme="dark"] .notifications-empty p {
+    color: #98AAA6;
+}
+
+html[data-theme="dark"] .notify-outline-btn {
+    color: #EEF7F5;
+    background: rgba(255,255,255,.06);
+    border-color: rgba(255,255,255,.10);
+}
+
+@media (max-width: 980px) {
+    .notifications-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    .notifications-hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .notification-card {
+        grid-template-columns: 1fr;
+    }
+
+    .notification-actions {
+        justify-content: flex-start;
+    }
+}
+
+.notify-check-btn {
+    min-width: 38px;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border-radius: 13px;
+}
+
+.notify-check-btn i {
+    width: 17px;
+    height: 17px;
+}
+
+.notify-check-all-btn {
+    min-height: 42px;
+    padding-inline: 14px;
+    border-radius: 15px;
+    white-space: nowrap;
+}
+
+
+
+/* ===== Notifications Hero - Side Pills Layout ===== */
+
+.notifications-hero-with-cards {
+    position: relative;
+    overflow: hidden;
+    min-height: 360px;
+    padding: 44px 52px;
+    border-radius: 34px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    grid-template-areas: "copy pills";
+    align-items: center;
+    gap: 42px;
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.92), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(77, 168, 218, 0.14), transparent 32%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.12), rgba(255, 255, 255, 0.94));
+    border: 1px solid rgba(29, 158, 117, 0.16);
+    box-shadow: 0 22px 55px rgba(18, 61, 71, 0.08);
+}
+
+/* النص يمين */
+.notifications-hero-copy {
+    grid-area: copy;
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+    justify-self: end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.notifications-hero-copy h1 {
+    margin: 0 0 14px;
+    color: #18333B;
+    font-size: clamp(42px, 5vw, 68px);
+    line-height: 1.05;
+    font-weight: 950;
+    letter-spacing: -1px;
+}
+
+.notifications-hero-copy p {
+    max-width: 720px;
+    margin: 0;
+    color: #647b84;
+    font-size: 17px;
+    line-height: 1.9;
+    font-weight: 850;
+}
+
+.notifications-hero-copy form {
+    margin-top: 22px;
+}
+
+/* الشرائح جنب النص */
+.notifications-hero-mini-panel {
+    grid-area: pills;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 320px;
+    justify-self: start;
+    align-self: center;
+    display: grid;
+    gap: 14px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+}
+
+.hero-mini-pill {
+    min-height: 58px;
+    padding: 0 18px;
+    border-radius: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 950;
+    white-space: nowrap;
+    box-shadow: 0 12px 26px rgba(18, 61, 71, 0.06);
+}
+
+.hero-mini-pill strong {
+    color: inherit;
+    font-size: 15px;
+    font-weight: 950;
+}
+
+.hero-mini-pill i {
+    width: 21px;
+    height: 21px;
+    flex: 0 0 auto;
+}
+
+.hero-mini-pill.is-green {
+    color: #15795A;
+    background: rgba(29, 158, 117, 0.13);
+    border: 1px solid rgba(29, 158, 117, 0.16);
+}
+
+.hero-mini-pill.is-blue {
+    color: #2877A8;
+    background: rgba(77, 168, 218, 0.13);
+    border: 1px solid rgba(77, 168, 218, 0.16);
+}
+
+.hero-mini-pill.is-soft {
+    color: #18333B;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(24, 51, 59, 0.08);
+}
+
+.mini-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 999px;
+    background: #1D9E75;
+    box-shadow: 0 0 0 7px rgba(29, 158, 117, 0.11);
+    flex: 0 0 auto;
+}
+
+/* إخفاء أي ستايل قديم للكروت */
+.notifications-hero-cards,
+.hero-info-card,
+.hero-info-icon {
+    display: none !important;
+}
+
+/* حذف أي سهم أو عنصر غريب داخل الهيرو إن كان ظاهر */
+.notifications-hero-with-cards > .hero-arrow,
+.notifications-hero-with-cards > .arrow,
+.notifications-hero-with-cards > span:not(.notifications-kicker):empty {
+    display: none !important;
+}
+
+/* عرض القائمة كاملة */
+.notifications-layout,
+.notifications-layout-full {
+    display: block;
+}
+
+.notifications-list {
+    width: 100%;
+}
+
+.notifications-side {
+    display: none !important;
+}
+
+/* Dark mode */
+html[data-theme="dark"] .notifications-hero-with-cards {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.08), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(77, 168, 218, 0.12), transparent 32%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.10), rgba(23, 38, 43, 0.96));
+    border-color: rgba(255,255,255,0.08);
+}
+
+html[data-theme="dark"] .notifications-hero-copy h1 {
+    color: #EEF7F5;
+}
+
+html[data-theme="dark"] .notifications-hero-copy p {
+    color: #98AAA6;
+}
+
+html[data-theme="dark"] .hero-mini-pill.is-soft {
+    color: #EEF7F5;
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.08);
+}
+
+/* Responsive */
+@media (max-width: 1050px) {
+    .notifications-hero-with-cards {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "copy"
+            "pills";
+        padding: 32px;
+    }
+
+    .notifications-hero-copy {
+        justify-self: stretch;
+    }
+
+    .notifications-hero-mini-panel {
+        max-width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .hero-mini-pill {
+        width: auto;
+    }
+}
+
+@media (max-width: 700px) {
+    .notifications-hero-with-cards {
+        padding: 24px;
+        border-radius: 26px;
+        min-height: auto;
+    }
+
+    .notifications-hero-copy h1 {
+        font-size: 34px;
+    }
+
+    .notifications-hero-copy p {
+        font-size: 14px;
+    }
+
+    .notifications-hero-mini-panel {
+        display: grid;
+    }
+
+    .hero-mini-pill {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* =========================================================
+   Notifications Page - Etzan Appointments Palette
+   نفس درجات صفحة المواعيد: light + dark
+   ضع هذا الملف بدل ملف صفحة الإشعارات كاملًا
+========================================================= */
+
+.notifications-page {
+    --notify-primary: #15916f;
+    --notify-primary-2: #1d9e75;
+    --notify-primary-dark: #0f6f55;
+    --notify-secondary: #4da8da;
+
+    --notify-ink: #12333f;
+    --notify-muted: #657b84;
+    --notify-soft: #effaf7;
+    --notify-soft-2: #f7fbfa;
+    --notify-card: rgba(255, 255, 255, 0.82);
+    --notify-white: #ffffff;
+
+    --notify-line: rgba(19, 131, 101, 0.18);
+    --notify-line-2: rgba(19, 51, 63, 0.09);
+
+    --notify-shadow: 0 22px 55px rgba(18, 61, 71, 0.09);
+    --notify-shadow-soft: 0 14px 35px rgba(18, 61, 71, 0.07);
+
+    color: var(--notify-ink);
+    background:
+        radial-gradient(circle at 88% 3%, rgba(77, 168, 218, 0.10), transparent 34%),
+        radial-gradient(circle at 7% 18%, rgba(29, 158, 117, 0.09), transparent 35%);
+}
+
+html.dark .notifications-page,
+body.dark .notifications-page,
+body.dark-mode .notifications-page,
+html[data-theme="dark"] .notifications-page,
+body[data-theme="dark"] .notifications-page,
+[data-theme="dark"] .notifications-page {
+    --notify-ink: #edf8f6;
+    --notify-muted: #a8c1c7;
+    --notify-soft: rgba(23, 68, 64, 0.38);
+    --notify-soft-2: #0d1d22;
+    --notify-card: rgba(16, 35, 40, 0.82);
+    --notify-white: #11262c;
+
+    --notify-line: rgba(87, 210, 178, 0.22);
+    --notify-line-2: rgba(255, 255, 255, 0.08);
+
+    --notify-shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
+    --notify-shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.22);
+
+    color: var(--notify-ink);
+    background:
+        radial-gradient(circle at 88% 3%, rgba(77, 168, 218, 0.10), transparent 34%),
+        radial-gradient(circle at 7% 18%, rgba(29, 158, 117, 0.09), transparent 35%);
+}
+
+/* Hero */
+.notifications-hero,
+.notifications-hero-with-cards {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.92), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(77, 168, 218, 0.14), transparent 32%),
+        linear-gradient(135deg, rgba(29, 158, 117, 0.12), var(--notify-card)) !important;
+    border: 1px solid var(--notify-line) !important;
+    box-shadow: var(--notify-shadow) !important;
+    color: var(--notify-ink) !important;
+}
+
+html.dark .notifications-hero,
+html.dark .notifications-hero-with-cards,
+body.dark .notifications-hero,
+body.dark .notifications-hero-with-cards,
+body.dark-mode .notifications-hero,
+body.dark-mode .notifications-hero-with-cards,
+html[data-theme="dark"] .notifications-hero,
+html[data-theme="dark"] .notifications-hero-with-cards,
+body[data-theme="dark"] .notifications-hero,
+body[data-theme="dark"] .notifications-hero-with-cards,
+[data-theme="dark"] .notifications-hero,
+[data-theme="dark"] .notifications-hero-with-cards {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.08), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(77, 168, 218, 0.12), transparent 32%),
+        linear-gradient(135deg, rgba(23, 68, 64, 0.38), var(--notify-card)) !important;
+    border-color: var(--notify-line) !important;
+    box-shadow: var(--notify-shadow) !important;
+}
+
+.notifications-kicker,
+.unread-dot {
+    color: var(--notify-primary-dark) !important;
+    background: rgba(29, 158, 117, 0.10) !important;
+    border: 1px solid rgba(29, 158, 117, 0.14);
+}
+
+html.dark .notifications-kicker,
+html.dark .unread-dot,
+body.dark .notifications-kicker,
+body.dark .unread-dot,
+body.dark-mode .notifications-kicker,
+body.dark-mode .unread-dot,
+html[data-theme="dark"] .notifications-kicker,
+html[data-theme="dark"] .unread-dot,
+body[data-theme="dark"] .notifications-kicker,
+body[data-theme="dark"] .unread-dot,
+[data-theme="dark"] .notifications-kicker,
+[data-theme="dark"] .unread-dot {
+    color: #57d2b2 !important;
+    background: rgba(87, 210, 178, 0.10) !important;
+    border-color: rgba(87, 210, 178, 0.18) !important;
+}
+
+.notifications-hero h1,
+.notifications-hero-copy h1,
+.notification-content h2,
+.side-card h3,
+.notifications-empty h2 {
+    color: var(--notify-ink) !important;
+}
+
+.notifications-hero p,
+.notifications-hero-copy p,
+.notification-content p,
+.side-card p,
+.notifications-empty p,
+.notification-meta span {
+    color: var(--notify-muted) !important;
+}
+
+/* Cards / list */
+.notification-card,
+.side-card,
+.notifications-empty {
+    background: var(--notify-card) !important;
+    border: 1px solid var(--notify-line-2) !important;
+    box-shadow: var(--notify-shadow-soft) !important;
+    color: var(--notify-ink) !important;
+}
+
+.notification-card.is-unread {
+    background:
+        linear-gradient(135deg, rgba(29, 158, 117, 0.075), var(--notify-card)) !important;
+    border-color: var(--notify-line) !important;
+}
+
+html.dark .notification-card.is-unread,
+body.dark .notification-card.is-unread,
+body.dark-mode .notification-card.is-unread,
+html[data-theme="dark"] .notification-card.is-unread,
+body[data-theme="dark"] .notification-card.is-unread,
+[data-theme="dark"] .notification-card.is-unread {
+    background:
+        linear-gradient(135deg, rgba(23, 68, 64, 0.38), var(--notify-card)) !important;
+}
+
+/* Icons */
+.notification-icon,
+.side-icon,
+.notifications-empty span {
+    color: var(--notify-primary-dark) !important;
+    background: rgba(29, 158, 117, 0.11) !important;
+}
+
+html.dark .notification-icon,
+html.dark .side-icon,
+html.dark .notifications-empty span,
+body.dark .notification-icon,
+body.dark .side-icon,
+body.dark .notifications-empty span,
+body.dark-mode .notification-icon,
+body.dark-mode .side-icon,
+body.dark-mode .notifications-empty span,
+html[data-theme="dark"] .notification-icon,
+html[data-theme="dark"] .side-icon,
+html[data-theme="dark"] .notifications-empty span,
+body[data-theme="dark"] .notification-icon,
+body[data-theme="dark"] .side-icon,
+body[data-theme="dark"] .notifications-empty span,
+[data-theme="dark"] .notification-icon,
+[data-theme="dark"] .side-icon,
+[data-theme="dark"] .notifications-empty span {
+    color: #57d2b2 !important;
+    background: rgba(87, 210, 178, 0.10) !important;
+}
+
+/* حالة التحذير والخطر تبقى واضحة لكن ناعمة */
+.notification-card.is-warning .notification-icon {
+    color: #9A6700 !important;
+    background: rgba(245, 179, 1, 0.14) !important;
+}
+
+.notification-card.is-danger .notification-icon {
+    color: #9B1C1C !important;
+    background: rgba(220, 38, 38, 0.10) !important;
+}
+
+.notification-card.is-blue .notification-icon {
+    color: #2877A8 !important;
+    background: rgba(77, 168, 218, 0.13) !important;
+}
+
+/* Buttons */
+.notify-primary-btn {
+    color: #fff !important;
+    background: linear-gradient(135deg, var(--notify-primary-2), var(--notify-primary-dark)) !important;
+    border: 1px solid transparent !important;
+    box-shadow: 0 16px 30px rgba(21, 145, 111, 0.20) !important;
+}
+
+.notify-primary-btn * {
+    color: #fff !important;
+}
+
+.notify-outline-btn {
+    color: var(--notify-ink) !important;
+    background: var(--notify-card) !important;
+    border: 1px solid var(--notify-line-2) !important;
+    box-shadow: none !important;
+}
+
+.notify-outline-btn:hover,
+.notify-primary-btn:hover {
+    transform: translateY(-2px);
+}
+
+.notify-outline-btn:hover {
+    border-color: var(--notify-line) !important;
+    background: var(--notify-soft) !important;
+}
+
+/* Hero pills */
+.hero-mini-pill {
+    box-shadow: var(--notify-shadow-soft) !important;
+}
+
+.hero-mini-pill.is-green {
+    color: var(--notify-primary-dark) !important;
+    background: rgba(29, 158, 117, 0.13) !important;
+    border: 1px solid rgba(29, 158, 117, 0.16) !important;
+}
+
+.hero-mini-pill.is-blue {
+    color: #2877A8 !important;
+    background: rgba(77, 168, 218, 0.13) !important;
+    border: 1px solid rgba(77, 168, 218, 0.16) !important;
+}
+
+.hero-mini-pill.is-soft {
+    color: var(--notify-ink) !important;
+    background: var(--notify-card) !important;
+    border: 1px solid var(--notify-line-2) !important;
+}
+
+html.dark .hero-mini-pill.is-soft,
+body.dark .hero-mini-pill.is-soft,
+body.dark-mode .hero-mini-pill.is-soft,
+html[data-theme="dark"] .hero-mini-pill.is-soft,
+body[data-theme="dark"] .hero-mini-pill.is-soft,
+[data-theme="dark"] .hero-mini-pill.is-soft {
+    color: var(--notify-ink) !important;
+    background: rgba(255, 255, 255, 0.055) !important;
+    border-color: var(--notify-line-2) !important;
+}
+
+.mini-dot {
+    background: var(--notify-primary-2) !important;
+    box-shadow: 0 0 0 7px rgba(29, 158, 117, 0.11) !important;
+}
+
+/* Empty & side consistency */
+.notifications-empty .notify-primary-btn {
+    margin-top: 10px;
+}
+
+/* Responsive remains unchanged */
