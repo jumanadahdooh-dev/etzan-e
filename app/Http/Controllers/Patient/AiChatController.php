@@ -33,7 +33,7 @@ class AiChatController extends Controller
 
     public function show(AiChatConversation $conversation): View
     {
-        abort_if((int) $conversation->user_id !== (int) Auth::id(), 403);
+        $this->authorize('view', $conversation);
 
         $user = Auth::user();
 
@@ -101,7 +101,7 @@ class AiChatController extends Controller
 
     public function destroy(AiChatConversation $conversation): RedirectResponse
     {
-        abort_if((int) $conversation->user_id !== (int) Auth::id(), 403);
+        $this->authorize('delete', $conversation);
 
         $conversation->delete();
 

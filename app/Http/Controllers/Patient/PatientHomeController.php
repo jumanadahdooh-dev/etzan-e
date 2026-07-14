@@ -875,7 +875,7 @@ public function followUp(): View
 
     public function destroyMeal(PatientMeal $meal): RedirectResponse
     {
-        abort_if((int) $meal->user_id !== (int) auth()->id(), 403);
+        $this->authorize('delete', $meal);
 
         $date = $meal->meal_date?->toDateString() ?? now()->toDateString();
 

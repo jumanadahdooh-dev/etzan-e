@@ -160,7 +160,7 @@ class PatientTaskController extends Controller
 
     public function complete(PatientTask $task): RedirectResponse
     {
-        $this->authorizePatientTask($task);
+        $this->authorize('update', $task);
 
         $task->update([
             'status' => 'completed',
@@ -174,7 +174,7 @@ class PatientTaskController extends Controller
 
     public function updateNote(Request $request, PatientTask $task): RedirectResponse
     {
-        $this->authorizePatientTask($task);
+        $this->authorize('update', $task);
 
         $validated = $request->validate([
             'patient_note' => ['nullable', 'string', 'max:1000'],
@@ -205,7 +205,7 @@ class PatientTaskController extends Controller
     */
     public function uploadAttachment(Request $request, PatientTask $task): RedirectResponse
     {
-        $this->authorizePatientTask($task);
+        $this->authorize('update', $task);
 
         if (! $task->is_doctor_task) {
             return redirect()
@@ -245,7 +245,7 @@ class PatientTaskController extends Controller
     */
     public function showAttachment(PatientTask $task)
     {
-        $this->authorizePatientTask($task);
+        $this->authorize('view', $task);
 
         if (! $task->attachment_path) {
             abort(404, 'لا توجد صورة نتيجة لهذه المهمة.');
@@ -260,7 +260,7 @@ class PatientTaskController extends Controller
 
     public function destroy(PatientTask $task): RedirectResponse
     {
-        $this->authorizePatientTask($task);
+        $this->authorize('delete', $task);
 
         if ($task->is_doctor_task) {
             return redirect()
@@ -277,10 +277,5 @@ class PatientTaskController extends Controller
         return redirect()
             ->route('patient.journey')
             ->with('success', 'تم حذف المهمة.');
-    }
-
-    private function authorizePatientTask(PatientTask $task): void
-    {
-        abort_unless((int) $task->patient_user_id === (int) auth()->id(), 403);
     }
 }
