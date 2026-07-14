@@ -42,20 +42,32 @@ class ContactController extends Controller
 
         try {
             $result = DB::transaction(function () use ($guestName, $guestEmail, $subject, $messageText) {
-                $conversationData = $this->filterColumns('conversations', [
-                    'user_id' => null,
-                    'guest_name' => $guestName,
-                    'guest_email' => $guestEmail,
-                    'subject' => $subject,
-                    'source' => 'contact_guest',
-                    'status' => 'open',
-                    'last_message_at' => now(),
-                    'unread_by_admin' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                $conversationId = $this->findOpenGuestConversation($guestEmail);
 
-                $conversationId = DB::table('conversations')->insertGetId($conversationData);
+                if ($conversationId) {
+                    DB::table('conversations')->where('id', $conversationId)->update(
+                        $this->filterColumns('conversations', [
+                            'last_message_at' => now(),
+                            'unread_by_admin' => 1,
+                            'updated_at' => now(),
+                        ])
+                    );
+                } else {
+                    $conversationData = $this->filterColumns('conversations', [
+                        'user_id' => null,
+                        'guest_name' => $guestName,
+                        'guest_email' => $guestEmail,
+                        'subject' => $subject,
+                        'source' => 'contact_guest',
+                        'status' => 'open',
+                        'last_message_at' => now(),
+                        'unread_by_admin' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+
+                    $conversationId = DB::table('conversations')->insertGetId($conversationData);
+                }
 
                 $messageData = $this->filterColumns('messages', [
                     'conversation_id' => $conversationId,
@@ -316,6 +328,31 @@ class ContactController extends Controller
         $columns = Schema::getColumnListing($table);
 
         return array_intersect_key($data, array_flip($columns));
+    }
+
+    /**
+     * لو نفس الزائر (بنفس الإيميل) بعت رسالة قبل هيك وضلت المحادثة "مفتوحة"
+     * (ما ردّ عليها الأدمن وأغلقها لسا)، منستخدم نفس المحادثة بدل ما نعمل
+     * وحدة جديدة كل مرة — بالضبط نفس الأسلوب المستخدم بمحادثة الدعم الفني
+     * للمريض المسجل دخول (ensureSupportConversation).
+     */
+    private function findOpenGuestConversation(string $guestEmail): ?int
+    {
+        if (!Schema::hasTable('conversations') || !Schema::hasColumn('conversations', 'guest_email')) {
+            return null;
+        }
+
+        $query = DB::table('conversations')
+            ->whereNull('user_id')
+            ->where('guest_email', $guestEmail);
+
+        if (Schema::hasColumn('conversations', 'status')) {
+            $query->where('status', 'open');
+        }
+
+        $id = $query->orderByDesc('id')->value('id');
+
+        return $id ? (int) $id : null;
     }
 
     private function contactResponse(Request $request, bool $success, string $message, array $extra = [])
