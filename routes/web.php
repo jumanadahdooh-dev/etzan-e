@@ -14,7 +14,10 @@ use App\Http\Controllers\Auth\DoctorApplicationController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\Doctor\DoctorAlertsController;
 use App\Http\Controllers\Doctor\DoctorDashboardController;
+use App\Http\Controllers\Doctor\DoctorPlansController;
+use App\Http\Controllers\Doctor\DoctorReportsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Patient\AiChatController;
 use App\Http\Controllers\Patient\PatientAppointmentController;
@@ -510,10 +513,10 @@ Route::prefix('doctor')
         Route::get('/appointments', [DoctorDashboardController::class, 'page'])->defaults('page', 'appointments')->name('appointments');
         Route::get('/messages', [DoctorDashboardController::class, 'page'])->defaults('page', 'messages')->name('messages');
         Route::get('/meal-reviews', [DoctorDashboardController::class, 'page'])->defaults('page', 'meal-reviews')->name('meal_reviews');
-        Route::get('/plans', [DoctorDashboardController::class, 'page'])->defaults('page', 'plans')->name('plans');
-        Route::get('/alerts', [DoctorDashboardController::class, 'page'])->defaults('page', 'alerts')->name('alerts');
+        Route::get('/plans', [DoctorPlansController::class, 'index'])->name('plans');
+        Route::get('/alerts', [DoctorAlertsController::class, 'index'])->name('alerts');
         Route::get('/articles', [DoctorDashboardController::class, 'page'])->defaults('page', 'articles')->name('articles');
-        Route::get('/reports', [DoctorDashboardController::class, 'page'])->defaults('page', 'reports')->name('reports');
+        Route::get('/reports', [DoctorReportsController::class, 'index'])->name('reports');
         Route::get('/profile', [DoctorDashboardController::class, 'page'])->defaults('page', 'profile')->name('profile');
         Route::get('/settings', [DoctorDashboardController::class, 'page'])->defaults('page', 'settings')->name('settings');
 
