@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Doctor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Doctor\LogPatientWeightRequest;
+use App\Http\Requests\Doctor\SetCalorieGoalRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
@@ -167,15 +168,9 @@ class DoctorPatientDetailController extends Controller
      * يلي بيقارن بتاريخ محدد)، مش هدف دائم — لو بدك يصير ثابت لكل الأيام
      * القادمة تلقائياً، هاد تطوير إضافي لاحقاً.
      */
-    public function setCalorieGoal(Request $request, int $patientProfile): RedirectResponse
+    public function setCalorieGoal(SetCalorieGoalRequest $request, int $patientProfile): RedirectResponse
     {
-        $validated = $request->validate([
-            'calories_goal' => ['required', 'integer', 'min:800', 'max:6000'],
-            'protein_goal' => ['nullable', 'integer', 'min:0', 'max:400'],
-            'carbs_goal' => ['nullable', 'integer', 'min:0', 'max:700'],
-            'fat_goal' => ['nullable', 'integer', 'min:0', 'max:400'],
-            'doctor_note' => ['nullable', 'string', 'max:500'],
-        ]);
+        $validated = $request->validated();
 
         $user = auth()->user();
         $doctorProfile = DB::table('doctor_profiles')->where('user_id', $user->id)->first();
@@ -217,13 +212,9 @@ class DoctorPatientDetailController extends Controller
      * تسجيل قياس وزن جديد للمريض (من الطبيب، وقت الزيارة/المتابعة).
      * الجدول جديد كلياً، فبيبلش فاضي وبيتراكم بمرور الوقت بس.
      */
-    public function logWeight(Request $request, int $patientProfile): RedirectResponse
+    public function logWeight(LogPatientWeightRequest $request, int $patientProfile): RedirectResponse
     {
-        $validated = $request->validate([
-            'weight_kg' => ['required', 'numeric', 'min:25', 'max:350'],
-            'logged_date' => ['nullable', 'date', 'before_or_equal:today'],
-            'note' => ['nullable', 'string', 'max:300'],
-        ]);
+        $validated = $request->validated();
 
         $user = auth()->user();
         $doctorProfile = DB::table('doctor_profiles')->where('user_id', $user->id)->first();

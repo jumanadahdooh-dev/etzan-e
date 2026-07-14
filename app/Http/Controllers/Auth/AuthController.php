@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\PatientProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -21,28 +23,14 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'agree_terms' => ['accepted'],
-        ], [
-            'name.required' => 'الاسم الكامل مطلوب.',
-            'email.required' => 'البريد الإلكتروني مطلوب.',
-            'email.email' => 'صيغة البريد الإلكتروني غير صحيحة.',
-            'email.unique' => 'هذا البريد مستخدم بالفعل.',
-            'password.required' => 'كلمة المرور مطلوبة.',
-            'password.min' => 'كلمة المرور يجب أن تكون 8 أحرف على الأقل.',
-            'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
-            'agree_terms.accepted' => 'يجب الموافقة على الشروط والأحكام وسياسة الخصوصية.',
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
             'role' => 'patient',
         ]);
 
@@ -54,17 +42,8 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'تم إنشاء الحساب بنجاح. يمكنك الآن تسجيل الدخول.');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ], [
-            'email.required' => 'البريد الإلكتروني مطلوب.',
-            'email.email' => 'صيغة البريد الإلكتروني غير صحيحة.',
-            'password.required' => 'كلمة المرور مطلوبة.',
-        ]);
-
         $credentials = $request->only('email', 'password');
         $remember = $request->has('remember');
 

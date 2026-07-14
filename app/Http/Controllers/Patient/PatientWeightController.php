@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Patient\SetWeightGoalRequest;
+use App\Http\Requests\Patient\StoreWeightLogRequest;
+use App\Http\Requests\Patient\UpdateWeightLogRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -13,12 +15,9 @@ class PatientWeightController extends Controller
     /**
      * تسجيل وزن جديد من جهة المريض نفسه.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreWeightLogRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'weight_kg' => ['required', 'numeric', 'min:25', 'max:350'],
-            'logged_date' => ['nullable', 'date', 'before_or_equal:today'],
-        ]);
+        $validated = $request->validated();
 
         $user = auth()->user();
 
@@ -54,12 +53,9 @@ class PatientWeightController extends Controller
     /**
      * تعديل قياس وزن سابق (بس لصاحبه).
      */
-    public function update(Request $request, int $log): RedirectResponse
+    public function update(UpdateWeightLogRequest $request, int $log): RedirectResponse
     {
-        $validated = $request->validate([
-            'weight_kg' => ['required', 'numeric', 'min:25', 'max:350'],
-            'logged_date' => ['nullable', 'date', 'before_or_equal:today'],
-        ]);
+        $validated = $request->validated();
 
         $user = auth()->user();
         $row = DB::table('patient_weight_logs')->where('id', $log)->where('user_id', $user->id)->first();
@@ -111,11 +107,9 @@ class PatientWeightController extends Controller
     /**
      * تحديد/تحديث هدف الوزن المستهدف.
      */
-    public function setGoal(Request $request): RedirectResponse
+    public function setGoal(SetWeightGoalRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'target_weight_kg' => ['required', 'numeric', 'min:25', 'max:350'],
-        ]);
+        $validated = $request->validated();
 
         $user = auth()->user();
 

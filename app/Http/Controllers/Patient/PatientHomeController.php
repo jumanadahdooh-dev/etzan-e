@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Patient\BookAppointmentRequest;
+use App\Http\Requests\Patient\CompleteProfileRequest;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\PatientDailyCalorieGoal;
@@ -1196,29 +1198,9 @@ public function followUp(): View
         ]));
     }
 
-    public function completeProfile(Request $request): RedirectResponse
+    public function completeProfile(CompleteProfileRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'height_cm' => ['required', 'numeric', 'min:80', 'max:240'],
-            'weight_kg' => ['required', 'numeric', 'min:25', 'max:350'],
-            'birth_date' => ['required', 'date', 'before:today'],
-            'gender' => ['required', 'in:female,male'],
-            'phone' => ['nullable', 'string', 'max:30'],
-            'city' => ['nullable', 'string', 'max:120'],
-            'health_goal' => ['required', 'string', 'max:80'],
-            'activity_level' => ['required', 'string', 'max:80'],
-            'medical_conditions' => ['nullable', 'array'],
-            'medical_conditions.*' => ['nullable', 'string', 'max:80'],
-            'medications' => ['nullable', 'string', 'max:1000'],
-            'allergies' => ['nullable', 'string', 'max:1000'],
-            'meals_per_day' => ['nullable', 'integer', 'min:1', 'max:8'],
-            'sleep_hours' => ['nullable', 'numeric', 'min:0', 'max:16'],
-            'water_cups' => ['nullable', 'integer', 'min:0', 'max:20'],
-            'preferred_doctor_gender' => ['nullable', 'in:any,female,male'],
-            'preferred_consultation_type' => ['nullable', 'in:any,online,clinic'],
-            'notes' => ['nullable', 'string', 'max:1500'],
-        ]);
+        $validated = $request->validated();
 
         $user = auth()->user();
 
@@ -1384,15 +1366,9 @@ public function followUp(): View
 
             }
 
-public function bookAppointment(Request $request): RedirectResponse
+public function bookAppointment(BookAppointmentRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'appointment_date' => ['required', 'date', 'after_or_equal:today'],
-            'appointment_time' => ['required', 'string', 'max:20'],
-            'consultation_type' => ['required', 'in:online,clinic'],
-            'reason' => ['required', 'string', 'max:120'],
-            'notes' => ['nullable', 'string', 'max:1000'],
-        ]);
+        $validated = $request->validated();
 
         $user = auth()->user();
 
