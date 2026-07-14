@@ -11,7 +11,7 @@ class DoctorNotificationController extends Controller
 {
     /**
      * خريطة أيقونات موثوقة لكل أنواع الإشعارات الحقيقية يلي المشروع
-     * بيبعتها للطبيب فعلياً (من PatientHomeController وDoctorPatientRequestController)،
+     * بيبعتها للطبيب فعلياً (من PatientContextHelpers وDoctorPatientRequestController)،
      * حتى لو الموديل نفسه ما بيعرف النوع.
      */
     private const TYPE_ICONS = [

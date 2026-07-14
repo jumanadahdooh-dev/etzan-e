@@ -4,7 +4,7 @@ namespace App\Enums;
 
 /**
  * مرجع لكل القيم الممكنة لعمود patient_appointments.status كما هي مستخدمة فعلياً
- * بالكود (PatientHomeController). ملاحظة: القيمتين 'cancelled' و 'canceled'
+ * بالكود (PatientAppointmentController وPatientContextHelpers). ملاحظة: القيمتين 'cancelled' و 'canceled'
  * موجودتين مع بعض بالكود (خطأ إملائي تاريخي) — تركناهم متل ما هم بدل ما نعدل
  * بيانات حقيقية بدون تأكيد. هاد enum مرجعي فقط للـ validation، مش مربوط
  * بالموديل كـ cast حتى ما ينهار تحميل أي صف قديم فيه قيمة غير متوقعة.

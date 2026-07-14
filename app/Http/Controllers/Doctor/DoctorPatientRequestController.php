@@ -17,7 +17,7 @@ use Illuminate\View\View;
  *   - doctor_profile_id  (رقم الطبيب المختار)
  *   - has_selected_doctor (true عند الاختيار)
  *   - doctor_request_status ('pending' | 'approved' | 'rejected')
- * (راجعي PatientHomeController::selectDoctor()).
+ * (راجعي PatientDoctorController::selectDoctor()).
  *
  * لذلك أعيد بناء هذا الكونترولر ليقرأ من نفس المصدر الحقيقي بدل الجدول
  * المنفصل الذي لم يعد أي مسار حقيقي يكتب إليه.
@@ -231,7 +231,7 @@ class DoctorPatientRequestController extends Controller
      * إرسال إشعار حقيقي عبر نفس خدمة الإشعارات المستخدمة بباقي المشروع
      * (AppNotificationService) بدل الإدخال اليدوي المباشر بالجدول،
      * حتى نتجنب مشاكل الأعمدة الإلزامية (زي actor_user_id) ونحافظ على
-     * نفس السلوك المستخدم في PatientHomeController.
+     * نفس السلوك المستخدم في PatientContextHelpers.
      */
     private function notifyPatient(
         int $recipientUserId,

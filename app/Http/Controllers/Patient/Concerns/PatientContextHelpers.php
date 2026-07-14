@@ -1,696 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Patient;
+namespace App\Http\Controllers\Patient\Concerns;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Patient\BookAppointmentRequest;
-use App\Http\Requests\Patient\CompleteProfileRequest;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\PatientDailyCalorieGoal;
 use App\Models\PatientMeal;
-use App\Services\AiMealAnalysisService;
 use App\Services\AppNotificationService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 
-class PatientHomeController extends Controller
+/**
+ * كل الدوال المساعدة المشتركة يلي كانت جوا PatientHomeController (4,698 سطر)
+ * قبل ما ينقسم لعدة controllers حسب الميزة. نُقلت هون حرفياً بدون أي تغيير
+ * على منطقها الداخلي حتى يضل سلوك التطبيق مطابق 100% لما كان عليه.
+ */
+trait PatientContextHelpers
 {
-    public function index(): RedirectResponse
-    {
-        return redirect()->route('patient.home');
-    }
-
-    public function home(): View
-    {
-        return view('patient.home', $this->dashboardData([
-            'pageTitle' => 'الرئيسية',
-            'activePage' => 'home',
-        ]));
-    }
-
-    public function journey(): View
-    {
-        return view('patient.journey', $this->dashboardData([
-            'pageTitle' => 'رحلتي اليوم',
-            'activePage' => 'journey',
-        ]));
-    }
-
-public function followUp(): View
-    {
-        $data = $this->dashboardData([
-            'pageTitle' => 'حجز موعد',
-            'activePage' => 'followup',
-        ]);
-
-        $user = auth()->user();
-        $profile = $this->patientProfile($user?->id);
-        $doctor = $data['doctor'] ?? $this->selectedDoctor($profile);
-        $nextAppointment = $data['nextAppointment'] ?? null;
-
-        $selectedDate = request('appointment_date')
-            ?: request('date')
-            ?: old('appointment_date')
-            ?: ($nextAppointment['date'] ?? now()->toDateString());
-
-        try {
-            $selectedDate = Carbon::parse($selectedDate)->toDateString();
-        } catch (\Throwable $exception) {
-            $selectedDate = now()->toDateString();
-        }
-
-        $ignoreAppointmentId = request()->boolean('edit') && !empty($nextAppointment['id'])
-            ? (int) $nextAppointment['id']
-            : null;
-
-        $doctorProfileId = !empty($doctor['id']) ? (int) $doctor['id'] : null;
-
-        $data['selectedAppointmentDate'] = $selectedDate;
-        $data['availableSlots'] = $this->appointmentSlots($doctorProfileId, $selectedDate, $ignoreAppointmentId);
-
-        $monthMeta = $doctorProfileId
-            ? $this->appointmentMonthMeta($doctorProfileId, $selectedDate, $ignoreAppointmentId)
-            : [
-                'availableAppointmentDates' => [],
-                'fullyBookedAppointmentDates' => [],
-            ];
-
-        $data['availableAppointmentDates'] = $monthMeta['availableAppointmentDates'];
-        $data['availableDates'] = $monthMeta['availableAppointmentDates'];
-        $data['fullyBookedAppointmentDates'] = $monthMeta['fullyBookedAppointmentDates'];
-        $data['fullyBookedDates'] = $monthMeta['fullyBookedAppointmentDates'];
-        $data['calendarAppointments'] = $this->calendarAppointmentsForPatient(
-            $user?->id,
-            $profile?->id ?? null,
-            $selectedDate
-        );
-
-        $data['appointmentReasons'] = [
-            'first_consultation' => 'استشارة أولى',
-            'followup' => 'متابعة دورية',
-            'nutrition_plan' => 'مراجعة الخطة الغذائية',
-            'medical_question' => 'استفسار صحي',
-            'progress_review' => 'مراجعة التقدم',
-        ];
-
-        return view('patient.appointments', $data);
-    }
-
-    public function profile(): View
-    {
-        return view('patient.profile', $this->dashboardData([
-            'pageTitle' => 'ملفي الصحي',
-            'activePage' => 'profile',
-        ]));
-    }
-
-    public function recommendedDoctorsPage(): View
-    {
-        return view('patient.recommended-doctors', $this->dashboardData([
-            'pageTitle' => 'الأطباء المناسبون',
-            'activePage' => 'profile',
-        ]));
-    }
-
-
-    public function myDoctor(): View
-{
-    $user = auth()->user();
-
-    $data = $this->dashboardData([
-        'pageTitle' => 'طبيبي',
-        'activePage' => 'my-doctor',
-    ]);
-
-    $profile = $this->patientProfile($user?->id);
-    $selectedDoctor = $this->selectedDoctor($profile);
-
-    $state = 'no_doctor';
-
-    if (! empty($selectedDoctor['is_selected'])) {
-        $requestStatus = $selectedDoctor['request_status'] ?? null;
-
-        $state = match ($requestStatus) {
-            'approved' => 'approved',
-            'rejected', 'declined' => 'rejected',
-            default => 'pending',
-        };
-    }
-
-    $doctor = $selectedDoctor;
-    $doctorArticles = [];
-
-    if (! empty($selectedDoctor['id']) && $this->tableExists('doctor_profiles') && $this->tableExists('users')) {
-        $select = [
-            'doctor_profiles.id',
-            'doctor_profiles.user_id',
-            'users.name as user_name',
-            'users.email as user_email',
-        ];
-
-        foreach (['avatar', 'profile_photo_path', 'image', 'photo', 'gender'] as $column) {
-            if ($this->columnExists('users', $column)) {
-                $select[] = 'users.' . $column . ' as user_' . $column;
-            }
-        }
-
-        foreach ([
-            'bio',
-            'about',
-            'description',
-            'specialty',
-            'specialization',
-            'years_experience',
-            'experience_years',
-            'photo_path',
-            'avatar',
-            'image',
-            'consultation_type',
-            'gender',
-            'doctor_gender',
-        ] as $column) {
-            if ($this->columnExists('doctor_profiles', $column)) {
-                $select[] = 'doctor_profiles.' . $column . ' as doctor_' . $column;
-            }
-        }
-
-        $doctorRow = DB::table('doctor_profiles')
-            ->join('users', 'users.id', '=', 'doctor_profiles.user_id')
-            ->where('doctor_profiles.id', $selectedDoctor['id'])
-            ->select($select)
-            ->first();
-
-        if ($doctorRow) {
-            $specialty = $this->doctorSpecialty((int) $doctorRow->id);
-
-            $gender = $this->normalizeGender(
-                $this->valueFrom($doctorRow, ['doctor_doctor_gender', 'doctor_gender', 'user_gender'], 'unknown')
-            );
-
-            $consultationKey = $this->normalizeConsultationType(
-                $this->valueFrom($doctorRow, ['doctor_consultation_type'], 'online')
-            );
-
-            $photo = $this->valueFrom($doctorRow, [
-                'doctor_photo_path',
-                'doctor_avatar',
-                'doctor_image',
-                'user_avatar',
-                'user_profile_photo_path',
-                'user_image',
-                'user_photo',
-            ]);
-
-            $experience = (int) $this->valueFrom($doctorRow, [
-                'doctor_years_experience',
-                'doctor_experience_years',
-            ], 5);
-
-            $bio = $this->valueFrom($doctorRow, [
-                'doctor_bio',
-                'doctor_about',
-                'doctor_description',
-            ], 'طبيب مختص يساعدك على بناء متابعة صحية مناسبة لحالتك وهدفك.');
-
-            $review = $this->doctorReviewSummary((int) $doctorRow->id);
-
-            $preferredGender = (string) $this->valueFrom($profile, ['preferred_doctor_gender'], 'any');
-            $preferredType = (string) $this->valueFrom($profile, ['preferred_consultation_type'], 'any');
-
-            $preferredGender = in_array($preferredGender, ['female', 'male'], true) ? $preferredGender : 'any';
-            $preferredType = in_array($preferredType, ['online', 'clinic'], true) ? $preferredType : 'any';
-
-            $match = $this->doctorMatch(
-                $profile,
-                $specialty,
-                $doctorRow,
-                $gender,
-                $consultationKey,
-                $preferredGender,
-                $preferredType,
-                $experience
-            );
-
-            $hasReviews = (bool) ($review['has_reviews'] ?? ((int) ($review['count'] ?? 0) > 0));
-
-            $doctorArticles = $this->doctorArticles((int) $doctorRow->id, (int) $doctorRow->user_id);
-
-            $doctor = array_merge($selectedDoctor, [
-                'id' => (int) $doctorRow->id,
-                'user_id' => (int) $doctorRow->user_id,
-                'name' => 'د. ' . ($doctorRow->user_name ?: 'طبيب اتزان'),
-                'email' => $doctorRow->user_email ?? null,
-                'specialty' => $specialty,
-                'avatar' => $this->imageUrl($photo) ?: $this->placeholderImage($doctorRow->user_name ?: 'طبيب'),
-                'bio' => $bio,
-                'gender' => $gender,
-                'gender_label' => $gender === 'female' ? 'طبيبة' : ($gender === 'male' ? 'طبيب' : 'غير محدد'),
-                'consultation_key' => $consultationKey,
-                'consultation_type' => $consultationKey === 'clinic' ? 'حضوري' : 'أونلاين',
-                'experience' => $experience,
-                'rating' => $review['average'] ?? null,
-                'reviews_count' => $review['count'] ?? 0,
-                'has_reviews' => $hasReviews,
-                'match_score' => $match['score'],
-                'match_reason' => $match['reason'],
-                'badges' => $match['badges'],
-            ]);
-        }
-    }
-
-    $myReview = null;
-
-        if (! empty($doctor['id']) && $this->tableExists('doctor_reviews')) {
-            $doctorReviewColumn = $this->firstExistingColumn('doctor_reviews', [
-                'doctor_profile_id',
-                'doctor_id',
-            ]);
-
-            $patientReviewColumn = $this->firstExistingColumn('doctor_reviews', [
-                'patient_user_id',
-                'user_id',
-                'patient_id',
-            ]);
-
-            if ($doctorReviewColumn && $patientReviewColumn) {
-                $patientReviewValue = (int) $user?->id;
-
-                $myReview = DB::table('doctor_reviews')
-                    ->where($doctorReviewColumn, $doctor['id'])
-                    ->where($patientReviewColumn, $patientReviewValue)
-                    ->first();
-                }
-        }
-
-
-    $data['myDoctorPage'] = [
-        'state' => $state,
-        'doctor' => $doctor,
-        'articles' => $doctorArticles,
-        'nextAppointment' => $data['nextAppointment'] ?? null,
-        'can_book' => $state === 'approved',
-        'can_message' => $state === 'approved',
-        'can_review' => $state === 'approved',
-        'my_review' => $myReview,
-    ];
-
-    return view('patient.my-doctor', $data);
-}
-
-
-    public function doctorDetails(int $doctorProfile): View
-{
-    $user = auth()->user();
-
-    $data = $this->dashboardData([
-        'pageTitle' => 'تفاصيل الطبيب',
-        'activePage' => 'profile',
-    ]);
-
-    $patientProfile = $this->patientProfile($user?->id);
-
-    if (! $this->tableExists('doctor_profiles') || ! $this->tableExists('users')) {
-        abort(404);
-    }
-
-    $select = [
-        'doctor_profiles.id',
-        'doctor_profiles.user_id',
-        'users.name as user_name',
-        'users.email as user_email',
-    ];
-
-    foreach (['avatar', 'profile_photo_path', 'image', 'photo', 'gender'] as $column) {
-        if ($this->columnExists('users', $column)) {
-            $select[] = 'users.' . $column . ' as user_' . $column;
-        }
-    }
-
-    foreach ([
-        'bio',
-        'about',
-        'description',
-        'specialty',
-        'specialization',
-        'years_experience',
-        'experience_years',
-        'photo_path',
-        'avatar',
-        'image',
-        'consultation_type',
-        'gender',
-        'doctor_gender',
-    ] as $column) {
-        if ($this->columnExists('doctor_profiles', $column)) {
-            $select[] = 'doctor_profiles.' . $column . ' as doctor_' . $column;
-        }
-    }
-
-    $doctorRow = DB::table('doctor_profiles')
-        ->join('users', 'users.id', '=', 'doctor_profiles.user_id')
-        ->where('doctor_profiles.id', $doctorProfile)
-        ->select($select)
-        ->first();
-
-    abort_if(! $doctorRow, 404);
-
-    $specialty = $this->doctorSpecialty((int) $doctorRow->id);
-
-    $gender = $this->normalizeGender(
-        $this->valueFrom($doctorRow, ['doctor_doctor_gender', 'doctor_gender', 'user_gender'], 'unknown')
-    );
-
-    $consultationKey = $this->normalizeConsultationType(
-        $this->valueFrom($doctorRow, ['doctor_consultation_type'], 'online')
-    );
-
-    $photo = $this->valueFrom($doctorRow, [
-        'doctor_photo_path',
-        'doctor_avatar',
-        'doctor_image',
-        'user_avatar',
-        'user_profile_photo_path',
-        'user_image',
-        'user_photo',
-    ]);
-
-    $experience = (int) $this->valueFrom($doctorRow, [
-        'doctor_years_experience',
-        'doctor_experience_years',
-    ], 5);
-
-    $bio = $this->valueFrom($doctorRow, [
-        'doctor_bio',
-        'doctor_about',
-        'doctor_description',
-    ], 'طبيب مختص يساعدك على بناء متابعة صحية مناسبة لحالتك وهدفك.');
-
-    $review = $this->doctorReviewSummary((int) $doctorRow->id);
-
-    $preferredGender = (string) $this->valueFrom($patientProfile, ['preferred_doctor_gender'], 'any');
-    $preferredType = (string) $this->valueFrom($patientProfile, ['preferred_consultation_type'], 'any');
-
-    $preferredGender = in_array($preferredGender, ['female', 'male'], true) ? $preferredGender : 'any';
-    $preferredType = in_array($preferredType, ['online', 'clinic'], true) ? $preferredType : 'any';
-
-    $match = $this->doctorMatch(
-        $patientProfile,
-        $specialty,
-        $doctorRow,
-        $gender,
-        $consultationKey,
-        $preferredGender,
-        $preferredType,
-        $experience
-    );
-
-    $currentDoctor = $this->selectedDoctor($patientProfile);
-
-    $isCurrentDoctor = ! empty($currentDoctor['id'])
-        && (int) $currentDoctor['id'] === (int) $doctorRow->id;
-
-    $doctorRequestStatus = $currentDoctor['request_status'] ?? null;
-
-    $doctor = [
-        'id' => (int) $doctorRow->id,
-        'user_id' => (int) $doctorRow->user_id,
-        'name' => 'د. ' . ($doctorRow->user_name ?: 'طبيب اتزان'),
-        'email' => $doctorRow->user_email ?? null,
-        'specialty' => $specialty,
-        'avatar' => $this->imageUrl($photo) ?: $this->placeholderImage($doctorRow->user_name ?: 'طبيب'),
-        'bio' => $bio,
-        'gender' => $gender,
-        'gender_label' => $gender === 'female' ? 'طبيبة' : ($gender === 'male' ? 'طبيب' : 'غير محدد'),
-        'consultation_key' => $consultationKey,
-        'consultation_type' => $consultationKey === 'clinic' ? 'حضوري' : 'أونلاين',
-        'experience' => $experience,
-        'rating' => $review['average'],
-        'reviews_count' => $review['count'],
-        'has_reviews' => $review['has_reviews'] ?? false,
-        'match_score' => $match['score'],
-        'match_reason' => $match['reason'],
-        'badges' => $match['badges'],
-        'articles' => $this->doctorArticles((int) $doctorRow->id, (int) $doctorRow->user_id),
-        'is_current_doctor' => $isCurrentDoctor,
-        'request_status' => $isCurrentDoctor ? $doctorRequestStatus : null,
-    ];
-
-    $data['doctorDetails'] = $doctor;
-
-    return view('patient.doctor-details', $data);
-}
-
-
-    public function storeDoctorReview(Request $request, int $doctorProfile): RedirectResponse
-    {
-        $user = auth()->user();
-
-        if (! $user) {
-            return redirect()->route('login');
-        }
-
-        $profile = $this->patientProfile($user?->id);
-        $selectedDoctor = $this->selectedDoctor($profile);
-
-        $isSelectedDoctor = ! empty($selectedDoctor['is_selected'])
-            && (int) ($selectedDoctor['id'] ?? 0) === (int) $doctorProfile;
-
-        $isApproved = ($selectedDoctor['request_status'] ?? null) === 'approved';
-
-        if (! $isSelectedDoctor || ! $isApproved) {
-            return back()->with('error', 'لا يمكنك تقييم الطبيب قبل اعتماد المتابعة.');
-        }
-
-        if (! $this->tableExists('doctor_reviews')) {
-            return back()->with('error', 'جدول تقييمات الأطباء غير موجود.');
-        }
-
-        $doctorColumn = $this->firstExistingColumn('doctor_reviews', [
-            'doctor_profile_id',
-            'doctor_id',
-        ]);
-
-        $patientColumn = $this->firstExistingColumn('doctor_reviews', [
-            'patient_user_id',
-            'user_id',
-            'patient_id',
-        ]);
-
-        $ratingColumn = $this->firstExistingColumn('doctor_reviews', [
-            'rating',
-            'stars',
-            'rate',
-        ]);
-
-        $commentColumn = $this->firstExistingColumn('doctor_reviews', [
-            'comment',
-            'review',
-            'body',
-        ]);
-
-        if (! $doctorColumn || ! $patientColumn || ! $ratingColumn) {
-            return back()->with('error', 'أعمدة جدول تقييمات الأطباء غير مكتملة.');
-        }
-
-        $validated = $request->validate([
-            'rating' => ['required', 'integer', 'min:1', 'max:5'],
-            'comment' => ['nullable', 'string', 'max:1000'],
-        ]);
-
-        $patientReviewValue = (int) $user->id;
-
-        $lookup = [
-            $doctorColumn => $doctorProfile,
-            $patientColumn => $patientReviewValue,
-        ];
-
-        $payload = [
-            $ratingColumn => (int) $validated['rating'],
-        ];
-
-        if ($this->columnExists('doctor_reviews', 'is_recommended')) {
-            $payload['is_recommended'] = $request->boolean('is_recommended');
-        }
-
-        if ($commentColumn) {
-            $payload[$commentColumn] = $validated['comment'] ?? null;
-        }
-
-        if ($this->columnExists('doctor_reviews', 'status')) {
-            $payload['status'] = 'published';
-        }
-
-        if ($this->columnExists('doctor_reviews', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        if ($this->columnExists('doctor_reviews', 'created_at')) {
-            $payload['created_at'] = now();
-        }
-
-        DB::table('doctor_reviews')->updateOrInsert($lookup, $payload);
-
-        return back()->with('success', 'تم حفظ تقييمك للطبيب بنجاح.');
-    }
-
-
-    public function calories(): View
-    {
-        $user = auth()->user();
-
-        $data = $this->dashboardData([
-            'pageTitle' => 'تحليل الوجبات',
-            'activePage' => 'calories',
-        ]);
-
-        $selectedDate = request('date')
-            ? Carbon::parse(request('date'))->toDateString()
-            : now()->toDateString();
-
-        $profile = $this->patientProfile($user?->id);
-
-        /*
-        |--------------------------------------------------------------------------
-        | 1) وجبات التاريخ المختار فقط
-        |--------------------------------------------------------------------------
-        | هذه هي التي تدخل في مجموع السعرات الظاهر في كرت اليوم.
-        */
-        $todayMeals = PatientMeal::query()
-            ->where('user_id', $user?->id)
-            ->whereDate('meal_date', $selectedDate)
-            ->where('status', 'confirmed')
-            ->latest('id')
-            ->get();
-
-        $consumed = (int) $todayMeals->sum('calories');
-        $protein = (int) $todayMeals->sum('protein');
-        $carbs = (int) $todayMeals->sum('carbs');
-        $fat = (int) $todayMeals->sum('fat');
-
-        /*
-        |--------------------------------------------------------------------------
-        | 2) آخر الوجبات المحفوظة من كل الأيام
-        |--------------------------------------------------------------------------
-        | لا تدخل في مجموع اليوم، لكنها تظهر كسجل سريع.
-        */
-        $recentAnalyses = PatientMeal::query()
-            ->where('user_id', $user?->id)
-            ->where('status', 'confirmed')
-            ->latest('meal_date')
-            ->latest('id')
-            ->limit(8)
-            ->get();
-
-        /*
-        |--------------------------------------------------------------------------
-        | 3) هدف السعرات
-        |--------------------------------------------------------------------------
-        | لا يوجد 2000 افتراضي.
-        | الهدف يظهر فقط إذا كان موجودًا في ملف المريض.
-        */
-        $dailyGoal = $this->dailyCalorieGoalForDate($user?->id, $profile, $selectedDate);
-
-        $target = $dailyGoal['target'];
-        $goalStatus = $dailyGoal['status'];
-
-        $proteinTarget = $dailyGoal['protein_target'];
-        $carbsTarget = $dailyGoal['carbs_target'];
-        $fatTarget = $dailyGoal['fat_target'];
-
-        $data['selectedDate'] = $selectedDate;
-
-        $data['caloriesSummary'] = [
-            'target' => $target,
-            'goal_status' => $goalStatus,
-
-            'consumed' => $consumed,
-            'remaining' => $target ? max($target - $consumed, 0) : null,
-            'progress' => $target ? min(100, (int) round(($consumed / $target) * 100)) : 0,
-
-            'protein' => $protein,
-            'carbs' => $carbs,
-            'fat' => $fat,
-
-            // مؤقتًا، إلى أن نعمل أهداف الماكروز من الطبيب أو من الملف الصحي
-            'protein_target' => $proteinTarget,
-            'carbs_target' => $carbsTarget,
-            'fat_target' => $fatTarget,
-            'goal_note' => $dailyGoal['note'],
-            'goal_date' => $selectedDate,
-        ];
-
-        $data['todayMeals'] = $todayMeals;
-        $data['recentAnalyses'] = $recentAnalyses;
-
-        $weekStart = Carbon::parse($selectedDate)
-        ->copy()
-        ->startOfWeek(\Carbon\CarbonInterface::SATURDAY);
-
-        $data['weeklyCalories'] = collect(range(0, 6))->map(function ($offset) use ($user, $profile, $weekStart) {
-            $date = $weekStart->copy()->addDays($offset)->toDateString();
-
-            $dailyGoal = $this->dailyCalorieGoalForDate($user?->id, $profile, $date);
-
-            return [
-                'date' => $date,
-                'label' => Carbon::parse($date)->locale('ar')->translatedFormat('D'),
-                'calories' => PatientMeal::query()
-                    ->where('user_id', $user?->id)
-                    ->where('status', 'confirmed')
-                    ->whereDate('meal_date', $date)
-                    ->sum('calories'),
-                'target' => $dailyGoal['target'],
-                'goal_status' => $dailyGoal['status'],
-            ];
-        })->toArray();
-
-        $data['aiMealDraft'] = session('ai_meal_draft');
-
-        $weightLogs = collect();
-        if ($this->tableExists('patient_weight_logs')) {
-            $weightLogs = DB::table('patient_weight_logs')
-                ->where('user_id', $user?->id)
-                ->orderBy('logged_date')
-                ->get();
-
-            // لو ما في أي سجل وزن بعد، بس عند المريض وزن أولي من وقت التسجيل،
-            // نستورده تلقائياً كأول نقطة بالسجل — حتى ما يبين الجدول فاضي بالغلط.
-            if ($weightLogs->isEmpty() && $profile) {
-                $initialWeight = $this->valueFrom($profile, ['weight', 'weight_kg', 'current_weight']);
-
-                if ($initialWeight && (float) $initialWeight > 0) {
-                    DB::table('patient_weight_logs')->insert([
-                        'user_id' => $user->id,
-                        'patient_profile_id' => $profile->id ?? null,
-                        'doctor_profile_id' => $profile->doctor_profile_id ?? null,
-                        'weight_kg' => $initialWeight,
-                        'logged_date' => $profile->created_at ?? now()->toDateString(),
-                        'source' => 'profile_initial',
-                        'note' => 'الوزن الأولي وقت إكمال الملف الصحي',
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-
-                    $weightLogs = DB::table('patient_weight_logs')
-                        ->where('user_id', $user->id)
-                        ->orderBy('logged_date')
-                        ->get();
-                }
-            }
-        }
-        $data['weightLogs'] = $weightLogs;
-
-        return view('patient.calories', $data);
-    }
         private function dailyCalorieGoalForDate(?int $userId, ?object $profile, string $selectedDate): array
     {
         $empty = [
@@ -740,1116 +70,6 @@ public function followUp(): View
         ];
     }
 
-    public function analyzeMeal(Request $request, AiMealAnalysisService $mealAnalysisService): RedirectResponse
-    {
-        $validated = $request->validate([
-            'meal_type' => ['required', 'string', 'max:30'],
-            'meal_date' => ['nullable', 'date'],
-
-            // نقبل الاسمين عشان لو البلايد يستخدم meal_text أو description
-            'meal_text' => ['nullable', 'string', 'max:2000'],
-            'description' => ['nullable', 'string', 'max:2000'],
-
-            // نقبل الاسمين عشان لو البلايد يستخدم meal_photo أو meal_image
-            'meal_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'meal_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-        ]);
-
-        $user = auth()->user();
-
-        if (! $user) {
-            return redirect()->route('login');
-        }
-
-        $description = trim((string) (
-            $validated['meal_text']
-            ?? $validated['description']
-            ?? ''
-        ));
-
-        $photoInputName = $request->hasFile('meal_photo')
-            ? 'meal_photo'
-            : ($request->hasFile('meal_image') ? 'meal_image' : null);
-
-        if ($description === '' && ! $photoInputName) {
-            return back()
-                ->withInput()
-                ->with('error', 'اكتب وصف الوجبة أو ارفع صورة قبل التحليل.');
-        }
-
-        if ($description === '' && $photoInputName) {
-            return back()
-                ->withInput()
-                ->with('error', 'حاليًا التحليل المجاني يحتاج وصفًا نصيًا مع الصورة. اكتب مكونات الوجبة باختصار.');
-        }
-
-        $imagePath = null;
-        $imageUrl = null;
-
-        if ($photoInputName) {
-            $imagePath = $request->file($photoInputName)->store('patient-meals', 'public');
-            $imageUrl = asset('storage/' . $imagePath);
-        }
-
-        $mealDate = ! empty($validated['meal_date'])
-            ? Carbon::parse($validated['meal_date'])->toDateString()
-            : now()->toDateString();
-
-        $result = $mealAnalysisService->analyzeTextMeal(
-            description: $description,
-            mealType: $validated['meal_type']
-        );
-
-        $result['meal_date'] = $mealDate;
-        $result['image_path'] = $imagePath;
-        $result['image_url'] = $imageUrl;
-
-        session(['ai_meal_draft' => $result]);
-
-        return redirect()
-            ->route('patient.calories', ['date' => $mealDate])
-            ->with('success', 'تم تحليل الوجبة. راجع النتيجة ثم اضغط اعتماد وحفظ.');
-    }
-
-    public function confirmMeal(Request $request): RedirectResponse
-    {
-        $draft = session('ai_meal_draft');
-
-        if (! $draft) {
-            return redirect()
-                ->route('patient.calories')
-                ->with('error', 'لا توجد نتيجة تحليل لاعتمادها.');
-        }
-
-        $validated = $request->validate([
-            'meal_name' => ['required', 'string', 'max:255'],
-            'calories' => ['required', 'integer', 'min:0', 'max:5000'],
-            'protein' => ['nullable', 'integer', 'min:0', 'max:400'],
-            'carbs' => ['nullable', 'integer', 'min:0', 'max:700'],
-            'fat' => ['nullable', 'integer', 'min:0', 'max:400'],
-            'patient_note' => ['nullable', 'string', 'max:1000'],
-        ]);
-
-        $user = auth()->user();
-
-        if (! $user) {
-            return redirect()->route('login');
-        }
-
-        $profile = $this->patientProfile($user->id);
-        $doctor = $this->selectedDoctor($profile);
-
-        PatientMeal::create([
-            'user_id' => $user->id,
-            'patient_profile_id' => $profile?->id,
-            'doctor_profile_id' => $doctor['id'] ?? null,
-            'doctor_user_id' => $doctor['user_id'] ?? null,
-
-            'meal_date' => $draft['meal_date'] ?? now()->toDateString(),
-            'meal_type' => $draft['meal_type'] ?? 'lunch',
-
-            'meal_name' => $validated['meal_name'],
-            'description' => $draft['description'] ?? null,
-            'image_path' => $draft['image_path'] ?? null,
-
-            'calories' => (int) $validated['calories'],
-            'protein' => (int) ($validated['protein'] ?? 0),
-            'carbs' => (int) ($validated['carbs'] ?? 0),
-            'fat' => (int) ($validated['fat'] ?? 0),
-            'confidence' => (int) ($draft['confidence'] ?? 0),
-
-            'ai_notes' => $draft['ai_notes'] ?? null,
-            'patient_note' => $validated['patient_note'] ?? null,
-            'ai_response' => $draft,
-
-            'source' => 'ai',
-            'status' => 'confirmed',
-        ]);
-
-        session()->forget('ai_meal_draft');
-
-        return redirect()
-            ->route('patient.calories', ['date' => $draft['meal_date'] ?? now()->toDateString()])
-            ->with('success', 'تم حفظ الوجبة في سجل اليوم.');
-    }
-
-    public function destroyMeal(PatientMeal $meal): RedirectResponse
-    {
-        $this->authorize('delete', $meal);
-
-        $date = $meal->meal_date?->toDateString() ?? now()->toDateString();
-
-        $meal->delete();
-
-        return redirect()
-            ->route('patient.calories', ['date' => $date])
-            ->with('success', 'تم حذف الوجبة من سجل اليوم.');
-    }
-
-    public function articles(Request $request): View
-    {
-        $data = $this->dashboardData([
-            'pageTitle' => 'المقالات',
-            'activePage' => 'articles',
-        ]);
-
-        $search = trim((string) $request->query('q', ''));
-        $filter = (string) $request->query('filter', 'recommended');
-        $selectedCategory = (string) $request->query('category', 'all');
-
-        if ($filter === 'admin') {
-            $filter = 'etzan';
-        }
-
-        if (! in_array($filter, ['recommended', 'all', 'doctor', 'etzan', 'research', 'tips', 'facts', 'ideas', 'wisdom', 'motivation'], true)) {
-            $filter = 'recommended';
-        }
-
-        $doctor = $data['doctor'] ?? [];
-        $doctorProfileId = !empty($doctor['id']) ? (int) $doctor['id'] : null;
-        $doctorUserId = !empty($doctor['user_id']) ? (int) $doctor['user_id'] : $this->doctorUserIdFromProfile($doctorProfileId);
-        $hasSelectedDoctor = !empty($doctor['is_selected']);
-
-        $articleCategories = $this->patientArticleCategories();
-        $doctorArticles = collect();
-        $patientArticles = new LengthAwarePaginator([], 0, 9, 1, [
-            'path' => $request->url(),
-            'query' => $request->query(),
-        ]);
-        $featuredArticle = null;
-        $doctorArticlesCount = 0;
-        $etzanArticlesCount = 0;
-        $allVisibleArticlesCount = 0;
-        $recommendedArticlesCount = 0;
-        $researchArticlesCount = 0;
-        $tipsArticlesCount = 0;
-        $factsArticlesCount = 0;
-        $ideasArticlesCount = 0;
-        $wisdomArticlesCount = 0;
-        $motivationArticlesCount = 0;
-
-        if ($this->tableExists('articles')) {
-            $baseQuery = $this->patientVisibleArticlesQuery();
-
-            if ($search !== '') {
-                $baseQuery->where(function (Builder $query) use ($search) {
-                    $query->where('title', 'like', '%' . $search . '%');
-
-                    foreach (['excerpt', 'content', 'author_name'] as $column) {
-                        if ($this->columnExists('articles', $column)) {
-                            $query->orWhere($column, 'like', '%' . $search . '%');
-                        }
-                    }
-
-                    if ($this->tableExists('article_categories')) {
-                        $query->orWhereHas('category', function (Builder $categoryQuery) use ($search) {
-                            $categoryQuery->where('name', 'like', '%' . $search . '%');
-                        });
-                    }
-
-                    if ($this->tableExists('specialties')) {
-                        $query->orWhereHas('specialty', function (Builder $specialtyQuery) use ($search) {
-                            $specialtyQuery->where('name', 'like', '%' . $search . '%');
-                        });
-                    }
-                });
-            }
-
-            if ($selectedCategory !== 'all' && $selectedCategory !== '') {
-                if ($this->columnExists('articles', 'article_category_id')) {
-                    $baseQuery->where('article_category_id', $selectedCategory);
-                } elseif ($this->columnExists('articles', 'specialty_id')) {
-                    $baseQuery->where('specialty_id', $selectedCategory);
-                }
-            }
-
-            if ($filter === 'recommended') {
-                $this->applyPatientRecommendedArticleScope($baseQuery, $data, $doctorProfileId, $doctorUserId);
-            } elseif ($filter === 'doctor') {
-                if ($doctorProfileId || $doctorUserId) {
-                    $this->applyDoctorArticleScope($baseQuery, $doctorProfileId, $doctorUserId);
-                } else {
-                    $baseQuery->whereRaw('1 = 0');
-                }
-            } elseif ($filter === 'etzan') {
-                $this->applyEtzanArticleScope($baseQuery, $doctorProfileId, $doctorUserId);
-            } elseif ($filter === 'research') {
-                $this->applyArticleTypeScope($baseQuery, ['research_summary']);
-            } elseif ($filter === 'tips') {
-                $this->applyArticleTypeScope($baseQuery, ['quick_tip']);
-            } elseif ($filter === 'facts') {
-                $this->applyArticleTypeScope($baseQuery, ['general_info']);
-            } elseif ($filter === 'ideas') {
-                $this->applyArticleTypeScope($baseQuery, ['wellness_idea']);
-            } elseif ($filter === 'wisdom') {
-                $this->applyArticleTypeScope($baseQuery, ['health_wisdom']);
-            } elseif ($filter === 'motivation') {
-                $this->applyArticleTypeScope($baseQuery, ['motivational_quote']);
-            }
-
-            $patientArticles = $baseQuery
-                ->paginate(9)
-                ->withQueryString();
-
-            if ($doctorProfileId || $doctorUserId) {
-                $doctorCounterQuery = $this->patientVisibleArticlesQuery();
-                $this->applyDoctorArticleScope($doctorCounterQuery, $doctorProfileId, $doctorUserId);
-                $doctorArticlesCount = (int) $doctorCounterQuery->count();
-
-                $doctorQuery = $this->patientVisibleArticlesQuery();
-                $this->applyDoctorArticleScope($doctorQuery, $doctorProfileId, $doctorUserId);
-                $doctorArticles = $doctorQuery->limit(4)->get();
-            }
-
-            $etzanCounterQuery = $this->patientVisibleArticlesQuery();
-            $this->applyEtzanArticleScope($etzanCounterQuery, $doctorProfileId, $doctorUserId);
-            $etzanArticlesCount = (int) $etzanCounterQuery->count();
-
-            $allVisibleArticlesCount = (int) $this->patientVisibleArticlesQuery()->count();
-
-            $recommendedCounterQuery = $this->patientVisibleArticlesQuery();
-            $this->applyPatientRecommendedArticleScope($recommendedCounterQuery, $data, $doctorProfileId, $doctorUserId);
-            $recommendedArticlesCount = (int) $recommendedCounterQuery->count();
-
-            $researchCounterQuery = $this->patientVisibleArticlesQuery();
-            $this->applyArticleTypeScope($researchCounterQuery, ['research_summary']);
-            $researchArticlesCount = (int) $researchCounterQuery->count();
-
-            $tipsCounterQuery = $this->patientVisibleArticlesQuery();
-            $this->applyArticleTypeScope($tipsCounterQuery, ['quick_tip']);
-            $tipsArticlesCount = (int) $tipsCounterQuery->count();
-
-            $factsCounterQuery = $this->patientVisibleArticlesQuery();
-            $this->applyArticleTypeScope($factsCounterQuery, ['general_info']);
-            $factsArticlesCount = (int) $factsCounterQuery->count();
-
-            $ideasCounterQuery = $this->patientVisibleArticlesQuery();
-            $this->applyArticleTypeScope($ideasCounterQuery, ['wellness_idea']);
-            $ideasArticlesCount = (int) $ideasCounterQuery->count();
-
-            $wisdomCounterQuery = $this->patientVisibleArticlesQuery();
-            $this->applyArticleTypeScope($wisdomCounterQuery, ['health_wisdom']);
-            $wisdomArticlesCount = (int) $wisdomCounterQuery->count();
-
-            $motivationCounterQuery = $this->patientVisibleArticlesQuery();
-            $this->applyArticleTypeScope($motivationCounterQuery, ['motivational_quote']);
-            $motivationArticlesCount = (int) $motivationCounterQuery->count();
-
-            $featuredQuery = $this->patientVisibleArticlesQuery();
-
-            if ($this->columnExists('articles', 'is_featured')) {
-                $featuredQuery->where('is_featured', true);
-            }
-
-            $featuredArticle = $featuredQuery->first() ?: $this->patientVisibleArticlesQuery()->first();
-        }
-
-        $hasActiveArticleFilter = $search !== '' || ! in_array($filter, ['recommended', 'all'], true) || ($selectedCategory !== 'all' && $selectedCategory !== '');
-
-        $articleResultsTitle = match ($filter) {
-            'recommended' => 'محتوى مناسب لحالتك',
-            'doctor' => 'مقالات طبيبك',
-            'etzan' => 'مكتبة اتزان الصحية',
-            'research' => 'ملخصات بحثية مبسطة',
-            'tips' => 'نصائح سريعة',
-            'facts' => 'معلومات صحية عامة',
-            'ideas' => 'أفكار صحية يومية',
-            'wisdom' => 'حكمة اليوم',
-            'motivation' => 'رسائل تحفيزية',
-            default => $search !== '' ? 'نتائج البحث' : 'مقالات صحية مختارة لك',
-        };
-
-        if ($selectedCategory !== 'all' && $selectedCategory !== '') {
-            $selectedCategoryName = optional($articleCategories->firstWhere('id', (int) $selectedCategory))->name;
-            if ($selectedCategoryName) {
-                $articleResultsTitle = 'مقالات ' . $selectedCategoryName;
-            }
-        }
-
-        $articleResultsSubtitle = $search !== ''
-            ? 'نعرض فقط المقالات الصحية المطابقة لبحثك داخل لوحة المريض.'
-            : match ($filter) {
-                'recommended' => 'نعرض محتوى مناسبًا لهدفك الصحي وبيانات ملفك مثل الوزن، النشاط، النوم، الماء والحالات الصحية عند توفرها.',
-                'doctor' => 'هذه المقالات منشورة من طبيب المتابعة المختار عند توفرها.',
-                'etzan' => 'مقالات عامة من فريق اتزان والإدارة، بدون المقالات التقنية أو التجريبية.',
-                'research' => 'ملخصات بحثية مبسطة للمريض، وتحتاج دائمًا لمصدر ومراجعة قبل النشر.',
-                'tips' => 'نصائح قصيرة قابلة للتطبيق اليوم.',
-                'facts' => 'معلومات صحية عامة بلغة بسيطة.',
-                'ideas' => 'أفكار صغيرة تساعدك تبني عادة صحية واحدة في اليوم.',
-                'wisdom' => 'حكم صحية قصيرة من اتزان، بدون نسبتها لأشخاص أو علماء إلا بوجود مصدر واضح.',
-                'motivation' => 'رسائل تحفيزية قصيرة تساعدك على الالتزام اليومي بدون مبالغة أو وعود.',
-                default => 'مقالات صحية فقط؛ المقالات التقنية مثل Back-end و Laravel لا تظهر هنا.',
-            };
-
-        return view('patient.articles', array_merge($data, [
-            'patientArticles' => $patientArticles,
-            'patientArticleCategories' => $articleCategories,
-            'doctorArticleHighlights' => $doctorArticles,
-            'featuredPatientArticle' => $featuredArticle,
-            'articleSearch' => $search,
-            'articleFilter' => $filter,
-            'selectedArticleCategory' => $selectedCategory,
-            'hasActiveArticleFilter' => $hasActiveArticleFilter,
-            'articleResultsTitle' => $articleResultsTitle,
-            'articleResultsSubtitle' => $articleResultsSubtitle,
-            'doctorArticlesCount' => $doctorArticlesCount,
-            'etzanArticlesCount' => $etzanArticlesCount,
-            'allVisibleArticlesCount' => $allVisibleArticlesCount,
-            'recommendedArticlesCount' => $recommendedArticlesCount,
-            'researchArticlesCount' => $researchArticlesCount,
-            'tipsArticlesCount' => $tipsArticlesCount,
-            'factsArticlesCount' => $factsArticlesCount,
-            'ideasArticlesCount' => $ideasArticlesCount,
-            'wisdomArticlesCount' => $wisdomArticlesCount,
-            'motivationArticlesCount' => $motivationArticlesCount,
-            'articlesDoctor' => [
-                'id' => $doctorProfileId,
-                'user_id' => $doctorUserId,
-                'name' => $doctor['name'] ?? 'طبيب المتابعة',
-                'specialty' => $doctor['specialty'] ?? null,
-                'avatar' => $doctor['avatar'] ?? null,
-                'is_selected' => $hasSelectedDoctor,
-            ],
-        ]));
-    }
-
-    public function articleDetails(string $slug): View
-    {
-        if (! $this->tableExists('articles')) {
-            abort(404);
-        }
-
-        $article = $this->patientVisibleArticlesQuery()
-            ->where('slug', $slug)
-            ->firstOrFail();
-
-        $data = $this->dashboardData([
-            'pageTitle' => $article->title ?? 'تفاصيل المقال',
-            'activePage' => 'articles',
-        ]);
-
-        $doctor = $data['doctor'] ?? [];
-        $doctorProfileId = !empty($doctor['id']) ? (int) $doctor['id'] : null;
-        $doctorUserId = !empty($doctor['user_id']) ? (int) $doctor['user_id'] : $this->doctorUserIdFromProfile($doctorProfileId);
-
-        $relatedQuery = $this->patientVisibleArticlesQuery()
-            ->where('articles.id', '!=', $article->id);
-
-        if ($this->columnExists('articles', 'article_category_id') && !empty($article->article_category_id)) {
-            $relatedQuery->where('article_category_id', $article->article_category_id);
-        } elseif ($this->columnExists('articles', 'specialty_id') && !empty($article->specialty_id)) {
-            $relatedQuery->where('specialty_id', $article->specialty_id);
-        }
-
-        $relatedArticles = $relatedQuery->limit(3)->get();
-
-        if ($relatedArticles->isEmpty()) {
-            $relatedArticles = $this->patientVisibleArticlesQuery()
-                ->where('articles.id', '!=', $article->id)
-                ->limit(3)
-                ->get();
-        }
-
-        $isCurrentDoctorArticle = false;
-
-        if ($doctorUserId && $this->columnExists('articles', 'user_id')) {
-            $isCurrentDoctorArticle = (int) ($article->user_id ?? 0) === (int) $doctorUserId;
-        }
-
-        if (! $isCurrentDoctorArticle && $doctorProfileId && $this->columnExists('articles', 'doctor_profile_id')) {
-            $isCurrentDoctorArticle = (int) ($article->doctor_profile_id ?? 0) === (int) $doctorProfileId;
-        }
-
-        return view('patient.article-details', array_merge($data, [
-            'patientArticle' => $article,
-            'relatedPatientArticles' => $relatedArticles,
-            'isCurrentDoctorArticle' => $isCurrentDoctorArticle,
-            'articlesDoctor' => [
-                'id' => $doctorProfileId,
-                'user_id' => $doctorUserId,
-                'name' => $doctor['name'] ?? 'طبيب المتابعة',
-                'specialty' => $doctor['specialty'] ?? null,
-                'avatar' => $doctor['avatar'] ?? null,
-            ],
-        ]));
-    }
-
-    public function messages(): View
-    {
-        return view('patient.messages', $this->dashboardData([
-            'pageTitle' => 'الرسائل',
-            'activePage' => 'messages',
-        ]));
-    }
-
-    public function support(): View
-    {
-        return view('patient.support', $this->dashboardData([
-            'pageTitle' => 'الدعم',
-            'activePage' => 'support',
-        ]));
-    }
-
-    public function notifications(): View
-    {
-        return view('patient.notifications', $this->dashboardData([
-            'pageTitle' => 'الإشعارات',
-            'activePage' => 'notifications',
-        ]));
-    }
-
-    public function completeProfile(CompleteProfileRequest $request): RedirectResponse
-    {
-        $validated = $request->validated();
-
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        if (!$this->tableExists('patient_profiles')) {
-            return back()->withInput()->with('error', 'جدول patient_profiles غير موجود بعد.');
-        }
-
-        $conditions = $validated['medical_conditions'] ?? [];
-
-        if (empty($conditions)) {
-            $conditions = ['none'];
-        }
-
-        $payload = [];
-        $avatarPath = null;
-
-        if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('patients/avatars', 'public');
-        }
-
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['user_id'], $user->id);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['height', 'height_cm'], $validated['height_cm']);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['weight', 'weight_kg', 'current_weight'], $validated['weight_kg']);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['birth_date', 'date_of_birth'], $validated['birth_date']);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['gender'], $validated['gender']);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['phone'], $validated['phone'] ?? null);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['city'], $validated['city'] ?? null);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['health_goal', 'goal', 'main_goal', 'target_goal', 'goal_type', 'main_health_goal', 'health_objective'], $validated['health_goal']);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['activity_level'], $validated['activity_level']);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['medical_conditions', 'health_condition', 'chronic_diseases', 'diseases'], json_encode($conditions, JSON_UNESCAPED_UNICODE));
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['medications'], $validated['medications'] ?? null);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['allergies'], $validated['allergies'] ?? null);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['meals_per_day'], $validated['meals_per_day'] ?? null);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['sleep_hours'], $validated['sleep_hours'] ?? null);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['water_cups'], $validated['water_cups'] ?? null);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['preferred_doctor_gender'], $validated['preferred_doctor_gender'] ?? 'any');
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['preferred_consultation_type'], $validated['preferred_consultation_type'] ?? 'any');
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['notes', 'patient_notes'], $validated['notes'] ?? null);
-
-        if ($avatarPath) {
-            $this->setFirstExistingColumn($payload, 'patient_profiles', ['avatar', 'profile_photo', 'photo', 'image', 'profile_photo_path'], $avatarPath);
-
-            $userPayload = [];
-
-            foreach (['avatar', 'profile_photo_path', 'image', 'photo'] as $column) {
-                if ($this->columnExists('users', $column)) {
-                    $userPayload[$column] = $avatarPath;
-                    break;
-                }
-            }
-
-            if (!empty($userPayload)) {
-                DB::table('users')->where('id', $user->id)->update($userPayload);
-            }
-        }
-
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['profile_completion', 'completion', 'completion_percentage', 'profile_completion_percentage'], 100);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['profile_completed', 'has_completed_profile', 'is_profile_complete', 'completed', 'is_completed'], true);
-
-        if ($this->columnExists('patient_profiles', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        $profile = $this->patientProfile($user->id);
-
-        if ($profile) {
-            DB::table('patient_profiles')->where('id', $profile->id)->update($payload);
-        } else {
-            if ($this->columnExists('patient_profiles', 'created_at')) {
-                $payload['created_at'] = now();
-            }
-
-            DB::table('patient_profiles')->insert($payload);
-        }
-
-        return redirect()
-            ->route('patient.doctors.recommended')
-            ->with('success', 'تم حفظ ملفك الصحي بنجاح. هذه قائمة الأطباء المناسبين لحالتك.');
-   }
-
-    public function selectDoctor(Request $request, int $doctorProfile): RedirectResponse
-    {
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        if (!$this->tableExists('patient_profiles')) {
-            return back()->with('error', 'جدول patient_profiles غير موجود.');
-        }
-
-        if (!$this->tableExists('doctor_profiles')) {
-            return back()->with('error', 'جدول doctor_profiles غير موجود.');
-        }
-
-        $doctorExists = DB::table('doctor_profiles')->where('id', $doctorProfile)->exists();
-
-        if (!$doctorExists) {
-            return back()->with('error', 'الطبيب المحدد غير موجود.');
-        }
-
-        $profile = $this->patientProfile($user->id);
-
-        if (!$profile || $this->profileCompletion($profile) < 100) {
-            return redirect()->route('patient.profile')->with('error', 'أكمل ملفك الصحي أولاً قبل اختيار الطبيب.');
-        }
-
-        $payload = [];
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['doctor_profile_id', 'selected_doctor_id', 'doctor_id'], $doctorProfile);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['has_selected_doctor', 'doctor_selected', 'is_doctor_selected'], true);
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['doctor_request_status'], 'pending');
-
-        if ($this->columnExists('patient_profiles', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        if (empty($payload)) {
-            return back()->with('error', 'لا يوجد عمود مناسب لحفظ طلب الطبيب في جدول patient_profiles.');
-        }
-
-        DB::table('patient_profiles')->where('id', $profile->id)->update($payload);
-
-        $this->createAppNotification(
-            recipientUserId: $user->id,
-            actorUserId: null,
-            type: 'doctor_request_pending',
-            title: 'تم إرسال طلب المتابعة',
-            body: 'تم إرسال طلب اختيار الطبيب، وسيتم إشعارك عند موافقة الطبيب أو اعتذاره.',
-            url: route('patient.profile')
-        );
-
-        $doctorUserId = $this->doctorUserIdFromProfile($doctorProfile);
-
-        if ($doctorUserId) {
-            $this->createAppNotification(
-                recipientUserId: $doctorUserId,
-                actorUserId: $user->id,
-                type: 'doctor_followup_request_received',
-                title: 'طلب متابعة جديد',
-                body: 'وصل طلب متابعة جديد من مريض. راجع الطلب ثم اختر الموافقة أو الاعتذار.',
-                url: url('/doctor/patients'),
-                relatedId: $profile->id ?? null,
-                relatedType: 'doctor_followup_request',
-                recipientRole: 'doctor',
-                data: [
-                    'patient_user_id' => $user->id,
-                    'patient_profile_id' => $profile->id ?? null,
-                    'doctor_profile_id' => $doctorProfile,
-                ]
-            );
-        }
-
-        $this->setFirstExistingColumn($payload, 'patient_profiles', ['doctor_request_status'], 'pending');
-
-        return redirect()
-            ->route('patient.doctor.current')
-            ->with('success', 'تم إرسال طلب اختيار الطبيب. بانتظار موافقة الطبيب.');
-
-            }
-
-public function bookAppointment(BookAppointmentRequest $request): RedirectResponse
-    {
-        $validated = $request->validated();
-
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        $profile = $this->patientProfile($user->id);
-
-        if (!$profile) {
-            return redirect()->route('patient.profile')->with('error', 'أكمل ملفك الصحي أولًا قبل حجز موعد.');
-        }
-
-        $doctor = $this->selectedDoctor($profile);
-        $doctorRequestStatus = $doctor['request_status'] ?? null;
-
-        if (($doctor['is_selected'] ?? false) !== true || $doctorRequestStatus !== 'approved') {
-            return redirect()->route('patient.profile')->with('error', 'لا يمكنك حجز موعد قبل موافقة الطبيب على طلب المتابعة.');
-        }
-
-        if (!$this->tableExists('patient_appointments')) {
-            return back()->withInput()->with('error', 'جدول patient_appointments غير موجود.');
-        }
-
-        $doctorProfileId = (int) ($doctor['id'] ?? 0);
-        $appointmentDate = Carbon::parse($validated['appointment_date'])->toDateString();
-        $appointmentTime = $this->normalizeAppointmentTime($validated['appointment_time']);
-
-        if (!$doctorProfileId || !$this->isAppointmentSlotAvailable($doctorProfileId, $appointmentDate, $appointmentTime)) {
-            return back()
-                ->withInput()
-                ->with('error', 'هذا الوقت لم يعد متاحًا، اختاري وقتًا آخر من الأوقات المتاحة.');
-        }
-
-        $payload = [
-            'user_id' => $user->id,
-            'patient_profile_id' => $profile->id ?? null,
-            'doctor_profile_id' => $doctorProfileId,
-            'appointment_date' => $appointmentDate,
-            'appointment_time' => $appointmentTime,
-            'consultation_type' => $validated['consultation_type'],
-            'reason' => $validated['reason'],
-            'notes' => $validated['notes'] ?? null,
-            'status' => 'pending',
-        ];
-
-        if ($this->columnExists('patient_appointments', 'created_at')) {
-            $payload['created_at'] = now();
-        }
-
-        if ($this->columnExists('patient_appointments', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        $appointmentId = DB::table('patient_appointments')->insertGetId($payload);
-
-        $this->createAppNotification(
-            recipientUserId: $user->id,
-            actorUserId: null,
-            type: 'appointment_pending',
-            title: 'تم إرسال طلب الموعد',
-            body: 'موعدك بانتظار تأكيد الطبيب. سيتم تحديث حالة الموعد بعد مراجعة الطبيب.',
-            url: route('patient.followup'),
-            appointmentId: $appointmentId
-        );
-
-        if (!empty($doctor['user_id'])) {
-            $this->createAppNotification(
-                recipientUserId: (int) $doctor['user_id'],
-                actorUserId: $user->id,
-                type: 'appointment_request_received',
-                title: 'طلب موعد جديد',
-                body: 'وصل طلب موعد جديد من المريض، راجع التاريخ والوقت ثم أكد الطلب أو اقترح وقتًا بديلًا.',
-                url: url('/doctor/appointments'),
-                appointmentId: $appointmentId,
-                recipientRole: 'doctor',
-                data: [
-                    'appointment_date' => $appointmentDate,
-                    'appointment_time' => $appointmentTime,
-                    'patient_user_id' => $user->id,
-                    'doctor_profile_id' => $doctorProfileId,
-                ]
-            );
-        }
-
-        return redirect()
-            ->route('patient.followup')
-            ->with('success', 'تم إرسال طلب الموعد بنجاح. سيراجع الطبيب الطلب.');
-    }
-
-public function updateAppointment(Request $request, int $appointment): RedirectResponse
-    {
-        $validated = $request->validate([
-            'appointment_date' => ['required', 'date', 'after_or_equal:today'],
-            'appointment_time' => ['required', 'string', 'max:20'],
-            'consultation_type' => ['required', 'in:online,clinic'],
-            'reason' => ['required', 'string', 'max:120'],
-            'notes' => ['nullable', 'string', 'max:1000'],
-        ]);
-
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        if (!$this->tableExists('patient_appointments')) {
-            return back()->with('error', 'جدول المواعيد غير موجود.');
-        }
-
-        $appointmentRow = DB::table('patient_appointments')
-            ->where('id', $appointment)
-            ->where('user_id', $user->id)
-            ->first();
-
-        if (!$appointmentRow) {
-            return redirect()->route('patient.followup')->with('error', 'طلب الموعد غير موجود.');
-        }
-
-        if (($appointmentRow->status ?? null) !== 'pending') {
-            return redirect()->route('patient.followup')->with('error', 'لا يمكن تعديل الموعد بعد رد الطبيب عليه.');
-        }
-
-        $doctorProfileId = (int) ($appointmentRow->doctor_profile_id ?? 0);
-        $appointmentDate = Carbon::parse($validated['appointment_date'])->toDateString();
-        $appointmentTime = $this->normalizeAppointmentTime($validated['appointment_time']);
-
-        if ($doctorProfileId && !$this->isAppointmentSlotAvailable($doctorProfileId, $appointmentDate, $appointmentTime, $appointment)) {
-            return back()
-                ->withInput()
-                ->with('error', 'هذا الوقت لم يعد متاحًا، اختاري وقتًا آخر من الأوقات المتاحة.');
-        }
-
-        $payload = [];
-
-        if ($this->columnExists('patient_appointments', 'appointment_date')) {
-            $payload['appointment_date'] = $appointmentDate;
-        }
-
-        if ($this->columnExists('patient_appointments', 'appointment_time')) {
-            $payload['appointment_time'] = $appointmentTime;
-        }
-
-        foreach (['consultation_type', 'reason', 'notes'] as $column) {
-            if ($this->columnExists('patient_appointments', $column)) {
-                $payload[$column] = $validated[$column] ?? null;
-            }
-        }
-
-        if ($this->columnExists('patient_appointments', 'status')) {
-            $payload['status'] = 'pending';
-        }
-
-        if ($this->columnExists('patient_appointments', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        DB::table('patient_appointments')
-            ->where('id', $appointment)
-            ->where('user_id', $user->id)
-            ->update($payload);
-
-        $doctorUserId = $this->doctorUserIdFromProfile($doctorProfileId);
-
-        if ($doctorUserId) {
-            $this->createAppNotification(
-                recipientUserId: $doctorUserId,
-                actorUserId: $user->id,
-                type: 'appointment_request_updated',
-                title: 'تم تعديل طلب الموعد',
-                body: 'عدّل المريض طلب الموعد قبل التأكيد. راجع التاريخ والوقت المحدّثين.',
-                url: url('/doctor/appointments'),
-                appointmentId: $appointment,
-                recipientRole: 'doctor',
-                data: [
-                    'appointment_date' => $appointmentDate,
-                    'appointment_time' => $appointmentTime,
-                    'patient_user_id' => $user->id,
-                    'doctor_profile_id' => $doctorProfileId,
-                ]
-            );
-        }
-
-        return redirect()->route('patient.followup')->with('success', 'تم تعديل طلب الموعد بنجاح. سيراجع الطبيب الموعد المحدّث.');
-    }
-
-    public function sendDoctorMessage(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'message' => ['required', 'string', 'max:2000'],
-        ]);
-
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        if (!$this->tableExists('messages') || !$this->tableExists('conversations')) {
-            return back()
-                ->withInput()
-                ->with('error', 'جداول الرسائل غير جاهزة.');
-        }
-
-        $profile = $this->patientProfile($user->id);
-        $doctor = $this->selectedDoctor($profile);
-
-        if (empty($doctor['is_selected']) || empty($doctor['user_id'])) {
-            return back()
-                ->withInput()
-                ->with('error', 'لا يوجد طبيب متابعة لإرسال الرسالة.');
-        }
-
-        $bodyColumn = $this->firstExistingColumn('messages', ['body', 'message', 'content', 'text']);
-
-        if (!$bodyColumn) {
-            return back()
-                ->withInput()
-                ->with('error', 'لا يوجد عمود مناسب لحفظ نص الرسالة في جدول messages.');
-        }
-
-        $conversationId = $this->ensureConversation(
-            patientUserId: $user->id,
-            doctorUserId: (int) $doctor['user_id'],
-            patientProfileId: $profile?->id,
-            doctorProfileId: $doctor['id'] ?? null
-        );
-
-        if (!$conversationId) {
-            return back()
-                ->withInput()
-                ->with('error', 'لم يتم إنشاء محادثة للطبيب، لذلك لا يمكن حفظ الرسالة.');
-        }
-
-        $messageText = trim((string) $validated['message']);
-
-        $payload = [
-            'conversation_id' => $conversationId,
-            $bodyColumn => $messageText,
-        ];
-
-        if ($this->columnExists('messages', 'sender_id')) {
-            $payload['sender_id'] = $user->id;
-        }
-
-        if ($this->columnExists('messages', 'receiver_id')) {
-            $payload['receiver_id'] = (int) $doctor['user_id'];
-        }
-
-        if ($this->columnExists('messages', 'from_user_id')) {
-            $payload['from_user_id'] = $user->id;
-        }
-
-        if ($this->columnExists('messages', 'to_user_id')) {
-            $payload['to_user_id'] = (int) $doctor['user_id'];
-        }
-
-        if ($this->columnExists('messages', 'user_id')) {
-            $payload['user_id'] = $user->id;
-        }
-
-        if ($this->columnExists('messages', 'patient_profile_id') && $profile) {
-            $payload['patient_profile_id'] = $profile->id;
-        }
-
-        if ($this->columnExists('messages', 'doctor_profile_id') && !empty($doctor['id'])) {
-            $payload['doctor_profile_id'] = $doctor['id'];
-        }
-
-        if ($this->columnExists('messages', 'sender_type')) {
-            $payload['sender_type'] = 'patient';
-        }
-
-        if ($this->columnExists('messages', 'sender_role')) {
-            $payload['sender_role'] = 'patient';
-        }
-
-        if ($this->columnExists('messages', 'direction')) {
-            $payload['direction'] = 'outgoing';
-        }
-
-        if ($this->columnExists('messages', 'type')) {
-            $payload['type'] = 'doctor_message';
-        }
-
-        if ($this->columnExists('messages', 'metadata')) {
-            $payload['metadata'] = json_encode([
-                'source' => 'patient_doctor_chat',
-                'patient_id' => $user->id,
-                'doctor_user_id' => (int) $doctor['user_id'],
-            ], JSON_UNESCAPED_UNICODE);
-        }
-
-        if ($this->columnExists('messages', 'is_read')) {
-            $payload['is_read'] = false;
-        }
-
-        if ($this->columnExists('messages', 'read_at')) {
-            $payload['read_at'] = null;
-        }
-
-        if ($this->columnExists('messages', 'created_at')) {
-            $payload['created_at'] = now();
-        }
-
-        if ($this->columnExists('messages', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        DB::table('messages')->insert($payload);
-
-        $conversationPayload = [];
-
-        if ($this->columnExists('conversations', 'last_message_at')) {
-            $conversationPayload['last_message_at'] = now();
-        }
-
-        if ($this->columnExists('conversations', 'updated_at')) {
-            $conversationPayload['updated_at'] = now();
-        }
-
-        if ($this->columnExists('conversations', 'unread_by_admin')) {
-            $conversationPayload['unread_by_admin'] = DB::raw('unread_by_admin + 1');
-        }
-
-        if (!empty($conversationPayload)) {
-            DB::table('conversations')
-                ->where('id', $conversationId)
-                ->update($conversationPayload);
-        }
-
-        $this->createAppNotification(
-            recipientUserId: (int) $doctor['user_id'],
-            actorUserId: $user->id,
-            type: 'message_received',
-            title: 'رسالة جديدة من المريض',
-            body: 'وصلتك رسالة جديدة من المريض داخل صفحة الرسائل.',
-            url: url('/doctor/messages'),
-            recipientRole: 'doctor'
-        );
-
-        return redirect()
-            ->route('patient.messages')
-            ->with('success', 'تم إرسال رسالتك للطبيب.');
-    }
-
-    public function sendSupportMessage(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'message' => ['required', 'string', 'max:2000'],
-        ]);
-
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        if (!$this->tableExists('conversations') || !$this->tableExists('messages')) {
-            return back()
-                ->withInput()
-                ->with('error', 'جداول الرسائل غير جاهزة.');
-        }
-
-        $conversationId = $this->ensureSupportConversation($user->id);
-
-        if (!$conversationId) {
-            return back()
-                ->withInput()
-                ->with('error', 'لم يتم إنشاء محادثة الدعم.');
-        }
-
-        $bodyColumn = $this->firstExistingColumn('messages', ['body', 'message', 'content', 'text']);
-
-        if (!$bodyColumn) {
-            return back()
-                ->withInput()
-                ->with('error', 'لا يوجد عمود مناسب لحفظ نص الرسالة في جدول messages.');
-        }
-
-        $messageText = trim((string) $validated['message']);
-
-        $payload = [
-            'conversation_id' => $conversationId,
-            $bodyColumn => $messageText,
-        ];
-
-        if ($this->columnExists('messages', 'user_id')) {
-            $payload['user_id'] = $user->id;
-        }
-
-        if ($this->columnExists('messages', 'sender_id')) {
-            $payload['sender_id'] = $user->id;
-        }
-
-        if ($this->columnExists('messages', 'from_user_id')) {
-            $payload['from_user_id'] = $user->id;
-        }
-
-        if ($this->columnExists('messages', 'sender_type')) {
-            $payload['sender_type'] = 'patient';
-        }
-
-        if ($this->columnExists('messages', 'sender_role')) {
-            $payload['sender_role'] = 'patient';
-        }
-
-        if ($this->columnExists('messages', 'direction')) {
-            $payload['direction'] = 'incoming';
-        }
-
-        if ($this->columnExists('messages', 'type')) {
-            $payload['type'] = 'text';
-        }
-
-        if ($this->columnExists('messages', 'metadata')) {
-            $payload['metadata'] = json_encode([
-                'source' => 'patient_support',
-                'patient_id' => $user->id,
-            ], JSON_UNESCAPED_UNICODE);
-        }
-
-        if ($this->columnExists('messages', 'is_read')) {
-            $payload['is_read'] = false;
-        }
-
-        if ($this->columnExists('messages', 'read_at')) {
-            $payload['read_at'] = null;
-        }
-
-        if ($this->columnExists('messages', 'created_at')) {
-            $payload['created_at'] = now();
-        }
-
-        if ($this->columnExists('messages', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        DB::table('messages')->insert($payload);
-
-        $conversationPayload = [];
-
-        if ($this->columnExists('conversations', 'status')) {
-            $statusValue = $this->conversationStatusValue();
-
-            if ($statusValue !== null) {
-                $conversationPayload['status'] = $statusValue;
-            }
-        }
-
-        if ($this->columnExists('conversations', 'last_message_at')) {
-            $conversationPayload['last_message_at'] = now();
-        }
-
-        if ($this->columnExists('conversations', 'unread_by_admin')) {
-            $conversationPayload['unread_by_admin'] = DB::raw('unread_by_admin + 1');
-        }
-
-        if ($this->columnExists('conversations', 'updated_at')) {
-            $conversationPayload['updated_at'] = now();
-        }
-
-        if (!empty($conversationPayload)) {
-            DB::table('conversations')
-                ->where('id', $conversationId)
-                ->update($conversationPayload);
-        }
-
-        $this->createAdminNotification(
-            type: 'message',
-            title: 'رسالة دعم جديدة',
-            body: 'وصلت رسالة دعم جديدة من ' . ($user->name ?? 'مريض اتزان') . '.',
-            url: route('admin.messages.show', $conversationId),
-            relatedId: $conversationId,
-            relatedType: 'conversation'
-        );
-
-        return redirect()
-            ->route('patient.support')
-            ->with('success', 'تم إرسال رسالتك للدعم بنجاح.');
-    }
 
     private function ensureSupportConversation(int $userId): ?int
     {
@@ -1914,187 +134,6 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
 
         return (int) DB::table('conversations')->insertGetId($payload);
     }
-
-    public function liveNotifications(): JsonResponse
-    {
-        $user = auth()->user();
-
-        if (!$user) {
-            return response()->json([
-                'notifications_count' => 0,
-                'unread_messages' => 0,
-                'notifications' => [],
-                'messages' => [],
-                'support_messages' => [],
-            ]);
-        }
-
-        $profile = $this->patientProfile($user->id);
-        $doctor = $this->selectedDoctor($profile);
-
-        return response()->json([
-            'notifications_count' => $this->unreadAppNotificationsCount($user->id),
-            'unread_messages' => $this->unreadMessagesCount($user->id),
-            'notifications' => $this->patientNotifications($user->id, 5),
-            'messages' => $this->latestMessages($user->id, $doctor['user_id'] ?? null),
-            'support_messages' => $this->supportMessages($user->id),
-        ]);
-    }
-
-    public function markNotificationRead(int $notification): RedirectResponse
-    {
-        $user = auth()->user();
-
-        if (! $user) {
-            return back();
-        }
-
-        app(AppNotificationService::class)->markAsRead(
-            notificationId: $notification,
-            recipientUserId: (int) $user->id
-        );
-
-        return back();
-    }
-
-    public function markAllNotificationsRead(): RedirectResponse
-        {
-            $user = auth()->user();
-
-            if (! $user) {
-                return back();
-            }
-
-            app(AppNotificationService::class)->markAllAsRead(
-                recipientUserId: (int) $user->id,
-                recipientRole: 'patient'
-            );
-
-            return back()->with('success', 'تم تحديد كل الإشعارات كمقروءة.');
-        }
-
-    public function acceptSuggestedAppointment(Request $request, int $appointment): RedirectResponse
-    {
-        $user = auth()->user();
-
-        if (!$user || !$this->tableExists('patient_appointments')) {
-            return back();
-        }
-
-        $row = DB::table('patient_appointments')
-            ->where('id', $appointment)
-            ->where('user_id', $user->id)
-            ->first();
-
-        if (!$row) {
-            return back()->with('error', 'الموعد غير موجود.');
-        }
-
-        if (($row->status ?? null) !== 'reschedule_requested') {
-            return back()->with('error', 'لا يوجد موعد مقترح لقبوله.');
-        }
-
-        $payload = [];
-
-        if ($this->columnExists('patient_appointments', 'appointment_date')) {
-            $payload['appointment_date'] = $row->suggested_date ?? $row->appointment_date;
-        }
-
-        if ($this->columnExists('patient_appointments', 'appointment_time')) {
-            $payload['appointment_time'] = $row->suggested_time ?? $row->appointment_time;
-        }
-
-        if ($this->columnExists('patient_appointments', 'status')) {
-            $payload['status'] = 'confirmed';
-        }
-
-        if ($this->columnExists('patient_appointments', 'patient_response_status')) {
-            $payload['patient_response_status'] = 'accepted';
-        }
-
-        if ($this->columnExists('patient_appointments', 'patient_response_message')) {
-            $payload['patient_response_message'] = $request->input('patient_response_message');
-        }
-
-        if ($this->columnExists('patient_appointments', 'confirmed_at')) {
-            $payload['confirmed_at'] = now();
-        }
-
-        if ($this->columnExists('patient_appointments', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        DB::table('patient_appointments')
-            ->where('id', $appointment)
-            ->where('user_id', $user->id)
-            ->update($payload);
-
-        $this->createAppNotification(
-            recipientUserId: $user->id,
-            actorUserId: null,
-            type: 'appointment_reschedule_accepted',
-            title: 'تم قبول الموعد المقترح',
-            body: 'تم تثبيت الموعد المقترح بنجاح.',
-            url: route('patient.followup'),
-            appointmentId: $appointment
-        );
-
-        return redirect()->route('patient.followup')->with('success', 'تم قبول الموعد المقترح وتأكيده.');
-    }
-
-    public function declineSuggestedAppointment(Request $request, int $appointment): RedirectResponse
-    {
-        $user = auth()->user();
-
-        if (!$user || !$this->tableExists('patient_appointments')) {
-            return back();
-        }
-
-        $row = DB::table('patient_appointments')
-            ->where('id', $appointment)
-            ->where('user_id', $user->id)
-            ->first();
-
-        if (!$row) {
-            return back()->with('error', 'الموعد غير موجود.');
-        }
-
-        $payload = [];
-
-        if ($this->columnExists('patient_appointments', 'status')) {
-            $payload['status'] = 'patient_declined_reschedule';
-        }
-
-        if ($this->columnExists('patient_appointments', 'patient_response_status')) {
-            $payload['patient_response_status'] = 'declined';
-        }
-
-        if ($this->columnExists('patient_appointments', 'patient_response_message')) {
-            $payload['patient_response_message'] = $request->input('patient_response_message');
-        }
-
-        if ($this->columnExists('patient_appointments', 'updated_at')) {
-            $payload['updated_at'] = now();
-        }
-
-        DB::table('patient_appointments')
-            ->where('id', $appointment)
-            ->where('user_id', $user->id)
-            ->update($payload);
-
-        $this->createAppNotification(
-            recipientUserId: $user->id,
-            actorUserId: null,
-            type: 'appointment_reschedule_declined',
-            title: 'تم رفض الموعد المقترح',
-            body: 'تم تسجيل رفضك للموعد المقترح. يمكنك طلب موعد آخر.',
-            url: route('patient.followup'),
-            appointmentId: $appointment
-        );
-
-        return redirect()->route('patient.followup')->with('success', 'تم رفض الموعد المقترح.');
-    }
-
 
 
     private function dashboardData(array $extra = []): array
@@ -2209,6 +248,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return array_replace_recursive($base, $extra);
     }
 
+
     private function journeyHero(int $profileCompletion, bool $isDoctorApproved, bool $hasStartedFollowup, array $doctor, ?array $nextAppointment = null): array
     {
         if ($profileCompletion < 100) {
@@ -2289,6 +329,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
             ],
         ];
     }
+
 
     private function profileStatus(int $completion, bool $hasDoctor, bool $isDoctorApproved, bool $hasStartedFollowup, ?string $appointmentStatus = null): array
     {
@@ -2382,6 +423,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         ];
     }
 
+
     private function patientProfile(?int $userId): ?object
     {
         if (!$userId || !$this->tableExists('patient_profiles') || !$this->columnExists('patient_profiles', 'user_id')) {
@@ -2390,6 +432,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
 
         return DB::table('patient_profiles')->where('user_id', $userId)->first();
     }
+
 
     private function profileCompletion(?object $profile): int
     {
@@ -2465,6 +508,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return (int) round((collect($checks)->filter()->count() / count($checks)) * 100);
     }
 
+
     private function profileFormData(?object $profile): array
     {
         if (!$profile) {
@@ -2492,6 +536,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         ];
     }
 
+
     private function profileConditions(?object $profile): array
     {
         if (!$profile) {
@@ -2500,6 +545,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
 
         return $this->decodeArrayValue($this->valueFrom($profile, ['medical_conditions', 'health_condition', 'chronic_diseases', 'diseases']));
     }
+
 
     private function selectedDoctor(?object $profile): array
     {
@@ -2563,6 +609,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
             'request_status' => $this->valueFrom($profile, ['doctor_request_status'], 'pending'),
         ];
     }
+
 
     private function recommendedDoctors(?object $profile): array
     {
@@ -2637,6 +684,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
 
         return $doctors->sortByDesc('match_score')->values()->take(24)->toArray();
     }
+
 
     private function doctorMatch(?object $profile, string $specialty, object $doctor, string $doctorGender, string $consultationType, string $preferredGender, string $preferredType, int $experience): array
     {
@@ -2713,6 +761,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         ];
     }
 
+
     private function recommendationMeta(?object $profile, array $doctors): array
     {
         $preferredGender = (string) $this->valueFrom($profile, ['preferred_doctor_gender'], 'any');
@@ -2732,6 +781,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
             'total' => count($doctors),
         ];
     }
+
 
     private function fallbackRecommendedDoctors(): array
     {
@@ -2767,6 +817,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         })->toArray();
     }
 
+
     private function doctorSpecialty(int $doctorProfileId): string
     {
         if ($this->tableExists('doctor_profiles')) {
@@ -2798,6 +849,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
 
         return 'استشاري صحي';
     }
+
 
     private function doctorReviewSummary(int $doctorProfileId): array
     {
@@ -2852,6 +904,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         ];
     }
 
+
     private function patientPublishedArticlesQuery(): Builder
     {
         $query = Article::query()->with(['specialty', 'category', 'author']);
@@ -2877,12 +930,14 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return $query;
     }
 
+
     private function patientVisibleArticlesQuery(): Builder
     {
         $query = $this->patientPublishedArticlesQuery();
 
         return $this->applyPatientArticleVisibilityScope($query);
     }
+
 
     private function applyPatientArticleVisibilityScope(Builder $query): Builder
     {
@@ -2923,6 +978,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return $query;
     }
 
+
     private function patientArticleBlockedTerms(): array
     {
         return [
@@ -2962,6 +1018,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
 
         return $query->whereIn('article_type', $types);
     }
+
 
     private function applyPatientRecommendedArticleScope(Builder $query, array $dashboardData, ?int $doctorProfileId = null, ?int $doctorUserId = null): Builder
     {
@@ -3005,6 +1062,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
             }
         });
     }
+
 
     private function patientRecommendedAudiences(array $dashboardData): array
     {
@@ -3052,6 +1110,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return array_values(array_unique($audiences));
     }
 
+
     private function patientRecommendedKeywords(array $dashboardData): array
     {
         $profile = (array) data_get($dashboardData, 'patient.profile', []);
@@ -3089,6 +1148,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return array_values(array_unique(array_filter($keywords)));
     }
 
+
     private function applyDoctorArticleScope(Builder $query, ?int $doctorProfileId, ?int $doctorUserId = null): Builder
     {
         return $query->where(function (Builder $query) use ($doctorProfileId, $doctorUserId) {
@@ -3125,6 +1185,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         });
     }
 
+
     private function applyEtzanArticleScope(Builder $query, ?int $doctorProfileId = null, ?int $doctorUserId = null): Builder
     {
         if ($this->columnExists('articles', 'source')) {
@@ -3160,6 +1221,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return $query;
     }
 
+
     private function patientArticleCategories()
     {
         if (! $this->tableExists('article_categories') || ! $this->tableExists('articles') || ! $this->columnExists('articles', 'article_category_id')) {
@@ -3182,6 +1244,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
             ->orderBy('name')
             ->get();
     }
+
 
     private function doctorArticles(int $doctorProfileId, ?int $doctorUserId = null): array
     {
@@ -3207,6 +1270,7 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
             ];
         })->toArray();
     }
+
 
 private function appointmentSlots(?int $doctorProfileId = null, ?string $date = null, ?int $ignoreAppointmentId = null): array
     {
@@ -3241,6 +1305,7 @@ private function appointmentSlots(?int $doctorProfileId = null, ?string $date = 
             ->toArray();
     }
 
+
 private function defaultAppointmentSlotGroups(): array
     {
         return [
@@ -3249,6 +1314,7 @@ private function defaultAppointmentSlotGroups(): array
             'evening' => ['label' => 'الفترة المسائية', 'icon' => 'moon', 'times' => ['16:00', '16:30', '17:00', '17:30', '18:00']],
         ];
     }
+
 
     private function emptyAppointmentSlotGroups(array $groups): array
     {
@@ -3259,6 +1325,7 @@ private function defaultAppointmentSlotGroups(): array
             })
             ->toArray();
     }
+
 
     private function normalizeAppointmentTime(?string $time): string
     {
@@ -3279,6 +1346,7 @@ private function defaultAppointmentSlotGroups(): array
         }
     }
 
+
     private function flatAppointmentTimes(array $groups): array
     {
         return collect($groups)
@@ -3289,6 +1357,7 @@ private function defaultAppointmentSlotGroups(): array
             ->values()
             ->all();
     }
+
 
     private function bookedAppointmentTimes(int $doctorProfileId, string $date, ?int $ignoreAppointmentId = null): array
     {
@@ -3326,6 +1395,7 @@ private function defaultAppointmentSlotGroups(): array
             ->all();
     }
 
+
     private function isAppointmentSlotAvailable(int $doctorProfileId, string $date, string $time, ?int $ignoreAppointmentId = null): bool
     {
         $time = $this->normalizeAppointmentTime($time);
@@ -3340,6 +1410,7 @@ private function defaultAppointmentSlotGroups(): array
 
         return in_array($time, $availableTimes, true);
     }
+
 
     private function appointmentMonthMeta(int $doctorProfileId, string $monthDate, ?int $ignoreAppointmentId = null): array
     {
@@ -3376,6 +1447,7 @@ private function defaultAppointmentSlotGroups(): array
             'fullyBookedAppointmentDates' => array_values(array_unique($fullyBookedDates)),
         ];
     }
+
 
     private function calendarAppointmentsForPatient(?int $userId, ?int $profileId, ?string $monthDate = null): array
     {
@@ -3436,6 +1508,7 @@ private function defaultAppointmentSlotGroups(): array
         })->toArray();
     }
 
+
     private function appointmentStatusTextForCalendar(?string $status): string
     {
         return match ($status) {
@@ -3451,6 +1524,7 @@ private function defaultAppointmentSlotGroups(): array
         };
     }
 
+
     private function doctorUserIdFromProfile(?int $doctorProfileId): ?int
     {
         if (!$doctorProfileId || !$this->tableExists('doctor_profiles') || !$this->columnExists('doctor_profiles', 'user_id')) {
@@ -3463,6 +1537,7 @@ private function defaultAppointmentSlotGroups(): array
 
         return $userId ? (int) $userId : null;
     }
+
 
 private function nextAppointment(?int $userId, ?int $profileId): ?array
     {
@@ -3595,6 +1670,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         ];
     }
 
+
     private function appointmentDisplayStatus(object $appointment, Carbon $now): string
     {
         $status = $appointment->status ?? 'pending';
@@ -3638,6 +1714,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         return $status;
     }
 
+
     private function appointmentDateTime(object $appointment): ?Carbon
     {
         $date = $appointment->appointment_date ?? null;
@@ -3654,6 +1731,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         }
     }
 
+
     private function patientNotifications(?int $userId, int $limit = 8): array
     {
         return app(AppNotificationService::class)->latestUnread(
@@ -3663,6 +1741,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         );
     }
 
+
     private function unreadAppNotificationsCount(?int $userId): int
     {
         return app(AppNotificationService::class)->unreadCount(
@@ -3670,6 +1749,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
             recipientRole: 'patient'
         );
     }
+
 
    private function createAppNotification(
         ?int $recipientUserId,
@@ -3708,6 +1788,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
             data: $data
         );
     }
+
 
     private function createAdminNotification(
         string $type,
@@ -3780,6 +1861,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         }
     }
 
+
     private function todayTasks($user, ?object $profile): array
     {
         if (!$user || !$this->tableExists('patient_tasks')) {
@@ -3831,6 +1913,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         })->values()->toArray();
     }
 
+
     private function journeyTasks(array $tasks): array
     {
         return collect($tasks)->take(8)->map(function ($task) {
@@ -3845,6 +1928,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         })->values()->toArray();
     }
 
+
     private function fallbackTasks(): array
     {
         return [
@@ -3852,6 +1936,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
             ['title' => 'تسجيل وجبة اليوم', 'description' => null, 'completed' => false, 'time' => '13:00', 'type' => 'meal', 'icon' => 'utensils', 'progress' => 0, 'progressText' => '0/3 وجبات'],
         ];
     }
+
 
     private function latestMessages(?int $userId, ?int $doctorUserId = null): array
     {
@@ -3949,6 +2034,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
             ->toArray();
     }
 
+
     private function supportMessages(?int $userId): array
     {
         if (!$userId || !$this->tableExists('conversations') || !$this->tableExists('messages')) {
@@ -4011,6 +2097,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
             ->toArray();
     }
 
+
     private function unreadMessagesCount(?int $userId): int
     {
         if (!$userId || !$this->tableExists('messages')) {
@@ -4037,6 +2124,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return $query->count();
     }
+
 
         private function ensureConversation(
         int $patientUserId,
@@ -4136,6 +2224,8 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
        المصدر الحالي: جدول patient_tasks آخر 7 أيام.
        لا يغيّر أي شيء في الرسائل أو المواعيد.
     ================================================== */
+
+
     private function weeklyHealthChart($user, ?object $profile): array
     {
         $days = collect(range(6, 0))->map(function ($offset) {
@@ -4268,6 +2358,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         ];
     }
 
+
     private function dailyPatientContentCard(array $types, ?object $profile, ?int $doctorProfileId, ?int $doctorUserId, string $fallbackTitle, string $fallbackText): array
     {
         $fallback = [
@@ -4327,6 +2418,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         ];
     }
 
+
     private function dashboardArticles(): array
     {
         if (! $this->tableExists('articles')) {
@@ -4359,6 +2451,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         })->toArray();
     }
 
+
     private function fallbackArticles(): array
     {
         return [
@@ -4372,6 +2465,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         ];
     }
 
+
     private function homeStats(?object $profile, int $todayProgress): array
     {
         $weight = $this->valueFrom($profile, ['weight', 'weight_kg', 'current_weight']);
@@ -4382,15 +2476,18 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         ];
     }
 
+
     private function todayDate(): string
     {
         return Carbon::now()->locale('ar')->translatedFormat('l، d F Y');
     }
 
+
     private function humanTime($date): string
     {
         return $date ? Carbon::parse($date)->diffForHumans() : '';
     }
+
 
     private function taskIcon(?string $value): string
     {
@@ -4411,6 +2508,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         return 'circle-check';
     }
 
+
     private function patientDisplayName($user, ?object $profile): string
     {
         $nameFromProfile = $this->valueFrom($profile, ['full_name', 'patient_name', 'name']);
@@ -4425,6 +2523,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return 'مريض اتزان';
     }
+
 
     private function patientAvatar($user, ?object $profile): ?string
     {
@@ -4441,6 +2540,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return $this->imageUrl($avatar);
     }
+
 
     private function imageUrl(?string $path): ?string
     {
@@ -4459,6 +2559,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         return asset('storage/' . ltrim($path, '/'));
     }
 
+
     private function valueFrom(?object $row, array $columns, mixed $default = null): mixed
     {
         if (!$row) {
@@ -4473,6 +2574,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return $default;
     }
+
 
     private function filledValue(mixed $value): bool
     {
@@ -4490,6 +2592,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return true;
     }
+
 
     private function decodeArrayValue(mixed $value): array
     {
@@ -4514,6 +2617,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         return [];
     }
 
+
     private function setFirstExistingColumn(array &$payload, string $table, array $columns, mixed $value): void
     {
         foreach ($columns as $column) {
@@ -4523,6 +2627,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
             }
         }
     }
+
 
     private function firstExistingColumn(string $table, array $columns): ?string
     {
@@ -4535,6 +2640,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         return null;
     }
 
+
     private function validNumber(mixed $value, float $min, float $max): bool
     {
         if ($value === null || $value === '' || !is_numeric($value)) {
@@ -4545,6 +2651,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return $number >= $min && $number <= $max;
     }
+
 
     private function normalizeGender(mixed $value): string
     {
@@ -4557,6 +2664,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         };
     }
 
+
     private function normalizeConsultationType(mixed $value): string
     {
         $value = mb_strtolower(trim((string) $value), 'UTF-8');
@@ -4567,6 +2675,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
             default => 'online',
         };
     }
+
 
     private function textHas(string $text, array $needles): bool
     {
@@ -4580,6 +2689,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return false;
     }
+
 
     private function adminUserIds(): array
     {
@@ -4609,6 +2719,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
             ->toArray();
     }
 
+
     private function tableExists(string $table): bool
     {
         static $cache = [];
@@ -4619,6 +2730,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return $cache[$table];
     }
+
 
     private function columnExists(string $table, string $column): bool
     {
@@ -4632,6 +2744,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
 
         return $cache[$key];
     }
+
 
     private function placeholderImage(string $text): string
     {
@@ -4655,6 +2768,7 @@ SVG;
 
         return 'data:image/svg+xml;utf8,' . rawurlencode($svg);
     }
+
 
     private function conversationStatusValue(): ?string
 {
@@ -4686,13 +2800,5 @@ SVG;
         return 'open';
     }
 }
-
-
-
-
-
-
-
-
 
 }

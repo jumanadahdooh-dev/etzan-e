@@ -17,7 +17,14 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Patient\AiChatController;
-use App\Http\Controllers\Patient\PatientHomeController;
+use App\Http\Controllers\Patient\PatientAppointmentController;
+use App\Http\Controllers\Patient\PatientArticleController;
+use App\Http\Controllers\Patient\PatientCalorieController;
+use App\Http\Controllers\Patient\PatientDashboardController;
+use App\Http\Controllers\Patient\PatientDoctorController;
+use App\Http\Controllers\Patient\PatientMessageController;
+use App\Http\Controllers\Patient\PatientNotificationController;
+use App\Http\Controllers\Patient\PatientProfileController;
 use App\Http\Controllers\Patient\PatientTaskController;
 use App\Http\Controllers\PublicArticleController;
 use App\Http\Controllers\QuizController;
@@ -275,10 +282,10 @@ Route::middleware(['auth', 'patient'])
     ->prefix('patient')
     ->name('patient.')
     ->group(function () {
-        Route::get('/', [PatientHomeController::class, 'index'])
+        Route::get('/', [PatientDashboardController::class, 'index'])
             ->name('index');
 
-        Route::get('/home', [PatientHomeController::class, 'home'])
+        Route::get('/home', [PatientDashboardController::class, 'home'])
             ->name('home');
 
         /*
@@ -312,19 +319,19 @@ Route::middleware(['auth', 'patient'])
         |--------------------------------------------------------------------------
         */
 
-        Route::get('/followup', [PatientHomeController::class, 'followUp'])
+        Route::get('/followup', [PatientAppointmentController::class, 'followUp'])
             ->name('followup');
 
-        Route::post('/appointments/book', [PatientHomeController::class, 'bookAppointment'])
+        Route::post('/appointments/book', [PatientAppointmentController::class, 'bookAppointment'])
             ->name('appointments.book');
 
-        Route::put('/appointments/{appointment}/update', [PatientHomeController::class, 'updateAppointment'])
+        Route::put('/appointments/{appointment}/update', [PatientAppointmentController::class, 'updateAppointment'])
             ->name('appointments.update');
 
-        Route::post('/appointments/{appointment}/suggestion/accept', [PatientHomeController::class, 'acceptSuggestedAppointment'])
+        Route::post('/appointments/{appointment}/suggestion/accept', [PatientAppointmentController::class, 'acceptSuggestedAppointment'])
             ->name('appointments.suggestion.accept');
 
-        Route::post('/appointments/{appointment}/suggestion/decline', [PatientHomeController::class, 'declineSuggestedAppointment'])
+        Route::post('/appointments/{appointment}/suggestion/decline', [PatientAppointmentController::class, 'declineSuggestedAppointment'])
             ->name('appointments.suggestion.decline');
 
         /*
@@ -333,25 +340,25 @@ Route::middleware(['auth', 'patient'])
         |--------------------------------------------------------------------------
         */
 
-        Route::get('/profile', [PatientHomeController::class, 'profile'])
+        Route::get('/profile', [PatientProfileController::class, 'profile'])
             ->name('profile');
 
-        Route::post('/profile/complete', [PatientHomeController::class, 'completeProfile'])
+        Route::post('/profile/complete', [PatientProfileController::class, 'completeProfile'])
             ->name('profile.complete');
 
-       Route::get('/doctors/recommended', [PatientHomeController::class, 'recommendedDoctorsPage'])
+       Route::get('/doctors/recommended', [PatientDoctorController::class, 'recommendedDoctorsPage'])
             ->name('doctors.recommended');
 
-        Route::get('/doctors/{doctorProfile}/details', [PatientHomeController::class, 'doctorDetails'])
+        Route::get('/doctors/{doctorProfile}/details', [PatientDoctorController::class, 'doctorDetails'])
             ->name('doctors.details');
 
-        Route::post('/doctors/{doctorProfile}/select', [PatientHomeController::class, 'selectDoctor'])
+        Route::post('/doctors/{doctorProfile}/select', [PatientDoctorController::class, 'selectDoctor'])
             ->name('doctors.select');
 
-        Route::get('/my-doctor', [PatientHomeController::class, 'myDoctor'])
+        Route::get('/my-doctor', [PatientDoctorController::class, 'myDoctor'])
             ->name('doctor.current');
 
-        Route::post('/doctors/{doctorProfile}/review', [PatientHomeController::class, 'storeDoctorReview'])
+        Route::post('/doctors/{doctorProfile}/review', [PatientDoctorController::class, 'storeDoctorReview'])
             ->name('doctors.review');
 
 
@@ -361,38 +368,38 @@ Route::middleware(['auth', 'patient'])
         |--------------------------------------------------------------------------
         */
 
-        Route::get('/calories', [PatientHomeController::class, 'calories'])
+        Route::get('/calories', [PatientCalorieController::class, 'calories'])
             ->name('calories');
 
-        Route::get('/articles', [PatientHomeController::class, 'articles'])
+        Route::get('/articles', [PatientArticleController::class, 'articles'])
             ->name('articles');
 
 
-        Route::get('/articles/{slug}', [PatientHomeController::class, 'articleDetails'])->name('articles.show');
+        Route::get('/articles/{slug}', [PatientArticleController::class, 'articleDetails'])->name('articles.show');
 
 
-        Route::get('/messages', [PatientHomeController::class, 'messages'])
+        Route::get('/messages', [PatientMessageController::class, 'messages'])
             ->name('messages');
 
-        Route::post('/messages/send', [PatientHomeController::class, 'sendDoctorMessage'])
+        Route::post('/messages/send', [PatientMessageController::class, 'sendDoctorMessage'])
             ->name('messages.send');
 
-        Route::get('/support', [PatientHomeController::class, 'support'])
+        Route::get('/support', [PatientMessageController::class, 'support'])
             ->name('support');
 
-        Route::post('/support/send', [PatientHomeController::class, 'sendSupportMessage'])
+        Route::post('/support/send', [PatientMessageController::class, 'sendSupportMessage'])
             ->name('support.send');
 
-        Route::get('/notifications', [PatientHomeController::class, 'notifications'])
+        Route::get('/notifications', [PatientNotificationController::class, 'notifications'])
             ->name('notifications');
 
-        Route::post('/notifications/{notification}/read', [PatientHomeController::class, 'markNotificationRead'])
+        Route::post('/notifications/{notification}/read', [PatientNotificationController::class, 'markNotificationRead'])
             ->name('notifications.read');
 
-        Route::post('/notifications/read-all', [PatientHomeController::class, 'markAllNotificationsRead'])
+        Route::post('/notifications/read-all', [PatientNotificationController::class, 'markAllNotificationsRead'])
             ->name('notifications.read-all');
 
-        Route::get('/live/notifications', [PatientHomeController::class, 'liveNotifications'])
+        Route::get('/live/notifications', [PatientNotificationController::class, 'liveNotifications'])
             ->name('live.notifications');
 
         Route::get('/journey', [PatientTaskController::class, 'index'])
@@ -452,17 +459,17 @@ Route::middleware(['auth', 'patient'])
 
 
 
-        Route::get('/calories', [PatientHomeController::class, 'calories'])
+        Route::get('/calories', [PatientCalorieController::class, 'calories'])
             ->name('calories');
 
-        Route::post('/calories/analyze', [PatientHomeController::class, 'analyzeMeal'])
+        Route::post('/calories/analyze', [PatientCalorieController::class, 'analyzeMeal'])
             ->middleware('throttle:15,1')
             ->name('calories.analyze');
 
-        Route::post('/calories/confirm', [PatientHomeController::class, 'confirmMeal'])
+        Route::post('/calories/confirm', [PatientCalorieController::class, 'confirmMeal'])
             ->name('calories.confirm');
 
-        Route::delete('/calories/{meal}', [PatientHomeController::class, 'destroyMeal'])
+        Route::delete('/calories/{meal}', [PatientCalorieController::class, 'destroyMeal'])
             ->name('calories.destroy');
 
 

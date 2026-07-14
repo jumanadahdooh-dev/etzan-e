@@ -162,7 +162,7 @@ class DoctorPatientDetailController extends Controller
     /**
      * تحديد/تحديث هدف السعرات لليوم — بيانات حقيقية بتنكتب مباشرة
      * بجدول patient_daily_calorie_goals، بنفس الآلية يلي المريض شايفها
-     * بصفحته (PatientHomeController::dailyCalorieGoalForDate).
+     * بصفحته (PatientContextHelpers::dailyCalorieGoalForDate).
      *
      * ملاحظة: الهدف حالياً بينكتب لتاريخ اليوم بس (نفس منطق المريض الحالي
      * يلي بيقارن بتاريخ محدد)، مش هدف دائم — لو بدك يصير ثابت لكل الأيام
