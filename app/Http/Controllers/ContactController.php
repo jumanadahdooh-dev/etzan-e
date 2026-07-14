@@ -260,58 +260,14 @@ class ContactController extends Controller
 
             /*
              |--------------------------------------------------------------------------
-             | جدول app_notifications
-             |--------------------------------------------------------------------------
-             | إذا مشروعك يعرض الجرس من app_notifications، بنضيف إشعار لكل أدمن.
+             | ملاحظة: كان هون كود بيحاول يكتب كمان بجدول app_notifications، بس كان
+             | معطّل بالكامل — أسماء الأعمدة يلي كان يحاول يستخدمها (user_id, admin_id,
+             | recipient_id, notifiable_id) ما وحدة منهم بتطابق العمود الحقيقي
+             | (recipient_user_id)، فكانت النتيجة صفوف بدون مستلم محدد، وما في
+             | أي شاشة أدمن أصلاً بتقرأ من app_notifications (إشعارات الأدمن كلها
+             | من admin_notifications فوق). شيلناه لأنه كان عم يكتب صفوف ميتة
+             | بقاعدة البيانات بدون أي فايدة مع كل رسالة تواصل.
             */
-            if (Schema::hasTable('app_notifications')) {
-                $adminIds = $this->getAdminIds();
-
-                foreach ($adminIds as $adminId) {
-                    $appNotificationData = $this->filterColumns('app_notifications', [
-                        'user_id' => $adminId,
-                        'admin_id' => $adminId,
-                        'recipient_id' => $adminId,
-                        'notifiable_id' => $adminId,
-                        'notifiable_type' => 'App\\Models\\User',
-
-                        'title' => $title,
-                        'message' => $body,
-                        'body' => $body,
-                        'content' => $body,
-                        'description' => $body,
-
-                        'type' => 'message',
-                        'category' => 'message',
-                        'icon' => 'fa-regular fa-message',
-
-                        'url' => $url,
-                        'link' => $url,
-                        'route' => $url,
-                        'action_url' => $url,
-
-                        'conversation_id' => $conversationId,
-                        'message_id' => $messageId,
-
-                        'data' => json_encode($data, JSON_UNESCAPED_UNICODE),
-                        'meta' => json_encode($data, JSON_UNESCAPED_UNICODE),
-                        'payload' => json_encode($data, JSON_UNESCAPED_UNICODE),
-
-                        'is_read' => false,
-                        'read' => false,
-                        'seen' => false,
-                        'read_at' => null,
-                        'seen_at' => null,
-
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-
-                    if (!empty($appNotificationData)) {
-                        DB::table('app_notifications')->insert($appNotificationData);
-                    }
-                }
-            }
         } catch (\Throwable $e) {
             /*
              | لا نخلي فشل الإشعار يمنع إرسال رسالة الزائر.

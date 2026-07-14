@@ -27,7 +27,7 @@ return new class extends Migration
             }
         });
 
-        // MySQL فقط: SQLite (المستخدمة بالاختبارات) ما بتدعم صيغة MODIFY هاي.
+        // MySQL: بنستخدم نفس أوامر MODIFY الأصلية (زي ما كانت بالإنتاج تماماً).
         if (DB::connection()->getDriverName() === 'mysql') {
             if (Schema::hasColumn('conversations', 'user_id')) {
                 DB::statement('ALTER TABLE conversations MODIFY user_id BIGINT UNSIGNED NULL');
@@ -43,6 +43,32 @@ return new class extends Migration
 
             if (Schema::hasColumn('messages', 'from_user_id')) {
                 DB::statement('ALTER TABLE messages MODIFY from_user_id BIGINT UNSIGNED NULL');
+            }
+        } else {
+            // غير MySQL (زي SQLite بالاختبارات): نفس الأثر (تصيير الأعمدة nullable)
+            // بس عن طريق Schema Builder القياسي بدل SQL خاص بـ MySQL.
+            if (Schema::hasColumn('conversations', 'user_id')) {
+                Schema::table('conversations', function (Blueprint $table) {
+                    $table->foreignId('user_id')->nullable()->change();
+                });
+            }
+
+            if (Schema::hasColumn('messages', 'user_id')) {
+                Schema::table('messages', function (Blueprint $table) {
+                    $table->unsignedBigInteger('user_id')->nullable()->change();
+                });
+            }
+
+            if (Schema::hasColumn('messages', 'sender_id')) {
+                Schema::table('messages', function (Blueprint $table) {
+                    $table->unsignedBigInteger('sender_id')->nullable()->change();
+                });
+            }
+
+            if (Schema::hasColumn('messages', 'from_user_id')) {
+                Schema::table('messages', function (Blueprint $table) {
+                    $table->unsignedBigInteger('from_user_id')->nullable()->change();
+                });
             }
         }
     }
