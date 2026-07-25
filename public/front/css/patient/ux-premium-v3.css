@@ -1754,21 +1754,6 @@ html[data-theme="dark"] .article-card::after {
     color: var(--primary-dark);
 }
 
-.mascot-wrap {
-    min-height: 134px;
-}
-
-.etzan-mascot {
-    width: 118px;
-    height: 118px;
-    margin: auto;
-    border-radius: 50%;
-    background:
-        radial-gradient(circle at 50% 52%, #F9FFFC 0 35%, transparent 36%),
-        linear-gradient(135deg, #86D9BC, var(--primary));
-    box-shadow: 0 18px 42px rgba(29, 158, 117, .20);
-}
-
 .journey-grid {
     display: grid;
     grid-template-columns: 1.1fr .9fr;
@@ -5312,33 +5297,6 @@ html[data-theme="dark"] .simple-avatar-btn {
     background: rgba(255, 255, 255, 0.76);
 }
 
-.welcome-mascot {
-    position: relative;
-    min-height: 246px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-}
-
-.mascot-glow {
-    position: absolute;
-    bottom: 16px;
-    width: 205px;
-    height: 118px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(29, 158, 117, 0.18), transparent 70%);
-    filter: blur(8px);
-}
-
-.welcome-mascot img {
-    position: relative;
-    z-index: 2;
-    max-height: 248px;
-    width: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 18px 24px rgba(24, 51, 59, 0.12));
-}
-
 .welcome-progress {
     display: grid;
     justify-items: center;
@@ -5463,15 +5421,6 @@ html[data-theme="dark"] .welcome-ghost-btn {
     .welcome-actions,
     .welcome-cta-row {
         justify-content: center;
-    }
-
-    .welcome-mascot {
-        order: -1;
-        min-height: 180px;
-    }
-
-    .welcome-mascot img {
-        max-height: 185px;
     }
 
     .welcome-progress {

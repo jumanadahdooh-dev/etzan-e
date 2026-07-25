@@ -11,7 +11,7 @@
 @section('content')
 @php
     $quizImage = setting('home_quiz_image');
-    $quizImageUrl = $quizImage ? asset('storage/' . $quizImage) : asset('front/images/quiz-character.png');
+    $quizImageUrl = $quizImage ? asset('storage/' . $quizImage) : asset('front/image/quiz-doctor.png');
 @endphp
 
 <main class="quiz-page">

@@ -97,6 +97,8 @@
 
         return $imageUrl(
             $getAny($doctor, [
+                'doctorProfile.photo_path',
+                'doctor_profile.photo_path',
                 'image',
                 'photo',
                 'avatar',
@@ -131,6 +133,7 @@
     $articleImage = function ($article, $index) use ($getAny, $imageUrl) {
         return $imageUrl(
             $getAny($article, [
+                'cover_image',
                 'image',
                 'cover',
                 'thumbnail',
@@ -620,11 +623,11 @@
                     </div>
 
                     <div class="doctor-info-actions">
-                        <a href="{{ $doctorBookingUrl($firstDoctor) }}" class="doctor-main-btn doctor-main-btn-primary">
+                        <a href="{{ $doctorBookingUrl($firstDoctor) }}" class="doctor-main-btn doctor-main-btn-primary" id="doctorInfoBookingBtn">
                             احجز استشارة
                         </a>
 
-                        <a href="{{ $doctorUrl($firstDoctor) }}" class="doctor-main-btn doctor-main-btn-outline">
+                        <a href="{{ $doctorUrl($firstDoctor) }}" class="doctor-main-btn doctor-main-btn-outline" id="doctorInfoProfileBtn">
                             عرض الملف
                         </a>
                     </div>
@@ -691,6 +694,8 @@
                                 data-tag1="{{ $doctorTag1 }}"
                                 data-tag2="{{ $doctorTag2 }}"
                                 data-tag3="{{ $doctorTag3 }}"
+                                data-booking-url="{{ $doctorBookingUrl($doctor) }}"
+                                data-profile-url="{{ $doctorUrl($doctor) }}"
                             >
                                 <span class="doctor-card-status">{{ $doctorStatus }}</span>
 
@@ -891,7 +896,7 @@
     $quizBubble = setting('home_quiz_bubble_text', 'خلّينا نبدأ بخطوة بسيطة، وأنا أساعدك تعرفي الاتجاه الأنسب لك.');
 
     $quizImage = setting('home_quiz_image');
-    $quizImageUrl = $quizImage ? asset('storage/' . $quizImage) : asset('front/images/quiz-character.png');
+    $quizImageUrl = $quizImage ? asset('storage/' . $quizImage) : asset('front/image/quiz-doctor.png');
 
     $quizResultBadge = setting('home_quiz_result_badge', 'نتيجتك الأولية');
     $quizResultTitle = setting('home_quiz_result_title', 'بداية مناسبة حسب إجاباتك');
