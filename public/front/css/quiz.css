@@ -1,11 +1,9 @@
 :root {
-    --primary: #4f8f6f;
-    --primary-dark: #2f6d55;
-    --primary-soft: #eaf7f0;
-    --secondary: #dff3e8;
-    --accent: #f4b860;
-    --danger: #d95c5c;
-
+    /* ملاحظة: --primary/--primary-dark/--secondary/--accent/--danger القديمة
+       اتشالت من هون لأنها كانت بتصطدم بأسماء متغيرات الموقع العامة
+       (design-tokens.css) وتفرض لون سلطي مختلف عن هوية الموقع على أي
+       عنصر بهاي الصفحة بيستخدم var(--primary) من ستايل تاني — مع العلم
+       إنها كانت مكررة بالقيم مع --q-primary/-dark تحت أصلًا. */
     --q-primary: #4f8f6f;
     --q-primary-dark: #2f6d55;
     --q-primary-light: #eaf7f0;
@@ -18,6 +16,23 @@
     --q-border: rgba(79, 143, 111, 0.15);
     --q-shadow: 0 24px 65px rgba(35, 77, 63, 0.13);
     --q-shadow-soft: 0 12px 30px rgba(35, 77, 63, 0.08);
+    --q-shadow-ink: 35, 77, 63;
+}
+
+/* جسر الوضع الغامق — نفس أسلوب باقي صفحات الموقع. */
+:root[data-theme="dark"] {
+    --q-primary: var(--primary);
+    --q-primary-dark: var(--primary-hover);
+    --q-primary-light: color-mix(in srgb, var(--primary) 15%, transparent);
+    --q-bg: var(--bg);
+    --q-white: var(--surface);
+    --q-ink: var(--text);
+    --q-text: var(--text-2);
+    --q-muted: var(--text-2);
+    --q-border: color-mix(in srgb, var(--primary) 30%, transparent);
+    --q-shadow: 0 24px 65px rgba(0, 0, 0, 0.5);
+    --q-shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.35);
+    --q-shadow-ink: 0, 0, 0;
 }
 
 * {
@@ -34,9 +49,9 @@ body {
     font-family: 'Cairo', sans-serif;
     color: var(--q-ink);
     background:
-        radial-gradient(circle at 88% 10%, rgba(79, 143, 111, 0.18), transparent 30%),
-        radial-gradient(circle at 8% 90%, rgba(244, 184, 96, 0.18), transparent 32%),
-        linear-gradient(135deg, #f8fcfa 0%, #eef8f2 50%, #fff8ee 100%);
+        radial-gradient(circle at 88% 10%, color-mix(in srgb, var(--q-primary) 18%, transparent), transparent 30%),
+        radial-gradient(circle at 8% 90%, color-mix(in srgb, var(--warning) 18%, transparent), transparent 32%),
+        linear-gradient(135deg, var(--q-bg) 0%, var(--surface-2) 50%, color-mix(in srgb, var(--warning) 8%, var(--surface-2)) 100%);
 }
 
 button,
@@ -74,7 +89,7 @@ button {
     height: 280px;
     top: -120px;
     right: -90px;
-    background: rgba(79, 143, 111, 0.20);
+    background: color-mix(in srgb, var(--q-primary) 20%, transparent);
 }
 
 .quiz-bg-orb-2 {
@@ -82,7 +97,7 @@ button {
     height: 240px;
     bottom: -100px;
     left: -80px;
-    background: rgba(244, 184, 96, 0.22);
+    background: color-mix(in srgb, var(--warning) 22%, transparent);
 }
 
 .quiz-bg-orb-3 {
@@ -90,7 +105,7 @@ button {
     height: 150px;
     top: 44%;
     left: 12%;
-    background: rgba(127, 183, 153, 0.16);
+    background: color-mix(in srgb, var(--q-primary) 16%, transparent);
 }
 
 /* MAIN LAYOUT */
@@ -112,8 +127,8 @@ button {
     min-height: 660px;
     max-height: 660px;
     border-radius: 34px;
-    background: rgba(255, 255, 255, 0.86);
-    border: 1px solid rgba(255, 255, 255, 0.78);
+    background: color-mix(in srgb, var(--q-white) 86%, transparent);
+    border: 1px solid var(--q-border);
     box-shadow: var(--q-shadow);
     backdrop-filter: blur(22px);
 }
@@ -136,7 +151,7 @@ button {
     border-radius: 50%;
     right: -105px;
     bottom: -100px;
-    background: rgba(79, 143, 111, 0.10);
+    background: color-mix(in srgb, var(--q-primary) 10%, transparent);
 }
 
 .quiz-side::after {
@@ -147,7 +162,7 @@ button {
     border-radius: 50%;
     left: -70px;
     top: 38%;
-    background: rgba(244, 184, 96, 0.11);
+    background: color-mix(in srgb, var(--warning) 11%, transparent);
 }
 
 .quiz-back-link {
@@ -179,8 +194,8 @@ button {
     gap: 8px;
     padding: 8px 13px;
     border-radius: 999px;
-    background: rgba(79, 143, 111, 0.10);
-    border: 1px solid rgba(79, 143, 111, 0.14);
+    background: color-mix(in srgb, var(--q-primary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 14%, transparent);
     color: var(--q-primary-dark);
     font-size: 12.5px;
     font-weight: 950;
@@ -227,12 +242,12 @@ button {
     width: fit-content;
     padding: 8px 10px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.78);
-    border: 1px solid rgba(79, 143, 111, 0.12);
+    background: color-mix(in srgb, var(--q-white) 78%, transparent);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 12%, transparent);
     color: var(--q-ink);
     font-size: 12px;
     font-weight: 900;
-    box-shadow: 0 8px 18px rgba(35, 77, 63, 0.05);
+    box-shadow: 0 8px 18px rgba(var(--q-shadow-ink), 0.05);
 }
 
 .quiz-side-points i {
@@ -255,9 +270,9 @@ button {
     padding: 16px;
     border-radius: 28px;
     background:
-        radial-gradient(circle at top right, rgba(79, 143, 111, 0.14), transparent 42%),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(243, 251, 246, 0.82));
-    border: 1px solid rgba(79, 143, 111, 0.13);
+        radial-gradient(circle at top right, color-mix(in srgb, var(--q-primary) 14%, transparent), transparent 42%),
+        linear-gradient(135deg, color-mix(in srgb, var(--q-white) 94%, transparent), rgba(243, 251, 246, 0.82));
+    border: 1px solid color-mix(in srgb, var(--q-primary) 13%, transparent);
     box-shadow: var(--q-shadow-soft);
 }
 
@@ -269,7 +284,7 @@ button {
     top: 24px;
     transform: translateX(50%);
     border-radius: 50%;
-    background: rgba(79, 143, 111, 0.16);
+    background: color-mix(in srgb, var(--q-primary) 16%, transparent);
     filter: blur(22px);
 }
 
@@ -284,10 +299,10 @@ button {
     border-radius: 30px;
     background:
         radial-gradient(circle at center, #ffffff 0%, #ffffff 48%, #eaf7f0 100%);
-    border: 1px solid rgba(79, 143, 111, 0.16);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 16%, transparent);
     box-shadow:
-        inset 0 0 0 8px rgba(255, 255, 255, 0.55),
-        0 16px 30px rgba(79, 143, 111, 0.12);
+        inset 0 0 0 8px color-mix(in srgb, var(--q-white) 55%, transparent),
+        0 16px 30px color-mix(in srgb, var(--q-primary) 12%, transparent);
 }
 
 .quiz-character-image::before {
@@ -297,7 +312,7 @@ button {
     height: 125px;
     bottom: 8px;
     border-radius: 50%;
-    background: rgba(79, 143, 111, 0.10);
+    background: color-mix(in srgb, var(--q-primary) 10%, transparent);
 }
 
 .quiz-character-image::after {
@@ -307,7 +322,7 @@ button {
     height: 12px;
     bottom: 14px;
     border-radius: 999px;
-    background: rgba(32, 59, 50, 0.08);
+    background: rgba(var(--q-shadow-ink), 0.08);
     filter: blur(2px);
 }
 
@@ -319,7 +334,7 @@ button {
     object-fit: contain;
     object-position: center bottom;
     transform: translateY(2px);
-    filter: drop-shadow(0 12px 18px rgba(35, 77, 63, 0.13));
+    filter: drop-shadow(0 12px 18px rgba(var(--q-shadow-ink), 0.13));
 }
 
 .quiz-character-message {
@@ -330,7 +345,7 @@ button {
     padding: 12px 13px;
     border-radius: 18px;
     background: var(--q-white);
-    border: 1px solid rgba(79, 143, 111, 0.12);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 12%, transparent);
 }
 
 .quiz-character-message i {
@@ -362,7 +377,7 @@ button {
 }
 
 .quiz-card::-webkit-scrollbar-thumb {
-    background: rgba(79, 143, 111, 0.22);
+    background: color-mix(in srgb, var(--q-primary) 22%, transparent);
     border-radius: 999px;
 }
 
@@ -396,8 +411,8 @@ button {
     display: grid;
     place-items: center;
     border-radius: 50%;
-    background: conic-gradient(var(--primary) 20%, #dcefea 0);
-    box-shadow: 0 12px 26px rgba(79, 143, 111, 0.14);
+    background: conic-gradient(var(--q-primary) 20%, var(--q-primary-light) 0);
+    box-shadow: 0 12px 26px color-mix(in srgb, var(--q-primary) 14%, transparent);
 }
 
 .quiz-progress-circle strong {
@@ -417,7 +432,7 @@ button {
     margin-bottom: 24px;
     overflow: hidden;
     border-radius: 999px;
-    background: #dcefea;
+    background: var(--q-primary-light);
 }
 
 .quiz-progress-line span {
@@ -453,10 +468,10 @@ button {
     min-height: 126px;
     padding: 17px;
     text-align: right;
-    border: 1px solid rgba(79, 143, 111, 0.14);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 14%, transparent);
     border-radius: 24px;
-    background: rgba(255, 255, 255, 0.88);
-    box-shadow: 0 10px 22px rgba(35, 77, 63, 0.06);
+    background: color-mix(in srgb, var(--q-white) 88%, transparent);
+    box-shadow: 0 10px 22px rgba(var(--q-shadow-ink), 0.06);
     cursor: pointer;
     transition: 0.22s ease;
 }
@@ -469,28 +484,28 @@ button {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    border: 2px solid rgba(79, 143, 111, 0.24);
-    background: #ffffff;
+    border: 2px solid color-mix(in srgb, var(--q-primary) 24%, transparent);
+    background: var(--q-white);
 }
 
 .quiz-option:hover {
     transform: translateY(-4px);
-    border-color: rgba(79, 143, 111, 0.36);
-    box-shadow: 0 16px 32px rgba(35, 77, 63, 0.10);
+    border-color: color-mix(in srgb, var(--q-primary) 36%, transparent);
+    box-shadow: 0 16px 32px rgba(var(--q-shadow-ink), 0.10);
 }
 
 .quiz-option.is-selected {
     border-color: var(--q-primary);
     background:
-        radial-gradient(circle at top left, rgba(79, 143, 111, 0.12), transparent 44%),
-        #ffffff;
-    box-shadow: 0 18px 38px rgba(79, 143, 111, 0.17);
+        radial-gradient(circle at top left, color-mix(in srgb, var(--q-primary) 12%, transparent), transparent 44%),
+        var(--q-white);
+    box-shadow: 0 18px 38px color-mix(in srgb, var(--q-primary) 17%, transparent);
 }
 
 .quiz-option.is-selected::after {
     border-color: var(--q-primary);
     background:
-        radial-gradient(circle, #ffffff 0 36%, transparent 38%),
+        radial-gradient(circle, var(--q-white) 0 36%, transparent 38%),
         var(--q-primary);
 }
 
@@ -508,7 +523,7 @@ button {
 }
 
 .quiz-option.is-selected i {
-    color: #ffffff;
+    color: #ffffff !important;
     background: linear-gradient(135deg, var(--q-primary), #80bd9e);
 }
 
@@ -562,7 +577,7 @@ button {
 }
 
 .quiz-prev-btn {
-    background: rgba(79, 143, 111, 0.10);
+    background: color-mix(in srgb, var(--q-primary) 10%, transparent);
     color: var(--q-primary-dark);
 }
 
@@ -570,7 +585,7 @@ button {
 .quiz-main-action {
     background: linear-gradient(135deg, var(--q-primary), #7fbd9e);
     color: #ffffff;
-    box-shadow: 0 13px 26px rgba(79, 143, 111, 0.22);
+    box-shadow: 0 13px 26px color-mix(in srgb, var(--q-primary) 22%, transparent);
 }
 
 .quiz-prev-btn:disabled,
@@ -604,8 +619,8 @@ button {
     padding: 8px 14px;
     margin-bottom: 13px;
     border-radius: 999px;
-    background: rgba(79, 143, 111, 0.10);
-    border: 1px solid rgba(79, 143, 111, 0.12);
+    background: color-mix(in srgb, var(--q-primary) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 12%, transparent);
     color: var(--q-primary-dark);
     font-size: 13px;
     font-weight: 950;
@@ -620,7 +635,7 @@ button {
     border-radius: 26px;
     color: #ffffff;
     background: linear-gradient(135deg, var(--q-primary), #7fbd9e);
-    box-shadow: 0 18px 36px rgba(79, 143, 111, 0.23);
+    box-shadow: 0 18px 36px color-mix(in srgb, var(--q-primary) 23%, transparent);
     font-size: 31px;
 }
 
@@ -651,9 +666,9 @@ button {
 .quiz-result-tags span {
     padding: 8px 12px;
     border-radius: 999px;
-    background: #ffffff;
+    background: var(--q-white);
     color: var(--q-primary-dark);
-    border: 1px solid rgba(79, 143, 111, 0.13);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 13%, transparent);
     font-size: 12.5px;
     font-weight: 900;
 }
@@ -673,8 +688,8 @@ button {
     overflow: hidden;
     padding: 16px;
     border-radius: 22px;
-    background: rgba(255, 255, 255, 0.90);
-    border: 1px solid rgba(79, 143, 111, 0.13);
+    background: color-mix(in srgb, var(--q-white) 90%, transparent);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 13%, transparent);
     box-shadow: var(--q-shadow-soft);
 }
 
@@ -686,7 +701,7 @@ button {
     top: -34px;
     left: -30px;
     border-radius: 50%;
-    background: rgba(79, 143, 111, 0.06);
+    background: color-mix(in srgb, var(--q-primary) 6%, transparent);
 }
 
 .quiz-ai-box h4 {
@@ -731,7 +746,7 @@ button {
 .quiz-ai-article:hover {
     padding-inline: 7px;
     color: var(--q-primary-dark);
-    background: rgba(79, 143, 111, 0.08);
+    background: color-mix(in srgb, var(--q-primary) 8%, transparent);
 }
 
 .quiz-empty-text {
@@ -762,18 +777,18 @@ button {
 
 .quiz-secondary-action,
 .quiz-restart-btn {
-    background: #ffffff;
+    background: var(--q-white);
     color: var(--q-primary-dark);
-    border: 1px solid rgba(79, 143, 111, 0.14);
+    border: 1px solid color-mix(in srgb, var(--q-primary) 14%, transparent);
 }
 
 .quiz-disclaimer {
     margin-top: 18px;
     padding: 13px 15px;
     border-radius: 17px;
-    background: rgba(255, 247, 234, 0.95);
-    border: 1px solid rgba(244, 184, 96, 0.30);
-    color: #7d5b12;
+    background: color-mix(in srgb, var(--warning) 10%, var(--q-white));
+    border: 1px solid color-mix(in srgb, var(--warning) 30%, transparent);
+    color: var(--warning);
     font-size: 12.8px;
     font-weight: 800;
     line-height: 1.8;

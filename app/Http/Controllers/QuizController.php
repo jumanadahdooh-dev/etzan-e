@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\QuizRecommendationRule;
+use App\Models\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -230,24 +232,85 @@ class QuizController extends Controller
         string $resultType,
         int $limit = 4
     ): array {
-        return $this->baseQuizRulesQuery('article', $answers, $resultType)
+        // Curated matches first: an admin can still hand-pick a specific article for a specific rule.
+        $curated = $this->baseQuizRulesQuery('article', $answers, $resultType)
             ->with('article')
             ->whereNotNull('article_id')
+            ->whereHas('article', fn ($q) => $q->where('status', 'published'))
             ->limit($limit)
             ->get()
             ->filter(fn ($rule) => $rule->article !== null)
-            ->map(function ($rule) {
-                $article = $rule->article;
+            ->map(fn ($rule) => $rule->article)
+            ->values();
 
-                return [
-                    'title' => $article->title ?? $article->name ?? 'مقال توعوي',
-                    'description' => $article->description ?? $article->summary ?? $article->excerpt ?? '',
-                    'category' => data_get($article, 'category.name', 'مقال'),
-                    'url' => $this->articleUrl($article),
-                ];
-            })
+        $articles = $curated;
+
+        // Fill any remaining slots automatically from published articles tagged with a
+        // relevant specialty, so a newly published article shows up without needing a
+        // manually-created quiz_recommendation_rules row for it.
+        if ($articles->count() < $limit) {
+            $specialtyIds = $this->relevantSpecialtyIds($answers);
+
+            $fallbackQuery = Article::query()
+                ->where('status', 'published')
+                ->whereNotIn('id', $articles->pluck('id')->all() ?: [0]);
+
+            if (!empty($specialtyIds)) {
+                $fallbackQuery->whereIn('specialty_id', $specialtyIds);
+            }
+
+            $fallback = $fallbackQuery
+                ->orderByDesc('published_at')
+                ->limit($limit - $articles->count())
+                ->get();
+
+            $articles = $articles->concat($fallback);
+        }
+
+        return $articles->map(function ($article) {
+            return [
+                'title' => $article->title ?? $article->name ?? 'مقال توعوي',
+                'description' => $article->description ?? $article->summary ?? $article->excerpt ?? '',
+                'category' => data_get($article, 'category.name', 'مقال'),
+                'url' => $this->articleUrl($article),
+            ];
+        })
             ->values()
             ->toArray();
+    }
+
+    private function relevantSpecialtyIds(array $answers): array
+    {
+        $condition = $answers['condition'] ?? null;
+        $goal = $answers['goal'] ?? null;
+
+        $keywords = [];
+
+        if (in_array($condition, ['diabetes', 'allergy'])) {
+            $keywords[] = 'تغذية';
+        }
+
+        if ($condition === 'pressure') {
+            $keywords[] = 'قلب';
+        }
+
+        if (in_array($goal, ['loss', 'gain'])) {
+            $keywords[] = 'سمنة';
+            $keywords[] = 'تغذية';
+        }
+
+        if (empty($keywords)) {
+            return [];
+        }
+
+        return Specialty::query()
+            ->where(function ($q) use ($keywords) {
+                foreach ($keywords as $keyword) {
+                    $q->orWhere('name', 'like', "%{$keyword}%");
+                }
+            })
+            ->pluck('id')
+            ->all();
     }
 
     private function baseQuizRulesQuery(
