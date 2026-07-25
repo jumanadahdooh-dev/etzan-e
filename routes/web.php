@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Doctor\DoctorAlertsController;
+use App\Http\Controllers\Doctor\DoctorAppointmentsController;
 use App\Http\Controllers\Doctor\DoctorDashboardController;
 use App\Http\Controllers\Doctor\DoctorPlansController;
 use App\Http\Controllers\Doctor\DoctorReportsController;
@@ -311,11 +312,17 @@ Route::middleware(['auth', 'patient'])
         Route::patch('/journey/tasks/{task}/complete', [PatientTaskController::class, 'complete'])
             ->name('journey.tasks.complete');
 
-        Route::delete('/journey/tasks/{task}', [PatientTaskController::class, 'destroy'])
-            ->name('journey.tasks.destroy');
+        Route::patch('/journey/tasks/{task}/note', [PatientTaskController::class, 'updateNote'])
+            ->name('journey.tasks.note');
 
         Route::post('/journey/tasks/{task}/attachment', [PatientTaskController::class, 'uploadAttachment'])
-             ->name('journey.tasks.attachment');
+            ->name('journey.tasks.attachment');
+
+        Route::get('/journey/tasks/{task}/attachment/show', [PatientTaskController::class, 'showAttachment'])
+            ->name('journey.tasks.attachment.show');
+
+        Route::delete('/journey/tasks/{task}', [PatientTaskController::class, 'destroy'])
+            ->name('journey.tasks.destroy');
         /*
         |--------------------------------------------------------------------------
         | Followup / Appointments
@@ -371,9 +378,6 @@ Route::middleware(['auth', 'patient'])
         |--------------------------------------------------------------------------
         */
 
-        Route::get('/calories', [PatientCalorieController::class, 'calories'])
-            ->name('calories');
-
         Route::get('/articles', [PatientArticleController::class, 'articles'])
             ->name('articles');
 
@@ -405,44 +409,8 @@ Route::middleware(['auth', 'patient'])
         Route::get('/live/notifications', [PatientNotificationController::class, 'liveNotifications'])
             ->name('live.notifications');
 
-        Route::get('/journey', [PatientTaskController::class, 'index'])
-            ->name('journey');
-
-        Route::post('/journey/tasks', [PatientTaskController::class, 'store'])
-            ->name('journey.tasks.store');
-
-        Route::patch('/journey/tasks/{task}/complete', [PatientTaskController::class, 'complete'])
-            ->name('journey.tasks.complete');
-
-        Route::patch('/journey/tasks/{task}/note', [PatientTaskController::class, 'updateNote'])
-            ->name('journey.tasks.note');
-
-        Route::post('/journey/tasks/{task}/attachment', [PatientTaskController::class, 'uploadAttachment'])
-            ->name('journey.tasks.attachment');
-
-        Route::delete('/journey/tasks/{task}', [PatientTaskController::class, 'destroy'])
-            ->name('journey.tasks.destroy');
-
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | صورة نتيجة مهمة الطبيب فقط
-        |--------------------------------------------------------------------------
-        | نخلي نفس اسم route القديم عشان ما نخرب البليد أو الجافاسكريبت.
-        | لكن وظيفته الآن: رفع صورة فقط لمهمة الطبيب.
-        */
-        Route::post('/journey/tasks/{task}/attachment', [PatientTaskController::class, 'uploadAttachment'])
-            ->name('journey.tasks.attachment');
-
-        Route::get('/journey/tasks/{task}/attachment/show', [PatientTaskController::class, 'showAttachment'])
-            ->name('journey.tasks.attachment.show');
-
-        Route::delete('/journey/tasks/{task}', [PatientTaskController::class, 'destroy'])
-            ->name('journey.tasks.destroy');
-
-
-
+        // ملاحظة: كل راوتات /journey/tasks مسجّلة مرة وحدة فوق (قسم
+        // "Patient Journey / Tasks") — كانت مكررة 2-3 مرات هون قبل التنظيف.
 
 
 
@@ -471,6 +439,9 @@ Route::middleware(['auth', 'patient'])
 
         Route::post('/calories/confirm', [PatientCalorieController::class, 'confirmMeal'])
             ->name('calories.confirm');
+
+        Route::put('/calories/{meal}', [PatientCalorieController::class, 'updateMeal'])
+            ->name('calories.update');
 
         Route::delete('/calories/{meal}', [PatientCalorieController::class, 'destroyMeal'])
             ->name('calories.destroy');
@@ -507,18 +478,31 @@ Route::prefix('doctor')
         Route::patch('/availability', [DoctorDashboardController::class, 'toggleAvailability'])->name('availability.toggle');
         Route::post('/requests/{doctorRequest}/approve', [\App\Http\Controllers\Doctor\DoctorPatientRequestController::class, 'approve'])->name('requests.approve');
         Route::post('/requests/{doctorRequest}/reject', [\App\Http\Controllers\Doctor\DoctorPatientRequestController::class, 'reject'])->name('requests.reject');
-        Route::get('/requests', [DoctorDashboardController::class, 'page'])->defaults('page', 'requests')->name('requests');
         Route::get('/patients', [\App\Http\Controllers\Doctor\DoctorPatientListController::class, 'index'])->name('patients');
-        Route::get('/patient-details', [DoctorDashboardController::class, 'page'])->defaults('page', 'patient-details')->name('patient_details');
-        Route::get('/appointments', [DoctorDashboardController::class, 'page'])->defaults('page', 'appointments')->name('appointments');
-        Route::get('/messages', [DoctorDashboardController::class, 'page'])->defaults('page', 'messages')->name('messages');
-        Route::get('/meal-reviews', [DoctorDashboardController::class, 'page'])->defaults('page', 'meal-reviews')->name('meal_reviews');
+        Route::get('/appointments', [DoctorAppointmentsController::class, 'index'])->name('appointments');
+        Route::post('/appointments/{appointment}/confirm', [DoctorAppointmentsController::class, 'confirm'])->name('appointments.confirm');
+        Route::post('/appointments/{appointment}/reject', [DoctorAppointmentsController::class, 'reject'])->name('appointments.reject');
+        Route::post('/appointments/{appointment}/suggest-time', [DoctorAppointmentsController::class, 'suggestTime'])->name('appointments.suggest-time');
+        Route::get('/messages', [\App\Http\Controllers\Doctor\DoctorMessageController::class, 'index'])->name('messages');
+        Route::get('/messages/{conversation}', [\App\Http\Controllers\Doctor\DoctorMessageController::class, 'show'])->name('messages.show');
+        Route::post('/messages/{conversation}/send', [\App\Http\Controllers\Doctor\DoctorMessageController::class, 'send'])->name('messages.send');
+        Route::get('/meal-reviews', [\App\Http\Controllers\Doctor\DoctorMealReviewController::class, 'index'])->name('meal_reviews');
+        Route::post('/meal-reviews/{meal}/review', [\App\Http\Controllers\Doctor\DoctorMealReviewController::class, 'review'])->name('meal_reviews.review');
         Route::get('/plans', [DoctorPlansController::class, 'index'])->name('plans');
         Route::get('/alerts', [DoctorAlertsController::class, 'index'])->name('alerts');
-        Route::get('/articles', [DoctorDashboardController::class, 'page'])->defaults('page', 'articles')->name('articles');
+        Route::get('/articles', [\App\Http\Controllers\Doctor\DoctorArticleController::class, 'index'])->name('articles');
+        Route::post('/articles', [\App\Http\Controllers\Doctor\DoctorArticleController::class, 'store'])->name('articles.store');
+        Route::post('/articles/ai-draft', [\App\Http\Controllers\Doctor\DoctorArticleController::class, 'aiDraft'])
+            ->middleware('throttle:10,1')
+            ->name('articles.ai-draft');
+        Route::put('/articles/{article}', [\App\Http\Controllers\Doctor\DoctorArticleController::class, 'update'])->name('articles.update');
+        Route::delete('/articles/{article}', [\App\Http\Controllers\Doctor\DoctorArticleController::class, 'destroy'])->name('articles.destroy');
         Route::get('/reports', [DoctorReportsController::class, 'index'])->name('reports');
-        Route::get('/profile', [DoctorDashboardController::class, 'page'])->defaults('page', 'profile')->name('profile');
-        Route::get('/settings', [DoctorDashboardController::class, 'page'])->defaults('page', 'settings')->name('settings');
+        Route::get('/profile', [\App\Http\Controllers\Doctor\DoctorProfileController::class, 'show'])->name('profile');
+        Route::put('/profile', [\App\Http\Controllers\Doctor\DoctorProfileController::class, 'update'])->name('profile.update');
+        Route::get('/settings', [\App\Http\Controllers\Doctor\DoctorSettingsController::class, 'show'])->name('settings');
+        Route::put('/settings/password', [\App\Http\Controllers\Doctor\DoctorSettingsController::class, 'updatePassword'])->name('settings.password');
+        Route::put('/settings/schedule', [\App\Http\Controllers\Doctor\DoctorSettingsController::class, 'updateSchedule'])->name('settings.schedule');
 
 
         // طلبات الاستشارة (المتابعة) — DoctorPatientRequestController
@@ -547,6 +531,9 @@ Route::prefix('doctor')
 
             Route::post('/patients/{patientProfile}/weight', [\App\Http\Controllers\Doctor\DoctorPatientDetailController::class, 'logWeight'])
                  ->name('patients.log-weight');
+
+            Route::post('/patients/{patientProfile}/tasks', [\App\Http\Controllers\Doctor\DoctorPatientDetailController::class, 'assignTask'])
+                 ->name('patients.tasks.assign');
 
 
             // نظام إشعارات الطبيب — DoctorNotificationController

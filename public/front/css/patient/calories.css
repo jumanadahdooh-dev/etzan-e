@@ -1403,6 +1403,41 @@
     height: 16px;
 }
 
+.cal-meal-edit-form {
+    margin: -6px 0 14px;
+    padding: 16px;
+    border-radius: 20px;
+    display: grid;
+    gap: 10px;
+    background: rgba(248, 252, 251, 0.88);
+    border: 1px solid var(--cal-border);
+}
+
+.cal-meal-edit-form label {
+    display: grid;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 850;
+    color: var(--cal-muted);
+}
+
+.cal-meal-edit-form input,
+.cal-meal-edit-form textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--cal-border);
+    border-radius: 12px;
+    background: var(--cal-card);
+    color: var(--cal-text);
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.cal-meal-edit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 10px;
+}
+
 /* History */
 .cal-history-list {
     display: grid;
@@ -1610,9 +1645,20 @@ body[data-theme="dark"] .cal-meal-row,
 html[data-theme="dark"] .cal-history-item,
 body[data-theme="dark"] .cal-history-item,
 html[data-theme="dark"] .cal-empty-state,
-body[data-theme="dark"] .cal-empty-state {
+body[data-theme="dark"] .cal-empty-state,
+html[data-theme="dark"] .cal-meal-edit-form,
+body[data-theme="dark"] .cal-meal-edit-form {
     background: rgba(255, 255, 255, 0.045) !important;
     border-color: rgba(255, 255, 255, 0.075) !important;
+}
+
+html[data-theme="dark"] .cal-meal-edit-form input,
+body[data-theme="dark"] .cal-meal-edit-form input,
+html[data-theme="dark"] .cal-meal-edit-form textarea,
+body[data-theme="dark"] .cal-meal-edit-form textarea {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #f2f7f4 !important;
 }
 
 html[data-theme="dark"] .cal-calorie-ring::before,

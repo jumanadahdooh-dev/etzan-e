@@ -12,6 +12,7 @@ use App\Models\PatientDailyCalorieGoal;
 use App\Models\PatientMeal;
 use App\Services\AiMealAnalysisService;
 use App\Services\AppNotificationService;
+use App\Services\CalorieSuggestionService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -117,6 +118,8 @@ class PatientProfileController extends Controller
 
             DB::table('patient_profiles')->insert($payload);
         }
+
+        app(CalorieSuggestionService::class)->refreshSuggestionForUser($user->id);
 
         return redirect()
             ->route('patient.doctors.recommended')

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Patient\SetWeightGoalRequest;
 use App\Http\Requests\Patient\StoreWeightLogRequest;
 use App\Http\Requests\Patient\UpdateWeightLogRequest;
+use App\Services\CalorieSuggestionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -46,6 +47,7 @@ class PatientWeightController extends Controller
         ]);
 
         $this->syncProfileWeight($patientProfile, $validated['weight_kg']);
+        app(CalorieSuggestionService::class)->refreshSuggestionForUser($user->id);
 
         return back()->with('success', 'تم تسجيل وزنك بنجاح.');
     }
@@ -75,6 +77,7 @@ class PatientWeightController extends Controller
         if ($latest && (int) $latest->id === $log) {
             $patientProfile = DB::table('patient_profiles')->where('user_id', $user->id)->first();
             $this->syncProfileWeight($patientProfile, $validated['weight_kg']);
+            app(CalorieSuggestionService::class)->refreshSuggestionForUser($user->id);
         }
 
         return back()->with('success', 'تم تعديل القياس بنجاح.');
@@ -99,6 +102,7 @@ class PatientWeightController extends Controller
         if ($latest) {
             $patientProfile = DB::table('patient_profiles')->where('user_id', $user->id)->first();
             $this->syncProfileWeight($patientProfile, $latest->weight_kg);
+            app(CalorieSuggestionService::class)->refreshSuggestionForUser($user->id);
         }
 
         return back()->with('success', 'تم حذف القياس.');

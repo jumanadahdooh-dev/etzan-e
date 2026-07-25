@@ -19,6 +19,7 @@ class SetCalorieGoalRequest extends FormRequest
             'carbs_goal' => ['nullable', 'integer', 'min:0', 'max:700'],
             'fat_goal' => ['nullable', 'integer', 'min:0', 'max:400'],
             'doctor_note' => ['nullable', 'string', 'max:500'],
+            'duration_days' => ['nullable', 'integer', 'min:1', 'max:30'],
         ];
     }
 

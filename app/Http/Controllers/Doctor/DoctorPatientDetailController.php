@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Doctor;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Doctor\LogPatientWeightRequest;
 use App\Http\Requests\Doctor\SetCalorieGoalRequest;
+use App\Models\PatientTask;
+use App\Services\AppNotificationService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
@@ -113,6 +116,18 @@ class DoctorPatientDetailController extends Controller
                 ->get();
         }
 
+        // المهام يلي حددها الطبيب لهالمريض — جديد كلياً، بيبلش فاضي وبيتراكم
+        $tasks = collect();
+        if (Schema::hasTable('patient_tasks')) {
+            $tasks = DB::table('patient_tasks')
+                ->where('patient_user_id', $profile->user_id)
+                ->where('source', 'doctor')
+                ->orderByDesc('task_date')
+                ->orderByDesc('id')
+                ->limit(20)
+                ->get();
+        }
+
         // اتجاه السعرات من تاريخ الموافقة (أو آخر تحديث للملف كأقرب تقدير حقيقي متوفر)
         $followupStart = $profile->updated_at
             ? \Illuminate\Support\Carbon::parse($profile->updated_at)
@@ -156,6 +171,7 @@ class DoctorPatientDetailController extends Controller
             'currentWeightKg' => $profile->weight ?? $profile->weight_kg ?? $profile->current_weight ?? null,
             'followupStart' => $followupStart,
             'caloriesTrend' => $caloriesTrend,
+            'tasks' => $tasks,
         ]);
     }
 
@@ -184,28 +200,46 @@ class DoctorPatientDetailController extends Controller
             return back()->with('error', 'هذا المريض غير مرتبط بحسابك.');
         }
 
-        DB::table('patient_daily_calorie_goals')->updateOrInsert(
-            [
-                'user_id' => $profile->user_id,
-                'goal_date' => now()->toDateString(),
-            ],
-            [
-                'patient_profile_id' => $profile->id,
-                'doctor_profile_id' => $doctorProfile->id,
-                'doctor_user_id' => $user->id,
-                'calories_goal' => $validated['calories_goal'],
-                'protein_goal' => $validated['protein_goal'] ?? null,
-                'carbs_goal' => $validated['carbs_goal'] ?? null,
-                'fat_goal' => $validated['fat_goal'] ?? null,
-                'status' => 'approved',
-                'doctor_note' => $validated['doctor_note'] ?? null,
-                'approved_at' => now(),
-                'updated_at' => now(),
-                'created_at' => now(),
-            ]
+        $durationDays = (int) ($validated['duration_days'] ?? 1);
+
+        for ($i = 0; $i < $durationDays; $i++) {
+            DB::table('patient_daily_calorie_goals')->updateOrInsert(
+                [
+                    'user_id' => $profile->user_id,
+                    'goal_date' => now()->addDays($i)->toDateString(),
+                ],
+                [
+                    'patient_profile_id' => $profile->id,
+                    'doctor_profile_id' => $doctorProfile->id,
+                    'doctor_user_id' => $user->id,
+                    'calories_goal' => $validated['calories_goal'],
+                    'protein_goal' => $validated['protein_goal'] ?? null,
+                    'carbs_goal' => $validated['carbs_goal'] ?? null,
+                    'fat_goal' => $validated['fat_goal'] ?? null,
+                    'status' => 'approved',
+                    'doctor_note' => $validated['doctor_note'] ?? null,
+                    'approved_at' => now(),
+                    'updated_at' => now(),
+                    'created_at' => now(),
+                ]
+            );
+        }
+
+        app(AppNotificationService::class)->send(
+            recipientUserId: $profile->user_id,
+            recipientRole: 'patient',
+            type: 'calorie_goal_set',
+            title: 'طبيبك حدد هدف سعرات جديد',
+            body: $durationDays > 1
+                ? 'حدد طبيبك هدف ' . $validated['calories_goal'] . ' سعرة يوميًا لمدة ' . $durationDays . ' يوم.'
+                : 'حدد طبيبك هدف ' . $validated['calories_goal'] . ' سعرة لليوم.',
+            url: route('patient.calories'),
+            actorUserId: $user->id
         );
 
-        return back()->with('success', 'تم تحديد هدف السعرات لليوم بنجاح.');
+        return back()->with('success', $durationDays > 1
+            ? "تم تحديد هدف السعرات لـ{$durationDays} يوم بنجاح."
+            : 'تم تحديد هدف السعرات لليوم بنجاح.');
     }
 
     /**
@@ -244,7 +278,77 @@ class DoctorPatientDetailController extends Controller
             'updated_at' => now(),
         ]);
 
+        app(AppNotificationService::class)->send(
+            recipientUserId: $profile->user_id,
+            recipientRole: 'patient',
+            type: 'weight_logged',
+            title: 'طبيبك سجّل قياس وزن جديد',
+            body: 'سجّل طبيبك قياس وزن ' . $validated['weight_kg'] . ' كغم إلك.',
+            url: route('patient.calories'),
+            actorUserId: $user->id
+        );
+
         return back()->with('success', 'تم تسجيل قياس الوزن بنجاح.');
+    }
+
+    /**
+     * إسناد مهمة للمريض — كانت هاي الميزة جاهزة بالكامل بجدول patient_tasks
+     * وواجهة "رحلتي" عند المريض (بتعرض مهام الطبيب بشكل مختلف عن مهام
+     * المريض نفسه)، بس ما كان في أي route/controller عند الطبيب ينشئها.
+     */
+    public function assignTask(Request $request, int $patientProfile): RedirectResponse
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'min:3', 'max:160'],
+            'description' => ['nullable', 'string', 'max:2000'],
+            'task_date' => ['required', 'date'],
+            'task_time' => ['nullable', 'date_format:H:i'],
+        ], [
+            'title.required' => 'اكتب عنوان المهمة.',
+            'title.min' => 'عنوان المهمة يجب أن يكون 3 أحرف على الأقل.',
+            'task_date.required' => 'اختر تاريخ المهمة.',
+        ]);
+
+        $user = auth()->user();
+        $doctorProfile = DB::table('doctor_profiles')->where('user_id', $user->id)->first();
+
+        $profile = DB::table('patient_profiles')
+            ->where('id', $patientProfile)
+            ->where('doctor_profile_id', $doctorProfile?->id)
+            ->first();
+
+        if (!$profile) {
+            return back()->with('error', 'هذا المريض غير مرتبط بحسابك.');
+        }
+
+        PatientTask::create([
+            'patient_id' => $profile->id,
+            'patient_user_id' => $profile->user_id,
+            'doctor_user_id' => $user->id,
+            'created_by_id' => $user->id,
+            'created_by_type' => 'doctor',
+            'source' => 'doctor',
+
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'task_date' => $validated['task_date'],
+            'task_time' => $validated['task_time'] ?? null,
+
+            'status' => 'pending',
+            'repeat_type' => 'once',
+        ]);
+
+        app(AppNotificationService::class)->send(
+            recipientUserId: $profile->user_id,
+            recipientRole: 'patient',
+            type: 'task_reminder',
+            title: 'مهمة جديدة من طبيبك',
+            body: 'أضاف طبيبك مهمة جديدة إلك: "' . $validated['title'] . '".',
+            url: route('patient.journey'),
+            actorUserId: $user->id
+        );
+
+        return back()->with('success', 'تم إسناد المهمة للمريض.');
     }
 
     /**

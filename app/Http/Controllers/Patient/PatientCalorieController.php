@@ -312,6 +312,33 @@ class PatientCalorieController extends Controller
     }
 
 
+    public function updateMeal(Request $request, PatientMeal $meal): RedirectResponse
+    {
+        $this->authorize('update', $meal);
+
+        $validated = $request->validate([
+            'meal_name' => ['required', 'string', 'max:255'],
+            'calories' => ['required', 'integer', 'min:0', 'max:5000'],
+            'protein' => ['nullable', 'integer', 'min:0', 'max:400'],
+            'carbs' => ['nullable', 'integer', 'min:0', 'max:700'],
+            'fat' => ['nullable', 'integer', 'min:0', 'max:400'],
+            'patient_note' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $meal->update([
+            'meal_name' => $validated['meal_name'],
+            'calories' => (int) $validated['calories'],
+            'protein' => (int) ($validated['protein'] ?? 0),
+            'carbs' => (int) ($validated['carbs'] ?? 0),
+            'fat' => (int) ($validated['fat'] ?? 0),
+            'patient_note' => $validated['patient_note'] ?? null,
+        ]);
+
+        return redirect()
+            ->route('patient.calories', ['date' => $meal->meal_date?->toDateString() ?? now()->toDateString()])
+            ->with('success', 'تم تحديث الوجبة بنجاح.');
+    }
+
     public function destroyMeal(PatientMeal $meal): RedirectResponse
     {
         $this->authorize('delete', $meal);

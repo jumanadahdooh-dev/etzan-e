@@ -121,6 +121,10 @@
         ? 'patient.calories.destroy'
         : null;
 
+    $updateRouteName = \Illuminate\Support\Facades\Route::has('patient.calories.update')
+        ? 'patient.calories.update'
+        : null;
+
     $mealTypeArabic = [
         'breakfast' => 'الإفطار',
         'lunch' => 'الغداء',
@@ -440,6 +444,10 @@
                     @else
                         <strong>لم يحدد الطبيب هدفًا لهذا اليوم</strong>
                         <span>اختر يومًا آخر أو انتظر إضافة هدف السعرات لهذا التاريخ.</span>
+                    @endif
+
+                    @if (data_get($summary, 'goal_note'))
+                        <p class="cal-ai-note">ملاحظة طبيبك: {{ data_get($summary, 'goal_note') }}</p>
                     @endif
                 </div>
             </div>
@@ -777,11 +785,21 @@
                                 <span>{{ $mealTime }}</span>
                                 <span>{{ data_get($meal, 'source') === 'ai' ? 'AI تحليل' : 'يدوي' }}</span>
                             </div>
+
+                            @if (data_get($meal, 'doctor_note'))
+                                <p class="cal-ai-note">ملاحظة طبيبك: {{ data_get($meal, 'doctor_note') }}</p>
+                            @endif
                         </div>
 
                         <div class="cal-meal-side">
                             <strong>{{ (int) data_get($meal, 'calories', 0) }}</strong>
                             <small>Cal</small>
+
+                            @if ($updateRouteName && data_get($meal, 'id'))
+                                <button type="button" data-meal-edit-toggle aria-label="تعديل الوجبة">
+                                    <i data-lucide="pencil"></i>
+                                </button>
+                            @endif
 
                             @if ($destroyRouteName && data_get($meal, 'id'))
                                 <form action="{{ route($destroyRouteName, data_get($meal, 'id')) }}" method="POST" onsubmit="return confirm('هل تريد حذف هذه الوجبة؟');">
@@ -795,6 +813,47 @@
                             @endif
                         </div>
                     </article>
+
+                    @if ($updateRouteName && data_get($meal, 'id'))
+                        <form action="{{ route($updateRouteName, data_get($meal, 'id')) }}" method="POST" class="cal-meal-edit-form" data-meal-edit-form hidden>
+                            @csrf
+                            @method('PUT')
+
+                            <label>
+                                <span>اسم الوجبة</span>
+                                <input type="text" name="meal_name" value="{{ data_get($meal, 'meal_name') }}" required>
+                            </label>
+
+                            <div class="cal-meal-edit-grid">
+                                <label>
+                                    <span>سعرات</span>
+                                    <input type="number" name="calories" value="{{ (int) data_get($meal, 'calories', 0) }}" min="0" max="5000" required>
+                                </label>
+
+                                <label>
+                                    <span>بروتين (غ)</span>
+                                    <input type="number" name="protein" value="{{ (int) data_get($meal, 'protein', 0) }}" min="0" max="400">
+                                </label>
+
+                                <label>
+                                    <span>كارب (غ)</span>
+                                    <input type="number" name="carbs" value="{{ (int) data_get($meal, 'carbs', 0) }}" min="0" max="700">
+                                </label>
+
+                                <label>
+                                    <span>دهون (غ)</span>
+                                    <input type="number" name="fat" value="{{ (int) data_get($meal, 'fat', 0) }}" min="0" max="400">
+                                </label>
+                            </div>
+
+                            <label>
+                                <span>ملاحظتك (اختياري)</span>
+                                <textarea name="patient_note" rows="2">{{ data_get($meal, 'patient_note') }}</textarea>
+                            </label>
+
+                            <button type="submit" class="cal-primary-btn">حفظ التعديل</button>
+                        </form>
+                    @endif
                 @endforeach
             </div>
         @else

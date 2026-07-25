@@ -92,6 +92,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    document.querySelectorAll("[data-meal-edit-toggle]").forEach(function (button) {
+        button.addEventListener("click", function () {
+            const row = button.closest(".cal-meal-row");
+            const editForm = row ? row.nextElementSibling : null;
+
+            if (editForm && editForm.hasAttribute("data-meal-edit-form")) {
+                editForm.hidden = !editForm.hidden;
+            }
+        });
+    });
+
     if (window.lucide && typeof window.lucide.createIcons === "function") {
         window.lucide.createIcons();
     }

@@ -151,6 +151,15 @@
                         <label>السعرات المستهدفة</label>
                         <input type="number" name="calories_goal" value="{{ $currentGoal->calories_goal ?? '' }}" placeholder="مثلاً 1800" required>
                     </div>
+                    <div class="dpat-goal-form__row">
+                        <label>مدة الخطة</label>
+                        <select name="duration_days">
+                            <option value="1">يوم واحد (اليوم فقط)</option>
+                            <option value="7">7 أيام</option>
+                            <option value="14">14 يوم</option>
+                            <option value="30">30 يوم</option>
+                        </select>
+                    </div>
                     <div class="dpat-goal-form__grid">
                         <div class="dpat-goal-form__row">
                             <label>بروتين (غ)</label>
@@ -248,6 +257,55 @@
                 @else
                     <div class="ddash-empty"><i data-lucide="utensils"></i><p>ما في وجبات مسجّلة منذ بداية المتابعة لعرض الاتجاه.</p></div>
                 @endif
+            </div>
+
+            {{-- المهام --}}
+            <div class="ddash-card ddash-accent--violet">
+                <div class="ddash-card__head">
+                    <div><span>Journey</span><h2>مهام حددتها للمريض</h2></div>
+                    <i data-lucide="list-checks" class="ddash-card__icon"></i>
+                </div>
+
+                @forelse ($tasks as $task)
+                    <div class="ddash-item">
+                        <span class="ddash-avatar ddash-avatar--violet"><i data-lucide="{{ $task->status === 'completed' ? 'check' : 'clock' }}"></i></span>
+                        <div class="ddash-item__body">
+                            <strong>{{ $task->title }}</strong>
+                            <small>
+                                {{ \Illuminate\Support\Carbon::parse($task->task_date)->locale('ar')->translatedFormat('j M Y') }}
+                                @if ($task->task_time) · {{ \Illuminate\Support\Carbon::parse($task->task_time)->format('H:i') }} @endif
+                            </small>
+                        </div>
+                        <span class="ddash-pill ddash-pill--{{ $task->status === 'completed' ? 'green' : 'amber' }}">
+                            {{ $task->status === 'completed' ? 'أنجزها' : 'بانتظار' }}
+                        </span>
+                    </div>
+                @empty
+                    <div class="ddash-empty"><i data-lucide="list-checks"></i><p>ما حددتلها أي مهمة لسا.</p></div>
+                @endforelse
+
+                <form method="POST" action="{{ route('doctor.patients.tasks.assign', $profile->id) }}" class="dpat-goal-form" style="margin-top:16px;border-top:1px solid var(--d-border);padding-top:16px">
+                    @csrf
+                    <div class="dpat-goal-form__row">
+                        <label>عنوان المهمة</label>
+                        <input type="text" name="title" placeholder="مثلاً: امشي 30 دقيقة" required minlength="3" maxlength="160">
+                    </div>
+                    <div class="dpat-goal-form__grid" style="grid-template-columns:1fr 1fr">
+                        <div class="dpat-goal-form__row">
+                            <label>التاريخ</label>
+                            <input type="date" name="task_date" value="{{ now()->toDateString() }}" required>
+                        </div>
+                        <div class="dpat-goal-form__row">
+                            <label>الوقت (اختياري)</label>
+                            <input type="time" name="task_time">
+                        </div>
+                    </div>
+                    <div class="dpat-goal-form__row">
+                        <label>وصف (اختياري)</label>
+                        <input type="text" name="description" placeholder="تفاصيل إضافية">
+                    </div>
+                    <button type="submit" class="dreq-btn dreq-btn--success" style="width:100%;justify-content:center;display:flex">إسناد المهمة</button>
+                </form>
             </div>
         </div>
     @endif
