@@ -524,9 +524,9 @@ html[data-theme="dark"] .ddash-week-day { background: rgba(59,130,246,.16); colo
 html[data-theme="dark"] .ddash-week-type--online { color: #4ee0ac; }
 html[data-theme="dark"] .ddash-week-type--person { color: #b79bff; }
 .ddash-btn {
-    padding: 7px 16px; border-radius: 10px; font-size: .75rem; font-weight: 800;
-    background: var(--d-green); color: #fff !important; border: 0; cursor: pointer;
-    text-decoration: none !important; white-space: nowrap; transition: .16s ease;
+    padding: 7px 16px; border-radius: var(--radius-sm, 8px); font-size: .75rem; font-weight: 800;
+    background: var(--success); color: #fff !important; border: 0; cursor: pointer;
+    text-decoration: none !important; white-space: nowrap; transition: .16s var(--ease, ease);
 }
 .ddash-btn:hover { filter: brightness(.94); }
 

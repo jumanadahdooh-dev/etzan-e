@@ -23,13 +23,14 @@
     --settings-border-1: var(--border-1, rgba(255,255,255,0.09));
     --settings-border-2: var(--border-2, rgba(255,255,255,0.16));
 
-    --settings-jade: var(--jade, #00c9a7);
-    --settings-jade-dim: var(--jade-dim, rgba(0,201,167,0.12));
-    --settings-jade-glow: var(--jade-glow, rgba(0,201,167,0.22));
-    --settings-jade-soft: var(--jade-soft, rgba(0,201,167,0.07));
+    /* موحّدة هلق مع ألوان البراند المشتركة (--primary/--secondary) بدل تدرج teal/blue خاص فيها لحالها */
+    --settings-jade: var(--jade, var(--primary, #00c9a7));
+    --settings-jade-dim: var(--jade-dim, var(--success-soft, rgba(0,201,167,0.12)));
+    --settings-jade-glow: var(--jade-glow, rgba(var(--primary-rgb, 0,201,167), 0.22));
+    --settings-jade-soft: var(--jade-soft, rgba(var(--primary-rgb, 0,201,167), 0.07));
 
-    --settings-sapphire: var(--sapphire, #4b9ef5);
-    --settings-sapphire-dim: var(--sapphire-dim, rgba(75,158,245,0.12));
+    --settings-sapphire: var(--sapphire, var(--secondary, #4b9ef5));
+    --settings-sapphire-dim: var(--sapphire-dim, var(--info-soft, rgba(75,158,245,0.12)));
 
     --settings-amber: var(--amber, #f59e0b);
     --settings-amber-dim: var(--amber-dim, rgba(245,158,11,0.12));

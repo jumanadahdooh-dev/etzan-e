@@ -141,14 +141,15 @@ html[data-theme="dark"] .dreq-featured__eyebrow { color: #fbbf24; }
 }
 
 /* ══════════ أزرار الإجراءات ══════════ */
+/* نفس مقياس الانحناء ومنطق الألوان الدلالية (نجاح/خطر) المشترك بكل الموقع */
 .dreq-btn {
-    padding: 8px 20px; border-radius: 11px; font-size: .82rem; font-weight: 850;
-    border: 0; cursor: pointer; transition: .18s ease; white-space: nowrap;
+    padding: 8px 20px; border-radius: var(--radius-sm, 8px); font-size: .82rem; font-weight: 850;
+    border: 0; cursor: pointer; transition: .18s var(--ease, ease); white-space: nowrap;
 }
-.dreq-btn--success { background: var(--d-green); color: #fff; }
-.dreq-btn--success:hover { background: #157a5c; transform: translateY(-1px); }
-.dreq-btn--danger { background: transparent; color: var(--d-rose); border: 1px solid rgba(244, 63, 94, .3); }
-.dreq-btn--danger:hover { background: rgba(244, 63, 94, .08); }
+.dreq-btn--success { background: var(--success); color: #fff; }
+.dreq-btn--success:hover { background: var(--primary-hover); transform: translateY(-1px); }
+.dreq-btn--danger { background: var(--danger-soft); color: var(--danger); border: 1px solid var(--danger-border); }
+.dreq-btn--danger:hover { background: var(--danger); color: #fff; }
 .dreq-btn--muted { background: var(--d-soft-bg); color: var(--d-muted); }
 .dreq-btn--muted:hover { background: rgba(148, 163, 184, .18); }
 
