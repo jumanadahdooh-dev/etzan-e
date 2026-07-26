@@ -1,32 +1,26 @@
 @charset "UTF-8";
 
 /* ==================================================
-   Variables
+   Variables — موحّدة هلق فعليًا مع design-tokens.css (المصدر المشترك
+   لكل الموقع، يتحمّل قبل هاد الملف بلاي-آوت المريض). المتغيرات يلي كانت
+   بنفس اسم design-tokens.css (--primary/--secondary/--text/--bg/--border/
+   --border-strong/--warning/--warning-soft/--danger/--radius-xl/lg/md)
+   انشالت من هون تمامًا حتى ترث القيمة الحقيقية المشتركة (مش تلغيها بقيمة
+   محلية مختلفة شوي زي ما كان صاير). الباقي (أسماء مش موجودة بالمصدر
+   المشترك) ضلت هون كـ alias بس، حتى باقي الملف يشتغل بدون أي تعديل.
 ================================================== */
 :root {
-    --primary: #1D9E75;
-    --primary-dark: #15795A;
-    --secondary: #4DA8DA;
-    --text: #18333B;
-    --muted: #667C84;
-    --bg: #F7FCFB;
-    --bg-soft: #F8FCFB;
-    --card: rgba(255, 255, 255, 0.82);
-    --card-solid: #FFFFFF;
-    --border: rgba(24, 51, 59, 0.07);
-    --border-strong: rgba(24, 51, 59, 0.12);
+    --primary-dark: var(--primary-hover, #15795A);
+    --muted: var(--text-2, #667C84);
+    --bg-soft: var(--surface-2, #F8FCFB);
+    --card: color-mix(in srgb, var(--surface, #fff) 82%, transparent);
+    --card-solid: var(--surface, #FFFFFF);
     --shadow: 0 22px 60px rgba(24, 51, 59, 0.07);
     --shadow-soft: 0 10px 30px rgba(24, 51, 59, 0.045);
-    --green-soft: rgba(29, 158, 117, 0.10);
-    --blue-soft: rgba(77, 168, 218, 0.12);
+    --green-soft: var(--success-soft, rgba(29, 158, 117, 0.10));
+    --blue-soft: var(--info-soft, rgba(77, 168, 218, 0.12));
     --purple: #7C6ED6;
     --purple-soft: rgba(124, 110, 214, 0.12);
-    --warning: #F4B860;
-    --warning-soft: rgba(244, 184, 96, 0.15);
-    --danger: #E36A5C;
-    --radius-xl: 32px;
-    --radius-lg: 26px;
-    --radius-md: 20px;
     --sidebar-width: 282px;
     --sidebar-collapsed: 92px;
     --topbar-height: 86px;
@@ -34,17 +28,11 @@
 }
 
 html[data-theme="dark"] {
-    --primary: #35B98F;
-    --primary-dark: #35B98F;
-    --secondary: #64B9EA;
-    --text: #EEF7F5;
-    --muted: #98AAA6;
-    --bg: #0F1718;
-    --bg-soft: #111D1E;
-    --card: rgba(255, 255, 255, 0.055);
-    --card-solid: #152223;
-    --border: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.14);
+    --primary-dark: var(--primary-hover, #35B98F);
+    --muted: var(--text-2, #98AAA6);
+    --bg-soft: var(--surface-2, #111D1E);
+    --card: color-mix(in srgb, var(--surface, #152223) 90%, transparent);
+    --card-solid: var(--surface, #152223);
     --shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
     --shadow-soft: 0 12px 36px rgba(0, 0, 0, 0.18);
 }
