@@ -10,6 +10,40 @@ class AppNotificationService
 {
     private string $table = 'app_notifications';
 
+    /**
+     * إشعار "فريق الأدمن" كله (طلب دكتور جديد، رسالة دعم جديدة...) — نسخة
+     * شخصية منفصلة لكل أدمن حالي، بدل الجدول المشترك القديم admin_notifications
+     * يلي كانت حالة القراءة فيه مشتركة (أدمن يقرأ إشعار بيختفي عند الباقيين).
+     * هاي نقطة الكتابة الوحيدة لأي "إشعار أدمن" بالمشروع من هلق وطالع.
+     */
+    public function sendToAllAdmins(
+        string $type,
+        string $title,
+        ?string $body = null,
+        ?string $url = null,
+        ?int $actorUserId = null,
+        ?int $relatedId = null,
+        ?string $relatedType = null,
+        array $data = []
+    ): void {
+        $adminIds = DB::table('users')->where('role', 'admin')->pluck('id');
+
+        foreach ($adminIds as $adminId) {
+            $this->send(
+                recipientUserId: $adminId,
+                recipientRole: 'admin',
+                type: $type,
+                title: $title,
+                body: $body,
+                url: $url,
+                actorUserId: $actorUserId,
+                relatedId: $relatedId,
+                relatedType: $relatedType,
+                data: $data
+            );
+        }
+    }
+
     public function send(
         ?int $recipientUserId,
         ?string $recipientRole,
@@ -330,8 +364,20 @@ class AppNotificationService
             'task_late' => 'circle-alert',
             'task_completed' => 'check-circle',
 
+            'meal_reviewed' => 'utensils',
+            'calorie_goal_set' => 'flame',
+            'calorie_overage_alert' => 'flame',
+            'weight_logged' => 'scale',
+            'article_approved' => 'badge-check',
+            'article_rejected' => 'circle-alert',
+            'doctor_application' => 'user-plus',
+            'doctor_followup_request_received', 'appointment_request_received' => 'bell-plus',
+            'appointment_request_updated' => 'calendar-clock',
+            'doctor_followup_completed' => 'star',
+
             'admin_message' => 'message-circle',
             'doctor_message' => 'message-circle',
+            'message' => 'message-circle',
             'system' => 'settings',
 
             default => 'bell-ring',
@@ -344,26 +390,36 @@ class AppNotificationService
             'appointment_confirmed',
             'appointment_reschedule_accepted',
             'doctor_request_approved',
+            'article_approved',
             'task_completed' => 'is-success',
 
             'appointment_rejected',
             'appointment_reschedule_declined',
             'doctor_request_rejected',
-            'task_late' => 'is-danger',
+            'article_rejected',
+            'task_late',
+            'calorie_overage_alert' => 'is-danger',
 
             'appointment_pending',
             'appointment_reschedule_requested',
             'appointment_reminder_60',
             'appointment_reminder_10',
             'appointment_starting_now',
+            'appointment_request_received',
+            'appointment_request_updated',
+            'doctor_followup_request_received',
             'task_reminder',
             'task_due' => 'is-warning',
 
             'message_received',
             'support_reply',
             'support_message_sent',
+            'meal_reviewed',
+            'calorie_goal_set',
+            'weight_logged',
             'admin_message',
-            'doctor_message' => 'is-message',
+            'doctor_message',
+            'message' => 'is-message',
 
             default => 'is-general',
         };

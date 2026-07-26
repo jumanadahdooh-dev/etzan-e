@@ -14,3 +14,7 @@ Schedule::command('patient-tasks:notify')
 Schedule::command('appointments:send-reminders')
     ->everyMinute()
     ->withoutOverlapping();
+
+Schedule::command('patient-alerts:calorie-overage')
+    ->dailyAt('06:00')
+    ->withoutOverlapping();
