@@ -13,10 +13,10 @@
     --appt-line-2: rgba(19, 51, 63, 0.09);
     --appt-card: rgba(255, 255, 255, 0.82);
     --appt-white: #ffffff;
-    --appt-warning: #a86a00;
-    --appt-warning-bg: #fff7dc;
-    --appt-danger: #b42318;
-    --appt-danger-bg: #fff1ef;
+    --appt-warning: var(--warning, #a86a00);
+    --appt-warning-bg: var(--warning-soft, #fff7dc);
+    --appt-danger: var(--danger, #b42318);
+    --appt-danger-bg: var(--danger-soft, #fff1ef);
     --appt-shadow: 0 22px 55px rgba(18, 61, 71, 0.09);
     --appt-shadow-soft: 0 14px 35px rgba(18, 61, 71, 0.07);
     --appt-radius-xl: 34px;
@@ -36,8 +36,8 @@ body.dark-mode,
     --appt-line-2: rgba(255, 255, 255, 0.08);
     --appt-card: rgba(16, 35, 40, 0.82);
     --appt-white: #11262c;
-    --appt-warning-bg: rgba(255, 184, 77, 0.11);
-    --appt-danger-bg: rgba(255, 113, 100, 0.12);
+    --appt-warning-bg: var(--warning-soft, rgba(255, 184, 77, 0.11));
+    --appt-danger-bg: var(--danger-soft, rgba(255, 113, 100, 0.12));
     --appt-shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
     --appt-shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.22);
 }
