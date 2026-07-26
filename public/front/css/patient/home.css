@@ -24,17 +24,14 @@
     --home-v2-danger: #E36A5C;
 }
 
+/*
+ * (--bg/--bg-soft/--card/--card-solid/--text/--muted/--border/--border-strong/
+ * --green-soft/--blue-soft) انشالوا من هون — كانوا يلغوا نفس الأسماء يلي
+ * design-tokens.css وux-premium-v3.css عرّفوها بالفعل للدارك مود بكل صفحات
+ * المريض، فهالصفحة كانت الوحيدة يلي عندها لون خلفية دارك مختلف شوي عن
+ * الباقي. هلق بترث نفس القيمة المشتركة زي أي صفحة مريض تانية.
+ */
 html[data-theme="dark"] {
-    --bg: #071514;
-    --bg-soft: #0B1C1B;
-    --card: rgba(255, 255, 255, 0.065);
-    --card-solid: #102321;
-    --text: #F4FAF8;
-    --muted: #9CB5AF;
-    --border: rgba(255, 255, 255, 0.085);
-    --border-strong: rgba(255, 255, 255, 0.14);
-    --green-soft: rgba(52, 211, 153, 0.12);
-    --blue-soft: rgba(56, 189, 248, 0.12);
     --home-v2-card: rgba(255, 255, 255, 0.065);
     --home-v2-soft: rgba(255, 255, 255, 0.045);
     --home-v2-border: rgba(255, 255, 255, 0.09);
