@@ -21,64 +21,39 @@ public/front/css/admin/admin-notifications.css
    لازم يكون بأول ملف الإشعارات
 ========================= */
 
+/*
+ * design-tokens.css (يتحمّل قبل هاد الملف من layouts/admin.blade.php) عرّف
+ * --surface/--text/--border/--shadow-sm/--shadow-md أصلاً بفاتح ودارك -
+ * فبالتالي ما منعيد تعريفهم هون إطلاقًا (إعادة التعريف بنفس :root بتلغي
+ * نسخة design-tokens.css، وإعادة تعريف متغيّر بدلالة نفسه = حلقة غير
+ * صالحة بالـ CSS). الأسماء المحلية غير المتصادمة (--green-s، --r-xl...)
+ * لسا موجودة كـ alias بس، حتى باقي هالملف يضل شغال بدون أي تعديل.
+ */
 :root {
-    --surface: #ffffff;
-    --surface2: #f5fbf8;
-    --surface-2: #f5fbf8;
+    --surface2: var(--surface-2);
+    --muted: var(--text-2);
 
-    --text: #173530;
-    --muted: #6b8a84;
-    --text-2: #6b8a84;
+    --green: var(--primary, #1D9E75);
+    --teal: var(--primary, #1D9E75);
+    --green-s: var(--success-soft, rgba(29, 158, 117, .12));
+    --green-glow: rgba(var(--primary-rgb, 29, 158, 117), .25);
 
-    --border: rgba(29, 158, 117, .15);
+    --blue: var(--secondary, #38b8f2);
+    --blue-s: var(--info-soft, rgba(56, 184, 242, .12));
 
-    --green: #1D9E75;
-    --teal: #1D9E75;
-    --green-s: rgba(29, 158, 117, .12);
-    --green-glow: rgba(29, 158, 117, .25);
+    --orange: var(--warning, #F5A623);
+    --orange-s: var(--warning-soft, rgba(245, 166, 35, .14));
 
-    --blue: #38b8f2;
-    --blue-s: rgba(56, 184, 242, .12);
+    --red: var(--danger, #ef4444);
+    --red-s: var(--danger-soft, rgba(239, 68, 68, .13));
 
-    --orange: #F5A623;
-    --orange-s: rgba(245, 166, 35, .14);
+    --purple: var(--accent-purple, #8B5CF6);
+    --purple-s: rgba(var(--accent-purple-rgb, 139, 92, 246), .13);
 
-    --red: #ef4444;
-    --red-s: rgba(239, 68, 68, .13);
+    --shadow: var(--shadow-md);
 
-    --purple: #8B5CF6;
-    --purple-s: rgba(139, 92, 246, .13);
-
-    --shadow: 0 20px 50px rgba(15, 55, 45, .09);
-    --shadow-md: 0 20px 50px rgba(15, 55, 45, .09);
-    --shadow-sm: 0 8px 24px rgba(15, 55, 45, .07);
-
-    --r-xl: 28px;
-    --r-lg: 20px;
-}
-
-/* دعم الدارك سواء الثيم على html أو body */
-html[data-theme="dark"],
-body.admin-body[data-theme="dark"] {
-    --surface: #132522;
-    --surface2: #192e2b;
-    --surface-2: #192e2b;
-
-    --text: #e2f5ee;
-    --muted: #7fa89f;
-    --text-2: #7fa89f;
-
-    --border: rgba(255, 255, 255, .08);
-
-    --green-s: rgba(29, 158, 117, .20);
-    --blue-s: rgba(56, 184, 242, .16);
-    --orange-s: rgba(245, 166, 35, .17);
-    --red-s: rgba(239, 68, 68, .15);
-    --purple-s: rgba(139, 92, 246, .16);
-
-    --shadow: 0 20px 55px rgba(0, 0, 0, .35);
-    --shadow-md: 0 20px 55px rgba(0, 0, 0, .35);
-    --shadow-sm: 0 8px 24px rgba(0, 0, 0, .25);
+    --r-xl: var(--radius-xl, 28px);
+    --r-lg: var(--radius-lg, 20px);
 }
 
 .admin-notifications-page,

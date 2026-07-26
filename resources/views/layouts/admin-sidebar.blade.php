@@ -19,8 +19,17 @@
         return false;
     };
 
-    $pendingDoctorRequests = (int) ($pendingDoctorRequests ?? ($stats['pending_doctor_applications'] ?? 0));
-    $unreadAdminNotifications = (int) ($unreadAdminNotifications ?? ($stats['admin_notifications_unread'] ?? (class_exists(\App\Models\AdminNotification::class) ? \App\Models\AdminNotification::unread()->count() : 0)));
+    // عدّادين حقيقيين بكل صفحات الأدمن (مش بس الداشبورد يلي كان الوحيد
+    // يمرر $stats) — العدد الاحتياطي كان صفر أو (أسوأ) عدد إشعارات مشترك
+    // من موديل admin_notifications القديم بدل عدد الأدمن الحالي الحقيقي.
+    $pendingDoctorRequests = (int) ($pendingDoctorRequests
+        ?? ($stats['pending_doctor_applications']
+            ?? (\Illuminate\Support\Facades\Schema::hasTable('doctor_applications')
+                ? \Illuminate\Support\Facades\DB::table('doctor_applications')->where('status', 'pending')->count()
+                : 0)));
+
+    $unreadAdminNotifications = (int) ($unreadAdminNotifications
+        ?? \App\Models\AppNotification::forUser(auth()->id())->unread()->count());
 
     $navGroups = [
         [
@@ -71,13 +80,6 @@
                     'routes' => ['admin.specialties.index'],
                     'fallback' => '/admin/specialties',
                     'active' => ['admin/specialties'],
-                ],
-                [
-                    'label' => 'الصفحات الثابتة',
-                    'icon' => 'fa-regular fa-file-lines',
-                    'routes' => ['admin.static-pages.index'],
-                    'fallback' => '/admin/static-pages',
-                    'active' => ['admin/static-pages'],
                 ],
             ],
         ],
