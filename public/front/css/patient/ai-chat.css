@@ -144,12 +144,12 @@ body:has(.ai-chat-page) .patient-main {
 .ai-new-chat-btn {
     height: 38px;
     padding: 0 13px;
-    border-radius: 14px;
+    border-radius: var(--radius-md, 14px);
     display: inline-flex;
     align-items: center;
     gap: 7px;
     color: #ffffff;
-    background: linear-gradient(135deg, var(--ai-primary-2), var(--ai-primary-dark));
+    background: linear-gradient(135deg, var(--ai-primary-2), var(--ai-secondary));
     text-decoration: none;
     font-size: 12px;
     font-weight: 900;

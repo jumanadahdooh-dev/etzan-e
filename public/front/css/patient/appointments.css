@@ -870,7 +870,7 @@ body.dark-mode .slot-btn,
 .appt-primary-btn,
 .appt-meeting-btn {
     color: #fff;
-    background: linear-gradient(135deg, var(--appt-primary-2), var(--appt-primary-dark));
+    background: linear-gradient(135deg, var(--appt-primary-2), var(--appt-secondary));
     box-shadow: 0 16px 30px rgba(21, 145, 111, 0.20);
 }
 

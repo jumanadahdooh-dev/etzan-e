@@ -175,7 +175,7 @@ body.dark-mode .docdeck-page,
     color: #fff;
     text-decoration: none;
     font-weight: 950;
-    background: linear-gradient(135deg, var(--dd-primary), var(--dd-primary-dark));
+    background: linear-gradient(135deg, var(--dd-primary), var(--dd-secondary));
     box-shadow: 0 18px 36px var(--dd-glow);
 }
 

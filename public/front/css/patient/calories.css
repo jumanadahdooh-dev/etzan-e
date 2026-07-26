@@ -149,7 +149,7 @@
     min-height: 50px;
     padding: 0 18px;
     border: 0;
-    border-radius: 18px;
+    border-radius: var(--radius-full, 999px);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -158,12 +158,13 @@
     font-size: 13px;
     font-weight: 950;
     cursor: pointer;
-    transition: 0.22s ease;
+    transition: 0.22s var(--ease, ease);
 }
 
+/* نفس تدرّج اللون الأخضر-أزرق وشكل الحبة الكامل المستخدم بزر "إضافة" برحلتي وبأزرار الصفحة الرئيسية العامة */
 .cal-primary-btn {
     color: #ffffff;
-    background: linear-gradient(135deg, var(--cal-primary), var(--cal-primary-dark));
+    background: linear-gradient(135deg, var(--cal-primary), var(--cal-secondary));
     box-shadow: 0 14px 26px rgba(29, 158, 117, 0.22);
 }
 
