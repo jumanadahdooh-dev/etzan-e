@@ -12,23 +12,49 @@
   --primary: #1D9E75;
   --primary-hover: #15795A;
   --primary-ink: #FFFFFF;
+  --secondary: #4DA8DA;
+  --secondary-hover: #2E8FC2;
   --text: #18333B;
   --text-2: #647B84;
   --border: rgba(24, 51, 59, 0.10);
   --border-strong: rgba(24, 51, 59, 0.20);
 
-  --danger: #DC2626;
-  --warning: #B45309;
+  /*
+   * ألوان دلالية (status colors) — كل واحد له نسخة "soft" شفافة خفيفة
+   * (لخلفيات الشارات/التنبيهات) ونسخة صريحة (للنص/الأيقونة/الحدود).
+   * استخدام ثابت لهاي الأربعة بكل الموقع = المستخدم يتعلم بسرعة إن
+   * الأخضر = نجاح/مكتمل، الأصفر = تنبيه/بانتظار، الأحمر = خطر/مرفوض،
+   * الأزرق = معلومة عامة — بدل ما كل صفحة تخترع تدرجها الخاص.
+   */
   --success: #1D9E75;
+  --success-soft: rgba(29, 158, 117, 0.12);
+  --success-border: rgba(29, 158, 117, 0.24);
+
+  --warning: #B45309;
+  --warning-soft: rgba(244, 184, 96, 0.18);
+  --warning-border: rgba(180, 83, 9, 0.24);
+
+  --danger: #DC2626;
+  --danger-soft: rgba(220, 38, 38, 0.10);
+  --danger-border: rgba(220, 38, 38, 0.22);
+
   --info: #2E8FC2;
+  --info-soft: rgba(77, 168, 218, 0.12);
+  --info-border: rgba(77, 168, 218, 0.24);
 
   --shadow-sm: 0 1px 2px rgba(24, 51, 59, 0.06);
   --shadow-md: 0 8px 24px -8px rgba(24, 51, 59, 0.14);
   --shadow-lg: 0 24px 48px -16px rgba(24, 51, 59, 0.20);
 
+  --radius-xs: 10px;
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 22px;
+  --radius-xl: 30px;
+  --radius-full: 999px;
+
+  --ease: cubic-bezier(.2, .8, .2, 1);
+  --ease-spring: cubic-bezier(.16, 1, .3, 1);
 
   --font-body: "Cairo", "Segoe UI", system-ui, sans-serif;
 }
@@ -40,15 +66,28 @@
   --primary: #24C193;
   --primary-hover: #2FE0AC;
   --primary-ink: #04140D;
+  --secondary: #5FBFEA;
+  --secondary-hover: #7FCEF0;
   --text: #F2F7F4;
   --text-2: #9FB2AB;
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
 
-  --danger: #EF4444;
-  --warning: #F59E0B;
   --success: #24C193;
+  --success-soft: rgba(36, 193, 147, 0.14);
+  --success-border: rgba(36, 193, 147, 0.28);
+
+  --warning: #F59E0B;
+  --warning-soft: rgba(245, 158, 11, 0.16);
+  --warning-border: rgba(245, 158, 11, 0.30);
+
+  --danger: #EF4444;
+  --danger-soft: rgba(239, 68, 68, 0.14);
+  --danger-border: rgba(239, 68, 68, 0.28);
+
   --info: #5FBFEA;
+  --info-soft: rgba(95, 191, 234, 0.14);
+  --info-border: rgba(95, 191, 234, 0.28);
 
   /*
    * ظل أسود عادي بالكاد يبان فوق خلفية شبه سوداء. نضيف حافة إضاءة خفيفة
