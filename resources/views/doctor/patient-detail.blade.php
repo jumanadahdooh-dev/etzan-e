@@ -375,7 +375,15 @@ document.addEventListener('DOMContentLoaded', function () {
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeRejectModal(); });
     }
 
-    /* رسم بياني الوزن */
+    /* تدرّج تحت الخط — نفس أسلوب لمعة الكروت الموحّدة، بس هون لتعبئة الرسم البياني */
+    function verticalGradient(ctx, area, colorTop, colorBottom) {
+        var gradient = ctx.createLinearGradient(0, area.top, 0, area.bottom);
+        gradient.addColorStop(0, colorTop);
+        gradient.addColorStop(1, colorBottom);
+        return gradient;
+    }
+
+    /* رسم بياني الوزن — خط ناعم بتدرّج حقيقي تحته */
     var weightCanvas = document.getElementById('dpatWeightChart');
     if (weightCanvas && typeof Chart !== 'undefined') {
         new Chart(weightCanvas, {
@@ -385,10 +393,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 datasets: [{
                     data: @json($weightLogs->pluck('weight_kg')),
                     borderColor: '#8b5cf6',
-                    backgroundColor: 'rgba(139,92,246,.1)',
+                    backgroundColor: function (context) {
+                        var chart = context.chart;
+                        var chartArea = chart.chartArea;
+                        if (!chartArea) return 'rgba(139,92,246,.1)';
+                        return verticalGradient(chart.ctx, chartArea, 'rgba(139,92,246,.28)', 'rgba(139,92,246,.02)');
+                    },
                     fill: true,
-                    tension: .3,
+                    tension: .35,
                     pointRadius: 4,
+                    pointBackgroundColor: '#8b5cf6',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
                 }]
             },
             options: {
@@ -399,22 +415,48 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    /* رسم بياني السعرات */
+    /* رسم بياني السعرات — خط ناعم بتدرّج + خط مقارنة مع هدف الطبيب */
     var calCanvas = document.getElementById('dpatCaloriesChart');
     if (calCanvas && typeof Chart !== 'undefined') {
-        new Chart(calCanvas, {
-            type: 'bar',
-            data: {
-                labels: @json(collect($caloriesTrend)->pluck('label')),
-                datasets: [{
-                    data: @json(collect($caloriesTrend)->pluck('calories')),
-                    backgroundColor: 'rgba(20,184,166,.75)',
-                    borderRadius: 6,
-                }]
+        var goalValue = {{ $currentGoal->calories_goal ?? 'null' }};
+        var calLabels = @json(collect($caloriesTrend)->pluck('label'));
+        var calDatasets = [{
+            label: 'السعرات الفعلية',
+            data: @json(collect($caloriesTrend)->pluck('calories')),
+            borderColor: '#14b8a6',
+            backgroundColor: function (context) {
+                var chart = context.chart;
+                var chartArea = chart.chartArea;
+                if (!chartArea) return 'rgba(20,184,166,.12)';
+                return verticalGradient(chart.ctx, chartArea, 'rgba(20,184,166,.30)', 'rgba(20,184,166,.02)');
             },
+            fill: true,
+            tension: .35,
+            pointRadius: 3,
+            pointBackgroundColor: '#14b8a6',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+        }];
+
+        if (goalValue) {
+            calDatasets.push({
+                label: 'هدف الطبيب',
+                data: calLabels.map(function () { return goalValue; }),
+                borderColor: 'rgba(180,83,9,.55)',
+                borderDash: [6, 6],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                tension: 0,
+            });
+        }
+
+        new Chart(calCanvas, {
+            type: 'line',
+            data: { labels: calLabels, datasets: calDatasets },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: { legend: { display: !!goalValue, position: 'top', align: 'end', labels: { boxWidth: 12, font: { size: 11 } } } },
                 scales: { y: { beginAtZero: true, ticks: { precision: 0 } }, x: { grid: { display: false } } }
             }
         });
