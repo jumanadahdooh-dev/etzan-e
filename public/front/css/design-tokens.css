@@ -1,0 +1,61 @@
+/*
+ * design-tokens.css — مصدر واحد لهوية اتزان البصرية (ألوان، ظلال، حواف، خط).
+ * يتحكم بالوضع الفاتح/الغامق عبر data-theme على <html> (نفس الآلية
+ * الموجودة أصلًا بكل الليّاوتات — public/admin عبر setting('theme_mode')،
+ * doctor/patient عبر localStorage). حمّليه أول ملف CSS بأي صفحة.
+ */
+
+:root {
+  --bg: #F8FCFB;
+  --surface: #FFFFFF;
+  --surface-2: #F3F8F5;
+  --primary: #1D9E75;
+  --primary-hover: #15795A;
+  --primary-ink: #FFFFFF;
+  --text: #18333B;
+  --text-2: #647B84;
+  --border: rgba(24, 51, 59, 0.10);
+  --border-strong: rgba(24, 51, 59, 0.20);
+
+  --danger: #DC2626;
+  --warning: #B45309;
+  --success: #1D9E75;
+  --info: #2E8FC2;
+
+  --shadow-sm: 0 1px 2px rgba(24, 51, 59, 0.06);
+  --shadow-md: 0 8px 24px -8px rgba(24, 51, 59, 0.14);
+  --shadow-lg: 0 24px 48px -16px rgba(24, 51, 59, 0.20);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  --font-body: "Cairo", "Segoe UI", system-ui, sans-serif;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0B0D0C;
+  --surface: #161918;
+  --surface-2: #1D2120;
+  --primary: #24C193;
+  --primary-hover: #2FE0AC;
+  --primary-ink: #04140D;
+  --text: #F2F7F4;
+  --text-2: #9FB2AB;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --danger: #EF4444;
+  --warning: #F59E0B;
+  --success: #24C193;
+  --info: #5FBFEA;
+
+  /*
+   * ظل أسود عادي بالكاد يبان فوق خلفية شبه سوداء. نضيف حافة إضاءة خفيفة
+   * (inset highlight) جنب الظل حتى يبقى للكرت العلوي حدود واضحة بالدارك مود
+   * - نفس الأسلوب المستخدم بالواجهات الغامقة الاحترافية (Linear/Vercel).
+   */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --shadow-md: 0 8px 28px -6px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.035);
+  --shadow-lg: 0 24px 60px -12px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.045);
+}

@@ -73,8 +73,8 @@
 @media (prefers-color-scheme: dark) {
     :root {
         color-scheme: dark;
-        --et-bg: #000000;
-        --et-bg-2: #050505;
+        --et-bg: #0B0D0C;
+        --et-bg-2: #0F1211;
         --et-surface: rgba(10, 18, 16, .62);
         --et-surface-strong: rgba(12, 20, 18, .86);
         --et-surface-soft: rgba(255, 255, 255, .045);
@@ -104,8 +104,8 @@ body.dark-mode,
 body.theme-dark,
 [data-bs-theme="dark"] {
     color-scheme: dark;
-    --et-bg: #000000;
-    --et-bg-2: #050505;
+    --et-bg: #0B0D0C;
+    --et-bg-2: #0F1211;
     --et-surface: rgba(10, 18, 16, .62);
     --et-surface-strong: rgba(12, 20, 18, .86);
     --et-surface-soft: rgba(255, 255, 255, .045);
@@ -117,9 +117,9 @@ body.theme-dark,
     --et-faint: #61766f;
     --et-border: rgba(21, 155, 117, .22);
     --et-border-2: rgba(255, 255, 255, .08);
-    --et-shadow-xs: 0 12px 34px rgba(0, 0, 0, .28);
-    --et-shadow-sm: 0 22px 60px rgba(0, 0, 0, .42);
-    --et-shadow-md: 0 38px 110px rgba(0, 0, 0, .58);
+    --et-shadow-xs: 0 12px 34px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .03);
+    --et-shadow-sm: 0 22px 60px rgba(0, 0, 0, .48), 0 0 0 1px rgba(255, 255, 255, .035);
+    --et-shadow-md: 0 38px 110px rgba(0, 0, 0, .6), 0 0 0 1px rgba(255, 255, 255, .04);
     --et-shadow-glow: 0 0 0 1px rgba(var(--et-primary-rgb), .22), 0 0 70px rgba(var(--et-primary-rgb), .18);
     --et-glow: rgba(var(--et-primary-rgb), .34);
     --et-grid-dot: rgba(21, 155, 117, .13);
