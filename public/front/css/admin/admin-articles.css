@@ -2,63 +2,32 @@
    ARTICLES FINAL FIX + ANIMATIONS
 ========================= */
 
-/* متغيرات احتياطية لو مش موجودة في admin.css */
+/* design-tokens.css عرّف --surface/--text/--border/--shadow-sm/--shadow-md أصلاً - ما منعيد تعريفهم هون (نفس إصلاح ملف الإشعارات وطلبات الأطباء) */
 :root {
-    --surface: #ffffff;
-    --surface-2: #f5fbf8;
-    --surface2: #f5fbf8;
+    --surface2: var(--surface-2);
+    --muted: var(--text-2);
 
-    --border: rgba(29,158,117,.15);
+    --teal: var(--primary, #1D9E75);
+    --green: var(--primary, #1D9E75);
+    --green-s: var(--success-soft, rgba(29,158,117,.12));
+    --green-glow: rgba(var(--primary-rgb, 29, 158, 117), .25);
 
-    --text: #173530;
-    --text-2: #6b8a84;
-    --muted: #6b8a84;
+    --blue: var(--secondary, #38b8f2);
+    --blue-s: var(--info-soft, rgba(56,184,242,.12));
 
-    --teal: #1D9E75;
-    --green: #1D9E75;
-    --green-s: rgba(29,158,117,.12);
-    --green-glow: rgba(29,158,117,.25);
+    --purple: var(--accent-purple, #8B5CF6);
+    --purple-s: rgba(var(--accent-purple-rgb, 139, 92, 246), .13);
 
-    --blue: #38b8f2;
-    --blue-s: rgba(56,184,242,.12);
+    --orange: var(--warning, #F5A623);
+    --orange-s: var(--warning-soft, rgba(245,166,35,.14));
 
-    --purple: #8B5CF6;
-    --purple-s: rgba(139,92,246,.13);
+    --red: var(--danger, #ef4444);
+    --red-s: var(--danger-soft, rgba(239,68,68,.13));
 
-    --orange: #F5A623;
-    --orange-s: rgba(245,166,35,.14);
+    --shadow: var(--shadow-md);
 
-    --red: #ef4444;
-    --red-s: rgba(239,68,68,.13);
-
-    --shadow-md: 0 20px 50px rgba(15,55,45,.09);
-    --shadow: 0 20px 50px rgba(15,55,45,.09);
-    --shadow-sm: 0 8px 24px rgba(15,55,45,.07);
-
-    --r-xl: 28px;
-    --r-lg: 20px;
-}
-
-html[data-theme="dark"] {
-    --surface: #132522;
-    --surface-2: #192e2b;
-    --surface2: #192e2b;
-
-    --border: rgba(255,255,255,.08);
-
-    --text: #e2f5ee;
-    --text-2: #7fa89f;
-    --muted: #7fa89f;
-
-    --green-s: rgba(29,158,117,.20);
-    --blue-s: rgba(56,184,242,.16);
-    --purple-s: rgba(139,92,246,.16);
-    --orange-s: rgba(245,166,35,.17);
-    --red-s: rgba(239,68,68,.15);
-
-    --shadow-md: 0 20px 55px rgba(0,0,0,.35);
-    --shadow: 0 20px 55px rgba(0,0,0,.35);
-    --shadow-sm: 0 8px 24px rgba(0,0,0,.25);
+    --r-xl: var(--radius-xl, 28px);
+    --r-lg: var(--radius-lg, 20px);
 }
 
 /* الصفحة */
