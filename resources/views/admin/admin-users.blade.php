@@ -24,20 +24,11 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </button>
                     <form method="GET" action="{{ route('admin.admin-users') }}" class="up-toolbar-pro__search" id="upSearchBox">
-                        @if(!empty($filters['role']))
-                            <input type="hidden" name="role" value="{{ $filters['role'] }}">
-                        @endif
                         @if(!empty($filters['account_status']))
                             <input type="hidden" name="account_status" value="{{ $filters['account_status'] }}">
                         @endif
                         @if(!empty($filters['verified']))
                             <input type="hidden" name="verified" value="{{ $filters['verified'] }}">
-                        @endif
-                        @if(!empty($filters['date_from']))
-                            <input type="hidden" name="date_from" value="{{ $filters['date_from'] }}">
-                        @endif
-                        @if(!empty($filters['date_to']))
-                            <input type="hidden" name="date_to" value="{{ $filters['date_to'] }}">
                         @endif
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" name="search" id="upSearchInput" value="{{ $search ?? '' }}" placeholder="ابحث بالاسم أو البريد الإلكتروني..." oninput="upToggleSearchClear()">
@@ -48,92 +39,49 @@
 
                 <button type="button" class="up-search-toggle" id="upFiltersToggle" onclick="upToggleFiltersPanel()" aria-label="فلاتر" title="فلاتر">
                     <i class="fa-solid fa-sliders"></i>
-                    @if(!empty($filters['role']) || !empty($filters['account_status']) || !empty($filters['verified']) || !empty($filters['date_from']) || !empty($filters['date_to']))
+                    @if(!empty($filters['account_status']) || !empty($filters['verified']))
                         <span class="up-search-toggle__dot"></span>
                     @endif
                 </button>
             </div>
         </div>
 
-        {{-- لوحة الفلاتر: مطوية افتراضياً، بتنفتح لما تدوسي على أيقونة الفلتر --}}
-        <form method="GET" action="{{ route('admin.admin-users') }}" class="up-filters-panel {{ (!empty($filters['role']) || !empty($filters['account_status']) || !empty($filters['verified']) || !empty($filters['date_from']) || !empty($filters['date_to'])) ? 'active' : '' }}" id="upFiltersPanel">
+        {{--
+            لوحة الفلاتر: مبسّطة (بدون فلتر "النوع" - مكرر أصلاً لأنه الصفحة
+            مقسومة 3 أعمدة حسب النوع بشكل دائم، وبدون فلتر مدى التاريخ -
+            نادرًا ما يُستخدم ومعقّد بدون داعٍ). الحالة والتوثيق صاروا
+            <select> عادي بدل قائمة منسدلة مبنية بجافاسكريبت مخصص.
+        --}}
+        <form method="GET" action="{{ route('admin.admin-users') }}" class="up-filters-panel {{ (!empty($filters['account_status']) || !empty($filters['verified'])) ? 'active' : '' }}" id="upFiltersPanel">
             @if(!empty($search))
                 <input type="hidden" name="search" value="{{ $search }}">
             @endif
 
-            @php
-                $upRoleOptions = ['' => 'كل الأنواع', 'admin' => 'مدراء', 'doctor' => 'أطباء', 'patient' => 'مرضى'];
-                $upStatusOptions = ['' => 'كل الحالات', 'active' => 'نشط', 'suspended' => 'موقوف'];
-                $upVerifiedOptions = ['' => 'كل التوثيق', 'verified' => 'موثّق', 'unverified' => 'غير موثّق'];
-            @endphp
+            <label class="up-pill-field">
+                <i class="fa-solid fa-toggle-on"></i>
+                <select name="account_status" onchange="this.form.submit()">
+                    <option value="">كل الحالات</option>
+                    <option value="active" @selected(($filters['account_status'] ?? '') === 'active')>نشط</option>
+                    <option value="suspended" @selected(($filters['account_status'] ?? '') === 'suspended')>موقوف</option>
+                </select>
+            </label>
 
-            <div class="up-custom-select">
-                <button type="button" class="up-pill-field" onclick="upToggleDropdown(event, 'role')">
-                    <i class="fa-solid fa-users"></i>
-                    <span class="up-custom-select__label" id="roleLabel">{{ $upRoleOptions[$filters['role'] ?? ''] ?? 'كل الأنواع' }}</span>
-                    <i class="fa-solid fa-chevron-down up-custom-select__chevron"></i>
-                </button>
-                <input type="hidden" name="role" id="roleInput" value="{{ $filters['role'] ?? '' }}">
-                <div class="up-custom-select__panel" id="rolePanel">
-                    @foreach ($upRoleOptions as $value => $label)
-                        <button type="button" class="{{ ($filters['role'] ?? '') === $value ? 'is-active' : '' }}" onclick="upSelectOption(event, 'role', '{{ $value }}', '{{ $label }}')">{{ $label }}</button>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="up-custom-select">
-                <button type="button" class="up-pill-field" onclick="upToggleDropdown(event, 'account_status')">
-                    <i class="fa-solid fa-toggle-on"></i>
-                    <span class="up-custom-select__label" id="account_statusLabel">{{ $upStatusOptions[$filters['account_status'] ?? ''] ?? 'كل الحالات' }}</span>
-                    <i class="fa-solid fa-chevron-down up-custom-select__chevron"></i>
-                </button>
-                <input type="hidden" name="account_status" id="account_statusInput" value="{{ $filters['account_status'] ?? '' }}">
-                <div class="up-custom-select__panel" id="account_statusPanel">
-                    @foreach ($upStatusOptions as $value => $label)
-                        <button type="button" class="{{ ($filters['account_status'] ?? '') === $value ? 'is-active' : '' }}" onclick="upSelectOption(event, 'account_status', '{{ $value }}', '{{ $label }}')">{{ $label }}</button>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="up-custom-select">
-                <button type="button" class="up-pill-field" onclick="upToggleDropdown(event, 'verified')">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span class="up-custom-select__label" id="verifiedLabel">{{ $upVerifiedOptions[$filters['verified'] ?? ''] ?? 'كل التوثيق' }}</span>
-                    <i class="fa-solid fa-chevron-down up-custom-select__chevron"></i>
-                </button>
-                <input type="hidden" name="verified" id="verifiedInput" value="{{ $filters['verified'] ?? '' }}">
-                <div class="up-custom-select__panel" id="verifiedPanel">
-                    @foreach ($upVerifiedOptions as $value => $label)
-                        <button type="button" class="{{ ($filters['verified'] ?? '') === $value ? 'is-active' : '' }}" onclick="upSelectOption(event, 'verified', '{{ $value }}', '{{ $label }}')">{{ $label }}</button>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="up-custom-select">
-                <button type="button" class="up-pill-field" onclick="upToggleCalendar(event, 'date_from')">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <span class="up-date-display" id="date_fromLabel">{{ !empty($filters['date_from']) ? \Carbon\Carbon::parse($filters['date_from'])->locale('ar')->translatedFormat('d M Y') : 'من تاريخ' }}</span>
-                </button>
-                <input type="hidden" name="date_from" id="date_fromInput" value="{{ $filters['date_from'] ?? '' }}">
-                <div class="up-calendar-panel" id="date_fromCalendar"></div>
-            </div>
-
-            <div class="up-custom-select">
-                <button type="button" class="up-pill-field" onclick="upToggleCalendar(event, 'date_to')">
-                    <i class="fa-solid fa-calendar-days"></i>
-                    <span class="up-date-display" id="date_toLabel">{{ !empty($filters['date_to']) ? \Carbon\Carbon::parse($filters['date_to'])->locale('ar')->translatedFormat('d M Y') : 'إلى تاريخ' }}</span>
-                </button>
-                <input type="hidden" name="date_to" id="date_toInput" value="{{ $filters['date_to'] ?? '' }}">
-                <div class="up-calendar-panel" id="date_toCalendar"></div>
-            </div>
+            <label class="up-pill-field">
+                <i class="fa-solid fa-shield-halved"></i>
+                <select name="verified" onchange="this.form.submit()">
+                    <option value="">كل التوثيق</option>
+                    <option value="verified" @selected(($filters['verified'] ?? '') === 'verified')>موثّق</option>
+                    <option value="unverified" @selected(($filters['verified'] ?? '') === 'unverified')>غير موثّق</option>
+                </select>
+            </label>
 
             <div class="up-toolbar-pro__actions">
-                @if(!empty($filters['role']) || !empty($filters['account_status']) || !empty($filters['verified']) || !empty($filters['date_from']) || !empty($filters['date_to']))
+                @if(!empty($filters['account_status']) || !empty($filters['verified']))
                     <a href="{{ route('admin.admin-users', array_filter(['search' => $search ?? null])) }}" class="up-search-toggle up-search-toggle--reset" title="مسح الفلاتر" aria-label="مسح الفلاتر">
                         <i class="fa-solid fa-arrow-rotate-left"></i>
                     </a>
                 @endif
-                <button type="submit" class="up-btn-apply">تطبيق</button>
+                <noscript><button type="submit" class="up-btn-apply">تطبيق</button></noscript>
             </div>
         </form>
 
@@ -162,9 +110,6 @@
                 ['key' => 'doctor', 'label' => 'أطباء', 'accent' => 'blue', 'icon' => 'fa-user-doctor'],
                 ['key' => 'patient', 'label' => 'مرضى', 'accent' => 'orange', 'icon' => 'fa-bed-pulse'],
             ];
-            if (!empty($filters['role'])) {
-                $upColumns = array_values(array_filter($upColumns, fn ($c) => $c['key'] === $filters['role']));
-            }
         @endphp
 
         {{-- شبكة البطاقات: عنوان كل قسم جوا عموده مباشرة (يضلوا مع بعض مهما كان التخطيط) --}}

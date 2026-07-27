@@ -19,10 +19,7 @@ class AdminUserController extends Controller
     public function index(Request $request)
     {
         $search = trim((string) $request->get('search'));
-        $dateFrom = $request->get('date_from');
-        $dateTo = $request->get('date_to');
         $verified = $request->get('verified');
-        $roleFilter = $request->get('role');
         $accountStatus = $request->get('account_status');
 
         $query = User::query()
@@ -36,24 +33,10 @@ class AdminUserController extends Controller
             });
         }
 
-        if (in_array($roleFilter, ['admin', 'doctor', 'patient'], true)) {
-            $query->where('role', $roleFilter);
-        } else {
-            $roleFilter = '';
-        }
-
         if (in_array($accountStatus, ['active', 'suspended'], true)) {
             $query->where('status', $accountStatus);
         } else {
             $accountStatus = '';
-        }
-
-        if (!empty($dateFrom)) {
-            $query->whereDate('created_at', '>=', $dateFrom);
-        }
-
-        if (!empty($dateTo)) {
-            $query->whereDate('created_at', '<=', $dateTo);
         }
 
         if ($verified === 'verified') {
@@ -109,10 +92,7 @@ class AdminUserController extends Controller
         ];
 
         $filters = [
-            'date_from' => $dateFrom,
-            'date_to' => $dateTo,
             'verified' => $verified,
-            'role' => $roleFilter,
             'account_status' => $accountStatus,
         ];
 
