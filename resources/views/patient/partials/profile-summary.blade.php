@@ -249,6 +249,12 @@
                         <i data-lucide="clock-3"></i>
                         بانتظار موافقة الطبيب
                     </span>
+
+                    {{-- طالما الطلب لسا pending (الطبيب ما وافق بعد)، المريض لسا فيه يغيّر رأيه ويختار طبيب تاني --}}
+                    <a href="{{ $doctorsUrl }}" class="ps-outline-btn">
+                        <i data-lucide="refresh-cw"></i>
+                        تغيير الطبيب
+                    </a>
                 @endif
             </div>
         </div>
@@ -354,6 +360,14 @@
                                 <small>{{ $statusLabel }}</small>
                             </div>
                         </div>
+
+                        {{-- تغيير الطبيب متاح بس طالما الطلب لسا معلّق (pending) - أول ما يوافق الطبيب هالخيار بيختفي --}}
+                        @if ($doctorRequestStatus === 'pending')
+                            <a href="{{ $doctorsUrl }}" class="ps-outline-btn">
+                                <i data-lucide="refresh-cw"></i>
+                                تغيير الطبيب
+                            </a>
+                        @endif
                     @else
                         <h2>لم يتم اختيار طبيب بعد</h2>
                         <p>اختر الطبيب المناسب حتى يتم إرسال طلب المتابعة.</p>
