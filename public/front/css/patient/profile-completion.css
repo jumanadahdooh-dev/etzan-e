@@ -4,15 +4,21 @@
 ========================================================= */
 
 :root {
-    --pc-primary: #1D9E75;
-    --pc-primary-dark: #15795A;
-    --pc-secondary: #4DA8DA;
-    --pc-text: #18333B;
-    --pc-muted: #667C84;
-    --pc-card: rgba(255, 255, 255, 0.84);
-    --pc-border: rgba(24, 51, 59, 0.07);
-    --pc-shadow: 0 18px 44px rgba(24, 51, 59, 0.06);
-    --pc-danger: #DC2626;
+    /*
+     * قبل هيك ما كان في نسخة دارك مود لهاي المتغيرات إطلاقًا بهالملف -
+     * يعني نص الصفحة (--pc-text) كان ضل بلون كحلي غامق حتى بالدارك مود،
+     * بمعنى غير مقروء فوق خلفية غامقة. الـ alias هلق بيورّث نسخة الدارك
+     * الصحيحة تلقائيًا من design-tokens.css.
+     */
+    --pc-primary: var(--primary, #1D9E75);
+    --pc-primary-dark: var(--primary-hover, #15795A);
+    --pc-secondary: var(--secondary, #4DA8DA);
+    --pc-text: var(--text, #18333B);
+    --pc-muted: var(--text-2, #667C84);
+    --pc-card: var(--surface, rgba(255, 255, 255, 0.84));
+    --pc-border: var(--border, rgba(24, 51, 59, 0.07));
+    --pc-shadow: var(--shadow-md, 0 18px 44px rgba(24, 51, 59, 0.06));
+    --pc-danger: var(--danger, #DC2626);
 
     --ps-photo-size: 220px;
     --ps-doctor-card-width: 390px;

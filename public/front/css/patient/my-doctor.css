@@ -3,25 +3,25 @@
 ========================================================= */
 
 .docdeck-page {
-    --dd-primary: #15916f;
-    --dd-primary-2: #1d9e75;
-    --dd-primary-dark: #0f6f55;
-    --dd-secondary: #4da8da;
-    --dd-accent: #15916f;
-    --dd-warning: #f6b73c;
+    --dd-primary: var(--primary, #15916f);
+    --dd-primary-2: var(--primary, #1d9e75);
+    --dd-primary-dark: var(--primary-hover, #0f6f55);
+    --dd-secondary: var(--secondary, #4da8da);
+    --dd-accent: var(--primary, #15916f);
+    --dd-warning: var(--warning, #f6b73c);
 
-    --dd-bg: #effaf7;
-    --dd-soft: #effaf7;
-    --dd-soft-2: #f7fbfa;
-    --dd-surface: rgba(255, 255, 255, 0.82);
-    --dd-surface-2: #f7fbfa;
-    --dd-white: #ffffff;
+    --dd-bg: var(--bg, #effaf7);
+    --dd-soft: var(--success-soft, #effaf7);
+    --dd-soft-2: var(--surface-2, #f7fbfa);
+    --dd-surface: var(--surface, rgba(255, 255, 255, 0.82));
+    --dd-surface-2: var(--surface-2, #f7fbfa);
+    --dd-white: var(--surface, #ffffff);
 
-    --dd-text: #12333f;
-    --dd-muted: #657b84;
+    --dd-text: var(--text, #12333f);
+    --dd-muted: var(--text-2, #657b84);
 
     --dd-line: rgba(19, 131, 101, 0.18);
-    --dd-line-strong: rgba(19, 51, 63, 0.09);
+    --dd-line-strong: var(--border, rgba(19, 51, 63, 0.09));
 
     --dd-shadow: 0 22px 55px rgba(18, 61, 71, 0.09);
     --dd-shadow-soft: 0 14px 35px rgba(18, 61, 71, 0.07);
@@ -43,25 +43,25 @@ body[data-theme="dark"] .docdeck-page,
 body.dark .docdeck-page,
 body.dark-mode .docdeck-page,
 [data-theme="dark"] .docdeck-page {
-    --dd-primary: #15916f;
-    --dd-primary-2: #1d9e75;
-    --dd-primary-dark: #0f6f55;
-    --dd-secondary: #4da8da;
-    --dd-accent: #15916f;
-    --dd-warning: #f6b73c;
+    --dd-primary: var(--primary, #15916f);
+    --dd-primary-2: var(--primary, #1d9e75);
+    --dd-primary-dark: var(--primary-hover, #0f6f55);
+    --dd-secondary: var(--secondary, #4da8da);
+    --dd-accent: var(--primary, #15916f);
+    --dd-warning: var(--warning, #f6b73c);
 
-    --dd-bg: #0d1d22;
+    --dd-bg: var(--bg, #0d1d22);
     --dd-soft: rgba(23, 68, 64, 0.38);
-    --dd-soft-2: #0d1d22;
-    --dd-surface: rgba(16, 35, 40, 0.82);
-    --dd-surface-2: #11262c;
-    --dd-white: #11262c;
+    --dd-soft-2: var(--surface-2, #0d1d22);
+    --dd-surface: var(--surface, rgba(16, 35, 40, 0.82));
+    --dd-surface-2: var(--surface-2, #11262c);
+    --dd-white: var(--surface, #11262c);
 
-    --dd-text: #edf8f6;
-    --dd-muted: #a8c1c7;
+    --dd-text: var(--text, #edf8f6);
+    --dd-muted: var(--text-2, #a8c1c7);
 
     --dd-line: rgba(87, 210, 178, 0.22);
-    --dd-line-strong: rgba(255, 255, 255, 0.08);
+    --dd-line-strong: var(--border, rgba(255, 255, 255, 0.08));
 
     --dd-shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
     --dd-shadow-soft: 0 16px 38px rgba(0, 0, 0, 0.22);

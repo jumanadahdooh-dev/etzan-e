@@ -3,20 +3,20 @@
    صفحة مقالات المريض + تفاصيل المقال - Light/Dark
 ========================================================= */
 :root {
-    --pa-primary: #1D9E75;
-    --pa-primary-dark: #15795A;
-    --pa-secondary: #4DA8DA;
-    --pa-ink: #17333b;
-    --pa-muted: #66808a;
-    --pa-bg: #f7fcfb;
-    --pa-card: rgba(255, 255, 255, 0.86);
-    --pa-soft: rgba(235, 250, 246, 0.90);
-    --pa-line: rgba(24, 51, 59, 0.10);
-    --pa-line-strong: rgba(29, 158, 117, 0.20);
-    --pa-shadow: 0 22px 60px rgba(18, 61, 71, 0.09);
-    --pa-shadow-soft: 0 14px 36px rgba(18, 61, 71, 0.07);
-    --pa-radius-xl: 34px;
-    --pa-radius-lg: 26px;
+    --pa-primary: var(--primary, #1D9E75);
+    --pa-primary-dark: var(--primary-hover, #15795A);
+    --pa-secondary: var(--secondary, #4DA8DA);
+    --pa-ink: var(--text, #17333b);
+    --pa-muted: var(--text-2, #66808a);
+    --pa-bg: var(--bg, #f7fcfb);
+    --pa-card: var(--surface, rgba(255, 255, 255, 0.86));
+    --pa-soft: var(--success-soft, rgba(235, 250, 246, 0.90));
+    --pa-line: var(--border, rgba(24, 51, 59, 0.10));
+    --pa-line-strong: rgba(var(--primary-rgb, 29, 158, 117), 0.20);
+    --pa-shadow: var(--shadow-lg, 0 22px 60px rgba(18, 61, 71, 0.09));
+    --pa-shadow-soft: var(--shadow-md, 0 14px 36px rgba(18, 61, 71, 0.07));
+    --pa-radius-xl: var(--radius-xl, 34px);
+    --pa-radius-lg: var(--radius-lg, 26px);
 }
 
 html.dark,

@@ -1,24 +1,24 @@
 :root {
-    --ai-primary: #15916f;
-    --ai-primary-2: #1d9e75;
-    --ai-primary-dark: #0f6f55;
-    --ai-secondary: #4da8da;
+    --ai-primary: var(--primary, #15916f);
+    --ai-primary-2: var(--primary, #1d9e75);
+    --ai-primary-dark: var(--primary-hover, #0f6f55);
+    --ai-secondary: var(--secondary, #4da8da);
 
-    --ai-ink: #12333f;
-    --ai-muted: #657b84;
-    --ai-soft: #effaf7;
-    --ai-soft-2: #f7fbfa;
-    --ai-card: rgba(255, 255, 255, 0.82);
-    --ai-white: #ffffff;
+    --ai-ink: var(--text, #12333f);
+    --ai-muted: var(--text-2, #657b84);
+    --ai-soft: var(--success-soft, #effaf7);
+    --ai-soft-2: var(--surface-2, #f7fbfa);
+    --ai-card: var(--surface, rgba(255, 255, 255, 0.82));
+    --ai-white: var(--surface, #ffffff);
 
     --ai-line: rgba(19, 131, 101, 0.18);
-    --ai-line-2: rgba(19, 51, 63, 0.09);
+    --ai-line-2: var(--border, rgba(19, 51, 63, 0.09));
 
-    --ai-shadow: 0 22px 55px rgba(18, 61, 71, 0.09);
-    --ai-shadow-soft: 0 14px 35px rgba(18, 61, 71, 0.07);
+    --ai-shadow: var(--shadow-lg, 0 22px 55px rgba(18, 61, 71, 0.09));
+    --ai-shadow-soft: var(--shadow-md, 0 14px 35px rgba(18, 61, 71, 0.07));
 
-    --ai-radius-xl: 30px;
-    --ai-radius-lg: 22px;
+    --ai-radius-xl: var(--radius-xl, 30px);
+    --ai-radius-lg: var(--radius-lg, 22px);
 }
 
 html[data-theme="dark"],

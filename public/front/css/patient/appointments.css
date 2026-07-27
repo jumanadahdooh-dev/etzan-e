@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-    --appt-primary: #15916f;
-    --appt-primary-2: #1d9e75;
-    --appt-primary-dark: #0f6f55;
-    --appt-secondary: #4da8da;
-    --appt-ink: #12333f;
-    --appt-muted: #657b84;
-    --appt-soft: #effaf7;
-    --appt-soft-2: #f7fbfa;
+    --appt-primary: var(--primary, #15916f);
+    --appt-primary-2: var(--primary, #1d9e75);
+    --appt-primary-dark: var(--primary-hover, #0f6f55);
+    --appt-secondary: var(--secondary, #4da8da);
+    --appt-ink: var(--text, #12333f);
+    --appt-muted: var(--text-2, #657b84);
+    --appt-soft: var(--success-soft, #effaf7);
+    --appt-soft-2: var(--surface-2, #f7fbfa);
     --appt-line: rgba(19, 131, 101, 0.18);
-    --appt-line-2: rgba(19, 51, 63, 0.09);
-    --appt-card: rgba(255, 255, 255, 0.82);
-    --appt-white: #ffffff;
+    --appt-line-2: var(--border, rgba(19, 51, 63, 0.09));
+    --appt-card: var(--surface, rgba(255, 255, 255, 0.82));
+    --appt-white: var(--surface, #ffffff);
     --appt-warning: var(--warning, #a86a00);
     --appt-warning-bg: var(--warning-soft, #fff7dc);
     --appt-danger: var(--danger, #b42318);
