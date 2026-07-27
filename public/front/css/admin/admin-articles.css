@@ -2007,15 +2007,15 @@ html[data-theme="dark"] .magazine-ai-notice span {
    تحسين واجهة المقالات والـ AI بنفس هوية اتزان
 ========================================================= */
 :root {
-    --ea-primary: #1D9E75;
-    --ea-primary-dark: #15795A;
-    --ea-secondary: #4DA8DA;
-    --ea-ink: #18333B;
-    --ea-muted: #647b84;
-    --ea-line: rgba(29, 158, 117, 0.16);
-    --ea-card: rgba(255, 255, 255, 0.82);
-    --ea-soft: #f3fbf8;
-    --ea-shadow: 0 22px 55px rgba(18, 61, 71, 0.09);
+    --ea-primary: var(--primary, #1D9E75);
+    --ea-primary-dark: var(--primary-hover, #15795A);
+    --ea-secondary: var(--secondary, #4DA8DA);
+    --ea-ink: var(--text, #18333B);
+    --ea-muted: var(--text-2, #647b84);
+    --ea-line: rgba(var(--primary-rgb, 29, 158, 117), 0.16);
+    --ea-card: var(--surface, rgba(255, 255, 255, 0.82));
+    --ea-soft: var(--success-soft, #f3fbf8);
+    --ea-shadow: var(--shadow-lg, 0 22px 55px rgba(18, 61, 71, 0.09));
 }
 
 html.dark,
