@@ -213,11 +213,12 @@ html[data-theme="dark"] .dnotif-item.is-unread { background: rgba(59,130,246,.08
 .dpat-goal-form__row label { font-size: .74rem; font-weight: 750; color: var(--d-text); }
 .dpat-goal-form__row input,
 .dpat-goal-form__row textarea {
-    padding: 9px 12px; border-radius: 10px;
+    padding: 9px 12px; border-radius: var(--radius-md, 14px);
     border: 1px solid var(--d-border); background: var(--d-soft-bg);
     font-size: .84rem; font-weight: 700; color: var(--d-title);
     font-family: inherit;
+    transition: border-color .18s var(--ease, ease);
 }
 .dpat-goal-form__row input:focus,
-.dpat-goal-form__row textarea:focus { outline: 0; border-color: var(--d-amber); }
+.dpat-goal-form__row textarea:focus { outline: 0; border-color: var(--d-green); }
 .dpat-goal-form__row textarea { resize: vertical; }

@@ -542,19 +542,19 @@
 .pc-input {
     min-height: 60px;
     padding: 0 15px;
-    border-radius: 20px;
+    border-radius: var(--radius-md, 18px);
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(255, 255, 255, 0.70);
-    border: 1px solid rgba(24, 51, 59, 0.07);
-    transition: 0.18s ease;
+    background: var(--pc-card);
+    border: 1px solid var(--pc-border);
+    transition: 0.18s var(--ease, ease);
 }
 
 .pc-input:focus-within,
 .pc-field textarea:focus {
-    border-color: rgba(29, 158, 117, 0.30);
-    box-shadow: 0 0 0 4px rgba(29, 158, 117, 0.06);
+    border-color: rgba(var(--primary-rgb, 29, 158, 117), 0.30);
+    box-shadow: 0 0 0 4px rgba(var(--primary-rgb, 29, 158, 117), 0.06);
 }
 
 .pc-input i {
