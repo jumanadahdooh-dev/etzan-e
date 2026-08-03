@@ -14,7 +14,10 @@
         return url($fallback);
     };
 
-    $notificationsCount = (int) ($notificationsCount ?? ($stats['admin_notifications_unread'] ?? 0));
+    // عدّاد حقيقي بكل صفحات الأدمن (مش بس الداشبورد) — كان يعتمد على
+    // $stats['admin_notifications_unread'] يلي بس صفحة الداشبورد بتمرره،
+    // فباقي صفحات الأدمن كانت دايماً بتطلع صفر بغض النظر عن الحقيقة.
+    $notificationsCount = \App\Models\AppNotification::forUser(auth()->id())->unread()->count();
 @endphp
 
 <header class="admin-topbar" id="adminTopbar">

@@ -26,6 +26,7 @@
         }
     </style>
 
+    <link rel="stylesheet" href="{{ asset('front/css/design-tokens.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/admin/admin-tokens.css') }}?v={{ filemtime(public_path('front/css/admin/admin-tokens.css')) }}">
     <link rel="stylesheet" href="{{ asset('front/css/admin/admin.css') }}?v={{ filemtime(public_path('front/css/admin/admin.css')) }}">
 

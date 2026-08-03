@@ -157,7 +157,55 @@
     $draftProtein = (int) data_get($aiMealDraft ?? [], 'protein', 0);
     $draftCarbs = (int) data_get($aiMealDraft ?? [], 'carbs', 0);
     $draftFat = (int) data_get($aiMealDraft ?? [], 'fat', 0);
+    $draftFiber = (int) data_get($aiMealDraft ?? [], 'fiber', 0);
+    $draftSugar = (int) data_get($aiMealDraft ?? [], 'sugar', 0);
+    $draftSodium = (int) data_get($aiMealDraft ?? [], 'sodium', 0);
     $draftConfidence = (int) data_get($aiMealDraft ?? [], 'confidence', 0);
+    $draftStatus = data_get($aiMealDraft ?? [], 'status');
+    $draftCookingMethod = data_get($aiMealDraft ?? [], 'cooking_method');
+    $draftIngredients = collect(data_get($aiMealDraft ?? [], 'ingredients', []));
+    $draftMicronutrients = collect(data_get($aiMealDraft ?? [], 'micronutrients', []));
+    $draftAdvantages = collect(data_get($aiMealDraft ?? [], 'advantages', []));
+    $draftWarnings = collect(data_get($aiMealDraft ?? [], 'warnings', []));
+    $draftDietCompatibility = collect(data_get($aiMealDraft ?? [], 'diet_compatibility', []));
+    $draftRecommendations = collect(data_get($aiMealDraft ?? [], 'recommendations', []));
+    $draftHealthScore = data_get($aiMealDraft ?? [], 'health_score');
+    $draftHealthGrade = data_get($aiMealDraft ?? [], 'health_grade');
+
+    $healthScoreBand = function (?int $score): string {
+        if ($score === null) {
+            return 'is-unknown';
+        }
+
+        return match (true) {
+            $score >= 70 => 'is-good',
+            $score >= 40 => 'is-moderate',
+            default => 'is-poor',
+        };
+    };
+
+    $micronutrientLabels = [
+        'vitamin_a' => 'فيتامين A',
+        'vitamin_c' => 'فيتامين C',
+        'vitamin_d' => 'فيتامين D',
+        'vitamin_b12' => 'فيتامين B12',
+        'iron' => 'الحديد',
+        'calcium' => 'الكالسيوم',
+        'potassium' => 'البوتاسيوم',
+        'magnesium' => 'المغنيسيوم',
+        'zinc' => 'الزنك',
+    ];
+
+    $dietIcons = [
+        'weight_loss' => 'trending-down',
+        'muscle_gain' => 'dumbbell',
+        'keto' => 'flame',
+        'mediterranean' => 'sun',
+        'diabetic_friendly' => 'droplet',
+        'heart_healthy' => 'heart-pulse',
+        'high_protein' => 'beef',
+        'low_carb' => 'wheat-off',
+    ];
 @endphp
 
 @push('styles')
@@ -282,7 +330,7 @@
                             </span>
 
                             <strong data-cal-file-label>ارفع صورة الوجبة</strong>
-                            <small>حاليًا أضف وصفًا نصيًا مع الصورة حتى يعمل التحليل المجاني بدقة أفضل.</small>
+                            <small>يحلل الذكاء الاصطناعي الصورة مباشرة. يمكنك أيضًا إضافة ملاحظة نصية من التبويب الثاني لتحسين الدقة.</small>
 
                             <div class="cal-image-preview" data-cal-preview hidden></div>
                         </label>
@@ -322,6 +370,12 @@
             <div class="cal-safe-note">
                 <i data-lucide="shield-check"></i>
                 <span>لن يتم حفظ أي نتيجة إلا بعد اعتمادك لها، وبعدها تظهر في سجل الوجبات.</span>
+            </div>
+
+            <div class="cal-loading-overlay" data-cal-loading hidden>
+                <div class="cal-loading-spinner"></div>
+                <strong data-cal-loading-text>جاري التحليل...</strong>
+                <span>قد تستغرق العملية بضع ثوانٍ</span>
             </div>
         </article>
 
@@ -598,50 +652,105 @@
             </div>
 
             @if (!empty($aiMealDraft))
-                <form action="{{ $confirmRoute }}" method="POST" class="cal-result-form">
+                <form action="{{ $confirmRoute }}" method="POST" class="cal-result-form cal-nutrition-report">
                     @csrf
 
                     <div class="cal-review-layout">
-                        <div class="cal-review-preview">
-                            <div class="cal-result-image">
-                                @if (data_get($aiMealDraft, 'image_url'))
-                                    <img src="{{ data_get($aiMealDraft, 'image_url') }}" alt="صورة الوجبة">
-                                @else
-                                    <span>🥗</span>
-                                @endif
-                            </div>
-
-                            <div class="cal-preview-copy">
-                                <span>Estimated Meal</span>
-
-                                <label class="cal-note-field cal-meal-name-field">
-                                    <span>اسم الوجبة</span>
-                                    <input
-                                        type="text"
-                                        name="meal_name"
-                                        value="{{ data_get($aiMealDraft, 'meal_name', 'وجبة محللة') }}"
-                                        required
-                                    >
-                                </label>
-
-                                <div class="cal-result-calories">
-                                    <strong>{{ $draftCalories }}</strong>
-                                    <small>Cal</small>
+                        <div class="cal-report-overview">
+                            <div class="cal-review-preview">
+                                <div class="cal-result-image">
+                                    @if (data_get($aiMealDraft, 'image_url'))
+                                        <img src="{{ data_get($aiMealDraft, 'image_url') }}" alt="صورة الوجبة">
+                                    @else
+                                        <span>🥗</span>
+                                    @endif
                                 </div>
 
-                                <div class="cal-confidence-pill">
-                                    <i data-lucide="badge-check"></i>
-                                    ثقة التحليل {{ $draftConfidence }}%
-                                </div>
+                                <div class="cal-preview-copy">
+                                    <span>Estimated Meal</span>
 
-                                @if (data_get($aiMealDraft, 'ai_notes'))
-                                    <p class="cal-ai-note">{{ data_get($aiMealDraft, 'ai_notes') }}</p>
-                                @endif
+                                    <label class="cal-note-field cal-meal-name-field">
+                                        <span>اسم الوجبة</span>
+                                        <input
+                                            type="text"
+                                            name="meal_name"
+                                            value="{{ data_get($aiMealDraft, 'meal_name', 'وجبة محللة') }}"
+                                            required
+                                        >
+                                    </label>
+
+                                    <div class="cal-result-calories">
+                                        <strong>{{ $draftCalories }}</strong>
+                                        <small>Cal</small>
+                                    </div>
+
+                                    <div class="cal-report-badges">
+                                        <div class="cal-confidence-pill">
+                                            <i data-lucide="badge-check"></i>
+                                            ثقة التحليل {{ $draftConfidence }}%
+                                        </div>
+
+                                        @if ($draftCookingMethod)
+                                            <div class="cal-cooking-pill">
+                                                <i data-lucide="flame"></i>
+                                                {{ $draftCookingMethod }}
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    @if (data_get($aiMealDraft, 'ai_notes'))
+                                        <p class="cal-ai-note {{ $draftStatus === 'fallback' ? 'is-fallback' : '' }}">{{ data_get($aiMealDraft, 'ai_notes') }}</p>
+                                    @endif
+                                </div>
                             </div>
+
+                            @if ($draftHealthScore !== null)
+                                <div class="cal-health-score">
+                                    <div class="cal-health-ring {{ $healthScoreBand($draftHealthScore) }}" style="--value: {{ $draftHealthScore }};">
+                                        <div>
+                                            <strong>{{ $draftHealthScore }}</strong>
+                                            <span>/100</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="cal-health-copy">
+                                        <span>Health Score</span>
+                                        <strong>{{ $draftHealthGrade }}</strong>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
-                        <div class="cal-review-editor">
-                            <div class="cal-edit-grid cal-premium-macros">
+                        @if ($draftIngredients->isNotEmpty())
+                            <div class="cal-report-section">
+                                <h3><i data-lucide="list-checks"></i> المكوّنات المكتشفة</h3>
+
+                                <div class="cal-ingredient-grid">
+                                    @foreach ($draftIngredients as $ingredient)
+                                        <div class="cal-ingredient-card">
+                                            <div class="cal-ingredient-head">
+                                                <strong>{{ data_get($ingredient, 'name') }}</strong>
+                                                <span class="cal-confidence-chip">{{ (int) data_get($ingredient, 'confidence', 0) }}%</span>
+                                            </div>
+
+                                            <span class="cal-ingredient-portion">≈ {{ (int) data_get($ingredient, 'portion_g', 0) }} غ</span>
+
+                                            <div class="cal-ingredient-macros">
+                                                <span>{{ (int) data_get($ingredient, 'calories', 0) }} سعرة</span>
+                                                <span>بروتين {{ (int) data_get($ingredient, 'protein', 0) }}g</span>
+                                                <span>كارب {{ (int) data_get($ingredient, 'carbs', 0) }}g</span>
+                                                <span>دهون {{ (int) data_get($ingredient, 'fat', 0) }}g</span>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="cal-report-section">
+                            <h3><i data-lucide="calculator"></i> إجمالي الوجبة (قابل للتعديل)</h3>
+
+                            <div class="cal-edit-grid cal-premium-macros cal-totals-grid">
                                 <label class="cal-edit-macro cal-macro-calories">
                                     <span>السعرات</span>
                                     <input type="number" name="calories" value="{{ $draftCalories }}" min="0">
@@ -665,8 +774,99 @@
                                     <input type="number" name="fat" value="{{ $draftFat }}" min="0">
                                     <small>g</small>
                                 </label>
-                            </div>
 
+                                <label class="cal-edit-macro cal-macro-fiber">
+                                    <span>الألياف</span>
+                                    <input type="number" name="fiber" value="{{ $draftFiber }}" min="0">
+                                    <small>g</small>
+                                </label>
+
+                                <label class="cal-edit-macro cal-macro-sugar">
+                                    <span>السكر</span>
+                                    <input type="number" name="sugar" value="{{ $draftSugar }}" min="0">
+                                    <small>g</small>
+                                </label>
+
+                                <label class="cal-edit-macro cal-macro-sodium">
+                                    <span>الصوديوم</span>
+                                    <input type="number" name="sodium" value="{{ $draftSodium }}" min="0">
+                                    <small>mg</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        @if ($draftMicronutrients->isNotEmpty())
+                            <div class="cal-report-section">
+                                <h3><i data-lucide="pill"></i> العناصر الدقيقة (تقديرية)</h3>
+
+                                <div class="cal-micro-grid">
+                                    @foreach ($micronutrientLabels as $key => $label)
+                                        @php $entry = $draftMicronutrients->get($key, []); @endphp
+
+                                        <div class="cal-micro-item">
+                                            <span>{{ $label }}</span>
+                                            <strong>{{ (int) data_get($entry, 'value', 0) }} {{ data_get($entry, 'unit', '') }}</strong>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($draftAdvantages->isNotEmpty() || $draftWarnings->isNotEmpty())
+                            <div class="cal-report-section cal-adv-warn-grid">
+                                @if ($draftAdvantages->isNotEmpty())
+                                    <div class="cal-advantage-list">
+                                        <h3><i data-lucide="thumbs-up"></i> الإيجابيات</h3>
+                                        <ul>
+                                            @foreach ($draftAdvantages as $advantage)
+                                                <li><i data-lucide="check"></i> {{ $advantage }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
+                                @if ($draftWarnings->isNotEmpty())
+                                    <div class="cal-warning-list">
+                                        <h3><i data-lucide="alert-triangle"></i> تنبيهات</h3>
+                                        <ul>
+                                            @foreach ($draftWarnings as $warning)
+                                                <li><i data-lucide="alert-circle"></i> {{ $warning }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
+
+                        @if ($draftDietCompatibility->isNotEmpty())
+                            <div class="cal-report-section">
+                                <h3><i data-lucide="salad"></i> التوافق مع الأنظمة الغذائية</h3>
+
+                                <div class="cal-diet-grid">
+                                    @foreach ($draftDietCompatibility as $key => $diet)
+                                        <div class="cal-diet-badge {{ data_get($diet, 'compatible') ? 'is-compatible' : 'is-not-compatible' }}">
+                                            <i data-lucide="{{ $dietIcons[$key] ?? 'circle' }}"></i>
+                                            <strong>{{ data_get($diet, 'label') }}</strong>
+                                            <span>{{ (int) data_get($diet, 'score', 0) }}%</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+
+                        @if ($draftRecommendations->isNotEmpty())
+                            <div class="cal-report-section">
+                                <h3><i data-lucide="lightbulb"></i> توصيات</h3>
+
+                                <ul class="cal-reco-list">
+                                    @foreach ($draftRecommendations as $recommendation)
+                                        <li><i data-lucide="arrow-left"></i> {{ $recommendation }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <div class="cal-review-editor">
                             <label class="cal-note-field">
                                 <span>ملاحظة أو تعديل الكمية</span>
                                 <textarea name="patient_note" rows="3" placeholder="مثال: بدون صوص، أو الكمية كانت أقل...">{{ old('patient_note') }}</textarea>

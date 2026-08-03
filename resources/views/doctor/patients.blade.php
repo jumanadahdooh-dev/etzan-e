@@ -6,16 +6,17 @@
 @endphp
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('front/css/doctor/dashboard.css') }}?v={{ file_exists(public_path('front/css/doctor/doctor-dashboard.css')) ? filemtime(public_path('front/css/doctor/doctor-dashboard.css')) : '1' }}">
-    <link rel="stylesheet" href="{{ asset('front/css/doctor/requests.css') }}?v={{ file_exists(public_path('front/css/doctor/doctor-requests.css')) ? filemtime(public_path('front/css/doctor/doctor-requests.css')) : '1' }}">
+    <link rel="stylesheet" href="{{ asset('front/css/doctor/dashboard.css') }}?v={{ file_exists(public_path('front/css/doctor/dashboard.css')) ? filemtime(public_path('front/css/doctor/dashboard.css')) : '1' }}">
+    <link rel="stylesheet" href="{{ asset('front/css/doctor/requests.css') }}?v={{ file_exists(public_path('front/css/doctor/requests.css')) ? filemtime(public_path('front/css/doctor/requests.css')) : '1' }}">
 @endpush
 
 @section('content')
 <section class="ddash">
 
     {{-- ══════════ رأس + بحث ══════════ --}}
-    <div class="dreq-head">
-        <p>مرضاك المقبولون حالياً تحت متابعتك</p>
+    <div class="ddash-section-head">
+        <h2>مرضاي</h2>
+        <span>مرضاك المقبولون حالياً تحت متابعتك</span>
     </div>
 
     <form method="GET" action="{{ route('doctor.patients') }}" class="dpat-search">

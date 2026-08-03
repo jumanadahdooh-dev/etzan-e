@@ -2,28 +2,22 @@
 
 namespace App\Http\Controllers\Doctor;
 
+use App\Http\Controllers\Concerns\ConversationHelpers;
 use App\Http\Controllers\Controller;
+use App\Models\Conversation;
 use App\Models\DoctorProfile;
+use App\Models\Message;
+use App\Models\PatientMeal;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class DoctorDashboardController extends Controller
 {
+    use ConversationHelpers;
+
     private array $pages = [
         'dashboard' => 'الرئيسية',
-        'requests' => 'طلبات الاستشارة',
-        'patients' => 'مرضاي',
-        'patient-details' => 'ملف المريض',
-        'appointments' => 'المواعيد',
-        'messages' => 'الرسائل',
-        'meal-reviews' => 'مراجعة الوجبات AI',
-        'plans' => 'الخطط الغذائية',
-        'alerts' => 'تنبيهات المرضى',
-        'articles' => 'مقالاتي',
-        'reports' => 'التقارير',
-        'profile' => 'ملفي الشخصي',
-        'settings' => 'الإعدادات',
     ];
 
     /**
@@ -57,9 +51,7 @@ class DoctorDashboardController extends Controller
                 'statusBreakdown' => ['confirmed' => 0, 'pending' => 0, 'completed' => 0, 'cancelled' => 0],
                 'genderBreakdown' => ['male' => 0, 'female' => 0],
                 'consultationBreakdown' => ['online' => 0, 'in_person' => 0],
-                'sidebarBadges' => $this->emptySidebarBadges(),
-
-
+                'attentionCounts' => ['unread_messages' => 0, 'meals_to_review' => 0, 'active_alerts' => 0],
                 'weeklyMealsCount' => $weeklyMealsCount,
             ]);
         }
@@ -82,17 +74,23 @@ class DoctorDashboardController extends Controller
             ? $doctorProfile->patientProfiles()->count()
             : 0;
 
-        $pendingRequestsCount = Schema::hasTable('patient_doctor_requests')
-            ? $doctorProfile->patientRequests()->where('status', 'pending')->count()
-            : 0;
+        // ملاحظة: طلبات متابعة المريض لا تُخزَّن في جدول patient_doctor_requests
+        // (ما إله أي مسار كتابة حقيقي)، وإنما مباشرة داخل patient_profiles عبر
+        // doctor_profile_id + doctor_request_status. راجعي DoctorPatientRequestController.
+        $pendingProfilesQuery = Schema::hasTable('patient_profiles')
+            ? \App\Models\PatientProfile::with('user')
+                ->where('doctor_profile_id', $doctorProfile->id)
+                ->where('doctor_request_status', 'pending')
+                ->latest('updated_at')
+            : null;
 
-        $pendingRequests = Schema::hasTable('patient_doctor_requests')
-            ? $doctorProfile->patientRequests()
-                ->with('patient')
-                ->where('status', 'pending')
-                ->latest()
-                ->limit(4)
-                ->get()
+        $pendingRequestsCount = $pendingProfilesQuery?->count() ?? 0;
+
+        $pendingRequests = $pendingProfilesQuery
+            ? $pendingProfilesQuery->limit(4)->get()->map(fn ($profile) => (object) [
+                'patient' => $profile->user,
+                'created_at' => $profile->updated_at,
+            ])
             : collect();
 
         $reviewsAvailable = Schema::hasTable('doctor_reviews');
@@ -196,18 +194,51 @@ class DoctorDashboardController extends Controller
             'statusBreakdown' => $statusBreakdown,
             'genderBreakdown' => $genderBreakdown,
             'consultationBreakdown' => $consultationBreakdown,
-            'sidebarBadges' => [
-                // بس هاد الرقم حقيقي فعلياً (مرتبط مباشرة ببيانات جبناها هلق).
-                // باقي أرقام القائمة الجانبية (رسائل، مراجعة وجبات، تنبيهات، مقالات)
-                // ما إلها جدول أو منطق حقيقي بالمشروع لحد الآن، فخليناها فاضية
-                // بدل ما نعرض رقم وهمي — هاي صفحات لسا برا نطاق هاد التحديث.
-                'requests' => $pendingRequestsCount,
-                'messages' => null,
-                'meal-reviews' => null,
-                'alerts' => null,
-                'articles' => null,
-            ],
+            'attentionCounts' => $this->attentionCounts($doctorProfile),
         ]);
+    }
+
+    /**
+     * 3 عدّادات حقيقية لأشياء بتحتاج انتباه الطبيب اليوم (رسائل غير مقروءة،
+     * وجبات لسا ما اتراجعت، تنبيهات فعّالة) — تُعرض كبطاقات بالداشبورد
+     * الرئيسي. كانت أرقام مكتوبة بالكود مباشرة (12، 8، 5) بغض النظر عن
+     * البيانات الفعلية. هلق كل رقم محسوب من جدوله الحقيقي.
+     */
+    private function attentionCounts(DoctorProfile $doctorProfile): array
+    {
+        $patientUserIds = $doctorProfile->patientProfiles()
+            ->where('doctor_request_status', 'approved')
+            ->pluck('user_id');
+
+        $unreadMessages = 0;
+        if ($patientUserIds->isNotEmpty() && $this->tableExists('conversations') && $this->tableExists('messages')) {
+            $conversationIds = $this->scopeDoctorConversations(
+                Conversation::query()->whereIn('user_id', $patientUserIds)
+            )->pluck('id');
+
+            if ($conversationIds->isNotEmpty()) {
+                $unreadMessages = Message::whereIn('conversation_id', $conversationIds)
+                    ->where('sender_type', 'patient')
+                    ->where('is_read', false)
+                    ->count();
+            }
+        }
+
+        $mealsToReview = 0;
+        if ($patientUserIds->isNotEmpty() && $this->tableExists('patient_meals') && Schema::hasColumn('patient_meals', 'reviewed_at')) {
+            $mealsToReview = PatientMeal::whereIn('user_id', $patientUserIds)
+                ->where('status', 'confirmed')
+                ->whereNull('reviewed_at')
+                ->count();
+        }
+
+        $activeAlerts = app(DoctorAlertsController::class)->resolveAlerts($doctorProfile->id)->count();
+
+        return [
+            'unread_messages' => $unreadMessages,
+            'meals_to_review' => $mealsToReview,
+            'active_alerts' => $activeAlerts,
+        ];
     }
 
     /**
@@ -226,18 +257,6 @@ class DoctorDashboardController extends Controller
         return back()->with('success', $doctorProfile->is_available
             ? 'صرت متاح لاستقبال استشارات جديدة.'
             : 'صرت غير متاح مؤقتاً لاستشارات جديدة.');
-    }
-
-    public function page(string $page): View
-    {
-        abort_unless(array_key_exists($page, $this->pages), 404);
-
-        return view('doctor.' . $page, [
-            'pageTitle' => $this->pages[$page],
-            'activePage' => $page,
-            'unreadMessages' => 12,
-            'patientAlerts' => 5,
-        ]);
     }
 
     /**
@@ -304,8 +323,4 @@ class DoctorDashboardController extends Controller
         ];
     }
 
-    private function emptySidebarBadges(): array
-    {
-        return ['requests' => 0, 'messages' => null, 'meal-reviews' => null, 'alerts' => null, 'articles' => null];
-    }
 }

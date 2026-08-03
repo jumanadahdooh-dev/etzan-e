@@ -7,112 +7,33 @@
   --recover-soft: #6b878b;
   --recover-border: rgba(123, 188, 192, 0.18);
   --recover-shadow: 0 24px 60px rgba(15, 84, 89, 0.08);
+  --recover-shadow-ink: 15, 84, 89;
   --recover-radius-xl: 32px;
   --recover-radius-md: 18px;
 }
 
-.recover-page *,
-.recover-page *::before,
-.recover-page *::after {
-  box-sizing: border-box;
+/* جسر الوضع الغامق — نفس أسلوب باقي صفحات الدخول. */
+:root[data-theme="dark"] {
+  --recover-bg-1: var(--bg);
+  --recover-bg-2: var(--surface-2);
+  --recover-primary: var(--primary);
+  --recover-secondary: var(--info);
+  --recover-text: var(--text);
+  --recover-soft: var(--text-2);
+  --recover-border: color-mix(in srgb, var(--primary) 30%, transparent);
+  --recover-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  --recover-shadow-ink: 0, 0, 0;
 }
 
-.recover-page {
-  min-height: 100vh;
-  padding: 46px 16px 66px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(70, 206, 194, 0.10), transparent 18%),
-    radial-gradient(circle at 85% 15%, rgba(52, 147, 196, 0.09), transparent 18%),
-    radial-gradient(circle at 75% 80%, rgba(110, 222, 214, 0.08), transparent 14%),
-    linear-gradient(180deg, var(--recover-bg-1) 0%, var(--recover-bg-2) 100%);
-  overflow: visible;
-}
-
-.recover-shell {
-  width: 100%;
-  max-width: 760px;
-  position: relative;
-  overflow: visible;
-  padding: 24px;
-}
-
-.recover-wrap {
-  position: relative;
-  width: 100%;
-  overflow: visible;
-}
-
-.recover-card {
-  position: relative;
-  z-index: 2;
-  padding: 34px 30px;
-  border-radius: var(--recover-radius-xl);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.74));
-  border: 1px solid var(--recover-border);
-  box-shadow:
-    var(--recover-shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  overflow: hidden;
-}
-
-.recover-card::before {
-  content: "";
-  position: absolute;
-  inset: 16px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.54);
-  pointer-events: none;
-}
-
-.recover-badge {
-  position: relative;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 22px;
-  padding: 10px 16px;
-  border-radius: 999px;
-  background: rgba(27, 176, 166, 0.10);
-  color: #188d8b;
-  font-size: 0.9rem;
-  font-weight: 800;
-  box-shadow: 0 10px 20px rgba(21, 112, 118, 0.04);
-}
-
-.recover-head {
-  position: relative;
-  z-index: 3;
-  text-align: center;
-  margin-bottom: 26px;
-}
-
-.recover-head h1 {
-  margin: 0 0 12px;
-  color: var(--recover-text);
-  font-size: 2.1rem;
-  font-weight: 900;
-  line-height: 1.15;
-}
-
-.recover-head p {
-  margin: 0;
-  color: var(--recover-soft);
-  line-height: 1.9;
-  font-size: 0.98rem;
-}
+/*
+ * صفحة استعادة كلمة المرور بتشارك نفس الكرت النظيف المتمركز
+ * (auth-page / auth-shell / auth-card) المُعرّف بملف auth.css المحمّل
+ * معها بنفس الصفحة — هون بس أنماط الخطوات (stepper)، صناديق الرمز،
+ * ومؤشر قوة كلمة المرور.
+ */
 
 /* stepper */
 .recover-stepper {
-  position: relative;
-  z-index: 3;
   margin-bottom: 28px;
 }
 
@@ -121,7 +42,7 @@
   height: 7px;
   border-radius: 999px;
   overflow: hidden;
-  background: #e7f1f1;
+  background: var(--recover-bg-2);
   margin-bottom: 18px;
 }
 
@@ -145,7 +66,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: #95adb1;
+  color: var(--recover-soft);
   font-size: 0.82rem;
   font-weight: 800;
 }
@@ -156,21 +77,21 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #edf5f5;
-  color: #88a3a6;
+  background: var(--recover-bg-2);
+  color: var(--recover-soft);
   transition: all 0.3s ease;
 }
 
 .recover-step.is-active,
 .recover-step.is-done {
-  color: #2d666c;
+  color: var(--recover-text);
 }
 
 .recover-step.is-active span,
 .recover-step.is-done span {
   background: linear-gradient(135deg, var(--recover-primary), var(--recover-secondary));
   color: #fff;
-  box-shadow: 0 10px 18px rgba(30, 180, 169, 0.20);
+  box-shadow: 0 10px 18px color-mix(in srgb, var(--recover-primary) 20%, transparent);
 }
 
 /* panes */
@@ -209,7 +130,7 @@
 
 .form-field label,
 .code-field label {
-  color: #22484d;
+  color: var(--recover-text);
   font-size: 0.94rem;
   font-weight: 800;
 }
@@ -222,28 +143,28 @@
   padding: 0 16px;
   border-radius: var(--recover-radius-md);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(251, 253, 253, 0.93));
-  border: 1px solid #dbecec;
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface) 93%, transparent));
+  border: 1px solid var(--recover-bg-2);
   transition: all 0.25s ease;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.72),
-    0 6px 16px rgba(34, 114, 119, 0.03);
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 72%, transparent),
+    0 6px 16px color-mix(in srgb, var(--recover-primary) 3%, transparent);
 }
 
 .input-shell:hover {
-  border-color: #cfe7e9;
+  border-color: var(--recover-bg-2);
 }
 
 .input-shell:focus-within {
-  border-color: #2ba8b1;
+  border-color: var(--recover-primary);
   box-shadow:
-    0 0 0 4px rgba(43, 168, 177, 0.12),
-    0 10px 20px rgba(31, 120, 126, 0.05);
+    0 0 0 4px color-mix(in srgb, var(--recover-primary) 12%, transparent),
+    0 10px 20px color-mix(in srgb, var(--recover-primary) 5%, transparent);
   transform: translateY(-1px);
 }
 
 .input-shell i {
-  color: #249ca1;
+  color: var(--recover-primary);
   font-size: 0.98rem;
   flex-shrink: 0;
 }
@@ -253,13 +174,13 @@
   border: 0;
   outline: none;
   background: transparent;
-  color: #183c42;
+  color: var(--recover-text);
   font-size: 0.97rem;
   font-family: inherit;
 }
 
 .input-shell input::placeholder {
-  color: #9ab2b5;
+  color: var(--recover-soft);
 }
 
 .input-shell--password .toggle-pass {
@@ -267,7 +188,7 @@
   height: 30px;
   border: 0;
   background: transparent;
-  color: #249ca1;
+  color: var(--recover-primary);
   border-radius: 50%;
   cursor: pointer;
   padding: 0;
@@ -276,7 +197,7 @@
 }
 
 .input-shell--password .toggle-pass:hover {
-  background: rgba(36, 156, 161, 0.08);
+  background: color-mix(in srgb, var(--recover-primary) 8%, transparent);
 }
 
 /* code */
@@ -296,25 +217,25 @@
   width: 62px;
   height: 62px;
   border-radius: 18px;
-  border: 1px solid #dbecec;
+  border: 1px solid var(--recover-bg-2);
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(251,253,253,0.93));
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface) 93%, transparent));
   text-align: center;
   font-size: 1.25rem;
   font-weight: 900;
-  color: #183c42;
+  color: var(--recover-text);
   outline: none;
 }
 
 .code-boxes input:focus {
-  border-color: #2ba8b1;
-  box-shadow: 0 0 0 4px rgba(43,168,177,0.12);
+  border-color: var(--recover-primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--recover-primary) 12%, transparent);
 }
 
 .code-help {
   margin-top: 12px;
   text-align: center;
-  color: #6f888c;
+  color: var(--recover-soft);
   font-size: 0.92rem;
 }
 
@@ -330,7 +251,7 @@
 .strength-wrap span {
   display: block;
   margin-bottom: 10px;
-  color: #69868a;
+  color: var(--recover-soft);
   font-size: 0.88rem;
   font-weight: 700;
 }
@@ -340,7 +261,7 @@
   height: 8px;
   border-radius: 999px;
   overflow: hidden;
-  background: #e7f1f1;
+  background: var(--recover-bg-2);
 }
 
 .strength-bar span {
@@ -382,8 +303,8 @@
   background: linear-gradient(135deg, var(--recover-primary), var(--recover-secondary));
   color: #fff;
   box-shadow:
-    0 18px 30px rgba(28,181,170,0.20),
-    inset 0 1px 0 rgba(255,255,255,0.18);
+    0 18px 30px color-mix(in srgb, var(--recover-primary) 20%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 18%, transparent);
 }
 
 .primary-action:hover {
@@ -396,10 +317,10 @@
 }
 
 .secondary-action {
-  border: 1px solid #d9ecec;
+  border: 1px solid var(--recover-bg-2);
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(251,253,253,0.95));
-  color: #264d53;
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface) 95%, transparent));
+  color: var(--recover-text);
 }
 
 .secondary-action:disabled {
@@ -410,7 +331,7 @@
 /* switch */
 .bottom-switch {
   text-align: center;
-  color: #6c868a;
+  color: var(--recover-soft);
   font-size: 0.97rem;
   margin-top: 18px;
 }
@@ -419,7 +340,7 @@
 .bottom-switch a {
   border: 0;
   background: transparent;
-  color: #178f95;
+  color: var(--recover-primary);
   font-weight: 900;
   cursor: pointer;
   padding: 0;
@@ -450,14 +371,14 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, rgba(29,183,171,0.14), rgba(46,159,192,0.16));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--recover-primary) 14%, transparent), color-mix(in srgb, var(--recover-secondary) 16%, transparent));
   color: var(--recover-primary);
   font-size: 2.5rem;
 }
 
 .recover-success h3 {
   margin: 0 0 12px;
-  color: #163b40;
+  color: var(--recover-text);
   font-size: 2rem;
   font-weight: 900;
 }
@@ -465,62 +386,12 @@
 .recover-success p {
   margin: 0 auto 24px;
   max-width: 520px;
-  color: #6b878b;
+  color: var(--recover-soft);
   line-height: 1.95;
 }
 
-/* mini deco */
-.mini-deco {
-  position: absolute;
-  width: 58px;
-  height: 58px;
-  border-radius: 18px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(125, 188, 192, 0.25);
-  color: #1a9899;
-  box-shadow: 0 12px 24px rgba(21, 112, 118, 0.10);
-  z-index: 5;
-  opacity: 1;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.mini-deco i {
-  font-size: 1.15rem;
-}
-
-.mini-deco--1 { top: -8px; right: -8px; }
-.mini-deco--2 { top: 100px; left: -8px; }
-.mini-deco--3 { bottom: 100px; right: -8px; }
-.mini-deco--4 { bottom: -8px; left: 12px; }
-.mini-deco--5 { top: -8px; left: 70px; }
-
 /* responsive */
 @media (max-width: 768px) {
-  .recover-page {
-    padding: 28px 14px 48px;
-  }
-
-  .recover-shell {
-    padding: 10px;
-  }
-
-  .recover-card {
-    padding: 24px 18px;
-    border-radius: 24px;
-  }
-
-  .recover-card::before {
-    inset: 12px;
-    border-radius: 18px;
-  }
-
-  .recover-head h1 {
-    font-size: 1.75rem;
-  }
-
   .recover-actions {
     flex-direction: column;
   }
@@ -539,28 +410,12 @@
     height: 54px;
     font-size: 1.05rem;
   }
-
-  .mini-deco {
-    width: 46px;
-    height: 46px;
-    border-radius: 15px;
-  }
-
-  .mini-deco i {
-    font-size: 1rem;
-  }
-
-  .mini-deco--1 { top: -6px; right: -4px; }
-  .mini-deco--2 { top: 110px; left: -4px; }
-  .mini-deco--3 { bottom: 110px; right: -4px; }
-  .mini-deco--4 { bottom: -6px; left: 8px; }
-  .mini-deco--5 { top: -6px; left: 48px; }
 }
 
 .auth-alert--success {
-  background: #edf9f3;
-  border: 1px solid #ccebd8;
-  color: #216b62;
+  background: color-mix(in srgb, var(--success) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--success) 25%, transparent);
+  color: var(--success);
   border-radius: 18px;
   padding: 14px 16px;
   margin-bottom: 18px;
@@ -569,31 +424,31 @@
 }
 
 .input-shell.is-invalid {
-  border-color: #e45d5d !important;
-  box-shadow: 0 0 0 4px rgba(228, 93, 93, 0.08);
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 8%, transparent);
 }
 
 .input-shell.is-invalid i,
 .input-shell.is-invalid .toggle-pass {
-  color: #c63f3f;
+  color: var(--danger);
 }
 
 .field-error {
   display: block;
   margin-top: 8px;
-  color: #c63f3f;
+  color: var(--danger);
   font-size: 0.88rem;
   font-weight: 700;
   padding-right: 4px;
 }
 
 .code-boxes.is-invalid input {
-  border-color: #e45d5d !important;
-  box-shadow: 0 0 0 4px rgba(228, 93, 93, 0.08);
-  color: #c63f3f;
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 8%, transparent);
+  color: var(--danger);
 }
 
 .code-boxes.is-invalid input:focus {
-  border-color: #c63f3f !important;
-  box-shadow: 0 0 0 4px rgba(198, 63, 63, 0.12);
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 12%, transparent);
 }

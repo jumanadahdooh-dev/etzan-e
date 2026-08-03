@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
 use App\Models\PatientTask;
+use App\Models\PatientProfile; // ✅ تم الإضافة
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -96,67 +97,60 @@ class PatientTaskController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
-    {
-        $user = auth()->user();
+    public function store(Request $request)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string|max:1000',
+        'task_date' => 'required|date|after_or_equal:today',
+        'task_time' => 'nullable|date_format:H:i',
+        'reminder_minutes' => 'nullable|integer|min:0|max:1440',
+        'repeat_type' => 'nullable|in:once,daily,weekly',
+    ]);
 
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'min:3', 'max:160'],
-            'description' => ['nullable', 'string', 'max:2000'],
-            'task_date' => ['required', 'date'],
-            'task_time' => ['nullable', 'date_format:H:i'],
-            'reminder_minutes' => ['nullable', 'integer', 'in:0,10,15,30'],
-            'repeat_type' => ['nullable', 'string', 'in:once,daily,weekly'],
-        ], [
-            'title.required' => 'اكتب عنوان المهمة.',
-            'title.min' => 'عنوان المهمة يجب أن يكون 3 أحرف على الأقل.',
-            'task_date.required' => 'اختر تاريخ المهمة.',
-            'task_time.date_format' => 'صيغة الوقت غير صحيحة.',
-            'reminder_minutes.in' => 'قيمة التذكير غير صحيحة.',
-            'repeat_type.in' => 'نوع التكرار غير صحيح.',
-        ]);
+    $user = auth()->user();
 
-        $patientProfile = DB::table('patient_profiles')
-            ->where('user_id', $user->id)
-            ->first();
-
-        if (! $patientProfile) {
-            return redirect()
-                ->route('patient.profile')
-                ->with('error', 'أكمل ملفك الصحي أولًا قبل إضافة المهام.');
-        }
-
-        PatientTask::create([
-            'patient_id' => $patientProfile->id,
-            'patient_user_id' => $user->id,
-            'doctor_user_id' => null,
-            'created_by_id' => $user->id,
-            'created_by_type' => 'patient',
-            'source' => 'patient',
-
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
-            'task_date' => $validated['task_date'],
-            'task_time' => $validated['task_time'] ?? null,
-
-            'status' => 'pending',
-            'repeat_type' => $validated['repeat_type'] ?? 'once',
-
-            'reminder_minutes' => (int) ($validated['reminder_minutes'] ?? 0),
-            'reminder_sent_at' => null,
-            'due_notification_sent_at' => null,
-            'late_notification_sent_at' => null,
-
-            'requires_attachment' => false,
-            'attachment_path' => null,
-            'patient_note' => null,
-            'completed_at' => null,
-        ]);
-
-        return redirect()
-            ->route('patient.journey')
-            ->with('success', 'تمت إضافة المهمة بنجاح.');
+    if (!$user) {
+        return redirect()->route('login');
     }
+
+    $patientProfile = PatientProfile::where('user_id', $user->id)->first();
+
+    if (!$patientProfile) {
+        return redirect()
+            ->route('patient.profile')
+            ->with('error', 'أكمل ملفك الصحي أولًا قبل إضافة المهام.');
+    }
+
+    PatientTask::create([
+        'patient_id' => $user->id, // ✅ تم الإضافة
+        'patient_profile_id' => $patientProfile->id,
+        'patient_user_id' => $user->id,
+        'doctor_user_id' => null,
+        'created_by_id' => $user->id,
+        'created_by_type' => 'patient',
+        'source' => 'patient',
+
+        'title' => $validated['title'],
+        'description' => $validated['description'] ?? null,
+        'task_date' => $validated['task_date'],
+        'task_time' => $validated['task_time'] ?? null,
+        'status' => 'pending',
+        'repeat_type' => $validated['repeat_type'] ?? 'once',
+        'reminder_minutes' => $validated['reminder_minutes'] ?? null,
+        'requires_attachment' => false,
+        'attachment_path' => null,
+        'patient_note' => null,
+        'completed_at' => null,
+        'reminder_sent_at' => null,
+        'due_notification_sent_at' => null,
+        'late_notification_sent_at' => null,
+    ]);
+
+    return redirect()
+        ->route('patient.journey')
+        ->with('success', 'تم إضافة المهمة بنجاح ✅');
+}
 
     public function complete(PatientTask $task): RedirectResponse
     {
@@ -193,16 +187,6 @@ class PatientTaskController extends Controller
             ->with('success', 'تم حفظ الملاحظة بنجاح.');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | رفع صورة نتيجة مهمة الطبيب فقط
-    |--------------------------------------------------------------------------
-    | لا نقبل ملفات.
-    | لا نقبل PDF.
-    | لا نقبل Word.
-    | فقط صور: jpg, jpeg, png, webp.
-    | ولا يظهر هذا الخيار أصلًا إلا في مهمة الطبيب من البليد.
-    */
     public function uploadAttachment(Request $request, PatientTask $task): RedirectResponse
     {
         $this->authorize('update', $task);
@@ -238,11 +222,6 @@ class PatientTaskController extends Controller
             ->with('success', 'تم رفع صورة النتيجة بنجاح.');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | عرض صورة النتيجة
-    |--------------------------------------------------------------------------
-    */
     public function showAttachment(PatientTask $task)
     {
         $this->authorize('view', $task);

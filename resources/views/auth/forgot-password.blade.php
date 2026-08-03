@@ -1,4 +1,4 @@
-@extends('layouts.public')
+@extends('layouts.auth')
 
 @section('title', 'نسيت كلمة المرور | اتزان')
 
@@ -9,85 +9,77 @@
 @endpush
 
 @section('content')
-<section class="recover-page">
-  <div class="recover-shell">
-    <div class="recover-wrap">
+<div class="auth-hero-page auth-hero-page--solo">
 
-      <div class="mini-deco mini-deco--1">
-        <i class="fa-regular fa-envelope"></i>
+  <div class="auth-decor" aria-hidden="true">
+    <span class="auth-decor__dots auth-decor__dots--1"></span>
+    <span class="auth-decor__dots auth-decor__dots--2"></span>
+    <span class="auth-decor__ring auth-decor__ring--1"></span>
+    <span class="auth-decor__ring auth-decor__ring--2"></span>
+    <span class="auth-decor__ring auth-decor__ring--3"></span>
+    <span class="auth-decor__ring auth-decor__ring--4"></span>
+    <span class="auth-decor__dot-solid"></span>
+    <span class="auth-decor__blob"></span>
+  </div>
+
+  <div class="auth-hero__form">
+    <div class="auth-hero__form-card">
+
+      <div class="auth-form-panel__logo">
+        <img src="{{ asset('front/image/logo.png') }}" alt="{{ setting('site_name', 'اتزان') }}">
+        <span>{{ setting('site_name', 'اتزان') }}</span>
       </div>
 
-      <div class="mini-deco mini-deco--2">
-        <i class="fa-solid fa-key"></i>
+      <div class="auth-form-panel__head">
+        <span class="auth-form-panel__eyebrow">استعادة كلمة المرور</span>
+        <h1>
+          @if ($currentStep == 1)
+            نسيت كلمة المرور؟
+          @elseif ($currentStep == 2)
+            تحقق من بريدك الإلكتروني
+          @else
+            أنشئ كلمة مرور جديدة
+          @endif
+        </h1>
+
+        <p>
+          @if ($currentStep == 1)
+            أدخل بريدك الإلكتروني ثم أكمل التحقق لتعيين كلمة مرور جديدة بسهولة وأمان.
+          @elseif ($currentStep == 2)
+            أدخل رمز التحقق المكوّن من 4 أرقام الذي تم إرساله إلى بريدك الإلكتروني.
+          @else
+            أدخل كلمة المرور الجديدة ثم أكدها لإكمال العملية.
+          @endif
+        </p>
       </div>
 
-      <div class="mini-deco mini-deco--3">
-        <i class="fa-solid fa-shield-halved"></i>
-      </div>
-
-      <div class="mini-deco mini-deco--4">
-        <i class="fa-solid fa-lock"></i>
-      </div>
-
-      <div class="mini-deco mini-deco--5">
-        <i class="fa-solid fa-circle-check"></i>
-      </div>
-
-      <div class="recover-card">
-        <div class="recover-badge">
-          <i class="fa-solid fa-key"></i>
-          استعادة الوصول
+      <div class="recover-stepper">
+        <div class="recover-progress-line">
+          <span style="width:
+            @if ($currentStep == 1) 0%;
+            @elseif ($currentStep == 2) 50%;
+            @else 100%;
+            @endif
+          "></span>
         </div>
 
-        <div class="recover-head">
-          <h1>
-            @if ($currentStep == 1)
-              نسيت كلمة المرور؟
-            @elseif ($currentStep == 2)
-              تحقق من بريدك الإلكتروني
-            @else
-              أنشئ كلمة مرور جديدة
-            @endif
-          </h1>
-
-          <p>
-            @if ($currentStep == 1)
-              أدخل بريدك الإلكتروني ثم أكمل التحقق لتعيين كلمة مرور جديدة بسهولة وأمان.
-            @elseif ($currentStep == 2)
-              أدخل رمز التحقق المكوّن من 4 أرقام الذي تم إرساله إلى بريدك الإلكتروني.
-            @else
-              أدخل كلمة المرور الجديدة ثم أكدها لإكمال العملية.
-            @endif
-          </p>
-        </div>
-
-        <div class="recover-stepper">
-          <div class="recover-progress-line">
-            <span style="width:
-              @if ($currentStep == 1) 0%;
-              @elseif ($currentStep == 2) 50%;
-              @else 100%;
-              @endif
-            "></span>
+        <div class="recover-steps">
+          <div class="recover-step {{ $currentStep == 1 ? 'is-active' : ($currentStep > 1 ? 'is-done' : '') }}">
+            <span>1</span>
+            <small>البريد</small>
           </div>
 
-          <div class="recover-steps">
-            <div class="recover-step {{ $currentStep == 1 ? 'is-active' : ($currentStep > 1 ? 'is-done' : '') }}">
-              <span>1</span>
-              <small>البريد</small>
-            </div>
+          <div class="recover-step {{ $currentStep == 2 ? 'is-active' : ($currentStep > 2 ? 'is-done' : '') }}">
+            <span>2</span>
+            <small>التحقق</small>
+          </div>
 
-            <div class="recover-step {{ $currentStep == 2 ? 'is-active' : ($currentStep > 2 ? 'is-done' : '') }}">
-              <span>2</span>
-              <small>التحقق</small>
-            </div>
-
-            <div class="recover-step {{ $currentStep == 3 ? 'is-active' : '' }}">
-              <span>3</span>
-              <small>كلمة المرور</small>
-            </div>
+          <div class="recover-step {{ $currentStep == 3 ? 'is-active' : '' }}">
+            <span>3</span>
+            <small>كلمة المرور</small>
           </div>
         </div>
+      </div>
 
         @if (session('success'))
           <div class="auth-alert auth-alert--success">
@@ -227,14 +219,14 @@
           </form>
         @endif
 
-        <div class="bottom-switch">
-          تذكرت كلمة المرور؟
-          <a href="{{ route('login') }}">العودة لتسجيل الدخول</a>
-        </div>
+      <div class="bottom-switch">
+        تذكرت كلمة المرور؟
+        <a href="{{ route('login') }}">العودة لتسجيل الدخول</a>
       </div>
     </div>
   </div>
-</section>
+
+</div>
 @endsection
 
 @push('scripts')

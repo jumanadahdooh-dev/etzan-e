@@ -21,12 +21,18 @@ class PatientMeal extends Model
         'protein',
         'carbs',
         'fat',
+        'fiber',
+        'sugar',
+        'sodium',
         'confidence',
+        'health_score',
         'ai_notes',
         'patient_note',
         'ai_response',
         'source',
         'status',
+        'doctor_note',
+        'reviewed_at',
     ];
 
     protected $casts = [
@@ -36,7 +42,12 @@ class PatientMeal extends Model
         'protein' => 'integer',
         'carbs' => 'integer',
         'fat' => 'integer',
+        'fiber' => 'integer',
+        'sugar' => 'integer',
+        'sodium' => 'integer',
         'confidence' => 'integer',
+        'health_score' => 'integer',
+        'reviewed_at' => 'datetime',
     ];
 
     public function user(): BelongsTo

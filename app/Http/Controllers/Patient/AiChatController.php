@@ -62,6 +62,10 @@ class AiChatController extends Controller
             'conversation_id' => ['nullable', 'integer'],
         ]);
 
+        // نظّف الرسالة الواردة من أي بايتات UTF-8 غير صالحة أول شي، حتى ما
+        // تنكسر عمليات الحفظ بقاعدة البيانات أو بناء رد الـ JSON لاحقًا.
+        $validated['message'] = $this->cleanUtf8($validated['message']);
+
         $user = Auth::user();
 
         $conversation = null;
@@ -82,21 +86,34 @@ class AiChatController extends Controller
             'ok' => true,
             'conversation' => [
                 'id' => $result['conversation']->id,
-                'title' => $result['conversation']->title,
+                'title' => $this->cleanUtf8($result['conversation']->title),
             ],
             'user_message' => [
                 'id' => $result['user_message']->id,
                 'role' => $result['user_message']->role,
-                'content' => $result['user_message']->content,
+                'content' => $this->cleanUtf8($result['user_message']->content),
                 'time' => $result['user_message']->created_at?->format('H:i'),
             ],
             'assistant_message' => [
                 'id' => $result['assistant_message']->id,
                 'role' => $result['assistant_message']->role,
-                'content' => $result['assistant_message']->content,
+                'content' => $this->cleanUtf8($result['assistant_message']->content),
                 'time' => $result['assistant_message']->created_at?->format('H:i'),
             ],
-        ]);
+        ], 200, [], JSON_INVALID_UTF8_SUBSTITUTE);
+    }
+
+    /**
+     * يصلّح أي بايتات UTF-8 غير صالحة قبل إدخال النص في رد الـ JSON،
+     * حتى لا ينهار الطلب بالكامل (500) بسبب فشل json_encode لاحقًا.
+     */
+    private function cleanUtf8(?string $text): ?string
+    {
+        if ($text === null) {
+            return null;
+        }
+
+        return mb_convert_encoding($text, 'UTF-8', 'UTF-8');
     }
 
     public function destroy(AiChatConversation $conversation): RedirectResponse

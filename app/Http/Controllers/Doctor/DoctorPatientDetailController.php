@@ -175,15 +175,7 @@ class DoctorPatientDetailController extends Controller
         ]);
     }
 
-    /**
-     * تحديد/تحديث هدف السعرات لليوم — بيانات حقيقية بتنكتب مباشرة
-     * بجدول patient_daily_calorie_goals، بنفس الآلية يلي المريض شايفها
-     * بصفحته (PatientContextHelpers::dailyCalorieGoalForDate).
-     *
-     * ملاحظة: الهدف حالياً بينكتب لتاريخ اليوم بس (نفس منطق المريض الحالي
-     * يلي بيقارن بتاريخ محدد)، مش هدف دائم — لو بدك يصير ثابت لكل الأيام
-     * القادمة تلقائياً، هاد تطوير إضافي لاحقاً.
-     */
+
     public function setCalorieGoal(SetCalorieGoalRequest $request, int $patientProfile): RedirectResponse
     {
         $validated = $request->validated();
@@ -322,7 +314,7 @@ class DoctorPatientDetailController extends Controller
         }
 
         PatientTask::create([
-            'patient_id' => $profile->id,
+            'patient_id' => $profile->user_id, // <--- تم التصحيح هنا!
             'patient_user_id' => $profile->user_id,
             'doctor_user_id' => $user->id,
             'created_by_id' => $user->id,

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\AdminNotification;
 use App\Models\DoctorApplication;
 use App\Models\Specialty;
 use App\Models\User;
+use App\Services\AppNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -124,13 +124,12 @@ class DoctorApplicationController extends Controller
             'status' => 'pending',
         ]);
 
-        AdminNotification::create([
-            'type' => 'doctor_application',
-            'title' => 'طلب طبيب جديد',
-            'body' => 'تم إرسال طلب انضمام جديد من ' . $doctorApplication->full_name,
-            'url' => route('admin.doctor-applications-show', $doctorApplication->id),
-            'read_at' => null,
-        ]);
+        app(AppNotificationService::class)->sendToAllAdmins(
+            type: 'doctor_application',
+            title: 'طلب طبيب جديد',
+            body: 'تم إرسال طلب انضمام جديد من ' . $doctorApplication->full_name,
+            url: route('admin.doctor-applications-show', $doctorApplication->id)
+        );
 
         return redirect()->route('join-doctor')->with([
             'doctor_apply_success' => 'تم إرسال طلبك بنجاح',

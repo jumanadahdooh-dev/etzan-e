@@ -18,6 +18,26 @@
   --contact-radius-xl: 28px;
   --contact-radius-lg: 22px;
   --contact-radius-md: 16px;
+  --contact-shadow-ink: 24, 51, 59;
+}
+
+/* جسر الوضع الغامق — نفس أسلوب باقي صفحات الموقع (يستبدل قسم "Dark Mode"
+   القديم تحت يلي كان بيعتمد على كلاسات html.dark/.dark-mode مش موجودة
+   بأي مكان بالموقع الفعلي، فما كان يشتغل أصلًا). */
+:root[data-theme="dark"] {
+  --contact-primary: var(--primary);
+  --contact-primary-dark: var(--primary-hover);
+  --contact-secondary: var(--info);
+  --contact-text: var(--text);
+  --contact-muted: var(--text-2);
+  --contact-bg: var(--bg);
+  --contact-card: color-mix(in srgb, var(--surface) 92%, transparent);
+  --contact-white: var(--surface);
+  --contact-border: color-mix(in srgb, var(--primary) 30%, transparent);
+  --contact-border-strong: color-mix(in srgb, var(--primary) 45%, transparent);
+  --contact-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+  --contact-soft-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  --contact-shadow-ink: 0, 0, 0;
 }
 
 /* =========================================================
@@ -26,9 +46,9 @@
 
 body:has(.contact-chat-section) {
   background:
-    radial-gradient(circle at 18% 12%, rgba(77, 168, 218, 0.10), transparent 28%),
-    radial-gradient(circle at 86% 42%, rgba(29, 158, 117, 0.10), transparent 30%),
-    linear-gradient(180deg, #F8FCFB 0%, #EDF8F6 100%) !important;
+    radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--contact-secondary) 10%, transparent), transparent 28%),
+    radial-gradient(circle at 86% 42%, color-mix(in srgb, var(--contact-primary) 10%, transparent), transparent 30%),
+    linear-gradient(180deg, var(--bg) 0%, var(--surface-2) 100%) !important;
 }
 
 /* =========================================================
@@ -49,7 +69,7 @@ body:has(.contact-chat-section) {
 .hero-card {
   border-radius: 30px;
   padding: 30px 34px;
-  background: rgba(255, 255, 255, 0.90);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
   border: 1px solid var(--contact-border);
   box-shadow: var(--contact-shadow);
   backdrop-filter: blur(14px);
@@ -70,7 +90,7 @@ body:has(.contact-chat-section) {
   width: 240px;
   height: 240px;
   border-radius: 50%;
-  background: rgba(29, 158, 117, 0.08);
+  background: color-mix(in srgb, var(--contact-primary) 8%, transparent);
   pointer-events: none;
 }
 
@@ -119,7 +139,7 @@ body:has(.contact-chat-section) {
   min-height: 42px;
   padding: 0 14px;
   border-radius: 999px;
-  background: rgba(29, 158, 117, 0.11);
+  background: color-mix(in srgb, var(--contact-primary) 11%, transparent);
   color: var(--contact-primary-dark);
   font-size: 13px;
   font-weight: 900;
@@ -130,8 +150,8 @@ body:has(.contact-chat-section) {
 }
 
 .hero-badge.soft {
-  background: rgba(77, 168, 218, 0.10);
-  color: #267EA9;
+  background: color-mix(in srgb, var(--contact-secondary) 10%, transparent);
+  color: var(--contact-secondary);
 }
 
 .badge-dot {
@@ -139,7 +159,7 @@ body:has(.contact-chat-section) {
   height: 9px;
   border-radius: 50%;
   background: var(--contact-primary);
-  box-shadow: 0 0 0 6px rgba(29, 158, 117, 0.12);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--contact-primary) 12%, transparent);
 }
 
 /* =========================================================
@@ -159,14 +179,14 @@ body:has(.contact-chat-section) {
 
 .contact-alert-success {
   color: var(--contact-primary-dark);
-  background: rgba(29, 158, 117, 0.10);
-  border: 1px solid rgba(29, 158, 117, 0.18);
+  background: color-mix(in srgb, var(--contact-primary) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--contact-primary) 18%, transparent);
 }
 
 .contact-alert-error {
-  color: #B42318;
-  background: rgba(244, 67, 54, 0.09);
-  border: 1px solid rgba(244, 67, 54, 0.18);
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 9%, transparent);
+  border: 1px solid color-mix(in srgb, var(--danger) 18%, transparent);
 }
 
 /* =========================================================
@@ -203,7 +223,7 @@ body:has(.contact-chat-section) {
 }
 
 .sidebar-card {
-  background: rgba(255, 255, 255, 0.92);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
   border: 1px solid var(--contact-border);
   border-radius: 26px;
   box-shadow: var(--contact-soft-shadow);
@@ -220,7 +240,7 @@ body:has(.contact-chat-section) {
   width: fit-content;
   padding: 7px 12px;
   border-radius: 999px;
-  background: rgba(29, 158, 117, 0.11);
+  background: color-mix(in srgb, var(--contact-primary) 11%, transparent);
   color: var(--contact-primary-dark);
   font-size: 12px;
   font-weight: 900;
@@ -253,10 +273,10 @@ body:has(.contact-chat-section) {
 .quick-chip {
   width: 100%;
   min-height: 42px;
-  border: 1px solid rgba(29, 158, 117, 0.18);
+  border: 1px solid color-mix(in srgb, var(--contact-primary) 18%, transparent);
   border-radius: 999px;
-  background: #FFFFFF;
-  color: #22545B;
+  background: var(--surface);
+  color: var(--contact-text);
   padding: 0 14px;
   display: flex;
   align-items: center;
@@ -274,7 +294,7 @@ body:has(.contact-chat-section) {
 
 .quick-chip:hover {
   transform: translateY(-1px);
-  background: rgba(29, 158, 117, 0.07);
+  background: color-mix(in srgb, var(--contact-primary) 7%, transparent);
   border-color: var(--contact-border-strong);
 }
 
@@ -288,15 +308,15 @@ body:has(.contact-chat-section) {
   min-height: 74px;
   padding: 13px 14px;
   border-radius: 20px;
-  background: rgba(248, 252, 251, 0.88);
-  border: 1px solid rgba(29, 158, 117, 0.12);
+  background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--contact-primary) 12%, transparent);
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
 .info-label {
-  color: #81949A;
+  color: var(--contact-muted);
   font-size: 12px;
   font-weight: 850;
   margin-bottom: 5px;
@@ -317,7 +337,7 @@ body:has(.contact-chat-section) {
   min-width: 0;
   min-height: 620px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.94);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
   border: 1px solid var(--contact-border);
   box-shadow: var(--contact-shadow);
   overflow: hidden;
@@ -328,10 +348,10 @@ body:has(.contact-chat-section) {
 .chat-topbar {
   min-height: 82px;
   padding: 16px 22px;
-  border-bottom: 1px solid rgba(29, 158, 117, 0.13);
+  border-bottom: 1px solid color-mix(in srgb, var(--contact-primary) 13%, transparent);
   background:
-    radial-gradient(circle at top right, rgba(29, 158, 117, 0.08), transparent 42%),
-    rgba(255, 255, 255, 0.96);
+    radial-gradient(circle at top right, color-mix(in srgb, var(--contact-primary) 8%, transparent), transparent 42%),
+    color-mix(in srgb, var(--surface) 96%, transparent);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -349,7 +369,7 @@ body:has(.contact-chat-section) {
   height: 54px;
   min-width: 54px;
   border-radius: 19px;
-  background: linear-gradient(135deg, rgba(29, 158, 117, 0.14), rgba(77, 168, 218, 0.15));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--contact-primary) 14%, transparent), color-mix(in srgb, var(--contact-secondary) 15%, transparent));
   color: var(--contact-primary-dark);
   display: flex;
   align-items: center;
@@ -380,13 +400,13 @@ body:has(.contact-chat-section) {
   height: 8px;
   border-radius: 50%;
   background: var(--contact-primary);
-  box-shadow: 0 0 0 6px rgba(29, 158, 117, 0.12);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--contact-primary) 12%, transparent);
 }
 
 .chat-topbar-tag {
   padding: 8px 13px;
   border-radius: 999px;
-  background: rgba(29, 158, 117, 0.11);
+  background: color-mix(in srgb, var(--contact-primary) 11%, transparent);
   color: var(--contact-primary-dark);
   font-size: 12px;
   font-weight: 900;
@@ -401,9 +421,9 @@ body:has(.contact-chat-section) {
   padding: 24px 26px;
   overflow-y: auto;
   background:
-    radial-gradient(circle at 18% 20%, rgba(77, 168, 218, 0.06), transparent 28%),
-    radial-gradient(circle at 80% 78%, rgba(29, 158, 117, 0.06), transparent 30%),
-    #F8FCFB;
+    radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--contact-secondary) 6%, transparent), transparent 28%),
+    radial-gradient(circle at 80% 78%, color-mix(in srgb, var(--contact-primary) 6%, transparent), transparent 30%),
+    var(--bg);
 }
 
 .messages-date {
@@ -411,12 +431,12 @@ body:has(.contact-chat-section) {
   margin: 0 auto 20px;
   padding: 7px 13px;
   border-radius: 999px;
-  background: #FFFFFF;
-  border: 1px solid rgba(29, 158, 117, 0.13);
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--contact-primary) 13%, transparent);
   color: var(--contact-muted);
   font-size: 12px;
   font-weight: 900;
-  box-shadow: 0 8px 18px rgba(24, 51, 59, 0.05);
+  box-shadow: 0 8px 18px rgba(var(--contact-shadow-ink), 0.05);
 }
 
 .message-row {
@@ -448,9 +468,9 @@ body:has(.contact-chat-section) {
 }
 
 .support-bubble {
-  background: #FFFFFF;
+  background: var(--surface);
   color: var(--contact-text);
-  border: 1px solid rgba(29, 158, 117, 0.13);
+  border: 1px solid color-mix(in srgb, var(--contact-primary) 13%, transparent);
   border-bottom-right-radius: 7px;
 }
 
@@ -458,7 +478,7 @@ body:has(.contact-chat-section) {
   color: #FFFFFF;
   background: linear-gradient(135deg, var(--contact-primary), var(--contact-secondary));
   border-bottom-left-radius: 7px;
-  box-shadow: 0 12px 24px rgba(29, 158, 117, 0.20);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--contact-primary) 20%, transparent);
 }
 
 /* =========================================================
@@ -467,8 +487,8 @@ body:has(.contact-chat-section) {
 
 .chat-composer {
   padding: 16px 18px 18px;
-  background: rgba(255, 255, 255, 0.98);
-  border-top: 1px solid rgba(29, 158, 117, 0.13);
+  background: color-mix(in srgb, var(--surface) 98%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--contact-primary) 13%, transparent);
 }
 
 .contact-form {
@@ -504,8 +524,8 @@ body:has(.contact-chat-section) {
   width: 100%;
   height: 46px;
   border-radius: 16px;
-  border: 1px solid rgba(24, 51, 59, 0.12);
-  background: #FFFFFF;
+  border: 1px solid rgba(var(--contact-shadow-ink), 0.12);
+  background: var(--surface);
   color: var(--contact-text);
   padding: 0 14px;
   outline: none;
@@ -517,8 +537,8 @@ body:has(.contact-chat-section) {
 .guest-field input:focus,
 .contact-subject-row input:focus,
 .message-input:focus {
-  border-color: rgba(29, 158, 117, 0.48);
-  box-shadow: 0 0 0 4px rgba(29, 158, 117, 0.10);
+  border-color: color-mix(in srgb, var(--contact-primary) 48%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--contact-primary) 10%, transparent);
 }
 
 .contact-message-row {
@@ -536,8 +556,8 @@ body:has(.contact-chat-section) {
   resize: none;
   overflow: hidden;
   border-radius: 18px;
-  border: 1px solid rgba(24, 51, 59, 0.12);
-  background: #FFFFFF;
+  border: 1px solid rgba(var(--contact-shadow-ink), 0.12);
+  background: var(--surface);
   color: var(--contact-text);
   padding: 13px 15px;
   line-height: 1.7;
@@ -560,7 +580,7 @@ body:has(.contact-chat-section) {
   align-items: center;
   justify-content: center;
   padding: 0;
-  box-shadow: 0 12px 24px rgba(29, 158, 117, 0.20);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--contact-primary) 20%, transparent);
   cursor: pointer;
   transition: 0.22s ease;
 }
@@ -593,19 +613,19 @@ body:has(.contact-chat-section) {
 ========================================================= */
 
 .contact-field-error {
-  border-color: #e63946 !important;
-  background: rgba(230, 57, 70, 0.05) !important;
-  box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12) !important;
+  border-color: var(--danger) !important;
+  background: color-mix(in srgb, var(--danger) 5%, transparent) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 12%, transparent) !important;
 }
 
 .contact-field-error::placeholder {
-  color: #b42318 !important;
+  color: var(--danger) !important;
 }
 
 .contact-field-error-text {
   display: block;
   margin-top: 2px;
-  color: #b42318;
+  color: var(--danger);
   font-size: 11.5px;
   font-weight: 900;
   line-height: 1.5;
@@ -628,119 +648,6 @@ body:has(.contact-chat-section) {
   75% {
     transform: translateX(-4px);
   }
-}
-
-/* =========================================================
-   Dark Mode
-========================================================= */
-
-html.dark .contact-page-hero,
-html.dark .contact-chat-section,
-body.dark .contact-page-hero,
-body.dark .contact-chat-section,
-body.dark-mode .contact-page-hero,
-body.dark-mode .contact-chat-section,
-.dark .contact-page-hero,
-.dark .contact-chat-section,
-.dark-mode .contact-page-hero,
-.dark-mode .contact-chat-section {
-  --contact-text: #EAF7F4;
-  --contact-muted: #A6BBB7;
-  --contact-card: rgba(15, 42, 38, 0.92);
-  --contact-white: #102823;
-  --contact-bg: #071B20;
-  --contact-border: rgba(77, 190, 150, 0.18);
-  --contact-border-strong: rgba(77, 190, 150, 0.35);
-  --contact-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
-}
-
-html.dark .contact-hero-card,
-html.dark .hero-card,
-html.dark .sidebar-card,
-html.dark .contact-chat-shell,
-html.dark .chat-shell,
-body.dark .contact-hero-card,
-body.dark .hero-card,
-body.dark .sidebar-card,
-body.dark .contact-chat-shell,
-body.dark .chat-shell,
-body.dark-mode .contact-hero-card,
-body.dark-mode .hero-card,
-body.dark-mode .sidebar-card,
-body.dark-mode .contact-chat-shell,
-body.dark-mode .chat-shell,
-.dark .contact-hero-card,
-.dark .hero-card,
-.dark .sidebar-card,
-.dark .contact-chat-shell,
-.dark .chat-shell,
-.dark-mode .contact-hero-card,
-.dark-mode .hero-card,
-.dark-mode .sidebar-card,
-.dark-mode .contact-chat-shell,
-.dark-mode .chat-shell {
-  background: rgba(15, 42, 38, 0.92);
-  border-color: rgba(77, 190, 150, 0.18);
-}
-
-html.dark .chat-topbar,
-body.dark .chat-topbar,
-body.dark-mode .chat-topbar,
-.dark .chat-topbar,
-.dark-mode .chat-topbar,
-html.dark .chat-composer,
-body.dark .chat-composer,
-body.dark-mode .chat-composer,
-.dark .chat-composer,
-.dark-mode .chat-composer {
-  background: rgba(15, 42, 38, 0.96);
-  border-color: rgba(77, 190, 150, 0.18);
-}
-
-html.dark .chat-messages,
-body.dark .chat-messages,
-body.dark-mode .chat-messages,
-.dark .chat-messages,
-.dark-mode .chat-messages {
-  background:
-    radial-gradient(circle at 18% 20%, rgba(77, 168, 218, 0.04), transparent 28%),
-    radial-gradient(circle at 80% 78%, rgba(29, 158, 117, 0.06), transparent 30%),
-    #0D2522;
-}
-
-html.dark .support-bubble,
-html.dark .messages-date,
-body.dark .support-bubble,
-body.dark .messages-date,
-body.dark-mode .support-bubble,
-body.dark-mode .messages-date,
-.dark .support-bubble,
-.dark .messages-date,
-.dark-mode .support-bubble,
-.dark-mode .messages-date {
-  background: rgba(255, 255, 255, 0.06);
-  color: #EAF7F4;
-  border-color: rgba(77, 190, 150, 0.18);
-}
-
-html.dark .guest-field input,
-html.dark .contact-subject-row input,
-html.dark .message-input,
-body.dark .guest-field input,
-body.dark .contact-subject-row input,
-body.dark .message-input,
-body.dark-mode .guest-field input,
-body.dark-mode .contact-subject-row input,
-body.dark-mode .message-input,
-.dark .guest-field input,
-.dark .contact-subject-row input,
-.dark .message-input,
-.dark-mode .guest-field input,
-.dark-mode .contact-subject-row input,
-.dark-mode .message-input {
-  background: rgba(255, 255, 255, 0.06);
-  color: #EAF7F4;
-  border-color: rgba(77, 190, 150, 0.20);
 }
 
 /* =========================================================
@@ -836,7 +743,7 @@ body.dark-mode .message-input,
   }
 
   .chat-sidebar::-webkit-scrollbar-thumb {
-    background: rgba(29, 158, 117, 0.25) !important;
+    background: color-mix(in srgb, var(--contact-primary) 25%, transparent) !important;
     border-radius: 999px !important;
   }
 

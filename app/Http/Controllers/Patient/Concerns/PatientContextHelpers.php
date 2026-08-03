@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Patient\Concerns;
 
+use App\Http\Controllers\Concerns\ConversationHelpers;
 use App\Models\Article;
 use App\Models\ArticleCategory;
 use App\Models\PatientDailyCalorieGoal;
@@ -18,9 +19,14 @@ use Illuminate\Support\Str;
  * كل الدوال المساعدة المشتركة يلي كانت جوا PatientHomeController (4,698 سطر)
  * قبل ما ينقسم لعدة controllers حسب الميزة. نُقلت هون حرفياً بدون أي تغيير
  * على منطقها الداخلي حتى يضل سلوك التطبيق مطابق 100% لما كان عليه.
+ *
+ * دوال فحص جداول/أعمدة الرسائل (tableExists/columnExists/firstExistingColumn/
+ * conversationStatusValue) انتقلت لـ ConversationHelpers المشترك مع جهة الدكتور.
  */
 trait PatientContextHelpers
 {
+    use ConversationHelpers;
+
         private function dailyCalorieGoalForDate(?int $userId, ?object $profile, string $selectedDate): array
     {
         $empty = [
@@ -161,14 +167,14 @@ trait PatientContextHelpers
 
         $profileForm = $this->profileFormData($patientProfile);
         $recommendedDoctors = $this->recommendedDoctors($patientProfile);
-        $todayTasks = $this->todayTasks($user, $patientProfile);
+        $todayTasks = $this->realTodayTasks($user);
         $journeyTasks = $this->journeyTasks($todayTasks);
         $tasksTotal = max(count($journeyTasks), 1);
         $tasksCompleted = collect($journeyTasks)->where('completed', true)->count();
         $todayProgress = (int) round(($tasksCompleted / $tasksTotal) * 100);
         $messages = $this->latestMessages($user?->id, $doctor['user_id'] ?? null);
         $supportMessages = $this->supportMessages($user?->id);
-        $articles = $this->dashboardArticles();
+        $articles = $this->realRecommendedArticles();
         $dailyWisdom = $this->dailyPatientContentCard(['health_wisdom'], $patientProfile, $doctor['id'] ?? null, $doctor['user_id'] ?? null, 'حكمة اليوم', 'كل عادة صحية صغيرة هي تصويت لصالح النسخة الأقوى منك.');
         $dailyMotivation = $this->dailyPatientContentCard(['motivational_quote'], $patientProfile, $doctor['id'] ?? null, $doctor['user_id'] ?? null, 'رسالة اليوم', 'لا تحتاجين يومًا مثاليًا؛ فقط خطوة صحية واحدة الآن تكفي لتغيير اتجاه اليوم.');
         $patientNotifications = $this->patientNotifications($user?->id);
@@ -210,28 +216,12 @@ trait PatientContextHelpers
             'notificationsCount' => $unreadAppNotifications,
             'patientNotifications' => $patientNotifications,
             'homeStats' => $this->homeStats($patientProfile, $todayProgress),
-            'homeProgress' => [
-                'title' => 'تقدمك اليوم',
-                'percentage' => $todayProgress,
-                'completed' => $tasksCompleted,
-                'total' => $tasksTotal,
-                'text' => $todayProgress >= 70 ? 'أحسنت! يومك يسير باتزان واضح.' : 'خطوات صغيرة الآن تصنع فرقاً كبيراً في نهاية اليوم.',
-            ],
+            'homeProgress' => $this->realTaskProgress($user),
             'homeTasks' => $todayTasks,
             'journeyTasks' => $journeyTasks,
             'messages' => $messages,
             'supportMessages' => $supportMessages,
-            'aiCalories' => [
-                'title' => 'تحليل السعرات بالذكاء الاصطناعي',
-                'target' => null,
-                'consumed' => 0,
-                'remaining' => null,
-                'progress' => 0,
-                'carbs' => 0,
-                'protein' => 0,
-                'fats' => 0,
-                'note' => 'ارفع صورة الوجبة أو اكتب وصفها، وسيظهر تقدير السعرات قبل اعتمادها.',
-            ],
+            'aiCalories' => $this->realCaloriesData($user, $patientProfile),
             'nutrition' => [
                 'calories' => '0',
                 'title' => 'ملخص التغذية',
@@ -1790,6 +1780,14 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
     }
 
 
+    /**
+     * إشعار كل الأدمنز الحاليين — بعد توحيد نظام الإشعارات، نقطة الكتابة
+     * الوحيدة صارت AppNotificationService::sendToAllAdmins() (نفس النوع
+     * الحقيقي بدون بادئة، حتى يتوافق مع type_label/type_icon الموحّدين).
+     * قبل هيك كانت هاي الدالة بتكتب مرتين: مرة بجدول admin_notifications
+     * القديم (مشترك، حالة قراءة واحدة لكل الأدمنز)، ومرة تانية بـ
+     * app_notifications بنوع مبدوء بـ"admin_" ما كان أي شاشة بتقرأه.
+     */
     private function createAdminNotification(
         string $type,
         string $title,
@@ -1798,67 +1796,15 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         ?int $relatedId = null,
         ?string $relatedType = null
     ): void {
-        /*
-        | نحافظ على جدول admin_notifications القديم حتى لا تنكسر صفحات الأدمن الحالية.
-        */
-        if ($this->tableExists('admin_notifications')) {
-            $payload = [];
-
-            $this->setFirstExistingColumn($payload, 'admin_notifications', ['type'], $type);
-            $this->setFirstExistingColumn($payload, 'admin_notifications', ['title'], $title);
-            $this->setFirstExistingColumn($payload, 'admin_notifications', ['body'], $body);
-            $this->setFirstExistingColumn($payload, 'admin_notifications', ['icon'], 'fa-headset');
-            $this->setFirstExistingColumn($payload, 'admin_notifications', ['url'], $url);
-
-            if ($relatedId) {
-                $this->setFirstExistingColumn($payload, 'admin_notifications', ['related_id'], $relatedId);
-            }
-
-            if ($relatedType) {
-                $this->setFirstExistingColumn($payload, 'admin_notifications', ['related_type'], $relatedType);
-            }
-
-            if ($this->columnExists('admin_notifications', 'is_read')) {
-                $payload['is_read'] = 0;
-            }
-
-            if ($this->columnExists('admin_notifications', 'read_at')) {
-                $payload['read_at'] = null;
-            }
-
-            if ($this->columnExists('admin_notifications', 'created_at')) {
-                $payload['created_at'] = now();
-            }
-
-            if ($this->columnExists('admin_notifications', 'updated_at')) {
-                $payload['updated_at'] = now();
-            }
-
-            if (! empty($payload)) {
-                DB::table('admin_notifications')->insert($payload);
-            }
-        }
-
-        /*
-        | نسخة موحدة داخل app_notifications للأدمن.
-        */
-        foreach ($this->adminUserIds() as $adminUserId) {
-            app(AppNotificationService::class)->send(
-                recipientUserId: (int) $adminUserId,
-                recipientRole: 'admin',
-                type: 'admin_' . $type,
-                title: $title,
-                body: $body,
-                url: $url,
-                actorUserId: auth()->id(),
-                relatedId: $relatedId,
-                relatedType: $relatedType,
-                data: [
-                    'source' => 'patient_controller',
-                    'legacy_table' => 'admin_notifications',
-                ]
-            );
-        }
+        app(AppNotificationService::class)->sendToAllAdmins(
+            type: $type,
+            title: $title,
+            body: $body,
+            url: $url,
+            actorUserId: auth()->id(),
+            relatedId: $relatedId,
+            relatedType: $relatedType
+        );
     }
 
 
@@ -2098,31 +2044,29 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
     }
 
 
+    /**
+     * كان هاد بيتحقق من عمود receiver_id/user_id غير موجودين أصلاً بجدول
+     * messages (الأعمدة الحقيقية: conversation_id, sender_id, sender_type,
+     * is_read فقط)، فكان دايماً بيرجع صفر بغض النظر عن الرسائل الحقيقية.
+     * التصليح: رسائل المريض الغير مقروءة هي الرسائل يلي إرسلها الطبيب
+     * (sender_type='doctor') بمحادثته هو (conversations.user_id = المريض).
+     */
     private function unreadMessagesCount(?int $userId): int
     {
-        if (!$userId || !$this->tableExists('messages')) {
+        if (!$userId || !$this->tableExists('messages') || !$this->tableExists('conversations')) {
             return 0;
         }
 
-        $query = DB::table('messages');
-
-        if ($this->columnExists('messages', 'receiver_id')) {
-            $query->where('receiver_id', $userId);
-        } elseif ($this->columnExists('messages', 'user_id')) {
-            $query->where('user_id', $userId);
-        } else {
+        if (!$this->columnExists('messages', 'sender_type') || !$this->columnExists('messages', 'is_read')) {
             return 0;
         }
 
-        if ($this->columnExists('messages', 'read_at')) {
-            $query->whereNull('read_at');
-        } elseif ($this->columnExists('messages', 'is_read')) {
-            $query->where('is_read', false);
-        } else {
-            return 0;
-        }
-
-        return $query->count();
+        return DB::table('messages')
+            ->join('conversations', 'conversations.id', '=', 'messages.conversation_id')
+            ->where('conversations.user_id', $userId)
+            ->where('messages.sender_type', 'doctor')
+            ->where('messages.is_read', false)
+            ->count();
     }
 
 
@@ -2629,18 +2573,6 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
     }
 
 
-    private function firstExistingColumn(string $table, array $columns): ?string
-    {
-        foreach ($columns as $column) {
-            if ($this->columnExists($table, $column)) {
-                return $column;
-            }
-        }
-
-        return null;
-    }
-
-
     private function validNumber(mixed $value, float $min, float $max): bool
     {
         if ($value === null || $value === '' || !is_numeric($value)) {
@@ -2691,61 +2623,6 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
     }
 
 
-    private function adminUserIds(): array
-    {
-        if (! $this->tableExists('users')) {
-            return [];
-        }
-
-        $query = DB::table('users');
-
-        if ($this->columnExists('users', 'role')) {
-            $query->whereIn('role', ['admin', 'super_admin', 'superadmin']);
-        } elseif ($this->columnExists('users', 'user_type')) {
-            $query->whereIn('user_type', ['admin', 'super_admin', 'superadmin']);
-        } elseif ($this->columnExists('users', 'type')) {
-            $query->whereIn('type', ['admin', 'super_admin', 'superadmin']);
-        } elseif ($this->columnExists('users', 'is_admin')) {
-            $query->where('is_admin', true);
-        } else {
-            return [];
-        }
-
-        return $query
-            ->pluck('id')
-            ->filter()
-            ->map(fn ($id) => (int) $id)
-            ->values()
-            ->toArray();
-    }
-
-
-    private function tableExists(string $table): bool
-    {
-        static $cache = [];
-
-        if (!array_key_exists($table, $cache)) {
-            $cache[$table] = Schema::hasTable($table);
-        }
-
-        return $cache[$table];
-    }
-
-
-    private function columnExists(string $table, string $column): bool
-    {
-        static $cache = [];
-
-        $key = $table . '.' . $column;
-
-        if (!array_key_exists($key, $cache)) {
-            $cache[$key] = Schema::hasTable($table) && Schema::hasColumn($table, $column);
-        }
-
-        return $cache[$key];
-    }
-
-
     private function placeholderImage(string $text): string
     {
         $safeText = htmlspecialchars(mb_substr($text, 0, 18, 'UTF-8'), ENT_QUOTES, 'UTF-8');
@@ -2769,36 +2646,283 @@ SVG;
         return 'data:image/svg+xml;utf8,' . rawurlencode($svg);
     }
 
+        /* ==================================================
+       🔥 دوال جديدة لجلب البيانات الحقيقية للـ Home
+       ================================================== */
 
-    private function conversationStatusValue(): ?string
-{
-    if (! Schema::hasTable('conversations') || ! Schema::hasColumn('conversations', 'status')) {
-        return null;
-    }
-
-    try {
-        $column = DB::selectOne("SHOW COLUMNS FROM conversations WHERE Field = 'status'");
-
-        $type = $column->Type ?? '';
-
-        if (str_contains($type, "enum")) {
-            preg_match_all("/'([^']+)'/", $type, $matches);
-
-            $allowed = $matches[1] ?? [];
-
-            foreach (['open', 'active', 'pending', 'new'] as $status) {
-                if (in_array($status, $allowed, true)) {
-                    return $status;
-                }
-            }
-
-            return $allowed[0] ?? null;
+    /**
+     * جلب مهام اليوم الحقيقية
+     */
+    private function realTodayTasks($user): array
+    {
+        if (!$user || !$this->tableExists('patient_tasks')) {
+            return $this->fallbackTasks();
         }
 
-        return 'open';
+        $today = Carbon::today()->toDateString();
+
+        $query = DB::table('patient_tasks')
+            ->where('patient_user_id', $user->id)
+            ->whereDate('task_date', $today)
+            ->where('status', '!=', 'cancelled')
+            ->orderBy('task_time');
+
+        $rows = $query->get();
+
+        if ($rows->isEmpty()) {
+            return $this->fallbackTasks();
+        }
+
+        return $rows->map(function ($task) {
+            $completed = $task->status === 'completed';
+            $time = $task->task_time ? Carbon::parse($task->task_time)->format('g:i A') : null;
+
+            return [
+                'id' => $task->id,
+                'title' => $task->title ?? 'مهمة صحية',
+                'description' => $task->description ?? null,
+                'completed' => $completed,
+                'time' => $time ?: '—',
+                'type' => $task->source ?? 'patient',
+                'icon' => $this->taskIcon($task->title ?? ''),
+                'progress' => $completed ? 100 : 0,
+                'progressText' => $completed ? 'مكتملة' : 'بانتظار التنفيذ',
+            ];
+        })->values()->toArray();
+    }
+
+    /**
+     * حساب تقدم المهام الحقيقي
+     */
+    private function realTaskProgress($user): array
+    {
+        if (!$user || !$this->tableExists('patient_tasks')) {
+            return [
+                'total' => 0,
+                'completed' => 0,
+                'percentage' => 0,
+                'title' => 'تابعي تقدمك اليوم',
+                'text' => 'ابدئي بإضافة مهامك اليومية',
+            ];
+        }
+
+        $today = Carbon::today()->toDateString();
+
+        $total = DB::table('patient_tasks')
+            ->where('patient_user_id', $user->id)
+            ->whereDate('task_date', $today)
+            ->where('status', '!=', 'cancelled')
+            ->count();
+
+        $completed = DB::table('patient_tasks')
+            ->where('patient_user_id', $user->id)
+            ->whereDate('task_date', $today)
+            ->where('status', 'completed')
+            ->count();
+
+        $percentage = $total > 0 ? round(($completed / $total) * 100) : 0;
+
+        return [
+            'total' => $total,
+            'completed' => $completed,
+            'percentage' => $percentage,
+            'title' => $percentage >= 100 ? 'أحسنت! يومك مكتمل ✅' : 'تابعي تقدمك اليوم',
+            'text' => $percentage >= 100 
+                ? 'أكملت جميع مهام اليوم!'
+                : ($total > 0 ? 'أنتِ في منتصف الطريق، استمري 💪' : 'ابدئي بإضافة مهامك اليومية'),
+        ];
+    }
+
+    /**
+     * جلب بيانات السعرات الحقيقية
+     */
+    /**
+ * جلب بيانات السعرات الحقيقية
+ */
+private function realCaloriesData($user, $patientProfile): array
+{
+    $empty = [
+        'consumed' => 0,
+        'target' => 0,
+        'today_calories' => 0,
+        'daily_goal' => 2000,
+        'last_meal' => null,
+        'latest_meal' => null,
+        'title' => 'تحليل السعرات بالذكاء الاصطناعي',
+        'note' => 'ارفع صورة الوجبة أو اكتب وصفها، وسيظهر تقدير السعرات قبل اعتمادها.',
+    ];
+
+    if (!$user || !$this->tableExists('patient_meals')) {
+        return $empty;
+    }
+
+    $today = Carbon::today()->toDateString();
+
+    // ✅ جلب هدف السعرات - باستخدام العمود الصحيح
+    $calorieGoal = null;
+    if ($this->tableExists('patient_daily_calorie_goals')) {
+        // تحقق من وجود الأعمدة الصحيحة
+        $columns = $this->getTableColumns('patient_daily_calorie_goals');
+        
+        $query = DB::table('patient_daily_calorie_goals');
+        
+        // استخدام العمود الصحيح
+        if (in_array('user_id', $columns)) {
+            $query->where('user_id', $user->id);
+        } elseif (in_array('patient_id', $columns)) {
+            $query->where('patient_id', $patientProfile?->id ?? 0);
+        } elseif (in_array('patient_user_id', $columns)) {
+            $query->where('patient_user_id', $user->id);
+        } else {
+            return $empty;
+        }
+        
+        // استخدام اسم العمود الصحيح للتاريخ
+        if (in_array('goal_date', $columns)) {
+            $query->whereDate('goal_date', $today);
+        } elseif (in_array('date', $columns)) {
+            $query->whereDate('date', $today);
+        } elseif (in_array('created_at', $columns)) {
+            $query->whereDate('created_at', $today);
+        } else {
+            return $empty;
+        }
+        
+        $calorieGoal = $query->first();
+    }
+
+    $target = $calorieGoal ? (int) ($calorieGoal->calories ?? $calorieGoal->calories_goal ?? 0) : 2000;
+
+    // ✅ جلب وجبات اليوم - باستخدام العمود الصحيح
+    $columns = $this->getTableColumns('patient_meals');
+    
+    $mealsQuery = DB::table('patient_meals');
+    
+    if (in_array('user_id', $columns)) {
+        $mealsQuery->where('user_id', $user->id);
+    } elseif (in_array('patient_id', $columns)) {
+        $mealsQuery->where('patient_id', $patientProfile?->id ?? 0);
+    } elseif (in_array('patient_user_id', $columns)) {
+        $mealsQuery->where('patient_user_id', $user->id);
+    } else {
+        return $empty;
+    }
+    
+    if (in_array('created_at', $columns)) {
+        $mealsQuery->whereDate('created_at', $today);
+    } elseif (in_array('meal_date', $columns)) {
+        $mealsQuery->whereDate('meal_date', $today);
+    } elseif (in_array('date', $columns)) {
+        $mealsQuery->whereDate('date', $today);
+    } else {
+        return $empty;
+    }
+    
+    $meals = $mealsQuery->get();
+
+    // حساب السعرات
+    $consumed = 0;
+    $lastMeal = null;
+    
+    foreach ($meals as $meal) {
+        $calories = (int) ($meal->calories ?? $meal->calories_consumed ?? $meal->total_calories ?? 0);
+        $consumed += $calories;
+        
+        if (!$lastMeal || $meal->created_at > $lastMeal->created_at) {
+            $lastMeal = $meal;
+        }
+    }
+
+    return [
+        'consumed' => (int) $consumed,
+        'target' => $target,
+        'today_calories' => (int) $consumed,
+        'daily_goal' => $target,
+        'last_meal' => $lastMeal ? ($lastMeal->meal_name ?? $lastMeal->title ?? 'وجبة') : null,
+        'latest_meal' => $lastMeal ? [
+            'name' => $lastMeal->meal_name ?? $lastMeal->title ?? 'وجبة',
+            'title' => $lastMeal->meal_name ?? $lastMeal->title ?? 'وجبة',
+            'calories' => (int) ($lastMeal->calories ?? $lastMeal->calories_consumed ?? 0),
+        ] : null,
+        'title' => 'تحليل السعرات بالذكاء الاصطناعي',
+        'note' => $consumed > 0 ? 'تم تسجيل ' . $consumed . ' سعرة اليوم' : 'ارفع صورة الوجبة أو اكتب وصفها',
+    ];
+}
+
+/**
+ * الحصول على أسماء الأعمدة في جدول
+ */
+private function getTableColumns(string $table): array
+{
+    if (!$this->tableExists($table)) {
+        return [];
+    }
+    
+    try {
+        return Schema::getColumnListing($table);
     } catch (\Throwable $e) {
-        return 'open';
+        return [];
     }
 }
 
+    /**
+     * جلب المقالات الموصى بها
+     */
+    private function realRecommendedArticles(): array
+    {
+        if (!$this->tableExists('articles')) {
+            return $this->fallbackArticles();
+        }
+
+        $query = DB::table('articles');
+
+        if ($this->columnExists('articles', 'is_published')) {
+            $query->where('is_published', true);
+        }
+
+        if ($this->columnExists('articles', 'status')) {
+            $query->where('status', 'published');
+        }
+
+        if ($this->columnExists('articles', 'published_at')) {
+            $query->where('published_at', '<=', now());
+        }
+
+        if ($this->columnExists('articles', 'is_featured')) {
+            $query->orderByDesc('is_featured');
+        }
+
+        if ($this->columnExists('articles', 'published_at')) {
+            $query->orderByDesc('published_at');
+        }
+
+        if ($this->columnExists('articles', 'created_at')) {
+            $query->orderByDesc('created_at');
+        }
+
+        $rows = $query->limit(3)->get();
+
+        if ($rows->isEmpty()) {
+            return $this->fallbackArticles();
+        }
+
+        return $rows->map(function ($article) {
+            $title = $article->title ?? 'مقال صحي';
+            $category = $article->category ?? 'صحة';
+            $readTime = $article->reading_time_label ?? $article->read_time ?? '4 دقائق قراءة';
+
+            return [
+                'id' => $article->id ?? null,
+                'title' => $title,
+                'slug' => $article->slug ?? null,
+                'tag' => $category,
+                'read_time' => $readTime,
+                'image' => $article->cover_image_url ?? $article->image_url ?? $this->placeholderImage($title),
+                'url' => !empty($article->slug) ? route('patient.articles.show', $article->slug) : route('patient.articles'),
+            ];
+        })->toArray();
+    }
+
 }
+
+

@@ -57,6 +57,8 @@ return [
                 'api_key' => env('OPENROUTER_API_KEY'),
                 'url' => env('OPENROUTER_URL', 'https://openrouter.ai/api/v1'),
                 'model' => env('OPENROUTER_MODEL'),
+                // Vision-capable model used for meal-photo analysis (Patient Meal Analysis feature).
+                'vision_model' => env('OPENROUTER_VISION_MODEL', 'google/gemma-4-26b-a4b-it:free'),
                 'site' => [
                     'http_referer' => env('OPENROUTER_SITE_HTTP_REFERER'),
                     'x_title' => env('OPENROUTER_SITE_X_TITLE'),

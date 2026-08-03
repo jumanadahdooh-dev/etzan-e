@@ -24,6 +24,8 @@
         })();
     </script>
 
+    <link rel="stylesheet" href="{{ asset('front/css/design-tokens.css') }}">
+
     {{-- بالضبط نفس ملفات CSS يلي بتحمّلها صفحة المريض — نفس المصدر، صفر تكرار --}}
     <link rel="stylesheet" href="{{ asset('front/css/patient/patient.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/patient/dashboard-shell.css') }}">

@@ -3,37 +3,45 @@
 @php
     $pageTitle = 'تنبيهات المرضى';
     $activePage = 'alerts';
+
+    $severityIcon = ['danger' => 'octagon-alert', 'warn' => 'triangle-alert'];
+    $severityLabel = ['danger' => 'خطر', 'warn' => 'تنبيه'];
 @endphp
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('front/css/doctor/dashboard.css') }}">
+@endpush
+
 @section('content')
-<section class="doctor-page">
-    <div class="doctor-filterbar">
-        <div><span class="home-v2-kicker"><span><i data-lucide="sparkles"></i></span> متابعة الطبيب</span></div>
+<section class="ddash">
+
+    <div class="ddash-section-head">
+        <h2>تنبيهات المرضى</h2>
+        <span>حالات حقيقية تحتاج متابعتك، محسوبة من نشاط مرضاك</span>
     </div>
 
-    <div class="doctor-panel">
-        <div class="doctor-panel-head">
-            <div>
-                <span>Patient Alerts</span>
-                <h2>تنبيهات تحتاج متابعة ({{ $alerts->count() }})</h2>
-            </div>
-            <i data-lucide="triangle-alert"></i>
+    <div class="ddash-card ddash-accent--rose">
+        <div class="ddash-card__head">
+            <div><span>Patient Alerts</span><h2>تنبيهات تحتاج متابعة ({{ $alerts->count() }})</h2></div>
+            <i data-lucide="triangle-alert" class="ddash-card__icon"></i>
         </div>
 
         @if ($alerts->isEmpty())
-            <p style="padding:16px 4px;color:var(--et-muted,#6b7280)">
-                ولا في تنبيه حالياً — كل مرضاك مسجلين وجباتهم بانتظام وما في مهام متأخرة. 👏
-            </p>
+            <div class="ddash-empty"><i data-lucide="check-circle"></i><p>ولا في تنبيه حالياً — كل مرضاك مسجلين وجباتهم بانتظام وما في مهام متأخرة 👏</p></div>
         @else
-            <div class="doctor-list">
+            <div>
                 @foreach ($alerts as $alert)
-                    <div class="doctor-item compact">
-                        <div>
-                            <span class="doctor-status {{ $alert->severity }}">{{ $alert->severity_label }}</span>
+                    <div class="ddash-item">
+                        <span class="ddash-avatar ddash-avatar--{{ $alert->severity === 'danger' ? 'rose' : 'amber' }}">{{ mb_substr($alert->patient_name, 0, 1) }}</span>
+                        <div class="ddash-item__body">
                             <strong>{{ $alert->title }}</strong>
                             <small>{{ $alert->detail }}</small>
                         </div>
-                        <a class="doctor-btn primary" href="{{ route('doctor.patient-profile.show', $alert->profile_id) }}">فتح الملف</a>
+                        <span class="ddash-pill ddash-pill--{{ $alert->severity === 'danger' ? 'rose' : 'amber' }}">
+                            <i data-lucide="{{ $severityIcon[$alert->severity] ?? 'bell' }}" style="width:12px;height:12px"></i>
+                            {{ $alert->severity_label }}
+                        </span>
+                        <a class="ddash-btn" href="{{ route('doctor.patient-profile.show', $alert->profile_id) }}">فتح الملف</a>
                     </div>
                 @endforeach
             </div>

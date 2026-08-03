@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Patient;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Patient\Concerns\PatientContextHelpers;
+use App\Http\Requests\Patient\AnalyzeMealRequest;
 use App\Http\Requests\Patient\BookAppointmentRequest;
 use App\Http\Requests\Patient\CompleteProfileRequest;
 use App\Models\Article;
@@ -12,6 +13,7 @@ use App\Models\PatientDailyCalorieGoal;
 use App\Models\PatientMeal;
 use App\Services\AiMealAnalysisService;
 use App\Services\AppNotificationService;
+use App\Services\NutritionInsightService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
@@ -59,6 +61,9 @@ class PatientCalorieController extends Controller
         $protein = (int) $todayMeals->sum('protein');
         $carbs = (int) $todayMeals->sum('carbs');
         $fat = (int) $todayMeals->sum('fat');
+        $fiber = (int) $todayMeals->sum('fiber');
+        $sugar = (int) $todayMeals->sum('sugar');
+        $sodium = (int) $todayMeals->sum('sodium');
 
         /*
         |--------------------------------------------------------------------------
@@ -103,6 +108,9 @@ class PatientCalorieController extends Controller
             'protein' => $protein,
             'carbs' => $carbs,
             'fat' => $fat,
+            'fiber' => $fiber,
+            'sugar' => $sugar,
+            'sodium' => $sodium,
 
             // مؤقتًا، إلى أن نعمل أهداف الماكروز من الطبيب أو من الملف الصحي
             'protein_target' => $proteinTarget,
@@ -177,20 +185,9 @@ class PatientCalorieController extends Controller
     }
 
 
-    public function analyzeMeal(Request $request, AiMealAnalysisService $mealAnalysisService): RedirectResponse
+    public function analyzeMeal(AnalyzeMealRequest $request, AiMealAnalysisService $mealAnalysisService, NutritionInsightService $insightService): RedirectResponse|JsonResponse
     {
-        $validated = $request->validate([
-            'meal_type' => ['required', 'string', 'max:30'],
-            'meal_date' => ['nullable', 'date'],
-
-            // نقبل الاسمين عشان لو البلايد يستخدم meal_text أو description
-            'meal_text' => ['nullable', 'string', 'max:2000'],
-            'description' => ['nullable', 'string', 'max:2000'],
-
-            // نقبل الاسمين عشان لو البلايد يستخدم meal_photo أو meal_image
-            'meal_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'meal_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-        ]);
+        $validated = $request->validated();
 
         $user = auth()->user();
 
@@ -209,15 +206,15 @@ class PatientCalorieController extends Controller
             : ($request->hasFile('meal_image') ? 'meal_image' : null);
 
         if ($description === '' && ! $photoInputName) {
-            return back()
-                ->withInput()
-                ->with('error', 'اكتب وصف الوجبة أو ارفع صورة قبل التحليل.');
-        }
+            $message = 'اكتب وصف الوجبة أو ارفع صورة قبل التحليل.';
 
-        if ($description === '' && $photoInputName) {
+            if ($request->wantsJson()) {
+                return response()->json(['message' => $message, 'errors' => ['description' => [$message]]], 422);
+            }
+
             return back()
                 ->withInput()
-                ->with('error', 'حاليًا التحليل المجاني يحتاج وصفًا نصيًا مع الصورة. اكتب مكونات الوجبة باختصار.');
+                ->with('error', $message);
         }
 
         $imagePath = null;
@@ -232,10 +229,15 @@ class PatientCalorieController extends Controller
             ? Carbon::parse($validated['meal_date'])->toDateString()
             : now()->toDateString();
 
-        $result = $mealAnalysisService->analyzeTextMeal(
+        $result = $mealAnalysisService->analyze(
             description: $description,
+            imageStoragePath: $imagePath,
             mealType: $validated['meal_type']
         );
+
+        if ($result['status'] === 'success') {
+            $result = array_merge($result, $insightService->analyze($result));
+        }
 
         $result['meal_date'] = $mealDate;
         $result['image_path'] = $imagePath;
@@ -265,6 +267,9 @@ class PatientCalorieController extends Controller
             'protein' => ['nullable', 'integer', 'min:0', 'max:400'],
             'carbs' => ['nullable', 'integer', 'min:0', 'max:700'],
             'fat' => ['nullable', 'integer', 'min:0', 'max:400'],
+            'fiber' => ['nullable', 'integer', 'min:0', 'max:200'],
+            'sugar' => ['nullable', 'integer', 'min:0', 'max:400'],
+            'sodium' => ['nullable', 'integer', 'min:0', 'max:10000'],
             'patient_note' => ['nullable', 'string', 'max:1000'],
         ]);
 
@@ -294,7 +299,11 @@ class PatientCalorieController extends Controller
             'protein' => (int) ($validated['protein'] ?? 0),
             'carbs' => (int) ($validated['carbs'] ?? 0),
             'fat' => (int) ($validated['fat'] ?? 0),
+            'fiber' => (int) ($validated['fiber'] ?? $draft['fiber'] ?? 0),
+            'sugar' => (int) ($validated['sugar'] ?? $draft['sugar'] ?? 0),
+            'sodium' => (int) ($validated['sodium'] ?? $draft['sodium'] ?? 0),
             'confidence' => (int) ($draft['confidence'] ?? 0),
+            'health_score' => $draft['health_score'] ?? null,
 
             'ai_notes' => $draft['ai_notes'] ?? null,
             'patient_note' => $validated['patient_note'] ?? null,

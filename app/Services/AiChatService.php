@@ -248,6 +248,6 @@ PROMPT;
 
     protected function model(): string
     {
-        return config('prism.providers.openrouter.model') ?: 'tngtech/deepseek-r1t2-chimera:free';
+        return config('prism.providers.openrouter.model') ?: 'openai/gpt-oss-20b:free';
     }
 }

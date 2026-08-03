@@ -8,16 +8,18 @@ use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
- * يتأكد إنه فورم "تواصل معنا" لسا بيسجل الإشعار الصحيح للأدمن
- * (admin_notifications) بعد ما شلنا الكتابة المعطّلة على app_notifications.
+ * يتأكد إنه فورم "تواصل معنا" بيسجل إشعار حقيقي شخصي لكل أدمن حالي عبر
+ * app_notifications (بعد توحيد نظام الإشعارات) — بدل الجدول المشترك القديم
+ * admin_notifications يلي عاد ما حدا بيكتب فيه.
  */
 class ContactNotificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_contact_message_notifies_admin_and_creates_no_orphaned_app_notification(): void
+    public function test_guest_contact_message_notifies_every_current_admin_personally(): void
     {
         $admin = User::factory()->admin()->create();
+        $secondAdmin = User::factory()->admin()->create();
 
         $response = $this->post(route('contact.messages.store'), [
             'guest_name' => 'زائر تجريبي',
@@ -28,7 +30,15 @@ class ContactNotificationTest extends TestCase
 
         $response->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('admin_notifications', [
+        $this->assertDatabaseHas('app_notifications', [
+            'recipient_user_id' => $admin->id,
+            'recipient_role' => 'admin',
+            'type' => 'message',
+        ]);
+
+        $this->assertDatabaseHas('app_notifications', [
+            'recipient_user_id' => $secondAdmin->id,
+            'recipient_role' => 'admin',
             'type' => 'message',
         ]);
 
@@ -36,6 +46,6 @@ class ContactNotificationTest extends TestCase
             'recipient_user_id' => null,
         ]);
 
-        $this->assertSame(0, DB::table('app_notifications')->count());
+        $this->assertSame(0, DB::table('admin_notifications')->count());
     }
 }

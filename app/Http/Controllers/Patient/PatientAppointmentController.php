@@ -27,7 +27,10 @@ class PatientAppointmentController extends Controller
 {
     use PatientContextHelpers;
 
-public function followUp(): View
+    /**
+     * عرض صفحة حجز الموعد
+     */
+    public function followUp(): View
     {
         $data = $this->dashboardData([
             'pageTitle' => 'حجز موعد',
@@ -87,8 +90,323 @@ public function followUp(): View
         return view('patient.appointments', $data);
     }
 
+    /**
+     * جلب الأوقات المتاحة للطبيب في تاريخ معين
+     */
+    private function appointmentSlots($doctorProfileId, $date, $ignoreAppointmentId = null)
+    {
+        // ✅ إذا لم يكن هناك طبيب، أرجع أوقات وهمية
+        if (!$doctorProfileId) {
+            return $this->getFallbackSlots();
+        }
 
-public function bookAppointment(BookAppointmentRequest $request): RedirectResponse
+        // التحقق من وجود جدول الطبيب
+        if (!$this->tableExists('doctor_schedules')) {
+            return $this->getFallbackSlots();
+        }
+
+        $dayOfWeek = Carbon::parse($date)->dayOfWeek;
+
+        // جلب جدول الطبيب لهذا اليوم
+        $schedule = DB::table('doctor_schedules')
+            ->where('doctor_profile_id', $doctorProfileId)
+            ->where('day_of_week', $dayOfWeek)
+            ->where('is_active', 1)
+            ->first();
+
+        if (!$schedule) {
+            return $this->getFallbackSlots();
+        }
+
+        // توليد الأوقات بين start_time و end_time
+        $startTime = Carbon::parse($schedule->start_time);
+        $endTime = Carbon::parse($schedule->end_time);
+        $interval = 30; // دقيقة
+
+        $times = [];
+        $current = $startTime->copy();
+
+        while ($current->lt($endTime)) {
+            $times[] = $current->format('H:i');
+            $current->addMinutes($interval);
+        }
+
+        if (empty($times)) {
+            return $this->getFallbackSlots();
+        }
+
+        // حجز المواعيد المحجوزة لهذا اليوم
+        $bookedTimes = [];
+        if ($this->tableExists('patient_appointments')) {
+            $query = DB::table('patient_appointments')
+                ->where('doctor_profile_id', $doctorProfileId)
+                ->where('appointment_date', $date)
+                ->whereIn('status', ['pending', 'confirmed', 'approved']);
+
+            if ($ignoreAppointmentId) {
+                $query->where('id', '!=', $ignoreAppointmentId);
+            }
+
+            $bookedTimes = $query->pluck('appointment_time')->toArray();
+        }
+
+        // إزالة الأوقات المحجوزة
+        $availableTimes = array_diff($times, $bookedTimes);
+        $availableTimes = array_values($availableTimes); // إعادة ترتيب المصفوفة
+
+        if (empty($availableTimes)) {
+            return [];
+        }
+
+        // تقسيم الأوقات إلى فترات
+        $morning = [];
+        $afternoon = [];
+        $evening = [];
+
+        foreach ($availableTimes as $time) {
+            $hour = (int) substr($time, 0, 2);
+            if ($hour < 12) {
+                $morning[] = $time;
+            } elseif ($hour < 17) {
+                $afternoon[] = $time;
+            } else {
+                $evening[] = $time;
+            }
+        }
+
+        $slots = [];
+
+        if (!empty($morning)) {
+            $slots[] = [
+                'icon' => 'sunrise',
+                'label' => 'الفترة الصباحية',
+                'times' => $morning,
+            ];
+        }
+
+        if (!empty($afternoon)) {
+            $slots[] = [
+                'icon' => 'sun',
+                'label' => 'الفترة المسائية',
+                'times' => $afternoon,
+            ];
+        }
+
+        if (!empty($evening)) {
+            $slots[] = [
+                'icon' => 'moon',
+                'label' => 'الفترة المسائية المتأخرة',
+                'times' => $evening,
+            ];
+        }
+
+        return !empty($slots) ? $slots : $this->getFallbackSlots();
+    }
+
+    /**
+     * أوقات افتراضية للاختبار (إذا لم يكن هناك جدول للطبيب)
+     */
+    private function getFallbackSlots()
+    {
+        return [
+            [
+                'icon' => 'sunrise',
+                'label' => 'الفترة الصباحية',
+                'times' => ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30'],
+            ],
+            [
+                'icon' => 'sunset',
+                'label' => 'الفترة المسائية',
+                'times' => ['16:00', '16:30', '17:00', '17:30', '18:00', '18:30'],
+            ],
+        ];
+    }
+
+    /**
+     * جلب بيانات الشهر للمواعيد
+     */
+    private function appointmentMonthMeta($doctorProfileId, $date, $ignoreAppointmentId = null)
+    {
+        if (!$doctorProfileId) {
+            return [
+                'availableAppointmentDates' => [],
+                'fullyBookedAppointmentDates' => [],
+            ];
+        }
+
+        $schedules = DB::table('doctor_schedules')
+            ->where('doctor_profile_id', $doctorProfileId)
+            ->where('is_active', 1)
+            ->get();
+
+        $workingDays = $schedules->pluck('day_of_week')->toArray();
+
+        $startDate = Carbon::parse($date)->startOfMonth();
+        $endDate = Carbon::parse($date)->endOfMonth();
+
+        $availableDates = [];
+        $fullyBookedDates = [];
+
+        for ($day = $startDate->copy(); $day->lte($endDate); $day->addDay()) {
+            $dayOfWeek = $day->dayOfWeek;
+
+            // إذا كان اليوم ضمن أيام العمل
+            if (in_array($dayOfWeek, $workingDays)) {
+                // التحقق من وجود مواعيد محجوزة في هذا اليوم
+                $bookedCount = DB::table('patient_appointments')
+                    ->where('doctor_profile_id', $doctorProfileId)
+                    ->where('appointment_date', $day->toDateString())
+                    ->whereIn('status', ['pending', 'confirmed', 'approved'])
+                    ->count();
+
+                // إذا كان اليوم مكتمل (جميع المواعيد محجوزة)
+                if ($bookedCount >= 8) { // 8 مواعيد كحد أقصى في اليوم
+                    $fullyBookedDates[] = $day->toDateString();
+                } else {
+                    $availableDates[] = $day->toDateString();
+                }
+            }
+        }
+
+        return [
+            'availableAppointmentDates' => $availableDates,
+            'fullyBookedAppointmentDates' => $fullyBookedDates,
+        ];
+    }
+
+    /**
+     * جلب مواعيد المريض في الشهر
+     */
+    private function calendarAppointmentsForPatient($userId, $patientProfileId, $date)
+    {
+        if (!$userId || !$patientProfileId) {
+            return [];
+        }
+
+        return DB::table('patient_appointments')
+            ->where('user_id', $userId)
+            ->where('patient_profile_id', $patientProfileId)
+            ->whereMonth('appointment_date', Carbon::parse($date)->month)
+            ->whereYear('appointment_date', Carbon::parse($date)->year)
+            ->get()
+            ->toArray();
+    }
+
+    /**
+     * التحقق من وجود جدول في قاعدة البيانات
+     */
+    private function tableExists($table)
+    {
+        try {
+            return Schema::hasTable($table);
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    /**
+     * التحقق من وجود عمود في الجدول
+     */
+    private function columnExists($table, $column)
+    {
+        try {
+            return Schema::hasColumn($table, $column);
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    /**
+     * توحيد صيغة الوقت
+     */
+    private function normalizeAppointmentTime($time)
+    {
+        if (empty($time)) {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($time)->format('H:i');
+        } catch (\Throwable $e) {
+            return $time;
+        }
+    }
+
+    /**
+     * التحقق من توفر الوقت
+     */
+    private function isAppointmentSlotAvailable($doctorProfileId, $date, $time, $ignoreAppointmentId = null)
+    {
+        if (!$doctorProfileId || !$date || !$time) {
+            return false;
+        }
+
+        $query = DB::table('patient_appointments')
+            ->where('doctor_profile_id', $doctorProfileId)
+            ->where('appointment_date', $date)
+            ->where('appointment_time', $time)
+            ->whereIn('status', ['pending', 'confirmed', 'approved']);
+
+        if ($ignoreAppointmentId) {
+            $query->where('id', '!=', $ignoreAppointmentId);
+        }
+
+        return $query->count() === 0;
+    }
+
+    /**
+     * جلب معرف المستخدم للطبيب من ملفه
+     */
+    private function doctorUserIdFromProfile($doctorProfileId)
+    {
+        if (!$doctorProfileId) {
+            return null;
+        }
+
+        $profile = DB::table('doctor_profiles')
+            ->where('id', $doctorProfileId)
+            ->first();
+
+        return $profile->user_id ?? null;
+    }
+
+    /**
+     * إنشاء إشعار
+     */
+    private function createAppNotification(
+        $recipientUserId,
+        $actorUserId,
+        $type,
+        $title,
+        $body,
+        $url,
+        $appointmentId = null,
+        $recipientRole = 'patient',
+        $data = []
+    ) {
+        try {
+            $notificationData = [
+                'user_id' => $recipientUserId,
+                'type' => $type,
+                'title' => $title,
+                'body' => $body,
+                'url' => $url,
+                'appointment_id' => $appointmentId,
+                'data' => json_encode($data),
+                'role' => $recipientRole,
+            ];
+
+            DB::table('notifications')->insert($notificationData);
+        } catch (\Throwable $e) {
+            // تجاهل خطأ الإشعار
+        }
+    }
+
+    // ============================================
+    // دوال حجز وتعديل المواعيد
+    // ============================================
+
+    public function bookAppointment(BookAppointmentRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -181,8 +499,7 @@ public function bookAppointment(BookAppointmentRequest $request): RedirectRespon
             ->with('success', 'تم إرسال طلب الموعد بنجاح. سيراجع الطبيب الطلب.');
     }
 
-
-public function updateAppointment(Request $request, int $appointment): RedirectResponse
+    public function updateAppointment(Request $request, int $appointment): RedirectResponse
     {
         $validated = $request->validate([
             'appointment_date' => ['required', 'date', 'after_or_equal:today'],
@@ -278,7 +595,6 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return redirect()->route('patient.followup')->with('success', 'تم تعديل طلب الموعد بنجاح. سيراجع الطبيب الموعد المحدّث.');
     }
 
-
     public function acceptSuggestedAppointment(Request $request, int $appointment): RedirectResponse
     {
         $user = auth()->user();
@@ -348,7 +664,6 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
         return redirect()->route('patient.followup')->with('success', 'تم قبول الموعد المقترح وتأكيده.');
     }
 
-
     public function declineSuggestedAppointment(Request $request, int $appointment): RedirectResponse
     {
         $user = auth()->user();
@@ -401,5 +716,4 @@ public function updateAppointment(Request $request, int $appointment): RedirectR
 
         return redirect()->route('patient.followup')->with('success', 'تم رفض الموعد المقترح.');
     }
-
 }

@@ -8,7 +8,12 @@ if (! function_exists('setting')) {
         static $settings = null;
 
         if ($settings === null) {
-            $settings = Setting::pluck('value', 'key')->toArray();
+            try {
+                $settings = Setting::pluck('value', 'key')->toArray();
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('setting(): فشل قراءة إعدادات الموقع', ['error' => $e->getMessage()]);
+                $settings = [];
+            }
         }
 
         return $settings[$key] ?? $default;

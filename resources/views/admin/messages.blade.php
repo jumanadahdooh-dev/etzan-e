@@ -379,12 +379,21 @@
     font-weight: 800 !important;
 }
 
-/* شكل رسالة الزائر */
+/* شكل رسالة الزائر — لايت (افتراضي) */
 .msg-page-v2 .msg-chat-body-v2 .msg-bubble-v2--user > .msg-bubble-content-v2 {
+    background: #ffffff !important;
+    color: #18333B !important;
+    border: 1px solid rgba(29, 158, 117, 0.18) !important;
+    border-bottom-right-radius: 7px !important;
+    box-shadow: 0 8px 20px rgba(24, 51, 59, 0.06) !important;
+}
+
+/* شكل رسالة الزائر — دارك */
+body[data-theme="dark"] .msg-page-v2 .msg-chat-body-v2 .msg-bubble-v2--user > .msg-bubble-content-v2,
+body.dark .msg-page-v2 .msg-chat-body-v2 .msg-bubble-v2--user > .msg-bubble-content-v2 {
     background: rgba(255, 255, 255, 0.06) !important;
     color: #EAF7F4 !important;
     border: 1px solid rgba(29, 158, 117, 0.28) !important;
-    border-bottom-right-radius: 7px !important;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10) !important;
 }
 

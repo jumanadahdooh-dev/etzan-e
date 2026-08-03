@@ -87,29 +87,25 @@
         return '#';
     };
 
-    $doctorImage = function ($doctor, $index) use ($getAny, $imageUrl) {
-        $fallbacks = [
-            1 => 'front/image/doctors/doctor-1.png',
-            2 => 'front/image/doctors/doctor-2.png',
-            3 => 'front/image/doctor-4.png',
-            4 => 'front/image/doctor-4.png',
-        ];
+    $doctorPhotoPath = function ($doctor) use ($getAny) {
+        return $getAny($doctor, [
+            'doctorProfile.photo_path',
+            'doctor_profile.photo_path',
+            'image',
+            'photo',
+            'avatar',
+            'profile_photo',
+            'profile_image',
+            'doctor_profile.image',
+            'doctorProfile.image',
+            'profile.image',
+        ]);
+    };
 
-        return $imageUrl(
-            $getAny($doctor, [
-                'doctorProfile.photo_path',
-                'doctor_profile.photo_path',
-                'image',
-                'photo',
-                'avatar',
-                'profile_photo',
-                'profile_image',
-                'doctor_profile.image',
-                'doctorProfile.image',
-                'profile.image',
-            ]),
-            $fallbacks[$index] ?? 'front/image/doctor-4.png'
-        );
+    $doctorImage = function ($doctor) use ($doctorPhotoPath, $imageUrl) {
+        $path = $doctorPhotoPath($doctor);
+
+        return $path ? $imageUrl($path, '') : null;
     };
 
     $articleUrl = function ($article) use ($getAny) {
@@ -670,8 +666,6 @@
                     <div class="doctors-stack-wrap">
                         @foreach($homepageDoctors as $index => $doctor)
                             @php
-                                $doctorIndex = $index + 1;
-
                                 $doctorName = $getAny($doctor, ['name', 'full_name'], 'طبيب اتزان');
                                 $doctorSpecialty = $getAny($doctor, ['specialty', 'specialization', 'doctor_profile.specialty', 'doctorProfile.specialty'], 'مختص تغذية');
                                 $doctorDescription = $getAny($doctor, ['description', 'bio', 'about', 'doctor_profile.bio', 'doctorProfile.bio'], 'مختص يساعدك على فهم احتياجك الغذائي بشكل أوضح.');
@@ -700,7 +694,13 @@
                                 <span class="doctor-card-status">{{ $doctorStatus }}</span>
 
                                 <div class="doctor-card-image">
-                                    <img src="{{ $doctorImage($doctor, $doctorIndex) }}" alt="{{ $doctorName }}">
+                                    @if ($doctorImage($doctor))
+                                        <img src="{{ $doctorImage($doctor) }}" alt="{{ $doctorName }}">
+                                    @else
+                                        <span class="doctor-card-image__placeholder" aria-hidden="true">
+                                            <i class="fa-solid fa-user-doctor"></i>
+                                        </span>
+                                    @endif
                                 </div>
 
                                 <div class="doctor-card-body">

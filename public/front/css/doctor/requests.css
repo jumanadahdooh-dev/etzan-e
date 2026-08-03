@@ -3,6 +3,18 @@
    يستخدم نفس متغيرات --d-* المعرّفة داخل .ddash (light + dark تلقائياً)
    ============================================================================ */
 
+/* ══════════ بطاقة/فورم قابلة للطي (details/summary) — مشتركة بأي صفحة ══════════ */
+.ddash-toggle > summary { list-style: none; cursor: pointer; }
+.ddash-toggle > summary::-webkit-details-marker { display: none; }
+.ddash-toggle > summary::marker { content: ""; }
+.ddash-toggle .chev { width: 18px; height: 18px; flex-shrink: 0; color: var(--d-muted, var(--muted)); transition: transform .18s ease; }
+.ddash-toggle[open] > summary .chev { transform: rotate(180deg); }
+.ddash-toggle-body { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--d-border, var(--home-v2-border)); }
+/* .doctor-form/.ddash-card وغيرها بتفرض display:grid/flex بذاتها، وهاد بيلغي
+   سلوك <details> الافتراضي بإخفاء محتواه وهو مقفول — نفرضه هون صراحة */
+.ddash-toggle:not([open]) > .ddash-toggle-body,
+.ddash-toggle:not([open]) > *:not(summary) { display: none !important; }
+
 /* ══════════ مودال سبب الرفض ══════════ */
 .dreq-modal-overlay {
     position: fixed; inset: 0; z-index: 9999;
@@ -222,3 +234,9 @@ html[data-theme="dark"] .dnotif-item.is-unread { background: rgba(59,130,246,.08
 .dpat-goal-form__row input:focus,
 .dpat-goal-form__row textarea:focus { outline: 0; border-color: var(--d-green); }
 .dpat-goal-form__row textarea { resize: vertical; }
+
+
+
+
+
+

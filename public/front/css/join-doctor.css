@@ -7,103 +7,295 @@
   --doctor-soft: #6b878b;
   --doctor-border: rgba(123, 188, 192, 0.18);
   --doctor-shadow: 0 24px 60px rgba(15, 84, 89, 0.08);
+  --doctor-shadow-ink: 15, 84, 89;
   --doctor-radius-xl: 32px;
   --doctor-radius-md: 18px;
+  --doctor-header-h: 76px;
 }
 
-.doctor-apply-page *,
-.doctor-apply-page *::before,
-.doctor-apply-page *::after {
+/* جسر الوضع الغامق — نفس أسلوب باقي صفحات الدخول. */
+:root[data-theme="dark"] {
+  --doctor-bg-1: var(--bg);
+  --doctor-bg-2: var(--surface-2);
+  --doctor-primary: var(--primary);
+  --doctor-secondary: var(--info);
+  --doctor-text: var(--text);
+  --doctor-soft: var(--text-2);
+  --doctor-border: color-mix(in srgb, var(--primary) 30%, transparent);
+  --doctor-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  --doctor-shadow-ink: 0, 0, 0;
+}
+
+.auth-split *,
+.auth-split *::before,
+.auth-split *::after {
   box-sizing: border-box;
 }
 
-.doctor-apply-page {
+/* =========================================================
+   Minimal branded header — same block as auth.css's .auth-topbar,
+   reused here because this page loads join-doctor.css only (it's
+   self-contained, doesn't load auth.css). Without this, the shared
+   layout's header markup renders with the browser's default (unsized)
+   logo <img>, which was overflowing the page on narrow screens.
+========================================================= */
+.auth-topbar {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 40;
+  height: var(--doctor-header-h);
+  display: flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--surface) 40%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--surface) 30%, transparent);
+}
+
+.auth-topbar__inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-inline: clamp(20px, 4vw, 56px);
+}
+
+.auth-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.auth-topbar__brand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.auth-topbar__brand span {
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--doctor-text);
+}
+
+.auth-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.auth-topbar__home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--doctor-soft);
+  font-weight: 800;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-topbar__home-link:hover {
+  color: var(--doctor-primary);
+}
+
+@media (max-width: 480px) {
+  .auth-topbar__brand span {
+    display: none;
+  }
+
+  .auth-topbar__home-link span {
+    display: none;
+  }
+
+  .auth-topbar__inner {
+    padding-inline: 16px;
+  }
+}
+
+/* =========================================================
+   Solo layout — no split photo (form-only application page).
+   Same vocabulary as auth.css's solo variant, scoped to
+   --doctor-* tokens since this page loads join-doctor.css only.
+========================================================= */
+.auth-split {
+  position: relative;
+  overflow: hidden;
   min-height: 100vh;
-  padding: 46px 16px 66px;
+  background: var(--bg);
+}
+
+.auth-split__form {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(70, 206, 194, 0.10), transparent 18%),
-    radial-gradient(circle at 85% 15%, rgba(52, 147, 196, 0.09), transparent 18%),
-    radial-gradient(circle at 75% 80%, rgba(110, 222, 214, 0.08), transparent 14%),
-    linear-gradient(180deg, var(--doctor-bg-1) 0%, var(--doctor-bg-2) 100%);
-  overflow: visible;
-}
-
-.doctor-apply-shell {
+  min-height: 100vh;
   width: 100%;
-  max-width: 920px;
-  position: relative;
-  overflow: visible;
-  padding: 24px;
+  padding: calc(var(--doctor-header-h) + 32px) 40px 48px;
 }
 
-.doctor-apply-wrap {
-  position: relative;
-  width: 100%;
-  overflow: visible;
-}
-
-.doctor-apply-card {
-  position: relative;
-  z-index: 2;
-  padding: 34px 30px;
-  border-radius: var(--doctor-radius-xl);
-  background:
-    linear-gradient(145deg, rgba(255,255,255,0.94), rgba(255,255,255,0.74));
-  border: 1px solid var(--doctor-border);
-  box-shadow:
-    var(--doctor-shadow),
-    inset 0 1px 0 rgba(255,255,255,0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  overflow: hidden;
-}
-
-.doctor-apply-card::before {
-  content: "";
+/* =========================================================
+   Scattered decoration layer — same vocabulary as auth.css's
+   .auth-decor, scoped to --doctor-* tokens (self-contained file).
+========================================================= */
+.auth-decor {
   position: absolute;
-  inset: 16px;
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.54);
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
-.doctor-apply-badge {
-  position: relative;
-  z-index: 3;
-  display: inline-flex;
+.auth-decor__dots {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--doctor-primary) 55%, transparent) 2px, transparent 2px);
+  background-size: 17px 17px;
+  opacity: 0.65;
+}
+
+.auth-decor__dots--1 { top: 120px; inset-inline-start: 64px; }
+.auth-decor__dots--2 { bottom: 100px; inset-inline-end: 90px; }
+
+.auth-decor__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--doctor-secondary) 50%, transparent);
+}
+
+.auth-decor__ring--1 { width: 130px; height: 130px; top: 70px; inset-inline-end: 140px; }
+.auth-decor__ring--2 { width: 58px; height: 58px; top: 240px; inset-inline-start: 230px; border-color: color-mix(in srgb, var(--doctor-primary) 60%, transparent); }
+.auth-decor__ring--3 { width: 200px; height: 200px; bottom: 50px; inset-inline-start: 50px; opacity: 0.7; }
+.auth-decor__ring--4 { width: 76px; height: 76px; top: 46%; inset-inline-end: 64px; }
+
+.auth-decor__dot-solid {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--doctor-secondary);
+  opacity: 0.6;
+  top: 42%;
+  inset-inline-start: 96px;
+}
+
+.auth-decor__blob {
+  position: absolute;
+  width: 580px;
+  height: 580px;
+  bottom: -220px;
+  inset-inline-end: -190px;
+  border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+  background: linear-gradient(155deg, color-mix(in srgb, var(--doctor-primary) 38%, transparent), color-mix(in srgb, var(--doctor-secondary) 34%, transparent));
+}
+
+@media (max-width: 700px) {
+  .auth-decor__ring--1,
+  .auth-decor__ring--3,
+  .auth-decor__dots--2 {
+    display: none;
+  }
+}
+
+/* framed card around the whole wizard, same vocabulary as the
+   solo auth pages in auth.css (login/register/forgot share the
+   --auth-* tokens, this file uses --doctor-* since it's self-contained). */
+.auth-split__form-inner {
+  background: var(--surface);
+  border: 1.5px solid color-mix(in srgb, var(--doctor-primary) 45%, transparent);
+  border-radius: var(--doctor-radius-xl);
+  box-shadow: var(--doctor-shadow);
+  padding: 40px 36px;
+}
+
+@media (max-width: 480px) {
+  .auth-split__form-inner {
+    padding: 28px 20px;
+  }
+}
+
+.auth-split__form-inner {
+  width: 100%;
+  max-width: 700px;
+  animation: authFormRise 0.5s var(--ease, ease) both;
+}
+
+@keyframes authFormRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-split__form-inner {
+    animation: none;
+  }
+}
+
+.auth-form-panel__logo {
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  margin-bottom: 22px;
-  padding: 10px 16px;
-  border-radius: 999px;
-  background: rgba(27,176,166,0.10);
-  color: #188d8b;
-  font-size: 0.9rem;
+  margin-bottom: 32px;
+}
+
+.auth-form-panel__logo img {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  object-fit: cover;
+  padding: 6px;
+  background: color-mix(in srgb, var(--doctor-primary) 8%, var(--surface));
+  box-shadow:
+    0 0 0 1px var(--doctor-border),
+    0 10px 22px -8px color-mix(in srgb, var(--doctor-primary) 35%, transparent),
+    0 0 26px color-mix(in srgb, var(--doctor-primary) 20%, transparent);
+}
+
+.auth-form-panel__logo span {
+  font-weight: 900;
+  color: var(--doctor-text);
+  font-size: 1.1rem;
+}
+
+.auth-form-panel__eyebrow {
+  display: block;
+  color: var(--doctor-primary);
   font-weight: 800;
-  box-shadow: 0 10px 20px rgba(21,112,118,0.04);
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  text-align: center;
 }
 
 .doctor-apply-head {
-  position: relative;
-  z-index: 3;
-  text-align: center;
   margin-bottom: 26px;
+  text-align: center;
 }
 
 .doctor-apply-head h1 {
-  margin: 0 0 12px;
+  margin: 0 0 10px;
   color: var(--doctor-text);
-  font-size: 2.15rem;
+  font-size: 1.85rem;
   font-weight: 900;
-  line-height: 1.15;
+  line-height: 1.22;
 }
 
 .doctor-apply-head p {
-  margin: 0;
+  margin: 0 auto;
+  max-width: 460px;
   color: var(--doctor-soft);
   line-height: 1.9;
   font-size: 0.98rem;
@@ -121,7 +313,7 @@
   height: 7px;
   border-radius: 999px;
   overflow: hidden;
-  background: #e7f1f1;
+  background: var(--doctor-bg-2);
   margin-bottom: 18px;
 }
 
@@ -145,7 +337,7 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: #95adb1;
+  color: var(--doctor-soft);
   font-size: 0.82rem;
   font-weight: 800;
 }
@@ -156,21 +348,21 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: #edf5f5;
-  color: #88a3a6;
+  background: var(--doctor-bg-2);
+  color: var(--doctor-soft);
   transition: all 0.3s ease;
 }
 
 .doctor-step.is-active,
 .doctor-step.is-done {
-  color: #2d666c;
+  color: var(--doctor-text);
 }
 
 .doctor-step.is-active span,
 .doctor-step.is-done span {
   background: linear-gradient(135deg, var(--doctor-primary), var(--doctor-secondary));
   color: #fff;
-  box-shadow: 0 10px 18px rgba(30,180,169,0.20);
+  box-shadow: 0 10px 18px color-mix(in srgb, var(--doctor-primary) 20%, transparent);
 }
 
 /* panes */
@@ -241,7 +433,7 @@
 }
 
 .form-field label {
-  color: #22484d;
+  color: var(--doctor-text);
   font-size: 0.94rem;
   font-weight: 800;
 }
@@ -249,12 +441,12 @@
 .input-shell,
 .textarea-shell {
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(251,253,253,0.93));
-  border: 1px solid #dbecec;
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface) 93%, transparent));
+  border: 1px solid var(--doctor-bg-2);
   transition: all 0.25s ease;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.72),
-    0 6px 16px rgba(34,114,119,0.03);
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 72%, transparent),
+    0 6px 16px color-mix(in srgb, var(--doctor-primary) 3%, transparent);
 }
 
 .input-shell {
@@ -276,21 +468,21 @@
 
 .input-shell:hover,
 .textarea-shell:hover {
-  border-color: #cfe7e9;
+  border-color: var(--doctor-bg-2);
 }
 
 .input-shell:focus-within,
 .textarea-shell:focus-within {
-  border-color: #2ba8b1;
+  border-color: var(--doctor-primary);
   box-shadow:
-    0 0 0 4px rgba(43,168,177,0.12),
-    0 10px 20px rgba(31,120,126,0.05);
+    0 0 0 4px color-mix(in srgb, var(--doctor-primary) 12%, transparent),
+    0 10px 20px color-mix(in srgb, var(--doctor-primary) 5%, transparent);
   transform: translateY(-1px);
 }
 
 .input-shell i,
 .textarea-shell i {
-  color: #249ca1;
+  color: var(--doctor-primary);
   font-size: 0.98rem;
   flex-shrink: 0;
 }
@@ -301,7 +493,7 @@
   border: 0;
   outline: none;
   background: transparent;
-  color: #183c42;
+  color: var(--doctor-text);
   font-size: 0.97rem;
   font-family: inherit;
 }
@@ -314,7 +506,7 @@
 
 .input-shell input::placeholder,
 .textarea-shell textarea::placeholder {
-  color: #9ab2b5;
+  color: var(--doctor-soft);
 }
 
 /* specialty pills */
@@ -343,9 +535,9 @@
   padding: 0 18px;
   border-radius: 999px;
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(251,253,253,0.93));
-  border: 1px solid #dbecec;
-  color: #285056;
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface) 93%, transparent));
+  border: 1px solid var(--doctor-bg-2);
+  color: var(--doctor-text);
   font-weight: 800;
   transition: all 0.25s ease;
 }
@@ -354,7 +546,7 @@
   color: #fff;
   border-color: transparent;
   background: linear-gradient(135deg, var(--doctor-primary), var(--doctor-secondary));
-  box-shadow: 0 12px 22px rgba(28,181,170,0.22);
+  box-shadow: 0 12px 22px color-mix(in srgb, var(--doctor-primary) 22%, transparent);
   transform: translateY(-1px);
 }
 
@@ -364,15 +556,15 @@
   padding: 16px 18px;
   border-radius: 20px;
   background:
-    linear-gradient(145deg, rgba(255,255,255,0.9), rgba(247,252,252,0.7));
-  border: 1px solid rgba(133,197,200,0.18);
-  box-shadow: 0 10px 24px rgba(18,96,101,0.05);
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 90%, transparent), color-mix(in srgb, var(--surface) 70%, transparent));
+  border: 1px solid color-mix(in srgb, var(--doctor-primary) 18%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--doctor-primary) 5%, transparent);
 }
 
 .doc-status-card__label {
   display: block;
   margin-bottom: 10px;
-  color: #69868a;
+  color: var(--doctor-soft);
   font-size: 0.84rem;
   font-weight: 700;
 }
@@ -382,7 +574,7 @@
   height: 8px;
   border-radius: 999px;
   overflow: hidden;
-  background: #e7f1f1;
+  background: var(--doctor-bg-2);
   margin-bottom: 10px;
 }
 
@@ -396,7 +588,7 @@
 }
 
 .doc-status-card strong {
-  color: #20474c;
+  color: var(--doctor-text);
   font-size: 0.95rem;
 }
 
@@ -412,11 +604,11 @@
   padding: 20px;
   border-radius: 28px;
   background:
-    linear-gradient(145deg, rgba(255,255,255,0.86), rgba(255,255,255,0.52));
-  border: 1px solid rgba(128,192,196,0.20);
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 86%, transparent), color-mix(in srgb, var(--surface) 52%, transparent));
+  border: 1px solid color-mix(in srgb, var(--doctor-primary) 20%, transparent);
   box-shadow:
-    0 18px 36px rgba(18,92,97,0.07),
-    inset 0 1px 0 rgba(255,255,255,0.64);
+    0 18px 36px color-mix(in srgb, var(--doctor-primary) 7%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 64%, transparent);
   cursor: pointer;
   transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
   overflow: hidden;
@@ -427,8 +619,8 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at top left, rgba(94,221,208,0.10), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(59,155,203,0.08), transparent 30%);
+    radial-gradient(circle at top left, color-mix(in srgb, var(--success) 10%, transparent), transparent 32%),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--doctor-secondary) 8%, transparent), transparent 30%);
   opacity: 0;
   transition: opacity 0.28s ease;
   pointer-events: none;
@@ -436,10 +628,10 @@
 
 .upload-tile:hover {
   transform: translateY(-4px);
-  border-color: rgba(95,189,194,0.34);
+  border-color: color-mix(in srgb, var(--doctor-secondary) 34%, transparent);
   box-shadow:
-    0 24px 44px rgba(18,92,97,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.7);
+    0 24px 44px color-mix(in srgb, var(--doctor-primary) 10%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 70%, transparent);
 }
 
 .upload-tile:hover::before {
@@ -448,31 +640,31 @@
 
 .upload-tile.is-dragover {
   transform: translateY(-5px) scale(1.01);
-  border-color: rgba(43,168,177,0.58);
+  border-color: color-mix(in srgb, var(--doctor-primary) 58%, transparent);
   box-shadow:
-    0 0 0 4px rgba(43,168,177,0.12),
-    0 28px 48px rgba(18,92,97,0.12);
+    0 0 0 4px color-mix(in srgb, var(--doctor-primary) 12%, transparent),
+    0 28px 48px color-mix(in srgb, var(--doctor-primary) 12%, transparent);
 }
 
 .upload-tile.is-uploaded {
-  border-color: rgba(50,178,146,0.34);
+  border-color: color-mix(in srgb, var(--success) 34%, transparent);
   box-shadow:
-    0 22px 42px rgba(22,114,95,0.10),
-    0 0 0 1px rgba(50,178,146,0.08);
+    0 22px 42px color-mix(in srgb, var(--success) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--success) 8%, transparent);
 }
 
 .upload-tile.is-uploaded .upload-tile__icon {
-  background: linear-gradient(135deg, #1eb88d, #2eb5b1);
+  background: linear-gradient(135deg, var(--success), var(--doctor-primary));
 }
 
 .upload-tile.is-uploaded .upload-tile__drop-icon {
-  background: rgba(30,184,141,0.12);
-  color: #198f63;
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
 }
 
 .upload-tile.is-uploaded .upload-tile__badge {
-  background: rgba(39,176,122,0.14);
-  color: #198f63;
+  background: color-mix(in srgb, var(--success) 14%, transparent);
+  color: var(--success);
 }
 
 .upload-input {
@@ -496,7 +688,7 @@
   background: linear-gradient(135deg, var(--doctor-primary), var(--doctor-secondary));
   color: #fff;
   font-size: 1.15rem;
-  box-shadow: 0 14px 24px rgba(28,181,170,0.20);
+  box-shadow: 0 14px 24px color-mix(in srgb, var(--doctor-primary) 20%, transparent);
 }
 
 .upload-tile__text {
@@ -505,30 +697,30 @@
 
 .upload-tile__text h3 {
   margin: 0 0 6px;
-  color: #163b40;
+  color: var(--doctor-text);
   font-size: 1.02rem;
   font-weight: 800;
 }
 
 .upload-tile__text p {
   margin: 0;
-  color: #7a9699;
+  color: var(--doctor-soft);
   font-size: 0.88rem;
 }
 
 .upload-tile__badge {
   padding: 8px 12px;
   border-radius: 999px;
-  background: rgba(255,193,7,0.16);
-  color: #9e7600;
+  background: color-mix(in srgb, var(--warning) 16%, transparent);
+  color: var(--warning);
   font-size: 0.78rem;
   font-weight: 800;
   white-space: nowrap;
 }
 
 .upload-tile__badge--soft {
-  background: rgba(44,159,192,0.12);
-  color: #227694;
+  background: color-mix(in srgb, var(--doctor-secondary) 12%, transparent);
+  color: var(--doctor-secondary);
 }
 
 .upload-tile__drop {
@@ -536,8 +728,8 @@
   padding: 18px;
   border-radius: 22px;
   background:
-    linear-gradient(145deg, rgba(255,255,255,0.7), rgba(246,252,252,0.54));
-  border: 1px solid rgba(145,205,208,0.18);
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 70%, transparent), color-mix(in srgb, var(--surface) 54%, transparent));
+  border: 1px solid color-mix(in srgb, var(--doctor-primary) 18%, transparent);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -553,19 +745,19 @@
   border-radius: 16px;
   display: grid;
   place-items: center;
-  background: rgba(29,183,171,0.10);
-  color: #1a9899;
+  background: color-mix(in srgb, var(--doctor-primary) 10%, transparent);
+  color: var(--doctor-primary);
   font-size: 1.1rem;
 }
 
 .upload-tile__drop span {
-  color: #5f7d81;
+  color: var(--doctor-soft);
   font-size: 0.94rem;
   line-height: 1.8;
 }
 
 .upload-tile__filename {
-  color: #607d81;
+  color: var(--doctor-soft);
   font-size: 0.9rem;
   font-weight: 700;
   white-space: nowrap;
@@ -584,9 +776,9 @@
   padding: 18px;
   border-radius: 20px;
   background:
-    linear-gradient(145deg, rgba(255,255,255,0.88), rgba(250,253,253,0.70));
-  border: 1px solid rgba(132,194,198,0.18);
-  box-shadow: 0 10px 24px rgba(18,96,101,0.04);
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 88%, transparent), color-mix(in srgb, var(--surface) 70%, transparent));
+  border: 1px solid color-mix(in srgb, var(--doctor-primary) 18%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--doctor-primary) 4%, transparent);
 }
 
 .review-card--full {
@@ -596,13 +788,13 @@
 .review-card span {
   display: block;
   margin-bottom: 8px;
-  color: #7b969a;
+  color: var(--doctor-soft);
   font-size: 0.85rem;
   font-weight: 700;
 }
 
 .review-card strong {
-  color: #173f45;
+  color: var(--doctor-text);
   font-size: 1rem;
   font-weight: 900;
 }
@@ -641,8 +833,8 @@
   background: linear-gradient(135deg, var(--doctor-primary), var(--doctor-secondary));
   color: #fff;
   box-shadow:
-    0 18px 30px rgba(28,181,170,0.20),
-    inset 0 1px 0 rgba(255,255,255,0.18);
+    0 18px 30px color-mix(in srgb, var(--doctor-primary) 20%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 18%, transparent);
 }
 
 .primary-action:hover {
@@ -655,10 +847,10 @@
 }
 
 .secondary-action {
-  border: 1px solid #d9ecec;
+  border: 1px solid var(--doctor-bg-2);
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.98), rgba(251,253,253,0.95));
-  color: #264d53;
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface) 95%, transparent));
+  color: var(--doctor-text);
 }
 
 .secondary-action:disabled {
@@ -668,13 +860,13 @@
 
 .bottom-switch {
   text-align: center;
-  color: #6c868a;
+  color: var(--doctor-soft);
   font-size: 0.97rem;
   margin-top: 18px;
 }
 
 .bottom-switch a {
-  color: #178f95;
+  color: var(--doctor-primary);
   font-weight: 900;
   text-decoration: none;
 }
@@ -701,14 +893,14 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, rgba(29,183,171,0.14), rgba(46,159,192,0.16));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--doctor-primary) 14%, transparent), color-mix(in srgb, var(--doctor-secondary) 16%, transparent));
   color: var(--doctor-primary);
   font-size: 2.5rem;
 }
 
 .doctor-success h3 {
   margin: 0 0 12px;
-  color: #163b40;
+  color: var(--doctor-text);
   font-size: 2rem;
   font-weight: 900;
 }
@@ -716,7 +908,7 @@
 .doctor-success p {
   margin: 0 auto 24px;
   max-width: 520px;
-  color: #6b878b;
+  color: var(--doctor-soft);
   line-height: 1.95;
 }
 
@@ -725,7 +917,7 @@
   display: inline-flex;
   align-items: flex-start;
   gap: 10px;
-  color: #688388;
+  color: var(--doctor-soft);
   font-size: 0.93rem;
   line-height: 1.85;
   cursor: pointer;
@@ -737,56 +929,15 @@
   flex-shrink: 0;
 }
 
-/* mini deco */
-.mini-deco {
-  position: absolute;
-  width: 58px;
-  height: 58px;
-  border-radius: 18px;
-  display: grid;
-  place-items: center;
-  background: rgba(255,255,255,0.95);
-  border: 1px solid rgba(125,188,192,0.25);
-  color: #1a9899;
-  box-shadow: 0 12px 24px rgba(21,112,118,0.10);
-  z-index: 5;
-  opacity: 1;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+@media (max-width: 900px) {
+  .auth-split__form {
+    padding: 32px 20px 40px;
+  }
 }
 
-.mini-deco i {
-  font-size: 1.15rem;
-}
-
-.mini-deco--1 { top: -8px; right: -8px; }
-.mini-deco--2 { top: 100px; left: -8px; }
-.mini-deco--3 { bottom: 100px; right: -8px; }
-.mini-deco--4 { bottom: -8px; left: 12px; }
-.mini-deco--5 { top: -8px; left: 70px; }
-
-/* responsive */
 @media (max-width: 768px) {
-  .doctor-apply-page {
-    padding: 28px 14px 48px;
-  }
-
-  .doctor-apply-shell {
-    padding: 10px;
-  }
-
-  .doctor-apply-card {
-    padding: 24px 18px;
-    border-radius: 24px;
-  }
-
-  .doctor-apply-card::before {
-    inset: 12px;
-    border-radius: 18px;
-  }
-
   .doctor-apply-head h1 {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 
   .doctor-steps {
@@ -810,46 +961,30 @@
   .secondary-action {
     width: 100%;
   }
-
-  .mini-deco {
-    width: 46px;
-    height: 46px;
-    border-radius: 15px;
-  }
-
-  .mini-deco i {
-    font-size: 1rem;
-  }
-
-  .mini-deco--1 { top: -6px; right: -4px; }
-  .mini-deco--2 { top: 110px; left: -4px; }
-  .mini-deco--3 { bottom: 110px; right: -4px; }
-  .mini-deco--4 { bottom: -6px; left: 8px; }
-  .mini-deco--5 { top: -6px; left: 48px; }
 }
 
 .input-shell.is-invalid,
 .textarea-shell.is-invalid,
 .upload-tile.is-invalid,
 .agreement-check.is-invalid {
-  border-color: #e53935 !important;
-  box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.12) !important;
-  background: rgba(229, 57, 53, 0.04) !important;
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--danger) 4%, transparent) !important;
 }
 
 .textarea-shell.is-invalid textarea,
 .input-shell.is-invalid input {
-  color: #b42318;
+  color: var(--danger);
 }
 
 .input-shell.is-invalid i,
 .textarea-shell.is-invalid i,
 .upload-tile.is-invalid .upload-tile__icon i {
-  color: #e53935 !important;
+  color: var(--danger) !important;
 }
 
 .upload-tile.is-invalid {
-  border: 1.5px dashed #e53935 !important;
+  border: 1.5px dashed var(--danger) !important;
 }
 
 .agreement-check.is-invalid {
@@ -861,7 +996,7 @@
 .field-error-js {
   display: block;
   margin-top: 8px;
-  color: #d92d20;
+  color: var(--danger);
   font-size: 13px;
   font-weight: 600;
 }
@@ -874,10 +1009,10 @@
 }
 
 .specialty-pills.is-invalid .specialty-pill span {
-  border: 1.5px solid #e53935 !important;
-  color: #c62828 !important;
-  background: rgba(229, 57, 53, 0.05) !important;
-  box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.08) !important;
+  border: 1.5px solid var(--danger) !important;
+  color: var(--danger) !important;
+  background: color-mix(in srgb, var(--danger) 5%, transparent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 8%, transparent) !important;
 }
 
 .specialty-pills.is-invalid + .field-error-js,
@@ -891,8 +1026,68 @@
 }
 
 .specialty-pills.is-invalid .specialty-pill input:checked + span {
-  border: 1.5px solid #e53935 !important;
-  box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.14) !important;
+  border: 1.5px solid var(--danger) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 14%, transparent) !important;
+}
+
+/* success modal wrapper — wraps .doctor-beacon-success in a dismissible overlay */
+.doctor-success-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+}
+
+.doctor-success-modal.is-open {
+  display: flex;
+}
+
+.doctor-success-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--text) 55%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.doctor-success-modal__card {
+  position: relative;
+  z-index: 2;
+  width: min(640px, 100%);
+  max-height: 88vh;
+  overflow-y: auto;
+  border-radius: 34px;
+  animation: doctorModalPop 0.35s ease;
+}
+
+.doctor-success-modal__close {
+  position: absolute;
+  top: 18px;
+  inset-inline-start: 18px;
+  z-index: 3;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes doctorModalPop {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 560px) {
+  .doctor-success-modal__card {
+    border-radius: 26px;
+  }
 }
 
 .doctor-beacon-success {
@@ -902,13 +1097,13 @@
   padding: 34px 28px;
   margin-top: 18px;
   background:
-    radial-gradient(circle at top right, rgba(34, 211, 238, 0.18), transparent 24%),
-    radial-gradient(circle at bottom left, rgba(20, 184, 166, 0.16), transparent 24%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(245, 252, 255, 0.95));
-  border: 1px solid rgba(148, 163, 184, 0.18);
+    radial-gradient(circle at top right, color-mix(in srgb, var(--info) 18%, transparent), transparent 24%),
+    radial-gradient(circle at bottom left, color-mix(in srgb, var(--success) 16%, transparent), transparent 24%),
+    linear-gradient(145deg, color-mix(in srgb, var(--surface) 96%, transparent), color-mix(in srgb, var(--surface) 95%, transparent));
+  border: 1px solid color-mix(in srgb, var(--border-strong) 18%, transparent);
   box-shadow:
-    0 24px 60px rgba(15, 23, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    0 24px 60px color-mix(in srgb, var(--doctor-shadow-ink) 12%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 75%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -917,7 +1112,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.25) 30%, transparent 60%);
+    linear-gradient(120deg, transparent 0%, color-mix(in srgb, var(--surface) 25%, transparent) 30%, transparent 60%);
   transform: translateX(-115%);
   animation: doctorBeaconShine 5s ease-in-out infinite;
   pointer-events: none;
@@ -934,7 +1129,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  border: 1px solid rgba(45, 212, 191, 0.24);
+  border: 1px solid color-mix(in srgb, var(--success) 24%, transparent);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
@@ -946,14 +1141,14 @@
 
 .doctor-beacon-success__halo--two {
   inset: 14px;
-  border-color: rgba(14, 165, 233, 0.24);
+  border-color: color-mix(in srgb, var(--info) 24%, transparent);
   animation-name: doctorOrbitTwo;
   animation-duration: 6.5s;
 }
 
 .doctor-beacon-success__halo--three {
   inset: 30px;
-  border-color: rgba(16, 185, 129, 0.22);
+  border-color: color-mix(in srgb, var(--success) 22%, transparent);
   animation-name: doctorOrbitOne;
   animation-duration: 4.8s;
 }
@@ -971,15 +1166,15 @@
   background:
     linear-gradient(145deg, #0ea5e9, #14b8a6 45%, #22c55e);
   box-shadow:
-    0 20px 36px rgba(14, 165, 233, 0.22),
-    0 0 0 12px rgba(20, 184, 166, 0.08);
+    0 20px 36px color-mix(in srgb, var(--info) 22%, transparent),
+    0 0 0 12px color-mix(in srgb, var(--success) 8%, transparent);
 }
 
 .doctor-beacon-success__core-ring {
   position: absolute;
   inset: -10px;
   border-radius: 36px;
-  border: 1px solid rgba(255,255,255,0.34);
+  border: 1px solid var(--doctor-border);
 }
 
 .doctor-beacon-success__core-icon {
@@ -994,8 +1189,8 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #14b8a6;
-  box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.35);
+  background: var(--success);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 35%, transparent);
   animation: doctorPulse 2.8s ease-in-out infinite;
 }
 
@@ -1029,8 +1224,8 @@
   padding: 7px 14px;
   border-radius: 999px;
   margin-bottom: 14px;
-  background: rgba(20, 184, 166, 0.1);
-  color: #0f766e;
+  background: color-mix(in srgb, var(--success) 10%, transparent);
+  color: var(--success);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.25px;
@@ -1040,13 +1235,13 @@
   margin: 0 0 14px;
   font-size: clamp(28px, 4vw, 40px);
   line-height: 1.45;
-  color: #0f172a;
+  color: var(--doctor-text);
 }
 
 .doctor-beacon-success__lead {
   margin: 0 auto;
   max-width: 620px;
-  color: #475569;
+  color: var(--doctor-soft);
   font-size: 15px;
   line-height: 2;
 }
@@ -1065,15 +1260,15 @@
   gap: 8px;
   padding: 10px 16px;
   border-radius: 999px;
-  background: rgba(245, 158, 11, 0.12);
-  color: #b45309;
+  background: color-mix(in srgb, var(--warning) 12%, transparent);
+  color: var(--warning);
   font-size: 14px;
   font-weight: 800;
 }
 
 .doctor-beacon-success__status-pill--soft {
-  background: rgba(14, 165, 233, 0.1);
-  color: #0369a1;
+  background: color-mix(in srgb, var(--info) 10%, transparent);
+  color: var(--info);
 }
 
 .doctor-beacon-success__timeline {
@@ -1090,20 +1285,20 @@
   text-align: right;
   padding: 14px 16px;
   border-radius: 20px;
-  background: rgba(255,255,255,0.6);
-  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border-strong) 12%, transparent);
 }
 
 .doctor-beacon-success__timeline-item strong {
   display: block;
   margin-bottom: 4px;
-  color: #0f172a;
+  color: var(--doctor-text);
   font-size: 15px;
 }
 
 .doctor-beacon-success__timeline-item p {
   margin: 0;
-  color: #64748b;
+  color: var(--doctor-soft);
   font-size: 14px;
   line-height: 1.8;
 }
@@ -1114,7 +1309,7 @@
   margin-top: 6px;
   border-radius: 50%;
   background: linear-gradient(145deg, #0ea5e9, #14b8a6);
-  box-shadow: 0 0 0 6px rgba(20, 184, 166, 0.08);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--success) 8%, transparent);
   flex-shrink: 0;
 }
 
@@ -1141,9 +1336,9 @@
 }
 
 @keyframes doctorPulse {
-  0% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.34); transform: scale(1); }
-  50% { box-shadow: 0 0 0 16px rgba(20, 184, 166, 0); transform: scale(1.08); }
-  100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); transform: scale(1); }
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 34%, transparent); transform: scale(1); }
+  50% { box-shadow: 0 0 0 16px color-mix(in srgb, var(--success) 0%, transparent); transform: scale(1.08); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 0%, transparent); transform: scale(1); }
 }
 
 @keyframes doctorBeaconShine {

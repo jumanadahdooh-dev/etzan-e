@@ -19,13 +19,23 @@ class DoctorAlertsController extends Controller
     {
         $doctorProfile = DB::table('doctor_profiles')->where('user_id', auth()->id())->first();
 
-        if (!$doctorProfile) {
-            return view('doctor.alerts', ['pageTitle' => 'تنبيهات المرضى', 'activePage' => 'alerts', 'alerts' => collect()]);
-        }
+        return view('doctor.alerts', [
+            'pageTitle' => 'تنبيهات المرضى',
+            'activePage' => 'alerts',
+            'alerts' => $doctorProfile ? $this->resolveAlerts($doctorProfile->id) : collect(),
+        ]);
+    }
 
+    /**
+     * نفس منطق التنبيهات المستخدم بصفحة "تنبيهات المرضى"، معروض هون كدالة
+     * قابلة لإعادة الاستخدام حتى الداشبورد يقدر يحسب عدد التنبيهات الحقيقي
+     * بدون ما يكرر نفس المنطق (nutritionGapAlert/overdueTaskAlert).
+     */
+    public function resolveAlerts(int $doctorProfileId): \Illuminate\Support\Collection
+    {
         $patients = DB::table('patient_profiles')
             ->join('users', 'users.id', '=', 'patient_profiles.user_id')
-            ->where('patient_profiles.doctor_profile_id', $doctorProfile->id)
+            ->where('patient_profiles.doctor_profile_id', $doctorProfileId)
             ->where('patient_profiles.doctor_request_status', 'approved')
             ->select('patient_profiles.id as profile_id', 'patient_profiles.user_id', 'users.name as patient_name')
             ->get();
@@ -37,13 +47,7 @@ class DoctorAlertsController extends Controller
             $alerts = $alerts->merge($this->overdueTaskAlert($patient));
         }
 
-        $alerts = $alerts->sortByDesc('severity_rank')->values();
-
-        return view('doctor.alerts', [
-            'pageTitle' => 'تنبيهات المرضى',
-            'activePage' => 'alerts',
-            'alerts' => $alerts,
-        ]);
+        return $alerts->sortByDesc('severity_rank')->values();
     }
 
     private function nutritionGapAlert(object $patient): array

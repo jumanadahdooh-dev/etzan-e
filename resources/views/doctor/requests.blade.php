@@ -23,16 +23,17 @@
 @endphp
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('front/css/doctor/dashboard.css') }}?v={{ file_exists(public_path('front/css/doctor/doctor-dashboard.css')) ? filemtime(public_path('front/css/doctor/doctor-dashboard.css')) : '1' }}">
-    <link rel="stylesheet" href="{{ asset('front/css/doctor/requests.css') }}?v={{ file_exists(public_path('front/css/doctor/doctor-requests.css')) ? filemtime(public_path('front/css/doctor/doctor-requests.css')) : '1' }}">
+    <link rel="stylesheet" href="{{ asset('front/css/doctor/dashboard.css') }}?v={{ file_exists(public_path('front/css/doctor/dashboard.css')) ? filemtime(public_path('front/css/doctor/dashboard.css')) : '1' }}">
+    <link rel="stylesheet" href="{{ asset('front/css/doctor/requests.css') }}?v={{ file_exists(public_path('front/css/doctor/requests.css')) ? filemtime(public_path('front/css/doctor/requests.css')) : '1' }}">
 @endpush
 
 @section('content')
 <section class="ddash">
 
     {{-- ══════════ رأس الصفحة ══════════ --}}
-    <div class="dreq-head">
-        <p>راجع الطلبات الجديدة واتخذ القرار المناسب</p>
+    <div class="ddash-section-head">
+        <h2>طلبات الاستشارة</h2>
+        <span>راجع الطلبات الجديدة واتخذ القرار المناسب</span>
     </div>
 
     {{-- ══════════ البطاقة البارزة: أقدم طلب معلّق ══════════ --}}

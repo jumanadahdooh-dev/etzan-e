@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Specialty;
 use App\Services\AiArticleDraftService;
+use App\Services\AppNotificationService;
 use App\Traits\GeneratesUniqueSlug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -390,6 +391,8 @@ class AdminArticleController extends Controller
             'reviewed_by_admin' => true,
         ])));
 
+        $this->notifyAuthor($article, 'article_approved', 'تم نشر مقالك', 'وافقت الإدارة على مقال "' . $article->title . '" وصار منشور للجميع.');
+
         return back()->with('success', 'تم قبول المقال ونشره بنجاح.');
     }
 
@@ -412,7 +415,32 @@ class AdminArticleController extends Controller
             'rejection_reason' => $validated['rejection_reason'],
         ]);
 
+        $this->notifyAuthor($article, 'article_rejected', 'تم رفض مقالك', 'رفضت الإدارة مقال "' . $article->title . '". السبب: ' . $validated['rejection_reason']);
+
         return back()->with('success', 'تم رفض المقال بنجاح.');
+    }
+
+    /**
+     * إشعار حقيقي لصاحب المقال (الطبيب غالباً) لما الإدارة توافق أو ترفض —
+     * قبل هيك ما كان في أي إشعار، فالطبيب ما كان إله طريقة يعرف شو صار بمقاله.
+     */
+    private function notifyAuthor(Article $article, string $type, string $title, string $body): void
+    {
+        if (!$article->user_id || (int) $article->user_id === (int) auth()->id()) {
+            return;
+        }
+
+        $authorRole = \App\Models\User::find($article->user_id)?->role;
+
+        app(AppNotificationService::class)->send(
+            recipientUserId: $article->user_id,
+            recipientRole: $authorRole,
+            type: $type,
+            title: $title,
+            body: $body,
+            url: $authorRole === 'doctor' ? route('doctor.articles') : null,
+            actorUserId: auth()->id()
+        );
     }
 
     public function destroy(Article $article)

@@ -37,7 +37,7 @@ class DoctorRealPagesTest extends TestCase
         $response = $this->actingAs($doctorProfile->user)->get(route('doctor.plans'));
 
         $response->assertOk();
-        $response->assertSee('1850');
+        $response->assertSee('1,850');
         $response->assertSee($patientProfile->user->name);
     }
 

@@ -9,3 +9,27 @@
 .doctor-app .brand-mark {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
 }
+
+/*
+ * doctor.css's .doctor-panel/.doctor-card/.doctor-item/.doctor-chip/.doctor-btn.ghost/
+ * .doctor-table/.doctor-tab/.doctor-search/.doctor-form/.bubble/.chat-* component set
+ * relies on the --home-v2-card/--home-v2-border/--home-v2-shadow tokens defined in
+ * patient/home.css — but that file is intentionally NOT loaded here (its body
+ * background gradient and .patient-content padding are !important overrides meant
+ * only for the patient home page). Without these, every one of those components
+ * rendered fully transparent (no card background, no border) on every doctor page —
+ * define just the tokens here, same values as home.css, so those components actually
+ * show up.
+ */
+body.doctor-app {
+    --home-v2-card: rgba(255, 255, 255, 0.88);
+    --home-v2-soft: rgba(255, 255, 255, 0.58);
+    --home-v2-border: rgba(24, 51, 59, 0.08);
+    --home-v2-shadow: 0 18px 48px rgba(24, 51, 59, 0.065);
+}
+html[data-theme="dark"] body.doctor-app {
+    --home-v2-card: rgba(255, 255, 255, 0.065);
+    --home-v2-soft: rgba(255, 255, 255, 0.045);
+    --home-v2-border: rgba(255, 255, 255, 0.09);
+    --home-v2-shadow: 0 22px 55px rgba(0, 0, 0, 0.28);
+}

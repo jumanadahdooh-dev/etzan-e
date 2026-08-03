@@ -1,12 +1,9 @@
 @php
     $activePage = $activePage ?? 'dashboard';
 
-    $liveBadges = $sidebarBadges ?? null;
-
-    // عداد طلبات الاستشارة: حقيقي دايماً بكل صفحات الطبيب، مش بس بالداشبورد
-    // (بيقرا من patient_profiles.doctor_request_status — نفس المصدر الحقيقي
-    // يلي DoctorPatientRequestController بيستخدمه، مش الجدول القديم المقطوع)
     $realPendingRequestsCount = null;
+    $currentDoctorProfileId = null;
+
     if (\Illuminate\Support\Facades\Schema::hasTable('patient_profiles')) {
         $currentDoctorProfileId = \Illuminate\Support\Facades\DB::table('doctor_profiles')
             ->where('user_id', auth()->id())
@@ -20,10 +17,54 @@
         }
     }
 
-    // عداد الإشعارات: حقيقي دايماً بكل صفحات الطبيب
     $realUnreadNotifications = null;
     if (\Illuminate\Support\Facades\Schema::hasTable('app_notifications')) {
         $realUnreadNotifications = \App\Models\AppNotification::forUser(auth()->id())->unread()->count();
+    }
+    $liveBadges = ['messages' => null, 'meal-reviews' => null, 'alerts' => null, 'articles' => null];
+
+    if ($currentDoctorProfileId) {
+        $approvedPatientUserIds = \Illuminate\Support\Facades\DB::table('patient_profiles')
+            ->where('doctor_profile_id', $currentDoctorProfileId)
+            ->where('doctor_request_status', 'approved')
+            ->pluck('user_id');
+
+        if ($approvedPatientUserIds->isNotEmpty()
+            && \Illuminate\Support\Facades\Schema::hasTable('conversations')
+            && \Illuminate\Support\Facades\Schema::hasTable('messages')
+        ) {
+            $conversationIds = \Illuminate\Support\Facades\DB::table('conversations')
+                ->whereIn('user_id', $approvedPatientUserIds)
+                ->where('subject', 'رسائل الطبيب')
+                ->pluck('id');
+
+            if ($conversationIds->isNotEmpty()) {
+                $liveBadges['messages'] = \Illuminate\Support\Facades\DB::table('messages')
+                    ->whereIn('conversation_id', $conversationIds)
+                    ->where('sender_type', 'patient')
+                    ->where('is_read', false)
+                    ->count() ?: null;
+            }
+        }
+
+        if ($approvedPatientUserIds->isNotEmpty()
+            && \Illuminate\Support\Facades\Schema::hasTable('patient_meals')
+            && \Illuminate\Support\Facades\Schema::hasColumn('patient_meals', 'reviewed_at')
+        ) {
+            $liveBadges['meal-reviews'] = \Illuminate\Support\Facades\DB::table('patient_meals')
+                ->whereIn('user_id', $approvedPatientUserIds)
+                ->where('status', 'confirmed')
+                ->whereNull('reviewed_at')
+                ->count() ?: null;
+        }
+
+        $liveBadges['alerts'] = app(\App\Http\Controllers\Doctor\DoctorAlertsController::class)
+            ->resolveAlerts($currentDoctorProfileId)
+            ->count() ?: null;
+
+        $liveBadges['articles'] = \App\Models\Article::where('user_id', auth()->id())
+            ->where('status', 'pending_review')
+            ->count() ?: null;
     }
 
     $navGroups = [
@@ -45,16 +86,16 @@
             'title' => 'المتابعة',
             'items' => [
                 ['label' => 'الإشعارات', 'hint' => 'كل التحديثات الواصلة لحسابك', 'route' => 'doctor.notifications.index', 'match' => 'notifications', 'icon' => 'bell', 'badge' => $realUnreadNotifications],
-                ['label' => 'الرسائل', 'hint' => 'محادثات المرضى', 'route' => 'doctor.messages', 'match' => 'messages', 'icon' => 'message-circle', 'badge' => $liveBadges ? ($liveBadges['messages'] ?? null) : 12],
-                ['label' => 'مراجعة الوجبات AI', 'hint' => 'وجبات تحتاج اعتماد', 'route' => 'doctor.meal_reviews', 'match' => 'meal-reviews', 'icon' => 'bot', 'badge' => $liveBadges ? ($liveBadges['meal-reviews'] ?? null) : 8],
+                ['label' => 'الرسائل', 'hint' => 'محادثات المرضى', 'route' => 'doctor.messages', 'match' => 'messages', 'icon' => 'message-circle', 'badge' => $liveBadges['messages']],
+                ['label' => 'مراجعة الوجبات AI', 'hint' => 'وجبات تحتاج اعتماد', 'route' => 'doctor.meal_reviews', 'match' => 'meal-reviews', 'icon' => 'bot', 'badge' => $liveBadges['meal-reviews']],
                 ['label' => 'الخطط الغذائية', 'hint' => 'إنشاء ومتابعة الخطط', 'route' => 'doctor.plans', 'match' => 'plans', 'icon' => 'clipboard-check', 'badge' => null],
-                ['label' => 'تنبيهات المرضى', 'hint' => 'حالات تحتاج متابعة', 'route' => 'doctor.alerts', 'match' => 'alerts', 'icon' => 'triangle-alert', 'badge' => $liveBadges ? ($liveBadges['alerts'] ?? null) : 5],
+                ['label' => 'تنبيهات المرضى', 'hint' => 'حالات تحتاج متابعة', 'route' => 'doctor.alerts', 'match' => 'alerts', 'icon' => 'triangle-alert', 'badge' => $liveBadges['alerts']],
             ],
         ],
         [
             'title' => 'المحتوى',
             'items' => [
-                ['label' => 'مقالاتي', 'hint' => 'محتوى ينتظر الاعتماد', 'route' => 'doctor.articles', 'match' => 'articles', 'icon' => 'newspaper', 'badge' => $liveBadges ? ($liveBadges['articles'] ?? null) : 2],
+                ['label' => 'مقالاتي', 'hint' => 'محتوى ينتظر الاعتماد', 'route' => 'doctor.articles', 'match' => 'articles', 'icon' => 'newspaper', 'badge' => $liveBadges['articles']],
                 ['label' => 'التقارير', 'hint' => 'تحليلات الأداء والمتابعة', 'route' => 'doctor.reports', 'match' => 'reports', 'icon' => 'bar-chart-3', 'badge' => null],
             ],
         ],

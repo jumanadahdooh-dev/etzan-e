@@ -5,6 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    {{-- تفضيل الزائر الشخصي (لو بدّل الزر) بيغلب إعداد الإدارة العام —
+         لازم تنفيذ قبل أي رسم عشان ما يصير وميض بالثيم الغلط. --}}
+    <script>
+        (function () {
+            var saved = localStorage.getItem('etzan-theme');
+            if (saved === 'dark' || saved === 'light') {
+                document.documentElement.setAttribute('data-theme', saved);
+            }
+        })();
+    </script>
+
     <title>@yield('title', setting('seo_title', setting('site_name', 'اتزان')))</title>
 
     <meta name="description" content="{{ setting('seo_description', setting('site_description', 'منصة صحية وغذائية متكاملة')) }}">
@@ -43,6 +54,9 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     />
 
+    <!-- مصدر واحد لألوان وخط اتزان (يتحكم بالوضع الفاتح/الغامق) -->
+    <link rel="stylesheet" href="{{ asset('front/css/design-tokens.css') }}">
+
     <!-- ستايل مشترك للهيدر والفوتر -->
     <link rel="stylesheet" href="{{ asset('front/css/shared.css') }}">
 
@@ -51,6 +65,19 @@
 </head>
 
 <body class="admin-body">
+
+    <!-- زر تبديل المظهر الفاتح/الغامق — عائم بمكانه الخاص، مش داخل الهيدر،
+         عشان يضل ظاهر ومتاح دائمًا حتى وقائمة الجوال مسكرة. -->
+    <button
+        type="button"
+        class="etzan-theme-toggle etzan-theme-toggle--floating"
+        id="etzanThemeToggle"
+        aria-label="التبديل بين المظهر الفاتح والغامق"
+        title="تبديل المظهر"
+    >
+        <i class="fa-solid fa-sun etzan-theme-toggle__icon etzan-theme-toggle__icon--sun"></i>
+        <i class="fa-solid fa-moon etzan-theme-toggle__icon etzan-theme-toggle__icon--moon"></i>
+    </button>
 
     <!-- Header -->
     <header class="main-header">

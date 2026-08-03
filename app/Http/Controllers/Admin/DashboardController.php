@@ -50,16 +50,23 @@ class DashboardController extends Controller
         $tasksTotal = $this->countTable('patient_tasks');
         $tasksPending = $this->countWhere('patient_tasks', 'status', 'pending');
         $tasksCompleted = $this->countWhere('patient_tasks', 'status', 'completed');
-        $tasksDueToday = $this->countWhere('patient_tasks', 'due_date', $today);
+        // ملاحظة: عمود due_date قديم وميت (ولا مكان بالتطبيق بيكتب فيه) —
+        // كل المهام الحقيقية بتتسجل بعمود task_date (نفس العمود يلي صفحات
+        // تنبيهات/تقارير الدكتور بتستخدمه)، فالعدّاد كان دايماً صفر قبل هالتصليح.
+        // استخدمنا whereDate() مش تطابق نصي حرفي، لأنه بعض الصفوف بتنكتب
+        // عبر Eloquent بحقل تاريخ مع جزء وقت (00:00:00) حسب طريقة الإدخال.
+        $tasksDueToday = $this->countWhereDate('patient_tasks', 'task_date', $today);
 
-        $mealsToday = $this->countWhere('patient_meals', 'meal_date', $today);
+        $mealsToday = $this->countWhereDate('patient_meals', 'meal_date', $today);
         $mealsThisMonth = $this->countBetweenDates('patient_meals', 'meal_date', $monthStart, $monthEnd);
         $mealsAi = $this->countWhere('patient_meals', 'source', 'ai');
         $caloriesThisMonth = $this->sumBetweenDates('patient_meals', 'meal_date', 'calories', $monthStart, $monthEnd);
 
         $openConversations = $this->countWhere('conversations', 'status', 'open');
         $unreadAdminMessages = $this->sumColumn('conversations', 'unread_by_admin');
-        $unreadNotifications = $this->countNull('admin_notifications', 'read_at');
+        // بعد توحيد نظام الإشعارات: عدّاد شخصي للأدمن الحالي بس من app_notifications
+        // (مش عدّاد مشترك من جدول admin_notifications القديم المتروك بدون استخدام).
+        $unreadNotifications = \App\Models\AppNotification::forUser(auth()->id())->unread()->count();
 
         $stats = [
             'total_users' => $totalUsers,
@@ -305,6 +312,15 @@ class DashboardController extends Controller
     private function countWhere(string $table, string $column, $value): int
     {
         return $this->columnExists($table, $column) ? (int) DB::table($table)->where($column, $value)->count() : 0;
+    }
+
+    /**
+     * زي countWhere بس لمقارنة تاريخ فقط (بدون جزء الوقت) — أأمن لأعمدة
+     * التاريخ يلي ممكن تنكتب أحياناً عبر Eloquent بجزء وقت 00:00:00.
+     */
+    private function countWhereDate(string $table, string $column, string $date): int
+    {
+        return $this->columnExists($table, $column) ? (int) DB::table($table)->whereDate($column, $date)->count() : 0;
     }
 
     private function countWhereIn(string $table, string $column, array $values): int

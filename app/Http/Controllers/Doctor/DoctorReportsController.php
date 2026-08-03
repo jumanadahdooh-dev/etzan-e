@@ -27,6 +27,7 @@ class DoctorReportsController extends Controller
                 'mealsThisMonth' => 0,
                 'publishedArticles' => 0,
                 'topPatients' => collect(),
+                'weeklyMeals' => [],
             ]);
         }
 
@@ -90,6 +91,23 @@ class DoctorReportsController extends Controller
             }
         }
 
+        // عدد الوجبات المسجّلة لكل مرضاه، يوم بيوم، لآخر 7 أيام (للرسم البياني)
+        $weeklyMeals = [];
+        if (Schema::hasTable('patient_meals') && $patientUserIds->isNotEmpty()) {
+            for ($i = 6; $i >= 0; $i--) {
+                $date = now()->subDays($i);
+
+                $weeklyMeals[] = [
+                    'label' => $date->locale('ar')->translatedFormat('D'),
+                    'count' => DB::table('patient_meals')
+                        ->whereIn('user_id', $patientUserIds)
+                        ->where('status', 'confirmed')
+                        ->whereDate('meal_date', $date->toDateString())
+                        ->count(),
+                ];
+            }
+        }
+
         return view('doctor.reports', [
             'pageTitle' => 'التقارير',
             'activePage' => 'reports',
@@ -98,6 +116,7 @@ class DoctorReportsController extends Controller
             'mealsThisMonth' => $mealsThisMonth,
             'publishedArticles' => $publishedArticles,
             'topPatients' => $topPatients,
+            'weeklyMeals' => $weeklyMeals,
         ]);
     }
 }

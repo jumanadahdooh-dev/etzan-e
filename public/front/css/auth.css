@@ -7,136 +7,197 @@
   --auth-soft: #6b878b;
   --auth-border: rgba(123, 188, 192, 0.18);
   --auth-shadow: 0 24px 60px rgba(15, 84, 89, 0.08);
+  --auth-shadow-ink: 15, 84, 89;
   --auth-radius-xl: 32px;
   --auth-radius-lg: 22px;
   --auth-radius-md: 18px;
+  --auth-header-h: 76px;
+}
+
+/* جسر الوضع الغامق — نفس أسلوب الصفحة الرئيسية: أسماء المتغيرات القديمة
+   بس قيمها هلق تتبع design-tokens.css، فصفحات الدخول/التسجيل تتلوّن
+   غامق تلقائيًا بدل ما تضل بيضا ثابتة. */
+:root[data-theme="dark"] {
+  --auth-bg-1: var(--bg);
+  --auth-bg-2: var(--surface-2);
+  --auth-primary: var(--primary);
+  --auth-secondary: var(--info);
+  --auth-text: var(--text);
+  --auth-soft: var(--text-2);
+  --auth-border: color-mix(in srgb, var(--primary) 30%, transparent);
+  --auth-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  --auth-shadow-ink: 0, 0, 0;
 }
 
 /* reset */
-.auth-clean-page *,
-.auth-clean-page *::before,
-.auth-clean-page *::after {
+.auth-split *,
+.auth-split *::before,
+.auth-split *::after {
   box-sizing: border-box;
 }
 
-/* page */
-.auth-clean-page {
-  min-height: 100vh;
-  padding: 46px 16px 66px;
+/* =========================================================
+   Minimal branded header — logo, home link, theme toggle.
+   Sits above the split screen on every auth page.
+========================================================= */
+.auth-topbar {
+  position: fixed;
+  top: 0;
+  inset-inline: 0;
+  z-index: 40;
+  height: var(--auth-header-h);
+  display: flex;
+  align-items: center;
+  background: color-mix(in srgb, var(--surface) 40%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--surface) 30%, transparent);
+}
+
+.auth-topbar__inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-inline: clamp(20px, 4vw, 56px);
+}
+
+.auth-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.auth-topbar__brand img {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.auth-topbar__brand span {
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--auth-text);
+}
+
+.auth-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.auth-topbar__home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--auth-soft);
+  font-weight: 800;
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-topbar__home-link:hover {
+  color: var(--auth-primary);
+}
+
+@media (max-width: 480px) {
+  .auth-topbar__brand span {
+    display: none;
+  }
+
+  .auth-topbar__home-link span {
+    display: none;
+  }
+}
+
+/* =========================================================
+   Split screen media-overlay content — chip pinned over the
+   full-bleed photo. Reused by .auth-hero__art (auth-hero-page)
+   below; the grid/photo positioning itself lives there now.
+========================================================= */
+.auth-split__media-content {
+  position: relative;
+  z-index: 1;
+  max-width: 380px;
+  text-align: center;
+  color: #fff;
+}
+
+.auth-split__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  font-size: 0.82rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+
+/* logo row at top of the form column — centered brand mark with a soft glow */
+.auth-form-panel__logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(70, 206, 194, 0.10), transparent 18%),
-    radial-gradient(circle at 85% 15%, rgba(52, 147, 196, 0.09), transparent 18%),
-    radial-gradient(circle at 75% 80%, rgba(110, 222, 214, 0.08), transparent 14%),
-    linear-gradient(180deg, var(--auth-bg-1) 0%, var(--auth-bg-2) 100%);
-  overflow: visible;
-}
-
-.auth-clean-shell {
-  width: 100%;
-  max-width: 760px;
-  position: relative;
-  overflow: visible;
-  padding: 24px;
-}
-
-.auth-clean-wrap {
-  position: relative;
-  width: 100%;
-  overflow: visible;
-}
-
-/* card */
-.auth-clean-card {
-  position: relative;
-  z-index: 2;
-  padding: 34px 30px;
-  border-radius: var(--auth-radius-xl);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.74));
-  border: 1px solid var(--auth-border);
-  box-shadow:
-    var(--auth-shadow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  overflow: hidden;
-}
-
-.auth-clean-card::before {
-  content: "";
-  position: absolute;
-  inset: 16px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.54);
-  pointer-events: none;
-}
-
-/* badge */
-.auth-clean-badge {
-  position: relative;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
   gap: 10px;
-  margin-bottom: 22px;
-  padding: 10px 16px;
-  border-radius: 999px;
-  background: rgba(27, 176, 166, 0.10);
-  color: #188d8b;
-  font-size: 0.9rem;
-  font-weight: 800;
-  box-shadow: 0 10px 20px rgba(21, 112, 118, 0.04);
+  margin-bottom: 36px;
 }
 
-/* heading */
-.auth-clean-head {
-  position: relative;
-  z-index: 3;
-  text-align: center;
-  margin-bottom: 26px;
+.auth-form-panel__logo img {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  object-fit: cover;
+  padding: 6px;
+  background: color-mix(in srgb, var(--auth-primary) 8%, var(--surface));
+  box-shadow:
+    0 0 0 1px var(--auth-border),
+    0 10px 22px -8px color-mix(in srgb, var(--auth-primary) 35%, transparent),
+    0 0 26px color-mix(in srgb, var(--auth-primary) 20%, transparent);
 }
 
-.auth-clean-head h1 {
-  margin: 0 0 12px;
-  color: var(--auth-text);
-  font-size: 2.2rem;
+.auth-form-panel__logo span {
   font-weight: 900;
-  line-height: 1.15;
+  color: var(--auth-text);
+  font-size: 1.1rem;
+}
+
+.auth-form-panel__eyebrow {
+  display: block;
+  color: var(--auth-primary);
+  font-weight: 800;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.auth-form-panel__head {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.auth-form-panel__head h1 {
+  margin: 0 0 10px;
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: var(--auth-text);
+  line-height: 1.22;
   letter-spacing: -0.01em;
 }
 
-.auth-clean-head p {
-  margin: 0;
+.auth-form-panel__head p {
+  margin: 0 auto;
+  max-width: 360px;
   color: var(--auth-soft);
-  line-height: 1.9;
-  font-size: 0.98rem;
-}
-
-/* modes */
-.auth-mode {
-  display: none;
-  position: relative;
-  z-index: 3;
-  animation: authFade 0.35s ease;
-}
-
-.auth-mode.is-active {
-  display: block;
-}
-
-@keyframes authFade {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  line-height: 1.85;
+  font-size: 0.96rem;
 }
 
 /* forms */
@@ -169,7 +230,7 @@
 }
 
 .form-field label {
-  color: #22484d;
+  color: var(--auth-text);
   font-size: 0.94rem;
   font-weight: 800;
 }
@@ -183,28 +244,28 @@
   padding: 0 16px;
   border-radius: var(--auth-radius-md);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(251, 253, 253, 0.93));
-  border: 1px solid #dbecec;
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface) 93%, transparent));
+  border: 1px solid var(--auth-bg-2);
   transition: all 0.25s ease;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.72),
-    0 6px 16px rgba(34, 114, 119, 0.03);
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 72%, transparent),
+    0 6px 16px color-mix(in srgb, var(--auth-primary) 3%, transparent);
 }
 
 .input-shell:hover {
-  border-color: #cfe7e9;
+  border-color: var(--auth-bg-2);
 }
 
 .input-shell:focus-within {
-  border-color: #2ba8b1;
+  border-color: var(--auth-primary);
   box-shadow:
-    0 0 0 4px rgba(43, 168, 177, 0.12),
-    0 10px 20px rgba(31, 120, 126, 0.05);
+    0 0 0 4px color-mix(in srgb, var(--auth-primary) 12%, transparent),
+    0 10px 20px color-mix(in srgb, var(--auth-primary) 5%, transparent);
   transform: translateY(-1px);
 }
 
 .input-shell i {
-  color: #249ca1;
+  color: var(--auth-primary);
   font-size: 0.98rem;
   flex-shrink: 0;
 }
@@ -215,14 +276,14 @@
   border: 0;
   outline: none;
   background: transparent;
-  color: #183c42;
+  color: var(--auth-text);
   font-size: 0.97rem;
   font-family: inherit;
 }
 
 .input-shell input::placeholder,
 .input-shell textarea::placeholder {
-  color: #9ab2b5;
+  color: var(--auth-soft);
 }
 
 /* password */
@@ -231,7 +292,7 @@
   height: 30px;
   border: 0;
   background: transparent;
-  color: #249ca1;
+  color: var(--auth-primary);
   border-radius: 50%;
   cursor: pointer;
   padding: 0;
@@ -240,7 +301,7 @@
 }
 
 .input-shell--password .toggle-pass:hover {
-  background: rgba(36, 156, 161, 0.08);
+  background: color-mix(in srgb, var(--auth-primary) 8%, transparent);
 }
 
 /* agreement */
@@ -248,7 +309,7 @@
   display: inline-flex;
   align-items: flex-start;
   gap: 10px;
-  color: #688388;
+  color: var(--auth-soft);
   font-size: 0.93rem;
   line-height: 1.85;
   cursor: pointer;
@@ -265,7 +326,7 @@
 }
 
 .agreement-check a {
-  color: #178f95;
+  color: var(--auth-primary);
   font-weight: 800;
   text-decoration: none;
 }
@@ -287,8 +348,8 @@
   font-size: 1rem;
   font-weight: 900;
   box-shadow:
-    0 18px 30px rgba(28, 181, 170, 0.20),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    0 18px 30px color-mix(in srgb, var(--auth-primary) 20%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--surface) 18%, transparent);
   transition: all 0.25s ease;
   cursor: pointer;
 }
@@ -310,7 +371,7 @@
   right: 0;
   width: 100%;
   height: 1px;
-  background: #e4efef;
+  background: var(--auth-bg-2);
   transform: translateY(-50%);
 }
 
@@ -319,80 +380,60 @@
   z-index: 1;
   display: inline-block;
   padding: 0 14px;
-  background: rgba(255, 255, 255, 0.98);
-  color: #95afb2;
+  background: color-mix(in srgb, var(--surface) 98%, transparent);
+  color: var(--auth-soft);
   font-size: 0.9rem;
   font-weight: 800;
 }
 
-/* social */
+/* social — Google only, one premium full-width button */
 .social-row {
   display: flex;
   justify-content: center;
   gap: 14px;
 }
 
-.social-icon-btn {
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  font-size: 22px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-  backdrop-filter: blur(10px);
-}
-
-.social-icon-btn span {
-  display: none;
-}
-
-.social-icon-btn:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18), 0 0 20px rgba(255, 255, 255, 0.18);
-}
-
-.social-icon-btn:active {
-  transform: scale(0.96);
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.28);
-}
-
-.social-icon-btn .fa-google {
-  color: #ea4335;
-}
-
-.social-icon-btn .fa-facebook-f {
-  color: #1877f2;
-}
-
 .social-btn {
   flex: 1;
-  height: 54px;
-  border: 1px solid #d9ecec;
-  border-radius: 17px;
+  height: 56px;
+  border: 1px solid var(--auth-bg-2);
+  border-radius: var(--auth-radius-md);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(251, 253, 253, 0.95));
-  color: #264d53;
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 98%, transparent), color-mix(in srgb, var(--surface) 95%, transparent));
+  color: var(--auth-text);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   font-weight: 800;
+  font-size: 0.95rem;
   font-family: inherit;
-  transition: all 0.25s ease;
-  box-shadow: 0 8px 18px rgba(35, 111, 116, 0.03);
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--auth-primary) 3%, transparent);
   cursor: pointer;
 }
 
 .social-btn:hover {
-  transform: translateY(-1px);
-  background: #fff;
-  border-color: #cce8e9;
+  transform: translateY(-2px);
+  border-color: var(--auth-primary);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--auth-primary) 10%, transparent);
+}
+
+.social-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.social-btn__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: inline-flex;
+}
+
+.social-btn__icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* login tools */
@@ -404,7 +445,7 @@
 }
 
 .forgot-link {
-  color: #178f95;
+  color: var(--auth-primary);
   font-weight: 800;
   text-decoration: none;
   white-space: nowrap;
@@ -413,89 +454,55 @@
 /* bottom switch */
 .bottom-switch {
   text-align: center;
-  color: #6c868a;
+  color: var(--auth-soft);
   font-size: 0.97rem;
 }
 
 .bottom-switch button {
   border: 0;
   background: transparent;
-  color: #178f95;
+  color: var(--auth-primary);
   font-weight: 900;
   cursor: pointer;
   padding: 0;
   font-family: inherit;
 }
 
-/* decorative mini icons */
-.mini-deco {
-  position: absolute;
-  width: 58px;
-  height: 58px;
-  border-radius: 18px;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(125, 188, 192, 0.25);
-  color: #1a9899;
-  box-shadow: 0 12px 24px rgba(21, 112, 118, 0.10);
-  z-index: 5;
-  opacity: 1;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.mini-deco i {
-  font-size: 1.15rem;
-}
-
-.mini-deco--1 {
-  top: -8px;
-  right: -8px;
-}
-
-.mini-deco--2 {
-  top: 100px;
-  left: -8px;
-}
-
-.mini-deco--3 {
-  bottom: 100px;
-  right: -8px;
-}
-
-.mini-deco--4 {
-  bottom: -8px;
-  left: 12px;
-}
-
-.mini-deco--5 {
-  top: -8px;
-  left: 70px;
-}
-
-/* responsive */
-@media (max-width: 768px) {
-  .auth-clean-page {
-    padding: 28px 14px 48px;
+/* responsive — image on top, form below (per the brief's mobile spec) */
+@media (max-width: 900px) {
+  .auth-split {
+    grid-template-columns: 1fr;
   }
 
-  .auth-clean-shell {
-    padding: 10px;
+  .auth-split__media {
+    min-height: unset;
+    padding: 32px 24px;
+    gap: 20px;
   }
 
-  .auth-clean-card {
-    padding: 24px 18px;
-    border-radius: 24px;
+  .auth-split__photo {
+    max-height: 34vh;
   }
 
-  .auth-clean-card::before {
-    inset: 12px;
-    border-radius: 18px;
+  .auth-split__quote {
+    font-size: 1rem;
   }
 
-  .auth-clean-head h1 {
-    font-size: 1.75rem;
+  .auth-split__form {
+    padding: 32px 20px 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-topbar__inner {
+    padding-inline: 16px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .auth-form-panel__head h1 {
+    font-size: 1.5rem;
   }
 
   .auth-form--grid {
@@ -511,47 +518,343 @@
   .forgot-link {
     text-align: center;
   }
+}
 
-  .mini-deco {
-    width: 46px;
-    height: 46px;
-    border-radius: 15px;
+/* =========================================================
+   Clean two-column composition: illustration column (whole,
+   uncropped, on a soft brand gradient) + a solid full-height
+   form panel — no floating card, no scrolling, no glass
+   (login/register only — forgot-password/join-doctor keep
+   the split-panel pattern above).
+
+   the grid follows the page's natural dir="rtl" order, so the
+   first child (.auth-hero__art, the photo) lands on the right and
+   the form lands on the left — matching join-doctor's .auth-split. */
+.auth-hero-page,
+.auth-hero-page *,
+.auth-hero-page *::before,
+.auth-hero-page *::after {
+  box-sizing: border-box;
+}
+
+.auth-hero-page {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(340px, 1.15fr) minmax(420px, 1fr);
+}
+
+/* solo variant — image-less auth pages (forgot-password, and any
+   other flow that shouldn't carry the split photo). Single centered
+   column, natural page scroll instead of the 100vh split pin. */
+.auth-hero-page--solo {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  height: auto;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.auth-hero-page--solo .auth-hero__form {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  overflow-y: visible;
+  background: transparent;
+}
+
+/* =========================================================
+   Scattered decoration layer — dot-grid clusters, hollow ring
+   circles, one soft gradient blob. Sits behind the card, clipped
+   to the page bounds, purely presentational (aria-hidden).
+========================================================= */
+.auth-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.auth-decor__dots {
+  position: absolute;
+  width: 110px;
+  height: 110px;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--auth-primary) 55%, transparent) 2px, transparent 2px);
+  background-size: 17px 17px;
+  opacity: 0.65;
+}
+
+.auth-decor__dots--1 { top: 120px; inset-inline-start: 64px; }
+.auth-decor__dots--2 { bottom: 100px; inset-inline-end: 90px; }
+
+.auth-decor__ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid color-mix(in srgb, var(--auth-primary) 45%, transparent);
+}
+
+.auth-decor__ring--1 { width: 130px; height: 130px; top: 70px; inset-inline-end: 140px; }
+.auth-decor__ring--2 { width: 58px; height: 58px; top: 240px; inset-inline-start: 230px; border-color: color-mix(in srgb, var(--auth-primary) 60%, transparent); }
+.auth-decor__ring--3 { width: 200px; height: 200px; bottom: 50px; inset-inline-start: 50px; opacity: 0.7; border-color: color-mix(in srgb, var(--auth-primary) 35%, transparent); }
+.auth-decor__ring--4 { width: 76px; height: 76px; top: 46%; inset-inline-end: 64px; }
+
+.auth-decor__dot-solid {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--auth-primary);
+  opacity: 0.55;
+  top: 42%;
+  inset-inline-start: 96px;
+}
+
+.auth-decor__blob {
+  position: absolute;
+  width: 580px;
+  height: 580px;
+  bottom: -220px;
+  inset-inline-end: -190px;
+  border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+  background: linear-gradient(155deg, color-mix(in srgb, var(--auth-primary) 40%, transparent), color-mix(in srgb, var(--auth-primary) 22%, transparent));
+}
+
+@media (max-width: 700px) {
+  .auth-decor__ring--1,
+  .auth-decor__ring--3,
+  .auth-decor__dots--2 {
+    display: none;
+  }
+}
+
+/* framed card — the split pages don't need this (the photo panel next
+   to it already gives the layout structure), but a solo centered form
+   needs its own visible boundary against the gradient backdrop. */
+.auth-hero-page--solo .auth-hero__form-card {
+  max-width: 560px;
+  background: var(--surface);
+  border: 1.5px solid color-mix(in srgb, var(--auth-primary) 45%, transparent);
+  border-radius: var(--auth-radius-xl);
+  box-shadow: var(--auth-shadow);
+  padding: 44px 44px;
+}
+
+@media (max-width: 480px) {
+  .auth-hero-page--solo .auth-hero__form-card {
+    padding: 28px 20px;
+  }
+}
+
+/* the whole composition is pinned to one viewport (no page-level
+   scroll) — if a form's content ever runs taller than the available
+   height (a long register form on a short screen), only that panel
+   scrolls internally, the photo side stays put */
+.auth-hero__form {
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.auth-hero__form::-webkit-scrollbar {
+  display: none;
+}
+
+/* decorated illustration panel — the image is shown in full
+   (contained, not cropped) over the same scattered dot/ring/blob
+   decoration used on the solo pages, so all four auth pages read
+   as one visual language instead of the image fighting a hard crop. */
+.auth-hero__art {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 320px;
+  padding: calc(var(--auth-header-h) + 24px) 8px 28px;
+  background: var(--bg);
+}
+
+.auth-hero__art-head {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding-inline: 24px;
+}
+
+.auth-hero__art-head h2 {
+  margin: 0 0 8px;
+  font-size: 1.7rem;
+  font-weight: 900;
+  color: var(--auth-text);
+  line-height: 1.3;
+}
+
+.auth-hero__art-head p {
+  margin: 0 auto;
+  color: var(--auth-soft);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  max-width: 380px;
+}
+
+.auth-hero__bg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  max-width: 860px;
+  height: auto;
+  object-fit: contain;
+}
+
+.auth-hero__art .auth-split__media-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 380px;
+  padding-inline: 24px;
+}
+
+.auth-hero__art .auth-split__chip {
+  background: color-mix(in srgb, var(--auth-primary) 12%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--auth-primary) 24%, transparent);
+  color: var(--auth-primary);
+  margin-bottom: 0;
+}
+
+.auth-hero__form {
+  position: relative;
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--auth-header-h) + 16px) 9% 20px;
+}
+
+.auth-hero__form-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-hero__form--wide .auth-hero__form-card {
+  max-width: 460px;
+}
+
+/* this composition is pinned to exactly one viewport (see
+   .auth-hero-page), so the form gets a tighter rhythm than the
+   same fields on the free-scrolling split-panel pages — still
+   comfortable, just no wasted vertical space */
+.auth-hero__form-card .auth-form-panel__logo {
+  margin-bottom: 14px;
+}
+
+.auth-hero__form-card .auth-form-panel__head {
+  margin-bottom: 16px;
+}
+
+.auth-hero__form-card .auth-form-panel__head h1 {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+
+.auth-hero__form-card .auth-form-panel__head p {
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.auth-hero__form-card .auth-form {
+  gap: 11px;
+}
+
+.auth-hero__form-card .form-field {
+  gap: 5px;
+}
+
+.auth-hero__form-card .input-shell {
+  height: 48px;
+}
+
+.auth-hero__form-card .primary-action {
+  height: 50px;
+}
+
+.auth-hero__form-card .social-btn {
+  height: 48px;
+}
+
+.auth-hero__form-card .password-strength {
+  padding: 10px 14px;
+}
+
+@media (max-width: 1150px) {
+  .auth-hero-page {
+    grid-template-columns: minmax(300px, 1fr) minmax(420px, 1fr);
   }
 
-  .mini-deco i {
-    font-size: 1rem;
+  .auth-hero__art {
+    padding: calc(var(--auth-header-h) + 20px) 36px 28px;
+    gap: 18px;
   }
 
-  .mini-deco--1 {
-    top: -6px;
-    right: -4px;
+  .auth-hero__bg {
+    max-width: 560px;
+  }
+}
+
+@media (max-width: 900px) {
+  .auth-hero-page {
+    height: auto;
+    min-height: 100vh;
+    grid-template-columns: 1fr;
   }
 
-  .mini-deco--2 {
-    top: 110px;
-    left: -4px;
+  .auth-hero__form {
+    overflow-y: visible;
   }
 
-  .mini-deco--3 {
-    bottom: 110px;
-    right: -4px;
+  .auth-hero__art {
+    min-height: 240px;
+    padding: calc(var(--auth-header-h) + 20px) 24px 24px;
+    gap: 16px;
   }
 
-  .mini-deco--4 {
-    bottom: -6px;
-    left: 8px;
+  .auth-hero__art-head h2 {
+    font-size: 1.4rem;
   }
 
-  .mini-deco--5 {
-    top: -6px;
-    left: 48px;
+  .auth-hero__bg {
+    max-width: 440px;
+  }
+
+  .auth-hero__form {
+    padding: 24px 24px 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-hero__art {
+    min-height: 200px;
+  }
+
+  .auth-hero__art-head p {
+    display: none;
+  }
+
+  .auth-hero__bg {
+    max-width: 320px;
+  }
+
+  .auth-hero__form {
+    padding: 8px 20px 40px;
   }
 }
 
 .auth-alert--success {
-  background: #edf9f3;
-  border: 1px solid #ccebd8;
-  color: #216b62;
+  background: color-mix(in srgb, var(--success) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--success) 25%, transparent);
+  color: var(--success);
   border-radius: 18px;
   padding: 14px 16px;
   margin-bottom: 18px;
@@ -560,20 +863,85 @@
 }
 
 .input-shell.is-invalid {
-  border-color: #e45d5d !important;
-  box-shadow: 0 0 0 4px rgba(228, 93, 93, 0.08);
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 8%, transparent);
 }
 
 .input-shell.is-invalid i,
 .input-shell.is-invalid .toggle-pass {
-  color: #c63f3f;
+  color: var(--danger);
 }
 
 .field-error {
   display: block;
   margin-top: 8px;
-  color: #c63f3f;
+  color: var(--danger);
   font-size: 0.88rem;
   font-weight: 700;
   padding-right: 4px;
+}
+
+/* password strength + requirements (register) */
+.password-strength {
+  margin-top: -4px;
+  padding: 14px 16px;
+  border-radius: var(--auth-radius-md);
+  background: color-mix(in srgb, var(--auth-primary) 4%, transparent);
+  border: 1px solid var(--auth-bg-2);
+}
+
+.password-strength__bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--auth-bg-2);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.password-strength__bar span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--danger), var(--warning), var(--auth-primary));
+  transition: width 0.3s var(--ease, ease);
+}
+
+.password-strength__rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.password-strength__rules li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--auth-soft);
+  transition: color 0.2s ease;
+}
+
+.password-strength__rules li i {
+  font-size: 0.85rem;
+  color: var(--auth-bg-2);
+  transition: color 0.2s ease;
+}
+
+.password-strength__rules li.is-met {
+  color: var(--auth-primary);
+}
+
+.password-strength__rules li.is-met i {
+  color: var(--auth-primary);
+}
+
+@media (max-width: 480px) {
+  .password-strength__rules {
+    grid-template-columns: 1fr;
+  }
 }

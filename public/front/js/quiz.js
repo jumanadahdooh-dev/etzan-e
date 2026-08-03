@@ -70,31 +70,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const progress = ((currentStep + 1) / steps.length) * 100;
         const currentKey = getCurrentStepKey();
-
         if (stepLabel) {
             stepLabel.textContent = `السؤال ${currentStep + 1} من ${steps.length}`;
         }
-
         if (questionTitle) {
             questionTitle.textContent = questions[currentKey] || `السؤال ${currentStep + 1}`;
         }
-
         if (progressNumber) {
             progressNumber.textContent = `${Math.round(progress)}%`;
         }
-
         if (progressBar) {
             progressBar.style.width = `${progress}%`;
         }
-
         if (progressCircle) {
             progressCircle.style.background = `conic-gradient(var(--primary) ${progress}%, #dcefea 0)`;
         }
-
         if (characterText) {
             characterText.textContent = characterMessages[currentKey] || 'جاوب على السؤال لنحدد لك الخطوة الأنسب.';
         }
-
         prevBtn.disabled = currentStep === 0;
         nextBtn.disabled = !hasAnswerForCurrentStep();
 

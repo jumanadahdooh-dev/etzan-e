@@ -22,6 +22,62 @@ document.addEventListener("DOMContentLoaded", function () {
     return element?.dataset?.[key] || fallback;
   };
 
+  const prefersReducedMotion = () =>
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /**
+   * يفعّل السحب باللمس (يمين/يسار) على عنصر سلايدر، ويستدعي onNext/onPrev
+   * حسب اتجاه السحب. بما إن الصفحة RTL، سحب لليمين = "السابق" بصريًا
+   * وسحب لليسار = "التالي"، فبنعكس onNext/onPrev داخليًا مرة وحدة هون
+   * بدل ما نكررها بكل سلايدر.
+   */
+  function enableSwipe(element, { onNext, onPrev, threshold = 40 } = {}) {
+    if (!element) {
+      return;
+    }
+
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+
+    element.addEventListener(
+      "touchstart",
+      (event) => {
+        const touch = event.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        tracking = true;
+      },
+      { passive: true }
+    );
+
+    element.addEventListener(
+      "touchend",
+      (event) => {
+        if (!tracking) {
+          return;
+        }
+
+        tracking = false;
+
+        const touch = event.changedTouches[0];
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+
+        if (Math.abs(deltaX) < threshold || Math.abs(deltaX) < Math.abs(deltaY)) {
+          return;
+        }
+
+        if (deltaX < 0) {
+          onNext?.();
+        } else {
+          onPrev?.();
+        }
+      },
+      { passive: true }
+    );
+  }
+
   /* =========================================================
      قسم الهيدر
   ========================================================= */
@@ -122,6 +178,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const dots = qsa(".slider-dot");
   const nextBtn = qs(".next");
   const prevBtn = qs(".prev");
+  const heroSliderEl = qs(".hero-slider");
 
   if (slides.length) {
     let current = 0;
@@ -156,7 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function startAutoSlide() {
       stopAutoSlide();
 
-      if (slides.length > 1) {
+      if (slides.length > 1 && !prefersReducedMotion()) {
         autoSlide = setInterval(nextSlide, 4000);
       }
     }
@@ -189,6 +246,20 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
+    heroSliderEl?.addEventListener("mouseenter", stopAutoSlide);
+    heroSliderEl?.addEventListener("mouseleave", startAutoSlide);
+
+    enableSwipe(heroSliderEl, {
+      onNext: () => {
+        nextSlide();
+        resetAutoSlide();
+      },
+      onPrev: () => {
+        prevSlide();
+        resetAutoSlide();
+      },
+    });
+
     showSlide(0);
     startAutoSlide();
   }
@@ -206,13 +277,15 @@ document.addEventListener("DOMContentLoaded", function () {
       card.classList.toggle("active", index === 0);
     });
 
-    setInterval(() => {
-      stepCards.forEach((card) => card.classList.remove("active"));
+    if (!prefersReducedMotion()) {
+      setInterval(() => {
+        stepCards.forEach((card) => card.classList.remove("active"));
 
-      stepCards[currentStep]?.classList.add("active");
+        stepCards[currentStep]?.classList.add("active");
 
-      currentStep = (currentStep + 1) % stepCards.length;
-    }, 3000);
+        currentStep = (currentStep + 1) % stepCards.length;
+      }, 3000);
+    }
   }
 
   /* =========================================================
@@ -373,7 +446,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function startFeatureAutoPlay() {
       stopFeatureAutoPlay();
 
-      if (featureItems.length > 1) {
+      if (featureItems.length > 1 && !prefersReducedMotion()) {
         featureAutoPlay = setInterval(goToNextFeature, 4000);
       }
     }
@@ -402,6 +475,17 @@ document.addEventListener("DOMContentLoaded", function () {
     featureSectionEl?.addEventListener("mouseenter", stopFeatureAutoPlay);
     featureSectionEl?.addEventListener("mouseleave", startFeatureAutoPlay);
 
+    enableSwipe(featureContentBox, {
+      onNext: () => {
+        goToNextFeature();
+        resetFeatureAutoPlay();
+      },
+      onPrev: () => {
+        goToPrevFeature();
+        resetFeatureAutoPlay();
+      },
+    });
+
     updateFeatureView(featureItems[0]);
     setFeatureDot(0);
     startFeatureAutoPlay();
@@ -425,6 +509,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const doctorInfoTag1 = qs("#doctorInfoTag1");
   const doctorInfoTag2 = qs("#doctorInfoTag2");
   const doctorInfoTag3 = qs("#doctorInfoTag3");
+  const doctorInfoBookingBtn = qs("#doctorInfoBookingBtn");
+  const doctorInfoProfileBtn = qs("#doctorInfoProfileBtn");
 
   if (doctorStackCards.length && doctorStackDotsContainer) {
     let doctorCurrentIndex = 0;
@@ -443,6 +529,20 @@ document.addEventListener("DOMContentLoaded", function () {
       setText(doctorInfoTag1, safeDataset(card, "tag1", "تغذية"));
       setText(doctorInfoTag2, safeDataset(card, "tag2", "متابعة"));
       setText(doctorInfoTag3, safeDataset(card, "tag3", "استشارة"));
+
+      if (doctorInfoBookingBtn) {
+        const bookingUrl = safeDataset(card, "bookingUrl", "");
+        if (bookingUrl) {
+          doctorInfoBookingBtn.setAttribute("href", bookingUrl);
+        }
+      }
+
+      if (doctorInfoProfileBtn) {
+        const profileUrl = safeDataset(card, "profileUrl", "");
+        if (profileUrl) {
+          doctorInfoProfileBtn.setAttribute("href", profileUrl);
+        }
+      }
     }
 
     function doctorCreateDots() {
@@ -511,6 +611,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     doctorNextBtn?.addEventListener("click", doctorNext);
     doctorPrevBtn?.addEventListener("click", doctorPrev);
+
+    enableSwipe(qs(".doctors-stack-wrap"), {
+      onNext: doctorNext,
+      onPrev: doctorPrev,
+    });
 
     doctorStackCards.forEach((card, index) => {
       card.addEventListener("click", () => {

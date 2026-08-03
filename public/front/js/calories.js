@@ -65,6 +65,17 @@ document.addEventListener("DOMContentLoaded", function () {
         resizeTextarea();
     });
 
+    const loadingOverlay = document.querySelector("[data-cal-loading]");
+    const loadingText = document.querySelector("[data-cal-loading-text]");
+    const loadingStages = [
+        "جاري تحليل الصورة...",
+        "التعرف على المكوّنات...",
+        "تقدير الكميات...",
+        "حساب القيم الغذائية...",
+        "توليد التحليل الصحي...",
+        "تجهيز التوصيات...",
+    ];
+
     if (form) {
         form.addEventListener("submit", function (event) {
             const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
@@ -88,6 +99,24 @@ document.addEventListener("DOMContentLoaded", function () {
             if (submitButton) {
                 submitButton.disabled = true;
                 submitButton.classList.add("is-loading");
+            }
+
+            if (loadingOverlay) {
+                loadingOverlay.hidden = false;
+
+                let stageIndex = 0;
+
+                if (loadingText) {
+                    loadingText.textContent = loadingStages[0];
+                }
+
+                setInterval(function () {
+                    stageIndex = (stageIndex + 1) % loadingStages.length;
+
+                    if (loadingText) {
+                        loadingText.textContent = loadingStages[stageIndex];
+                    }
+                }, 1800);
             }
         });
     }

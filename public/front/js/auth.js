@@ -18,6 +18,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  const registerPassword = document.getElementById("registerPassword");
+  const registerStrengthFill = document.getElementById("registerStrengthFill");
+  const registerStrengthRules = document.querySelectorAll("#registerStrength [data-rule]");
+
+  if (registerPassword && registerStrengthFill) {
+    registerPassword.addEventListener("input", function () {
+      const value = this.value;
+
+      const rules = {
+        length: value.length >= 8,
+        upper: /[A-Z]/.test(value),
+        number: /[0-9]/.test(value),
+        symbol: /[^A-Za-z0-9]/.test(value),
+      };
+
+      let met = 0;
+
+      registerStrengthRules.forEach((rule) => {
+        const isMet = rules[rule.dataset.rule];
+        rule.classList.toggle("is-met", Boolean(isMet));
+        if (isMet) met += 1;
+      });
+
+      registerStrengthFill.style.width = `${(met / registerStrengthRules.length) * 100}%`;
+    });
+  }
+
   const socialPopupButtons = document.querySelectorAll(".js-social-popup");
 
   socialPopupButtons.forEach((button) => {

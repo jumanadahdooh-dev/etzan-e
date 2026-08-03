@@ -73,4 +73,11 @@ class DoctorProfile extends Model
     {
         return $this->hasMany(\App\Models\PatientDailyCalorieGoal::class, 'doctor_profile_id');
     }
+
+    /** جدول ساعات العمل الأسبوعي لهاد الطبيب */
+    public function schedules()
+    {
+        return $this->hasMany(\App\Models\DoctorSchedule::class, 'doctor_profile_id')
+            ->orderBy('day_of_week');
+    }
 }

@@ -1,3 +1,28 @@
+:root {
+  --details-primary: #2f8f83;
+  --details-primary-dark: #216b62;
+  --details-text: #17342f;
+  --details-muted: #69857e;
+  --details-border: #d7ebe4;
+  --details-soft-bg: #f6fbf9;
+  --details-soft-border: #dff1eb;
+  --details-hover-bg: #eef8f4;
+  --details-shadow-ink: 23, 66, 58;
+}
+
+/* جسر الوضع الغامق — نفس أسلوب باقي صفحات الموقع. */
+:root[data-theme="dark"] {
+  --details-primary: var(--primary);
+  --details-primary-dark: var(--primary-hover);
+  --details-text: var(--text);
+  --details-muted: var(--text-2);
+  --details-border: color-mix(in srgb, var(--primary) 30%, transparent);
+  --details-soft-bg: var(--surface-2);
+  --details-soft-border: color-mix(in srgb, var(--primary) 20%, transparent);
+  --details-hover-bg: color-mix(in srgb, var(--primary) 14%, transparent);
+  --details-shadow-ink: 0, 0, 0;
+}
+
 .article-details-page {
   padding: 46px 0 50px;
 }
@@ -8,14 +33,14 @@
   gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 20px;
-  color: #7b8f97;
+  color: var(--details-muted);
   font-size: 14px;
   font-weight: 600;
 }
 
 .article-breadcrumb a {
   text-decoration: none;
-  color: #216b62;
+  color: var(--details-primary-dark);
 }
 
 .article-details-grid {
@@ -35,10 +60,10 @@
 .article-content-card,
 .article-bottom-box,
 .article-side-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #d7ebe4;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  border: 1px solid var(--details-border);
   border-radius: 28px;
-  box-shadow: 0 14px 28px rgba(23, 66, 58, 0.06);
+  box-shadow: 0 14px 28px rgba(var(--details-shadow-ink), 0.06);
 }
 
 .article-hero-card {
@@ -56,8 +81,8 @@
   min-height: 34px;
   padding: 0 14px;
   border-radius: 999px;
-  background: rgba(47, 143, 131, 0.1);
-  color: #216b62;
+  background: color-mix(in srgb, var(--details-primary) 10%, transparent);
+  color: var(--details-primary-dark);
   font-size: 14px;
   font-weight: 800;
   margin-bottom: 14px;
@@ -67,7 +92,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
-  color: #6f8680;
+  color: var(--details-muted);
   font-size: 14px;
   font-weight: 600;
 }
@@ -82,13 +107,13 @@
   margin: 0 0 14px;
   font-size: clamp(1.9rem, 3vw, 2.8rem);
   line-height: 1.25;
-  color: #17342f;
+  color: var(--details-text);
   font-weight: 800;
 }
 
 .article-intro {
   margin: 0 0 22px;
-  color: #69857e;
+  color: var(--details-muted);
   font-size: 17px;
   line-height: 2;
 }
@@ -97,9 +122,9 @@
   min-height: 260px;
   border-radius: 24px;
   background:
-    radial-gradient(circle at top right, rgba(77, 168, 218, 0.16), transparent 28%),
-    radial-gradient(circle at bottom left, rgba(29, 158, 117, 0.16), transparent 30%),
-    linear-gradient(135deg, #eff9f6, #e7f3f7);
+    radial-gradient(circle at top right, color-mix(in srgb, var(--info) 16%, transparent), transparent 28%),
+    radial-gradient(circle at bottom left, color-mix(in srgb, var(--details-primary) 16%, transparent), transparent 30%),
+    linear-gradient(135deg, var(--surface-2), var(--surface));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -109,13 +134,13 @@
   width: 94px;
   height: 94px;
   border-radius: 30px;
-  background: linear-gradient(135deg, #2f8f83, #216b62);
+  background: linear-gradient(135deg, var(--details-primary), var(--details-primary-dark));
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 34px;
-  box-shadow: 0 20px 30px rgba(47, 143, 131, 0.22);
+  box-shadow: 0 20px 30px color-mix(in srgb, var(--details-primary) 22%, transparent);
 }
 
 .article-content-card {
@@ -130,12 +155,12 @@
   margin: 0 0 14px;
   font-size: 24px;
   font-weight: 800;
-  color: #17342f;
+  color: var(--details-text);
 }
 
 .article-section p {
   margin: 0 0 16px;
-  color: #4e6560;
+  color: var(--details-muted);
   line-height: 2.05;
   font-size: 16px;
 }
@@ -143,7 +168,7 @@
 .article-list {
   margin: 0;
   padding-right: 22px;
-  color: #4e6560;
+  color: var(--details-muted);
   line-height: 2;
 }
 
@@ -157,12 +182,12 @@
   align-items: flex-start;
   border-radius: 20px;
   padding: 18px;
-  background: #f6fbf9;
-  border: 1px solid #dff1eb;
+  background: var(--details-soft-bg);
+  border: 1px solid var(--details-soft-border);
 }
 
 .article-note i {
-  color: #2f8f83;
+  color: var(--details-primary);
   margin-top: 4px;
   font-size: 18px;
 }
@@ -183,12 +208,12 @@
   margin: 0 0 10px;
   font-size: 22px;
   font-weight: 800;
-  color: #17342f;
+  color: var(--details-text);
 }
 
 .article-bottom-box__text p {
   margin: 0;
-  color: #69857e;
+  color: var(--details-muted);
   line-height: 1.9;
 }
 
@@ -197,14 +222,14 @@
   padding: 0 22px;
   border-radius: 999px;
   text-decoration: none;
-  background: linear-gradient(135deg, #2f8f83, #216b62);
+  background: linear-gradient(135deg, var(--details-primary), var(--details-primary-dark));
   color: #fff;
   font-weight: 800;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  box-shadow: 0 14px 28px rgba(47, 143, 131, 0.22);
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--details-primary) 22%, transparent);
 }
 
 .article-sidebar .sidebar-sticky {
@@ -223,7 +248,7 @@
   margin: 0 0 14px;
   font-size: 20px;
   font-weight: 800;
-  color: #17342f;
+  color: var(--details-text);
 }
 
 .article-side-nav {
@@ -235,18 +260,18 @@
 .article-side-nav a,
 .related-article {
   text-decoration: none;
-  color: #4e6560;
+  color: var(--details-muted);
   padding: 12px 14px;
   border-radius: 16px;
-  background: #f7fbfa;
-  border: 1px solid #ebf4f1;
+  background: var(--details-soft-bg);
+  border: 1px solid var(--details-soft-border);
   transition: 0.25s ease;
 }
 
 .article-side-nav a:hover,
 .related-article:hover {
-  background: #eef8f4;
-  color: #216b62;
+  background: var(--details-hover-bg);
+  color: var(--details-primary-dark);
 }
 
 .quick-info-list {
@@ -258,19 +283,19 @@
 .quick-info-item {
   border-radius: 16px;
   padding: 14px;
-  background: #f7fbfa;
-  border: 1px solid #ebf4f1;
+  background: var(--details-soft-bg);
+  border: 1px solid var(--details-soft-border);
 }
 
 .quick-info-item span {
   display: block;
   font-size: 13px;
-  color: #6f8680;
+  color: var(--details-muted);
   margin-bottom: 6px;
 }
 
 .quick-info-item strong {
-  color: #17342f;
+  color: var(--details-text);
   font-size: 15px;
 }
 
@@ -285,7 +310,7 @@
 .related-article__tag {
   display: inline-block;
   margin-bottom: 8px;
-  color: #216b62;
+  color: var(--details-primary-dark);
   font-size: 13px;
   font-weight: 800;
 }

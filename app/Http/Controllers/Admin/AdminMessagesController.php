@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Mail\SupportReplyMail;
 use App\Models\Conversation;
+use App\Services\AppNotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -125,9 +126,24 @@ class AdminMessagesController extends Controller
          | الرد يروح على الإيميل.
          |
          | إذا المحادثة لمستخدم مسجل:
-         | الرد يبقى داخل نظام الرسائل فقط.
+         | كانت الرسالة بس بتنكتب بجدول messages بدون أي إشعار — المريض
+         | كان لازم يرجع يفتح صفحة "الدعم" يدوياً ليعرف إنه في رد أصلاً.
         */
         $this->sendReplyToGuestEmailIfNeeded($conversation, $messageText);
+
+        if ($conversation->user_id) {
+            app(AppNotificationService::class)->send(
+                recipientUserId: $conversation->user_id,
+                recipientRole: $conversation->user?->role,
+                type: 'support_reply',
+                title: 'رد جديد من فريق الدعم',
+                body: \Illuminate\Support\Str::limit($messageText, 150),
+                url: route('patient.support'),
+                actorUserId: auth()->id(),
+                relatedId: $conversation->id,
+                relatedType: 'conversation'
+            );
+        }
 
         return back()->with('success', 'تم إرسال الرد بنجاح.');
     }
@@ -182,137 +198,25 @@ class AdminMessagesController extends Controller
     private function markMessageNotificationsAsRead(Conversation $conversation): void
     {
         try {
-            $messageIds = $conversation->messages()
-                ->pluck('id')
-                ->toArray();
-
-            if ($conversation->latestMessage?->id) {
-                $messageIds[] = $conversation->latestMessage->id;
-            }
-
-            $messageIds = array_values(array_filter(array_unique($messageIds)));
-
             $messageUrl = route('admin.messages.show', $conversation->id);
 
             /*
              |--------------------------------------------------------------------------
-             | admin_notifications
-             |--------------------------------------------------------------------------
-            */
-            if (Schema::hasTable('admin_notifications')) {
-                $updateData = $this->notificationReadColumns('admin_notifications');
-
-                if (!empty($updateData)) {
-                    $query = DB::table('admin_notifications');
-
-                    $hasCondition = false;
-
-                    $query->where(function ($q) use (
-                        $conversation,
-                        $messageIds,
-                        $messageUrl,
-                        &$hasCondition
-                    ) {
-                        if (Schema::hasColumn('admin_notifications', 'conversation_id')) {
-                            $q->orWhere('conversation_id', $conversation->id);
-                            $hasCondition = true;
-                        }
-
-                        if (
-                            Schema::hasColumn('admin_notifications', 'message_id') &&
-                            !empty($messageIds)
-                        ) {
-                            $q->orWhereIn('message_id', $messageIds);
-                            $hasCondition = true;
-                        }
-
-                        if (Schema::hasColumn('admin_notifications', 'url')) {
-                            $q->orWhere('url', $messageUrl);
-                            $hasCondition = true;
-                        }
-
-                        if (Schema::hasColumn('admin_notifications', 'link')) {
-                            $q->orWhere('link', $messageUrl);
-                            $hasCondition = true;
-                        }
-
-                        if (Schema::hasColumn('admin_notifications', 'route')) {
-                            $q->orWhere('route', $messageUrl);
-                            $hasCondition = true;
-                        }
-
-                        if (Schema::hasColumn('admin_notifications', 'action_url')) {
-                            $q->orWhere('action_url', $messageUrl);
-                            $hasCondition = true;
-                        }
-                    });
-
-                    if ($hasCondition) {
-                        $query->update($updateData);
-                    }
-                }
-            }
-
-            /*
-             |--------------------------------------------------------------------------
-             | app_notifications
+             | app_notifications — بعد توحيد نظام الإشعارات، إشعارات الأدمن كلها
+             | هون (شخصية لكل أدمن). نعلّم إشعارات هالأدمن الحالي بس (مش كل
+             | الأدمنز) المرتبطة بهاي المحادثة كمقروءة، بمطابقة الرابط الحقيقي.
+             | (كان فيه بق هون: بيتحقق من عمود user_id يلي مش موجود أصلاً —
+             | العمود الحقيقي recipient_user_id — فالشرط كان دايماً بيفشل.)
              |--------------------------------------------------------------------------
             */
             if (Schema::hasTable('app_notifications')) {
                 $updateData = $this->notificationReadColumns('app_notifications');
 
                 if (!empty($updateData)) {
-                    $query = DB::table('app_notifications');
-
-                    if (Schema::hasColumn('app_notifications', 'user_id')) {
-                        $query->where('user_id', auth()->id());
-                    }
-
-                    $hasCondition = false;
-
-                    $query->where(function ($q) use (
-                        $conversation,
-                        $messageIds,
-                        $messageUrl,
-                        &$hasCondition
-                    ) {
-                        if (Schema::hasColumn('app_notifications', 'conversation_id')) {
-                            $q->orWhere('conversation_id', $conversation->id);
-                            $hasCondition = true;
-                        }
-
-                        if (
-                            Schema::hasColumn('app_notifications', 'message_id') &&
-                            !empty($messageIds)
-                        ) {
-                            $q->orWhereIn('message_id', $messageIds);
-                            $hasCondition = true;
-                        }
-
-                        if (Schema::hasColumn('app_notifications', 'url')) {
-                            $q->orWhere('url', $messageUrl);
-                            $hasCondition = true;
-                        }
-
-                        if (Schema::hasColumn('app_notifications', 'link')) {
-                            $q->orWhere('link', $messageUrl);
-                            $hasCondition = true;
-                        }
-
-                        if (Schema::hasColumn('app_notifications', 'route')) {
-                            $q->orWhere('route', $messageUrl);
-                            $hasCondition = true;
-                        }
-
-                        if (Schema::hasColumn('app_notifications', 'action_url')) {
-                            $q->orWhere('action_url', $messageUrl);
-                            $hasCondition = true;
-                        }
-                    });
-
-                    if ($hasCondition) {
-                        $query->update($updateData);
-                    }
+                    DB::table('app_notifications')
+                        ->where('recipient_user_id', auth()->id())
+                        ->where('url', $messageUrl)
+                        ->update($updateData);
                 }
             }
         } catch (\Throwable $e) {

@@ -2758,3 +2758,464 @@ html[data-theme="dark"] .cal-weight-modal h3,
 body[data-theme="dark"] .cal-weight-modal h3 {
     color: #eef7f5 !important;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   AI Nutrition Report — Meal Analysis redesign
+   ══════════════════════════════════════════════════════════════ */
+
+.cal-loading-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    display: grid;
+    place-items: center;
+    justify-items: center;
+    gap: 8px;
+    padding: 24px;
+    text-align: center;
+    background: rgba(248, 252, 251, 0.92);
+    backdrop-filter: blur(6px);
+    border-radius: var(--cal-radius-xl);
+}
+
+.cal-analyzer-card {
+    position: relative;
+}
+
+.cal-loading-overlay strong {
+    color: var(--cal-text);
+    font-size: 15px;
+    font-weight: 900;
+}
+
+.cal-loading-overlay span {
+    color: var(--cal-muted);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.cal-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid rgba(29, 158, 117, 0.18);
+    border-top-color: var(--cal-primary);
+    animation: cal-spin 0.8s linear infinite;
+}
+
+@keyframes cal-spin {
+    to { transform: rotate(360deg); }
+}
+
+.cal-review-layout {
+    display: grid;
+    gap: 22px;
+}
+
+.cal-report-overview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: stretch;
+}
+
+.cal-report-overview .cal-review-preview {
+    flex: 1 1 320px;
+}
+
+.cal-report-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.cal-cooking-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--info-soft, rgba(77, 168, 218, 0.12));
+    border: 1px solid var(--info-border, rgba(77, 168, 218, 0.24));
+    color: var(--info, #2E8FC2);
+    font-size: 12px;
+    font-weight: 850;
+}
+
+.cal-cooking-pill i {
+    width: 14px;
+    height: 14px;
+}
+
+.cal-ai-note.is-fallback {
+    color: var(--warning, #B45309);
+    font-weight: 800;
+}
+
+/* ── Health score ring ── */
+.cal-health-score {
+    flex: 0 0 200px;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 10px;
+    padding: 20px;
+    border-radius: var(--cal-radius-lg);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--cal-border);
+}
+
+.cal-health-ring {
+    --value: 0;
+    --ring-color: var(--cal-primary);
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    position: relative;
+    background: conic-gradient(var(--ring-color) calc(var(--value) * 1%), rgba(24, 51, 59, 0.08) 0);
+}
+
+.cal-health-ring::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    border-radius: 50%;
+    background: var(--cal-card);
+}
+
+.cal-health-ring > div {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.cal-health-ring strong {
+    color: var(--cal-text);
+    font-size: 30px;
+    font-weight: 950;
+}
+
+.cal-health-ring span {
+    color: var(--cal-muted);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.cal-health-ring.is-good { --ring-color: var(--success, #1D9E75); }
+.cal-health-ring.is-moderate { --ring-color: var(--warning, #B45309); }
+.cal-health-ring.is-poor { --ring-color: var(--danger, #DC2626); }
+.cal-health-ring.is-unknown { --ring-color: var(--cal-muted); }
+
+.cal-health-copy {
+    text-align: center;
+    display: grid;
+    gap: 2px;
+}
+
+.cal-health-copy span {
+    color: var(--cal-muted);
+    font-size: 11.5px;
+    font-weight: 800;
+}
+
+.cal-health-copy strong {
+    color: var(--cal-text);
+    font-size: 15px;
+    font-weight: 950;
+}
+
+/* ── Generic report section ── */
+.cal-report-section {
+    padding: 20px;
+    border-radius: var(--cal-radius-lg);
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--cal-border);
+}
+
+.cal-report-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 14px;
+    color: var(--cal-text);
+    font-size: 14.5px;
+    font-weight: 900;
+}
+
+.cal-report-section h3 i {
+    width: 17px;
+    height: 17px;
+    color: var(--cal-primary);
+}
+
+/* ── Ingredient cards ── */
+.cal-ingredient-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+}
+
+.cal-ingredient-card {
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--cal-card);
+    border: 1px solid var(--cal-border);
+    display: grid;
+    gap: 6px;
+}
+
+.cal-ingredient-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.cal-ingredient-head strong {
+    color: var(--cal-text);
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.cal-confidence-chip {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--success-soft, rgba(29, 158, 117, 0.12));
+    color: var(--success, #1D9E75);
+    font-size: 10.5px;
+    font-weight: 900;
+}
+
+.cal-ingredient-portion {
+    color: var(--cal-muted);
+    font-size: 11.5px;
+    font-weight: 750;
+}
+
+.cal-ingredient-macros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.cal-ingredient-macros span {
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(24, 51, 59, 0.05);
+    color: var(--cal-text);
+    font-size: 10.5px;
+    font-weight: 800;
+}
+
+/* ── Meal totals extra macros ── */
+.cal-totals-grid {
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+}
+
+/* ── Micronutrients ── */
+.cal-micro-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.cal-micro-item {
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--cal-card);
+    border: 1px solid var(--cal-border);
+    display: grid;
+    gap: 4px;
+    text-align: center;
+}
+
+.cal-micro-item span {
+    color: var(--cal-muted);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.cal-micro-item strong {
+    color: var(--cal-text);
+    font-size: 13px;
+    font-weight: 900;
+}
+
+/* ── Advantages / warnings ── */
+.cal-adv-warn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.cal-advantage-list h3 i { color: var(--success, #1D9E75); }
+.cal-warning-list h3 i { color: var(--warning, #B45309); }
+
+.cal-advantage-list ul,
+.cal-warning-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.cal-advantage-list li,
+.cal-warning-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 750;
+    color: var(--cal-text);
+}
+
+.cal-advantage-list li i {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--success, #1D9E75);
+}
+
+.cal-warning-list li i {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--warning, #B45309);
+}
+
+/* ── Diet compatibility ── */
+.cal-diet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+.cal-diet-badge {
+    padding: 14px 10px;
+    border-radius: 18px;
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    text-align: center;
+    border: 1px solid var(--cal-border);
+    background: var(--cal-card);
+}
+
+.cal-diet-badge i {
+    width: 18px;
+    height: 18px;
+}
+
+.cal-diet-badge strong {
+    font-size: 11.5px;
+    font-weight: 900;
+    color: var(--cal-text);
+}
+
+.cal-diet-badge span {
+    font-size: 12px;
+    font-weight: 950;
+}
+
+.cal-diet-badge.is-compatible {
+    border-color: var(--success-border, rgba(29, 158, 117, 0.24));
+    background: var(--success-soft, rgba(29, 158, 117, 0.10));
+}
+
+.cal-diet-badge.is-compatible i,
+.cal-diet-badge.is-compatible span {
+    color: var(--success, #1D9E75);
+}
+
+.cal-diet-badge.is-not-compatible {
+    opacity: 0.6;
+}
+
+.cal-diet-badge.is-not-compatible i,
+.cal-diet-badge.is-not-compatible span {
+    color: var(--cal-muted);
+}
+
+/* ── Recommendations ── */
+.cal-reco-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.cal-reco-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: var(--info-soft, rgba(77, 168, 218, 0.10));
+    color: var(--cal-text);
+    font-size: 12.5px;
+    font-weight: 750;
+}
+
+.cal-reco-list li i {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: var(--info, #2E8FC2);
+    transform: scaleX(-1);
+}
+
+html[data-theme="dark"] .cal-loading-overlay,
+body[data-theme="dark"] .cal-loading-overlay {
+    background: rgba(15, 30, 27, 0.92) !important;
+}
+
+html[data-theme="dark"] .cal-health-score,
+body[data-theme="dark"] .cal-health-score,
+html[data-theme="dark"] .cal-report-section,
+body[data-theme="dark"] .cal-report-section {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .cal-ingredient-card,
+body[data-theme="dark"] .cal-ingredient-card,
+html[data-theme="dark"] .cal-micro-item,
+body[data-theme="dark"] .cal-micro-item,
+html[data-theme="dark"] .cal-diet-badge,
+body[data-theme="dark"] .cal-diet-badge {
+    background: rgba(255, 255, 255, 0.045) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .cal-ingredient-macros span,
+body[data-theme="dark"] .cal-ingredient-macros span {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+@media (max-width: 720px) {
+    .cal-report-overview {
+        flex-direction: column;
+    }
+
+    .cal-health-score {
+        flex-basis: auto;
+    }
+
+    .cal-ingredient-grid,
+    .cal-micro-grid,
+    .cal-diet-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+}

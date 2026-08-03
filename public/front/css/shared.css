@@ -11,11 +11,22 @@
 }
 
 body {
+  margin: 0;
   font-family: "Cairo", sans-serif;
   background:
     radial-gradient(circle at top right, rgba(47, 143, 131, 0.06), transparent 28%),
     radial-gradient(circle at bottom left, rgba(47, 143, 131, 0.05), transparent 24%),
     linear-gradient(180deg, #f8fcfb 0%, #f3faf8 100%);
+}
+
+/* بدون هاي القاعدة، خلفية <body> بتضل فاتحة بكل صفحات الزوار بالوضع
+   الغامق (الهيدر عائم بهامش حواليه، فأي فراغ حوله أو تحت أي قسم
+   بيورّي لون body الأصلي). */
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at top right, rgba(47, 143, 131, 0.05), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(47, 143, 131, 0.05), transparent 24%),
+    linear-gradient(180deg, var(--bg) 0%, var(--surface-2) 100%);
 }
 
 /* =========================
@@ -27,16 +38,16 @@ body {
   z-index: 1000;
   margin: 18px auto 0;
   width: min(95%, 1240px);
-  background: rgba(255, 255, 255, 0.88);
+  background: color-mix(in srgb, var(--surface, #fff) 88%, transparent);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.7));
   box-shadow: var(--etzan-shadow-sm);
   border-radius: 24px;
-  transition: all 0.25s ease;
+  transition: box-shadow 0.25s ease;
 }
 
 .main-header.scrolled {
-  box-shadow: 0 12px 30px rgba(21, 63, 56, 0.08);
+  box-shadow: var(--shadow-md, 0 12px 30px rgba(21, 63, 56, 0.08));
 }
 
 .navbar {
@@ -69,7 +80,7 @@ body {
   margin: 0;
   font-size: 26px;
   font-weight: 800;
-  color: #18333b;
+  color: var(--text, #18333b);
   line-height: 1.1;
 }
 
@@ -77,13 +88,13 @@ body {
   display: block;
   font-size: 13px;
   font-weight: 600;
-  color: #7b8f97;
+  color: var(--text-2, #7b8f97);
   margin-top: 4px;
 }
 
 .navbar-nav .nav-link {
   position: relative;
-  color: #1f2d3d;
+  color: var(--text, #1f2d3d);
   font-weight: 700;
   margin-inline: 10px;
   padding: 10px 14px 18px !important;
@@ -127,6 +138,161 @@ body {
   gap: 12px;
 }
 
+/* زر تبديل المظهر الفاتح/الغامق — أيقونتين فوق بعض، والـ CSS بيتحكم
+   بأيهما ظاهرة حسب data-theme، فما في وميض أو تأخير JS بالتبديل البصري. */
+.etzan-theme-toggle {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong, rgba(24, 51, 59, 0.2));
+  background: var(--surface, #fff);
+  color: var(--text, #18333b);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.etzan-theme-toggle:hover {
+  border-color: var(--primary, #1d9e75);
+  color: var(--primary, #1d9e75);
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(24, 51, 59, 0.08));
+}
+
+.etzan-theme-toggle:active {
+  transform: scale(0.92);
+}
+
+.etzan-theme-toggle__icon {
+  position: absolute;
+  font-size: 16px;
+  transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.etzan-theme-toggle__icon--sun {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.etzan-theme-toggle__icon--moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+}
+
+html[data-theme="dark"] .etzan-theme-toggle__icon--sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+
+html[data-theme="dark"] .etzan-theme-toggle__icon--moon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .etzan-theme-toggle__icon {
+    transition: opacity 0.15s ease;
+  }
+}
+
+/* =========================================================
+   فوتر بسيط لصفحات الدخول (login/register/forgot/join-doctor) —
+   مُعرّف هون (مش بـ auth.css أو join-doctor.css) عشان shared.css
+   هو الملف الوحيد المحمّل بكل صفحات الدخول الأربعة، فيضل شكله موحّد
+   بدون تكرار. بيستخدم متغيرات design-tokens.css العامة فقط.
+========================================================= */
+.auth-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border, rgba(24, 51, 59, 0.1));
+  background: var(--surface, #fff);
+}
+
+.auth-footer__inner {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: 18px clamp(20px, 4vw, 56px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.auth-footer__copy {
+  color: var(--text-2, #647b84);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.auth-footer__links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.auth-footer__links a {
+  color: var(--text-2, #647b84);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.auth-footer__links a:hover {
+  color: var(--primary, #1d9e75);
+}
+
+@media (max-width: 480px) {
+  .auth-footer__inner {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* نسخة عائمة من زر تبديل المظهر — ثابتة بمكانها بكل الصفحة، فوق الهيدر
+   وتحت أي مودال (زي مودال الكويز)، وبتحترم منطقة الأمان بأسفل الشاشة
+   بالجوالات ذات الحواف المدورة. */
+.etzan-theme-toggle--floating {
+  position: fixed;
+  inset-block-end: calc(22px + env(safe-area-inset-bottom, 0px));
+  inset-inline-end: 22px;
+  z-index: 1050;
+  width: 52px;
+  height: 52px;
+  background: var(--surface, #fff);
+  box-shadow: var(--shadow-lg, 0 24px 48px -16px rgba(24, 51, 59, 0.2));
+}
+
+.etzan-theme-toggle--floating .etzan-theme-toggle__icon {
+  font-size: 19px;
+}
+
+.etzan-theme-toggle--floating:hover {
+  transform: translateY(-3px);
+}
+
+.etzan-theme-toggle--floating:active {
+  transform: scale(0.94);
+}
+
+@media (max-width: 575.98px) {
+  .etzan-theme-toggle--floating {
+    inset-block-end: calc(16px + env(safe-area-inset-bottom, 0px));
+    inset-inline-end: 16px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .etzan-theme-toggle--floating .etzan-theme-toggle__icon {
+    font-size: 17px;
+  }
+}
+
 .header-actions .btn-login {
   min-height: 46px;
   padding: 0 18px;
@@ -135,10 +301,10 @@ body {
   align-items: center;
   justify-content: center;
   font-weight: 800;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid var(--etzan-line);
+  background: color-mix(in srgb, var(--surface, #fff) 75%, transparent);
+  border: 1px solid var(--border, var(--etzan-line));
   color: var(--etzan-primary-dark) !important;
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .header-actions .btn-login:hover {
@@ -158,7 +324,7 @@ body {
   background: linear-gradient(135deg, var(--etzan-primary), var(--etzan-primary-dark)) !important;
   border: none;
   box-shadow: 0 14px 28px rgba(47, 143, 131, 0.22);
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .header-actions .btn-start:hover {
@@ -172,6 +338,12 @@ body {
   background: rgba(47, 143, 131, 0.08);
   border-radius: 12px;
   padding: 8px 10px;
+}
+
+/* أيقونة همبرغر بووتستراب الافتراضية رسمتها غامقة ثابتة (SVG)، فبتصير
+   شبه مخفية فوق الهيدر الغامق — بنعكس ألوانها بالوضع الغامق بس. */
+html[data-theme="dark"] .navbar-toggler-icon {
+  filter: invert(1) brightness(1.6);
 }
 
 .bottom-line {
@@ -199,6 +371,13 @@ body {
   color: #eaf5f2;
   padding: 85px 0 24px;
   margin-top: 40px;
+}
+
+/* بالوضع الغامق خلفية الصفحة نفسها بتصير سودا تقريبًا (#0A0A0A)، فالفراغ
+   الفاصل قبل الفوتر (المصمم غامق دائمًا بقصد) كان طالع شريط أسود فاضي
+   بلا فايدة قبل الفوتر — بنلغي الفراغ بالوضع الغامق بس، الفاتح ما تغيّر. */
+html[data-theme="dark"] .etzan-footer {
+  margin-top: 0;
 }
 
 .etzan-footer::before,
@@ -382,8 +561,8 @@ body {
     margin-top: 16px;
     padding: 18px;
     border-radius: 22px;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid var(--etzan-line);
+    background: color-mix(in srgb, var(--surface, #fff) 92%, transparent);
+    border: 1px solid var(--border, var(--etzan-line));
     box-shadow: var(--etzan-shadow-sm);
   }
 

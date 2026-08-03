@@ -1,4 +1,19 @@
 document.addEventListener("DOMContentLoaded", function () {
+  /* =========================
+     تبديل المظهر الفاتح/الغامق
+  ========================= */
+  const themeToggle = document.getElementById("etzanThemeToggle");
+
+  if (themeToggle) {
+    themeToggle.addEventListener("click", function () {
+      const html = document.documentElement;
+      const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
+
+      html.setAttribute("data-theme", next);
+      localStorage.setItem("etzan-theme", next);
+    });
+  }
+
   const header = document.querySelector(".main-header");
   const navLinks = document.querySelectorAll(".nav-scroll-link");
   const allNavLinks = document.querySelectorAll(".nav-link");

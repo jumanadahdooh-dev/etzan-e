@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Setting;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckMaintenanceMode
@@ -15,18 +16,26 @@ class CheckMaintenanceMode
             return $next($request);
         }
 
-        $maintenanceMode = Setting::where('key', 'maintenance_mode')->value('value');
+        try {
+            $maintenanceMode = Setting::where('key', 'maintenance_mode')->value('value');
 
-        if ($maintenanceMode !== '1') {
+            if ($maintenanceMode !== '1') {
+                return $next($request);
+            }
+
+            $message = Setting::where('key', 'maintenance_message')->value('value')
+                ?: 'الموقع قيد التحديث حاليًا، يرجى المحاولة لاحقًا.';
+
+            return response()->view('errors.maintenance', [
+                'message' => $message,
+            ], 503);
+        } catch (\Throwable $e) {
+            // فشل فحص وضع الصيانة (مثلاً اتصال قاعدة بيانات خاطئ لحظيًا) ما لازم
+            // يطيح الموقع كله — منكمل الطلب عادي ونسجّل الخطأ عشان يظل مرئي.
+            Log::error('CheckMaintenanceMode: فشل فحص وضع الصيانة', ['error' => $e->getMessage()]);
+
             return $next($request);
         }
-
-        $message = Setting::where('key', 'maintenance_message')->value('value')
-            ?: 'الموقع قيد التحديث حاليًا، يرجى المحاولة لاحقًا.';
-
-        return response()->view('errors.maintenance', [
-            'message' => $message,
-        ], 503);
     }
 
     private function shouldBypassMaintenance(Request $request): bool

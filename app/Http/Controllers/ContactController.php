@@ -146,6 +146,13 @@ class ContactController extends Controller
         }
     }
 
+    /**
+     * إشعار كل الأدمنز الحاليين برسالة تواصل جديدة — نقطة كتابة واحدة
+     * نظيفة عبر AppNotificationService::sendToAllAdmins() بدل ~90 سطر
+     * كود دفاعي كان يجرب أعمدة كتير (admin_id/user_id/recipient_id...)
+     * ولا وحدة منها موجودة فعلياً بالجدول، فكان دايماً بيوقع بمسار واحد
+     * مشترك (حالة قراءة واحدة لكل الأدمنز).
+     */
     private function createAdminMessageNotification(
         int $conversationId,
         int $messageId,
@@ -155,168 +162,28 @@ class ContactController extends Controller
         string $messageText
     ): void {
         try {
-            $title = 'رسالة دعم جديدة';
-            $body = 'وصلت رسالة جديدة من ' . $guestName . ' بخصوص: ' . $subject;
-
-            $url = route('admin.messages.show', $conversationId);
-
-            $data = [
-                'conversation_id' => $conversationId,
-                'message_id' => $messageId,
-                'guest_name' => $guestName,
-                'guest_email' => $guestEmail,
-                'subject' => $subject,
-                'message_preview' => mb_substr($messageText, 0, 180),
-                'url' => $url,
-            ];
-
-            /*
-             |--------------------------------------------------------------------------
-             | جدول admin_notifications
-             |--------------------------------------------------------------------------
-             | إذا جدول إشعارات الأدمن موجود، بنضيف فيه إشعار.
-             | الكود مرن مع أسماء الأعمدة المختلفة عندك.
-            */
-            if (Schema::hasTable('admin_notifications')) {
-                $adminIds = $this->getAdminIds();
-
-                if (!empty($adminIds) && $this->tableHasAnyColumn('admin_notifications', [
-                    'admin_id',
-                    'user_id',
-                    'recipient_id',
-                    'notifiable_id',
-                ])) {
-                    foreach ($adminIds as $adminId) {
-                        $notificationData = $this->filterColumns('admin_notifications', [
-                            'admin_id' => $adminId,
-                            'user_id' => $adminId,
-                            'recipient_id' => $adminId,
-                            'notifiable_id' => $adminId,
-                            'notifiable_type' => 'App\\Models\\User',
-
-                            'title' => $title,
-                            'message' => $body,
-                            'body' => $body,
-                            'content' => $body,
-                            'description' => $body,
-
-                            'type' => 'message',
-                            'category' => 'message',
-                            'icon' => 'fa-regular fa-message',
-
-                            'url' => $url,
-                            'link' => $url,
-                            'route' => $url,
-                            'action_url' => $url,
-
-                            'conversation_id' => $conversationId,
-                            'message_id' => $messageId,
-
-                            'data' => json_encode($data, JSON_UNESCAPED_UNICODE),
-                            'meta' => json_encode($data, JSON_UNESCAPED_UNICODE),
-                            'payload' => json_encode($data, JSON_UNESCAPED_UNICODE),
-
-                            'is_read' => false,
-                            'read' => false,
-                            'seen' => false,
-                            'read_at' => null,
-                            'seen_at' => null,
-
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]);
-
-                        if (!empty($notificationData)) {
-                            DB::table('admin_notifications')->insert($notificationData);
-                        }
-                    }
-                } else {
-                    $notificationData = $this->filterColumns('admin_notifications', [
-                        'title' => $title,
-                        'message' => $body,
-                        'body' => $body,
-                        'content' => $body,
-                        'description' => $body,
-
-                        'type' => 'message',
-                        'category' => 'message',
-                        'icon' => 'fa-regular fa-message',
-
-                        'url' => $url,
-                        'link' => $url,
-                        'route' => $url,
-                        'action_url' => $url,
-
-                        'conversation_id' => $conversationId,
-                        'message_id' => $messageId,
-
-                        'data' => json_encode($data, JSON_UNESCAPED_UNICODE),
-                        'meta' => json_encode($data, JSON_UNESCAPED_UNICODE),
-                        'payload' => json_encode($data, JSON_UNESCAPED_UNICODE),
-
-                        'is_read' => false,
-                        'read' => false,
-                        'seen' => false,
-                        'read_at' => null,
-                        'seen_at' => null,
-
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-
-                    if (!empty($notificationData)) {
-                        DB::table('admin_notifications')->insert($notificationData);
-                    }
-                }
-            }
-
-            /*
-             |--------------------------------------------------------------------------
-             | ملاحظة: كان هون كود بيحاول يكتب كمان بجدول app_notifications، بس كان
-             | معطّل بالكامل — أسماء الأعمدة يلي كان يحاول يستخدمها (user_id, admin_id,
-             | recipient_id, notifiable_id) ما وحدة منهم بتطابق العمود الحقيقي
-             | (recipient_user_id)، فكانت النتيجة صفوف بدون مستلم محدد، وما في
-             | أي شاشة أدمن أصلاً بتقرأ من app_notifications (إشعارات الأدمن كلها
-             | من admin_notifications فوق). شيلناه لأنه كان عم يكتب صفوف ميتة
-             | بقاعدة البيانات بدون أي فايدة مع كل رسالة تواصل.
-            */
+            app(\App\Services\AppNotificationService::class)->sendToAllAdmins(
+                type: 'message',
+                title: 'رسالة دعم جديدة',
+                body: 'وصلت رسالة جديدة من ' . $guestName . ' بخصوص: ' . $subject,
+                url: route('admin.messages.show', $conversationId),
+                relatedId: $conversationId,
+                relatedType: 'conversation',
+                data: [
+                    'conversation_id' => $conversationId,
+                    'message_id' => $messageId,
+                    'guest_name' => $guestName,
+                    'guest_email' => $guestEmail,
+                    'subject' => $subject,
+                    'message_preview' => mb_substr($messageText, 0, 180),
+                ]
+            );
         } catch (\Throwable $e) {
             /*
              | لا نخلي فشل الإشعار يمنع إرسال رسالة الزائر.
             */
             report($e);
         }
-    }
-
-    private function getAdminIds()
-    {
-        if (!Schema::hasTable('users')) {
-            return [];
-        }
-
-        if (Schema::hasColumn('users', 'role')) {
-            return DB::table('users')
-                ->where('role', 'admin')
-                ->pluck('id')
-                ->toArray();
-        }
-
-        return [];
-    }
-
-    private function tableHasAnyColumn(string $table, array $columns): bool
-    {
-        if (!Schema::hasTable($table)) {
-            return false;
-        }
-
-        foreach ($columns as $column) {
-            if (Schema::hasColumn($table, $column)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private function filterColumns(string $table, array $data): array

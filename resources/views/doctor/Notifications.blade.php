@@ -16,8 +16,8 @@
 @endphp
 
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('front/css/doctor/doctor-dashboard.css') }}?v={{ file_exists(public_path('front/css/doctor/doctor-dashboard.css')) ? filemtime(public_path('front/css/doctor/doctor-dashboard.css')) : '1' }}">
-    <link rel="stylesheet" href="{{ asset('front/css/doctor/doctor-requests.css') }}?v={{ file_exists(public_path('front/css/doctor/doctor-requests.css')) ? filemtime(public_path('front/css/doctor/doctor-requests.css')) : '1' }}">
+    <link rel="stylesheet" href="{{ asset('front/css/doctor/dashboard.css') }}?v={{ file_exists(public_path('front/css/doctor/dashboard.css')) ? filemtime(public_path('front/css/doctor/dashboard.css')) : '1' }}">
+    <link rel="stylesheet" href="{{ asset('front/css/doctor/requests.css') }}?v={{ file_exists(public_path('front/css/doctor/requests.css')) ? filemtime(public_path('front/css/doctor/requests.css')) : '1' }}">
 @endpush
 
 @section('content')
@@ -67,7 +67,7 @@
                     <div class="dnotif-item__top">
                         <strong>{{ $notification->title }}</strong>
                         @if (is_null($notification->read_at))
-                            <span class="ddash-dot" style="background:#ef4444;position:static;display:inline-block;width:7px;height:7px;border-radius:50%"></span>
+                            <span class="ddash-dot" style="background:var(--danger);position:static;display:inline-block;width:7px;height:7px;border-radius:50%"></span>
                         @endif
                     </div>
                     @if ($notification->body)

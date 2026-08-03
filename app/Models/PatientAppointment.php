@@ -21,10 +21,24 @@ class PatientAppointment extends Model
         'reason',
         'notes',
         'status',
+        'doctor_response_message',
+        'suggested_date',
+        'suggested_time',
+        'patient_response_status',
+        'patient_response_message',
+        'confirmed_at',
+        'rejected_at',
+        'cancelled_at',
+        'completed_at',
     ];
 
     protected $casts = [
         'appointment_date' => 'date',
+        'suggested_date' => 'date',
+        'confirmed_at' => 'datetime',
+        'rejected_at' => 'datetime',
+        'cancelled_at' => 'datetime',
+        'completed_at' => 'datetime',
     ];
 
     public function patient()

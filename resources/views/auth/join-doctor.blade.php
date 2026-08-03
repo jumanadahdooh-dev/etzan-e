@@ -1,251 +1,43 @@
-@extends('layouts.public')
+@extends('layouts.auth')
 
 @section('title', 'انضم كطبيب | اتزان')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('front/css/join-doctor.css') }}">
-
-<style>
-/* =========================================================
-   Doctor Application Success Modal
-========================================================= */
-
-.doctor-success-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: 22px;
-  direction: rtl;
-}
-
-.doctor-success-modal.is-open {
-  display: flex;
-}
-
-.doctor-success-modal__overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(7, 27, 32, 0.48);
-  backdrop-filter: blur(12px);
-}
-
-.doctor-success-modal__card {
-  position: relative;
-  z-index: 2;
-  width: min(570px, 100%);
-  border-radius: 34px;
-  padding: 34px 34px 30px;
-  background:
-    radial-gradient(circle at top right, rgba(29, 158, 117, 0.13), transparent 38%),
-    radial-gradient(circle at bottom left, rgba(77, 168, 218, 0.13), transparent 35%),
-    #ffffff;
-  border: 1px solid rgba(29, 158, 117, 0.18);
-  box-shadow: 0 30px 90px rgba(24, 51, 59, 0.24);
-  text-align: center;
-  animation: doctorModalPop 0.35s ease;
-}
-
-.doctor-success-modal__close {
-  position: absolute;
-  top: 18px;
-  inset-inline-start: 18px;
-  width: 42px;
-  height: 42px;
-  border: 0;
-  border-radius: 16px;
-  background: rgba(29, 158, 117, 0.10);
-  color: #15795A;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.doctor-success-modal__icon {
-  width: 82px;
-  height: 82px;
-  margin: 0 auto 16px;
-  border-radius: 28px;
-  background: linear-gradient(135deg, #1D9E75, #4DA8DA);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 34px;
-  box-shadow: 0 20px 45px rgba(29, 158, 117, 0.28);
-}
-
-.doctor-success-modal__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  margin: 0 auto 12px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(29, 158, 117, 0.11);
-  color: #15795A;
-  font-size: 13px;
-  font-weight: 900;
-}
-
-.doctor-success-modal__card h2 {
-  margin: 0 0 10px;
-  color: #18333B;
-  font-size: 30px;
-  font-weight: 950;
-  line-height: 1.35;
-}
-
-.doctor-success-modal__card p {
-  margin: 0 auto 22px;
-  max-width: 450px;
-  color: #647B84;
-  font-size: 14px;
-  font-weight: 750;
-  line-height: 1.9;
-}
-
-.doctor-success-modal__steps {
-  display: grid;
-  gap: 10px;
-  margin: 22px 0;
-}
-
-.doctor-success-step {
-  min-height: 66px;
-  border-radius: 20px;
-  padding: 13px 15px;
-  background: rgba(248, 252, 251, 0.94);
-  border: 1px solid rgba(29, 158, 117, 0.13);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-align: right;
-}
-
-.doctor-success-step span {
-  width: 11px;
-  height: 11px;
-  min-width: 11px;
-  border-radius: 50%;
-  background: #1D9E75;
-  box-shadow: 0 0 0 6px rgba(29, 158, 117, 0.10);
-}
-
-.doctor-success-step strong {
-  display: block;
-  color: #18333B;
-  font-size: 14px;
-  font-weight: 950;
-  margin-bottom: 3px;
-}
-
-.doctor-success-step small {
-  display: block;
-  color: #647B84;
-  font-size: 12px;
-  font-weight: 750;
-  line-height: 1.6;
-}
-
-.doctor-success-modal__actions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 22px;
-  flex-wrap: wrap;
-}
-
-.doctor-success-btn {
-  min-width: 155px;
-  height: 48px;
-  border-radius: 999px;
-  padding: 0 22px;
-  border: 0;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 950;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.doctor-success-btn-primary {
-  color: #ffffff;
-  background: linear-gradient(135deg, #1D9E75, #4DA8DA);
-  box-shadow: 0 14px 28px rgba(29, 158, 117, 0.22);
-}
-
-.doctor-success-btn-outline {
-  color: #15795A;
-  background: #ffffff;
-  border: 1px solid rgba(29, 158, 117, 0.22);
-}
-
-@keyframes doctorModalPop {
-  from {
-    opacity: 0;
-    transform: translateY(18px) scale(0.96);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@media (max-width: 560px) {
-  .doctor-success-modal__card {
-    padding: 28px 20px 24px;
-    border-radius: 26px;
-  }
-
-  .doctor-success-modal__card h2 {
-    font-size: 24px;
-  }
-
-  .doctor-success-modal__actions {
-    flex-direction: column;
-  }
-
-  .doctor-success-btn {
-    width: 100%;
-  }
-}
-</style>
 @endpush
 
 @section('content')
 
-<section class="doctor-apply-page">
-  <div class="doctor-apply-shell">
-    <div class="doctor-apply-wrap">
+<section class="auth-split">
 
-      <div class="mini-deco mini-deco--1"><i class="fa-solid fa-user-doctor"></i></div>
-      <div class="mini-deco mini-deco--2"><i class="fa-solid fa-stethoscope"></i></div>
-      <div class="mini-deco mini-deco--3"><i class="fa-solid fa-file-shield"></i></div>
-      <div class="mini-deco mini-deco--4"><i class="fa-solid fa-circle-check"></i></div>
-      <div class="mini-deco mini-deco--5"><i class="fa-solid fa-heart-pulse"></i></div>
+  <div class="auth-decor" aria-hidden="true">
+    <span class="auth-decor__dots auth-decor__dots--1"></span>
+    <span class="auth-decor__dots auth-decor__dots--2"></span>
+    <span class="auth-decor__ring auth-decor__ring--1"></span>
+    <span class="auth-decor__ring auth-decor__ring--2"></span>
+    <span class="auth-decor__ring auth-decor__ring--3"></span>
+    <span class="auth-decor__ring auth-decor__ring--4"></span>
+    <span class="auth-decor__dot-solid"></span>
+    <span class="auth-decor__blob"></span>
+  </div>
 
-      <div class="doctor-apply-card">
-        <div class="doctor-apply-badge" id="doctorApplyBadge">
-          <i class="fa-solid fa-user-doctor"></i>
-          بوابة الاعتماد الطبي
-        </div>
+  <div class="auth-split__form">
+    <div class="auth-split__form-inner">
 
-        <div class="doctor-apply-head">
-          <h1 id="doctorApplyTitle">انضم كطبيب إلى المنصة</h1>
-          <p id="doctorApplyDesc">
-            أكمل خطوات الاعتماد المهني ليتم مراجعة طلبك من قبل الإدارة بطريقة واضحة ومنظمة.
-          </p>
-        </div>
+      <div class="auth-form-panel__logo">
+        <img src="{{ asset('front/image/logo.png') }}" alt="{{ setting('site_name', 'اتزان') }}">
+        <span>{{ setting('site_name', 'اتزان') }}</span>
+      </div>
 
-        <div class="doctor-stepper">
+      <div class="doctor-apply-head">
+        <span class="auth-form-panel__eyebrow" id="doctorApplyBadge">بوابة الاعتماد الطبي</span>
+        <h1 id="doctorApplyTitle">انضم كطبيب إلى المنصة</h1>
+        <p id="doctorApplyDesc">
+          أكمل خطوات الاعتماد المهني ليتم مراجعة طلبك من قبل الإدارة بطريقة واضحة ومنظمة.
+        </p>
+      </div>
+
+      <div class="doctor-stepper">
           <div class="doctor-progress-line">
             <span id="doctorProgressFill"></span>
           </div>
@@ -644,7 +436,6 @@
             <a href="{{ route('login') }}">تسجيل الدخول</a>
           </div>
         </form>
-      </div>
     </div>
   </div>
 </section>
@@ -658,54 +449,80 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <div class="doctor-success-modal__icon">
-        <i class="fa-solid fa-check"></i>
-      </div>
+      <div class="doctor-beacon-success">
+        <div class="doctor-beacon-success__visual">
+          <div class="doctor-beacon-success__halo doctor-beacon-success__halo--one"></div>
+          <div class="doctor-beacon-success__halo doctor-beacon-success__halo--two"></div>
+          <div class="doctor-beacon-success__halo doctor-beacon-success__halo--three"></div>
+          <div class="doctor-beacon-success__pulse doctor-beacon-success__pulse--a"></div>
+          <div class="doctor-beacon-success__pulse doctor-beacon-success__pulse--b"></div>
+          <div class="doctor-beacon-success__pulse doctor-beacon-success__pulse--c"></div>
 
-      <span class="doctor-success-modal__badge">
-        تم استلام الطلب
-      </span>
-
-      <h2>{{ session('doctor_apply_success') }}</h2>
-
-      <p>
-        {{ session('doctor_apply_note') }}
-      </p>
-
-      <div class="doctor-success-modal__steps">
-        <div class="doctor-success-step">
-          <span></span>
-          <div>
-            <strong>تم حفظ بياناتك</strong>
-            <small>وصل طلب الانضمام إلى إدارة منصة اتزان.</small>
+          <div class="doctor-beacon-success__core">
+            <div class="doctor-beacon-success__core-ring"></div>
+            <i class="fa-solid fa-check doctor-beacon-success__core-icon"></i>
           </div>
         </div>
 
-        <div class="doctor-success-step">
-          <span></span>
-          <div>
-            <strong>الطلب قيد المراجعة</strong>
-            <small>سيتم مراجعة بياناتك والمستندات المرفقة قبل اتخاذ القرار.</small>
+        <div class="doctor-beacon-success__content">
+          <span class="doctor-beacon-success__kicker">
+            <i class="fa-solid fa-circle-check"></i>
+            تم استلام الطلب
+          </span>
+
+          <h2>{{ session('doctor_apply_success') }}</h2>
+
+          <p class="doctor-beacon-success__lead">
+            {{ session('doctor_apply_note') }}
+          </p>
+
+          <div class="doctor-beacon-success__status-row">
+            <span class="doctor-beacon-success__status-pill">
+              <i class="fa-regular fa-clock"></i>
+              قيد المراجعة
+            </span>
+            <span class="doctor-beacon-success__status-pill doctor-beacon-success__status-pill--soft">
+              <i class="fa-regular fa-envelope"></i>
+              تحديث عبر البريد
+            </span>
+          </div>
+
+          <div class="doctor-beacon-success__timeline">
+            <div class="doctor-beacon-success__timeline-item">
+              <span class="doctor-beacon-success__dot"></span>
+              <div>
+                <strong>تم حفظ بياناتك</strong>
+                <p>وصل طلب الانضمام إلى إدارة منصة اتزان.</p>
+              </div>
+            </div>
+
+            <div class="doctor-beacon-success__timeline-item">
+              <span class="doctor-beacon-success__dot"></span>
+              <div>
+                <strong>الطلب قيد المراجعة</strong>
+                <p>سيتم مراجعة بياناتك والمستندات المرفقة قبل اتخاذ القرار.</p>
+              </div>
+            </div>
+
+            <div class="doctor-beacon-success__timeline-item">
+              <span class="doctor-beacon-success__dot"></span>
+              <div>
+                <strong>راجعي بريدك الإلكتروني</strong>
+                <p>سيصلك تحديث عند قبول الطلب أو عند الحاجة إلى معلومات إضافية.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="doctor-beacon-success__actions">
+            <a href="{{ route('home') }}" class="primary-action doctor-beacon-success__login-link">
+              العودة للرئيسية
+            </a>
+
+            <button type="button" class="secondary-action" data-close-doctor-modal>
+              البقاء في الصفحة
+            </button>
           </div>
         </div>
-
-        <div class="doctor-success-step">
-          <span></span>
-          <div>
-            <strong>راجعي بريدك الإلكتروني</strong>
-            <small>سيصلك تحديث عند قبول الطلب أو عند الحاجة إلى معلومات إضافية.</small>
-          </div>
-        </div>
-      </div>
-
-      <div class="doctor-success-modal__actions">
-        <a href="{{ route('home') }}" class="doctor-success-btn doctor-success-btn-primary">
-          العودة للرئيسية
-        </a>
-
-        <button type="button" class="doctor-success-btn doctor-success-btn-outline" data-close-doctor-modal>
-          البقاء في الصفحة
-        </button>
       </div>
     </div>
   </div>

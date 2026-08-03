@@ -35,21 +35,27 @@
 
     $completionRate = $stats['completion_rate'] ?? 0;
 
-    // شبكة الإحصائيات (8 كروت، صفين) — بيانات حقيقية بالكامل
+    $attentionCounts = $attentionCounts ?? ['unread_messages' => 0, 'meals_to_review' => 0, 'active_alerts' => 0];
+
+    // شبكة الإحصائيات (8 كروت، صفين) — بيانات حقيقية بالكامل، والي بيحتاج
+    // إجراء من الطبيب فيها رابط مباشر لصفحته (طلبات/رسائل/وجبات/تنبيهات)
     $statCards = [
-        ['icon' => 'calendar-check',  'accent' => 'green',  'value' => $stats['appointments_today'] ?? 0, 'label' => 'مواعيد اليوم', 'desc' => 'استشارات مجدولة'],
-        ['icon' => 'calendar-clock',  'accent' => 'violet', 'value' => $upcomingAppointments->count(), 'label' => 'القادمة', 'desc' => 'خلال الأيام الجاية'],
-        ['icon' => 'users-round',     'accent' => 'blue',   'value' => $stats['active_patients'] ?? 0, 'label' => 'مرضى نشطون', 'desc' => 'تحت متابعتك'],
-        ['icon' => 'user-check',      'accent' => 'teal',   'value' => ($statusBreakdown['completed'] ?? 0), 'label' => 'مكتملة هالشهر', 'desc' => 'مواعيد أُنجزت'],
-        ['icon' => 'clipboard-list',  'accent' => 'amber',  'value' => $stats['pending_requests'] ?? 0, 'label' => 'طلبات معلّقة', 'desc' => 'بانتظار قرارك'],
-        ['icon' => 'message-circle',  'accent' => 'sky',    'value' => $sidebarBadges['messages'] ?? 0, 'label' => 'رسائل غير مقروءة', 'desc' => 'من مرضاك'],
-        ['icon' => 'video',           'accent' => 'rose',   'value' => $consultationBreakdown['online'] ?? 0, 'label' => 'استشارات عن بُعد', 'desc' => 'هالشهر'],
-        ['icon' => 'star',            'accent' => 'amber',  'value' => ($stats['avg_rating'] ?? 0) > 0 ? $stats['avg_rating'] : '—', 'label' => 'تقييمك العام', 'desc' => number_format($stats['reviews_count'] ?? 0).' مراجعة'],
+        ['icon' => 'calendar-check',  'accent' => 'green',  'value' => $stats['appointments_today'] ?? 0, 'label' => 'مواعيد اليوم', 'desc' => 'استشارات مجدولة', 'href' => route('doctor.appointments')],
+        ['icon' => 'calendar-clock',  'accent' => 'violet', 'value' => $upcomingAppointments->count(), 'label' => 'القادمة', 'desc' => 'خلال الأيام الجاية', 'href' => route('doctor.appointments')],
+        ['icon' => 'users-round',     'accent' => 'blue',   'value' => $stats['active_patients'] ?? 0, 'label' => 'مرضى نشطون', 'desc' => 'تحت متابعتك', 'href' => route('doctor.patients')],
+        ['icon' => 'triangle-alert',  'accent' => 'rose',   'value' => $attentionCounts['active_alerts'], 'label' => 'تنبيهات فعّالة', 'desc' => 'مرضى بحاجة متابعة', 'href' => route('doctor.alerts')],
+        ['icon' => 'clipboard-list',  'accent' => 'amber',  'value' => $stats['pending_requests'] ?? 0, 'label' => 'طلبات معلّقة', 'desc' => 'بانتظار قرارك', 'href' => route('doctor.patient-requests.index')],
+        ['icon' => 'message-circle',  'accent' => 'sky',    'value' => $attentionCounts['unread_messages'], 'label' => 'رسائل غير مقروءة', 'desc' => 'من مرضاك', 'href' => route('doctor.messages')],
+        ['icon' => 'bot',             'accent' => 'teal',   'value' => $attentionCounts['meals_to_review'], 'label' => 'وجبات تحتاج مراجعة', 'desc' => 'تحليل AI بانتظارك', 'href' => route('doctor.meal_reviews')],
+        ['icon' => 'star',            'accent' => 'amber',  'value' => ($stats['avg_rating'] ?? 0) > 0 ? $stats['avg_rating'] : '—', 'label' => 'تقييمك العام', 'desc' => number_format($stats['reviews_count'] ?? 0).' مراجعة', 'href' => null],
     ];
 @endphp
 
 @push('styles')
     <link rel="stylesheet" href="{{ asset('front/css/doctor/dashboard.css') }}?v={{ file_exists(public_path('front/css/doctor/doctor-dashboard.css')) ? filemtime(public_path('front/css/doctor/doctor-dashboard.css')) : '1' }}">
+    <style>
+        a.ddash-stat-card { display: block; color: inherit; text-decoration: none; }
+    </style>
 @endpush
 
 @section('content')
@@ -109,14 +115,19 @@
     </div>
     <div class="ddash-stats-grid">
         @foreach ($statCards as $i => $c)
-            <div class="ddash-stat-card ddash-accent--{{ $c['accent'] }}" style="animation-delay: {{ $i * 55 }}ms">
+            @php $cardTag = $c['href'] ? 'a' : 'div'; @endphp
+            <{{ $cardTag }}
+                @if ($c['href']) href="{{ $c['href'] }}" @endif
+                class="ddash-stat-card ddash-accent--{{ $c['accent'] }}"
+                style="animation-delay: {{ $i * 55 }}ms"
+            >
                 <div class="ddash-stat-card__top">
                     <span class="ddash-stat-card__icon"><i data-lucide="{{ $c['icon'] }}"></i></span>
                 </div>
                 <div class="ddash-stat-card__num">{{ is_numeric($c['value']) ? number_format($c['value']) : $c['value'] }}</div>
                 <div class="ddash-stat-card__label">{{ $c['label'] }}</div>
                 <div class="ddash-stat-card__desc">{{ $c['desc'] }}</div>
-            </div>
+            </{{ $cardTag }}>
         @endforeach
     </div>
 
@@ -291,7 +302,7 @@
             <div class="ddash-card ddash-accent--amber">
                 <div class="ddash-card__head">
                     <div><span>بانتظار قرارك</span><h2>طلبات الاستشارة</h2></div>
-                    <a href="{{ route('doctor.requests') }}" class="ddash-link">عرض الكل</a>
+                    <a href="{{ route('doctor.patient-requests.index') }}" class="ddash-link">عرض الكل</a>
                 </div>
                 @forelse ($pendingRequests as $req)
                     <div class="ddash-item">
@@ -300,7 +311,7 @@
                             <strong>{{ $req->patient->name ?? 'مريض' }}</strong>
                             <small>طلب متابعة · {{ $req->created_at?->locale('ar')->diffForHumans() }}</small>
                         </div>
-                        <a href="{{ route('doctor.requests') }}" class="ddash-btn">مراجعة</a>
+                        <a href="{{ route('doctor.patient-requests.index') }}" class="ddash-btn">مراجعة</a>
                     </div>
                 @empty
                     <div class="ddash-empty"><i data-lucide="inbox"></i><p>ما في طلبات معلقة — كل شي مراجَع 🎉</p></div>
@@ -372,7 +383,7 @@
             <div class="ddash-card ddash-accent--violet">
                 <div class="ddash-card__head"><div><span>اختصارات</span><h2>إجراءات سريعة</h2></div></div>
                 <div class="ddash-quick">
-                    <a href="{{ route('doctor.requests') }}" class="ddash-quick__item ddash-accent--amber"><i data-lucide="clipboard-list"></i><strong>الطلبات</strong><span>مراجعة الطلبات</span></a>
+                    <a href="{{ route('doctor.patient-requests.index') }}" class="ddash-quick__item ddash-accent--amber"><i data-lucide="clipboard-list"></i><strong>الطلبات</strong><span>مراجعة الطلبات</span></a>
                     <a href="{{ route('doctor.appointments') }}" class="ddash-quick__item ddash-accent--blue"><i data-lucide="calendar"></i><strong>المواعيد</strong><span>جدولة موعد</span></a>
                     <a href="{{ route('doctor.patients') }}" class="ddash-quick__item ddash-accent--green"><i data-lucide="users-round"></i><strong>مرضاي</strong><span>القائمة الكاملة</span></a>
                     <a href="{{ route('doctor.meal_reviews') }}" class="ddash-quick__item ddash-accent--teal"><i data-lucide="bot"></i><strong>وجبات AI</strong><span>مراجعة واعتماد</span></a>
@@ -397,7 +408,7 @@
                             <strong>{{ $req->patient->name ?? 'مريض' }}</strong>
                             <small>طلب متابعة بانتظار ردّك</small>
                         </div>
-                        <i class="ddash-dot" style="background:#f59e0b"></i>
+                        <i class="ddash-dot" style="background:var(--d-amber)"></i>
                     </div>
                 @empty
                     <div class="ddash-empty" style="padding:16px"><i data-lucide="check-circle" style="width:34px;height:34px;padding:8px"></i><p>ما حدا محتاج متابعة عاجلة هلق 👍</p></div>
@@ -415,7 +426,7 @@
 
                 <div class="ddash-perf-row">
                     <div class="ddash-perf-head"><span>نسبة إنجاز المواعيد</span><strong>{{ $completionRate }}%</strong></div>
-                    <div class="ddash-perf-bar"><div class="ddash-perf-fill" style="width:{{ $completionRate }}%;background:#1D9E75"></div></div>
+                    <div class="ddash-perf-bar"><div class="ddash-perf-fill" style="width:{{ $completionRate }}%;background:var(--d-green)"></div></div>
                 </div>
 
                 @php
@@ -424,7 +435,7 @@
                 @if ($ratingPct > 0)
                     <div class="ddash-perf-row">
                         <div class="ddash-perf-head"><span>رضا المرضى (من التقييمات)</span><strong>{{ $ratingPct }}%</strong></div>
-                        <div class="ddash-perf-bar"><div class="ddash-perf-fill" style="width:{{ $ratingPct }}%;background:#3b82f6"></div></div>
+                        <div class="ddash-perf-bar"><div class="ddash-perf-fill" style="width:{{ $ratingPct }}%;background:var(--d-blue)"></div></div>
                     </div>
                 @endif
 
@@ -551,7 +562,11 @@
                                         {{ $statusLabels[$apt->status] ?? $apt->status }}
                                     </span>
                                 </td>
-                                <td><a href="{{ route('doctor.patient_details') }}" class="ddash-link">التفاصيل</a></td>
+                                <td>
+                                    @if ($apt->patient_profile_id)
+                                        <a href="{{ route('doctor.patient-profile.show', $apt->patient_profile_id) }}" class="ddash-link">التفاصيل</a>
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
