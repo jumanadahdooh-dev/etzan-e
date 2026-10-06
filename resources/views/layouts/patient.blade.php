@@ -28,7 +28,6 @@
     <link rel="stylesheet" href="{{ asset('front/css/patient/patient.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/patient/dashboard-shell.css') }}">
     <link rel="stylesheet" href="{{ asset('front/css/patient/ux-premium-v3.css') }}">
-    <link rel="stylesheet" href="{{ asset('front/css/patient/etzan-patient-premium.css') }}">
 
     @stack('styles')
 </head>
