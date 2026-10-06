@@ -105,7 +105,6 @@ class PatientTaskController extends Controller
         'task_date' => 'required|date|after_or_equal:today',
         'task_time' => 'nullable|date_format:H:i',
         'reminder_minutes' => 'nullable|integer|min:0|max:1440',
-        'repeat_type' => 'nullable|in:once,daily,weekly',
     ]);
 
     $user = auth()->user();
@@ -136,7 +135,8 @@ class PatientTaskController extends Controller
         'task_date' => $validated['task_date'],
         'task_time' => $validated['task_time'] ?? null,
         'status' => 'pending',
-        'repeat_type' => $validated['repeat_type'] ?? 'once',
+        // التكرار غير مطبّق بعد (المهمة صف واحد بحالة إنجاز واحدة)، فكل مهمة لمرة واحدة
+        'repeat_type' => 'once',
         'reminder_minutes' => $validated['reminder_minutes'] ?? null,
         'requires_attachment' => false,
         'attachment_path' => null,
