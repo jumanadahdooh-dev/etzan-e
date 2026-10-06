@@ -700,15 +700,6 @@
                         </select>
                     </label>
 
-                    <label>
-                        التكرار
-                        <select id="taskRepeatInput" name="repeat_type">
-                            <option value="once" @selected(old('repeat_type', 'once') === 'once')>مرة واحدة</option>
-                            <option value="daily" @selected(old('repeat_type') === 'daily')>يوميًا</option>
-                            <option value="weekly" @selected(old('repeat_type') === 'weekly')>أسبوعيًا</option>
-                        </select>
-                    </label>
-
                     <div class="journey-form-actions">
                         <button type="button" class="modal-cancel" data-close-modal>إلغاء</button>
                         <button type="submit" class="modal-save">حفظ</button>

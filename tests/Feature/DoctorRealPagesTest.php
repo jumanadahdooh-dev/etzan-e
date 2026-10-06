@@ -52,8 +52,10 @@ class DoctorRealPagesTest extends TestCase
         $response = $this->actingAs($doctorProfile->user)->get(route('doctor.plans'));
 
         $response->assertOk();
-        $response->assertSee('بدون خطة سعرات');
+        $response->assertSee('مرضى بحاجة لخطة سعرات');
         $response->assertSee($patientProfile->user->name);
+        $this->assertTrue($response->viewData('plans')->isEmpty());
+        $this->assertSame([$patientProfile->id], $response->viewData('patientsWithoutPlan')->pluck('profile_id')->all());
     }
 
     public function test_alerts_page_flags_patient_with_no_recent_meals(): void
@@ -83,7 +85,7 @@ class DoctorRealPagesTest extends TestCase
         $response = $this->actingAs($doctorProfile->user)->get(route('doctor.alerts'));
 
         $response->assertOk();
-        $response->assertSee('ما سجّل وجبات من');
+        $response->assertSee('ما سجّل وجبات من 10 يوم');
     }
 
     public function test_alerts_page_is_empty_when_patient_is_up_to_date(): void

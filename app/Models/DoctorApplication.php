@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class DoctorApplication extends Model
 {
+    /**
+     * الترخيص والسيرة الذاتية ملفات حساسة: تنحفظ على القرص الخاص وتنعرض فقط عبر لوحة الأدمن.
+     * الصورة الشخصية بتضل public لأنها بتصير صورة الطبيب العامة.
+     */
+    public const PRIVATE_DISK = 'local';
+
+    public const PRIVATE_FILE_COLUMNS = ['license_file_path', 'cv_file_path'];
+
     protected $fillable = [
         'full_name',
         'email',

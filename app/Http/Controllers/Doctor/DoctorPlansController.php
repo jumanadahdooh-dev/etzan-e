@@ -117,28 +117,19 @@ class DoctorPlansController extends Controller
         }
 
         // ==============================================================
-        // 6. جلب الموعد القادم (اكتشاف العمود تلقائياً)
+        // 6. جلب الموعد القادم من patient_appointments
         // ==============================================================
         $appointments = collect();
-        if (Schema::hasTable('appointments') && $patients->isNotEmpty()) {
-            $columns = Schema::getColumnListing('appointments');
-            $idColumn = 'patient_user_id'; // المواعيد غالباً patient_user_id
-            if (!in_array($idColumn, $columns) && in_array('user_id', $columns)) {
-                $idColumn = 'user_id';
-            } elseif (!in_array($idColumn, $columns) && in_array('patient_id', $columns)) {
-                $idColumn = 'patient_id';
-            }
-
-            $now = now();
-            $appointments = DB::table('appointments')
-                ->whereIn($idColumn, $patients->pluck('user_id'))
-                ->where('doctor_user_id', auth()->id())
-                ->where('appointment_date', '>=', $now->toDateString())
-                ->whereIn('status', ['pending', 'approved', 'confirmed'])
+        if ($patients->isNotEmpty()) {
+            $appointments = DB::table('patient_appointments')
+                ->whereIn('user_id', $patients->pluck('user_id'))
+                ->where('doctor_profile_id', $doctorProfile->id)
+                ->where('appointment_date', '>=', now()->toDateString())
+                ->whereIn('status', ['pending', 'confirmed'])
                 ->orderBy('appointment_date')
                 ->orderBy('appointment_time')
                 ->get()
-                ->groupBy($idColumn)
+                ->groupBy('user_id')
                 ->map(fn ($rows) => $rows->first());
         }
 

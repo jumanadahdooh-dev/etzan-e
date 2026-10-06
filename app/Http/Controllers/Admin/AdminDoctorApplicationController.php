@@ -173,11 +173,13 @@ class AdminDoctorApplicationController extends Controller
         abort(404, 'لم يتم رفع هذا الملف.');
     }
 
-    if (!Storage::disk('public')->exists($path)) {
+    $disk = $this->applicationFileDisk($type, $path);
+
+    if (!$disk) {
         abort(404, 'الملف غير موجود على الخادم.');
     }
 
-    $fullPath = Storage::disk('public')->path($path);
+    $fullPath = Storage::disk($disk)->path($path);
     $extension = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
 
     $mimeMap = [
@@ -207,12 +209,13 @@ class AdminDoctorApplicationController extends Controller
     public function downloadFile(DoctorApplication $doctorApplication, string $type)
     {
         $path = $this->resolveApplicationFile($doctorApplication, $type);
+        $disk = $path ? $this->applicationFileDisk($type, $path) : null;
 
-        if (!$path || !Storage::disk('public')->exists($path)) {
+        if (!$disk) {
             abort(404, 'الملف غير موجود.');
         }
 
-        $fullPath = Storage::disk('public')->path($path);
+        $fullPath = Storage::disk($disk)->path($path);
         return response()->download($fullPath, basename($fullPath));
     }
 
@@ -228,6 +231,23 @@ class AdminDoctorApplicationController extends Controller
             'cv'      => $doctorApplication->cv_file_path,
             default   => null,
         };
+    }
+
+    /**
+     * القرص اللي فيه الملف فعليًا. الترخيص والسيرة على القرص الخاص، بس الطلبات
+     * القديمة (قبل النقل) ممكن تكون لسا على public فبنرجعلها كاحتياط.
+     */
+    private function applicationFileDisk(string $type, string $path): ?string
+    {
+        $disks = $type === 'photo' ? ['public'] : [DoctorApplication::PRIVATE_DISK, 'public'];
+
+        foreach ($disks as $disk) {
+            if (Storage::disk($disk)->exists($path)) {
+                return $disk;
+            }
+        }
+
+        return null;
     }
 
     private function createOrUpdateDoctorUser(DoctorApplication $doctorApplication): User
@@ -298,8 +318,9 @@ class AdminDoctorApplicationController extends Controller
     public function viewFile(DoctorApplication $doctorApplication, string $type)
 {
     $path = $this->resolveApplicationFile($doctorApplication, $type);
+    $disk = $path ? $this->applicationFileDisk($type, $path) : null;
 
-    if (!$path || !Storage::disk('public')->exists($path)) {
+    if (!$disk) {
         abort(404, 'الملف غير موجود.');
     }
 
@@ -325,7 +346,7 @@ class AdminDoctorApplicationController extends Controller
         default => 'عرض الملف',
     };
 
-    $fileContent = Storage::disk('public')->get($path);
+    $fileContent = Storage::disk($disk)->get($path);
     $base64 = base64_encode($fileContent);
     $dataUri = "data:{$mime};base64,{$base64}";
 

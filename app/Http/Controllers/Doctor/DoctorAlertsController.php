@@ -62,7 +62,7 @@ class DoctorAlertsController extends Controller
             ->max('meal_date');
 
         $daysSince = $lastMealDate
-            ? Carbon::parse($lastMealDate)->diffInDays(now())
+            ? (int) Carbon::parse($lastMealDate)->startOfDay()->diffInDays(today())
             : null;
 
         if ($daysSince === null || $daysSince < 3) {

@@ -132,7 +132,8 @@ class DoctorPatientDetailController extends Controller
         $followupStart = $profile->updated_at
             ? \Illuminate\Support\Carbon::parse($profile->updated_at)
             : now();
-        $daysSinceStart = min(30, max(1, $followupStart->diffInDays(now()) + 1));
+        // Carbon 3 يرجع diffInDays كعدد عشري، فنحسب أيام تقويمية كاملة
+        $daysSinceStart = min(30, max(1, (int) $followupStart->copy()->startOfDay()->diffInDays(today()) + 1));
 
         $caloriesTrend = [];
         if (Schema::hasTable('patient_meals')) {
