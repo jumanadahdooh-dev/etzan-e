@@ -6,6 +6,7 @@ use App\Models\PatientProfile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
@@ -47,9 +48,7 @@ class PatientEmptyStatesTest extends TestCase
         $response->assertDontSee('بيانات تجريبية');
     }
 
-    /**
-     * @dataProvider weightProvider
-     */
+    #[DataProvider('weightProvider')]
     public function test_weight_progress_is_calculated_from_real_data(?float $target, array $logs, int $expected): void
     {
         $user = $this->patient(['weight' => $logs ? end($logs) : 90, 'target_weight_kg' => $target]);

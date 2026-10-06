@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 /**
@@ -63,9 +64,7 @@ class AuditPagesTest extends TestCase
         $this->actingAs($doctorProfile->user)->get(route('doctor.notifications.index'))->assertOk();
     }
 
-    /**
-     * @dataProvider followupStartProvider
-     */
+    #[DataProvider('followupStartProvider')]
     public function test_doctor_patient_detail_renders_for_any_followup_start(string $offset): void
     {
         Carbon::setTestNow('2026-10-06 14:30:00');
