@@ -75,6 +75,13 @@
                     'active' => ['admin/articles'],
                 ],
                 [
+                    'label' => 'تصنيفات المقالات',
+                    'icon' => 'fa-regular fa-folder',
+                    'routes' => ['admin.article-categories.index'],
+                    'fallback' => '/admin/article-categories',
+                    'active' => ['admin/article-categories'],
+                ],
+                [
                     'label' => 'التخصصات',
                     'icon' => 'fa-solid fa-stethoscope',
                     'routes' => ['admin.specialties.index'],
