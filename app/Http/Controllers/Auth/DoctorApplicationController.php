@@ -103,10 +103,10 @@ class DoctorApplicationController extends Controller
             ->store('doctor-applications/profile-photos', 'public');
 
         $licenseFilePath = $request->file('license_file')
-            ->store('doctor-applications/license-files', 'public');
+            ->store('doctor-applications/license-files', DoctorApplication::PRIVATE_DISK);
 
         $cvFilePath = $request->hasFile('cv_file')
-            ? $request->file('cv_file')->store('doctor-applications/cv-files', 'public')
+            ? $request->file('cv_file')->store('doctor-applications/cv-files', DoctorApplication::PRIVATE_DISK)
             : null;
 
         $doctorApplication = DoctorApplication::create([
