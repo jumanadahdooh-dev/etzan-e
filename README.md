@@ -79,7 +79,8 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-**Database.** The default is SQLite. Create the file, then migrate and seed:
+**Database.** The default is SQLite. Create the file, then migrate and seed (in Windows
+PowerShell, use `New-Item database/database.sqlite` instead of `touch`):
 
 ```bash
 touch database/database.sqlite
