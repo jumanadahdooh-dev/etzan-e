@@ -83,7 +83,7 @@ class DoctorRealPagesTest extends TestCase
         $response = $this->actingAs($doctorProfile->user)->get(route('doctor.alerts'));
 
         $response->assertOk();
-        $response->assertSee('ما سجّل وجبات من');
+        $response->assertSee('ما سجّل وجبات من 10 يوم');
     }
 
     public function test_alerts_page_is_empty_when_patient_is_up_to_date(): void
