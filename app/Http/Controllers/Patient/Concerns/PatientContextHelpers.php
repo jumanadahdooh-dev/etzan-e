@@ -604,7 +604,7 @@ trait PatientContextHelpers
     private function recommendedDoctors(?object $profile): array
     {
         if (!$profile || !$this->tableExists('doctor_profiles') || !$this->tableExists('users')) {
-            return $this->fallbackRecommendedDoctors();
+            return [];
         }
 
         $select = ['doctor_profiles.id', 'doctor_profiles.user_id', 'users.name as user_name'];
@@ -624,7 +624,7 @@ trait PatientContextHelpers
         $rows = DB::table('doctor_profiles')->join('users', 'users.id', '=', 'doctor_profiles.user_id')->select($select)->get();
 
         if ($rows->isEmpty()) {
-            return $this->fallbackRecommendedDoctors();
+            return [];
         }
 
         $preferredGender = (string) $this->valueFrom($profile, ['preferred_doctor_gender'], 'any');
@@ -770,41 +770,6 @@ trait PatientContextHelpers
             },
             'total' => count($doctors),
         ];
-    }
-
-
-    private function fallbackRecommendedDoctors(): array
-    {
-        $samples = [
-            ['name' => 'د. أحمد سالم', 'specialty' => 'تغذية علاجية وسكري', 'score' => 94, 'reason' => 'مناسب لمتابعة التغذية العلاجية وتنظيم الوجبات حسب الحالة الصحية.', 'badges' => ['تغذية علاجية', 'سكري', 'متابعة غذائية'], 'gender' => 'male', 'consultation' => 'online'],
-            ['name' => 'د. ليان منصور', 'specialty' => 'صحة عامة وأمراض مزمنة', 'score' => 91, 'reason' => 'مناسبة للمتابعة اليومية وتنظيم العادات الصحية لأصحاب الحالات المزمنة.', 'badges' => ['أمراض مزمنة', 'ضغط', 'نمط حياة'], 'gender' => 'female', 'consultation' => 'online'],
-            ['name' => 'د. سامر خليل', 'specialty' => 'تغذية وسمنة ونمط حياة', 'score' => 86, 'reason' => 'مناسب لبناء خطة صحية متدرجة ومتابعة الوزن والعادات اليومية.', 'badges' => ['وزن', 'عادات صحية', 'تغذية'], 'gender' => 'male', 'consultation' => 'clinic'],
-        ];
-
-        return collect($samples)->map(function ($doctor, $index) {
-            return [
-                'id' => $index + 1,
-                'is_fallback' => true,
-                'name' => $doctor['name'],
-                'specialty' => $doctor['specialty'],
-                'avatar' => $this->placeholderImage($doctor['name']),
-                'bio' => 'طبيب مختص يساعدك على بناء متابعة صحية مناسبة لحالتك وهدفك.',
-                'gender' => $doctor['gender'],
-                'gender_label' => $doctor['gender'] === 'female' ? 'طبيبة' : 'طبيب',
-                'consultation_key' => $doctor['consultation'],
-                'consultation_type' => $doctor['consultation'] === 'clinic' ? 'حضوري' : 'أونلاين',
-                'experience' => 5 + $index,
-                'rating' => number_format(4.8 - ($index * 0.1), 1),
-                'reviews_count' => 0,
-                'match_score' => $doctor['score'],
-                'match_reason' => $doctor['reason'],
-                'badges' => $doctor['badges'],
-                'articles' => [
-                    ['title' => 'كيف تبدأ متابعة صحية بطريقة بسيطة؟', 'read_time' => '4 دقائق قراءة'],
-                    ['title' => 'أخطاء شائعة في تنظيم الوجبات اليومية', 'read_time' => '5 دقائق قراءة'],
-                ],
-            ];
-        })->toArray();
     }
 
 
@@ -1811,7 +1776,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
     private function todayTasks($user, ?object $profile): array
     {
         if (!$user || !$this->tableExists('patient_tasks')) {
-            return $this->fallbackTasks();
+            return [];
         }
 
         $query = DB::table('patient_tasks');
@@ -1825,7 +1790,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         } elseif ($this->columnExists('patient_tasks', 'user_id')) {
             $query->where('user_id', $user->id);
         } else {
-            return $this->fallbackTasks();
+            return [];
         }
 
         if ($this->columnExists('patient_tasks', 'task_date')) {
@@ -1839,7 +1804,7 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
         $rows = $query->limit(8)->get();
 
         if ($rows->isEmpty()) {
-            return $this->fallbackTasks();
+            return [];
         }
 
         return $rows->map(function ($task) {
@@ -1872,15 +1837,6 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
                 'icon' => $task['icon'] ?? 'circle-check',
             ];
         })->values()->toArray();
-    }
-
-
-    private function fallbackTasks(): array
-    {
-        return [
-            ['title' => 'شرب 8 أكواب ماء', 'description' => null, 'completed' => false, 'time' => '12:00', 'type' => 'water', 'icon' => 'droplet', 'progress' => 0, 'progressText' => '0/8 أكواب'],
-            ['title' => 'تسجيل وجبة اليوم', 'description' => null, 'completed' => false, 'time' => '13:00', 'type' => 'meal', 'icon' => 'utensils', 'progress' => 0, 'progressText' => '0/3 وجبات'],
-        ];
     }
 
 
@@ -2366,13 +2322,13 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
     private function dashboardArticles(): array
     {
         if (! $this->tableExists('articles')) {
-            return $this->fallbackArticles();
+            return [];
         }
 
         $rows = $this->patientVisibleArticlesQuery()->limit(3)->get();
 
         if ($rows->isEmpty()) {
-            return $this->fallbackArticles();
+            return [];
         }
 
         return $rows->map(function (Article $article, int $index) {
@@ -2396,28 +2352,50 @@ private function nextAppointment(?int $userId, ?int $profileId): ?array
     }
 
 
-    private function fallbackArticles(): array
-    {
-        return [
-            [
-                'title' => 'أطعمة تعزز المناعة بطريقة طبيعية',
-                'tag' => 'تغذية',
-                'read_time' => '4 دقائق قراءة',
-                'image' => $this->placeholderImage('مقال صحي'),
-                'url' => route('patient.articles'),
-            ],
-        ];
-    }
-
-
     private function homeStats(?object $profile, int $todayProgress): array
     {
         $weight = $this->valueFrom($profile, ['weight', 'weight_kg', 'current_weight']);
 
         return [
             ['title' => 'مهام اليوم', 'value' => $todayProgress, 'unit' => '%', 'subtitle' => 'نسبة الإنجاز', 'icon' => 'badge-check', 'progress' => $todayProgress, 'color' => 'green'],
-            ['title' => 'الوزن', 'value' => $weight ?: '—', 'unit' => $weight ? 'كغ' : '', 'subtitle' => $weight ? 'آخر وزن مسجل' : 'لم يتم تسجيل الوزن', 'icon' => 'scale', 'progress' => $weight ? 65 : 0, 'color' => 'purple'],
+            ['title' => 'الوزن', 'value' => $weight ?: '—', 'unit' => $weight ? 'كغ' : '', 'subtitle' => $weight ? 'آخر وزن مسجل' : 'لم يتم تسجيل الوزن', 'icon' => 'scale', 'progress' => $this->weightGoalProgress($profile), 'color' => 'purple'],
         ];
+    }
+
+
+    /**
+     * نسبة التقدم نحو الوزن المستهدف: (وزن البداية - الوزن الحالي) / (وزن البداية - الهدف).
+     * البداية = أول وزن مسجل، الحالي = آخر وزن مسجل (وإلا وزن الملف)، وتشتغل للنزول والزيادة.
+     */
+    private function weightGoalProgress(?object $profile): int
+    {
+        $target = $this->valueFrom($profile, ['target_weight_kg']);
+        $profileWeight = $this->valueFrom($profile, ['weight', 'weight_kg', 'current_weight']);
+        $startWeight = $currentWeight = $profileWeight;
+
+        if ($profile && !empty($profile->user_id) && $this->tableExists('patient_weight_logs')) {
+            $logs = DB::table('patient_weight_logs')
+                ->where('user_id', $profile->user_id)
+                ->orderBy('logged_date')
+                ->orderBy('id');
+
+            $startWeight = (clone $logs)->value('weight_kg') ?? $startWeight;
+            $currentWeight = (clone $logs)->reorder()->orderByDesc('logged_date')->orderByDesc('id')->value('weight_kg') ?? $currentWeight;
+        }
+
+        if (!is_numeric($target) || !is_numeric($startWeight) || !is_numeric($currentWeight)) {
+            return 0;
+        }
+
+        $totalChange = (float) $startWeight - (float) $target;
+
+        if (abs($totalChange) < 0.01) {
+            return abs((float) $currentWeight - (float) $target) < 0.01 ? 100 : 0;
+        }
+
+        $progress = ((float) $startWeight - (float) $currentWeight) / $totalChange * 100;
+
+        return (int) round(max(0, min(100, $progress)));
     }
 
 
@@ -2656,7 +2634,7 @@ SVG;
     private function realTodayTasks($user): array
     {
         if (!$user || !$this->tableExists('patient_tasks')) {
-            return $this->fallbackTasks();
+            return [];
         }
 
         $today = Carbon::today()->toDateString();
@@ -2670,7 +2648,7 @@ SVG;
         $rows = $query->get();
 
         if ($rows->isEmpty()) {
-            return $this->fallbackTasks();
+            return [];
         }
 
         return $rows->map(function ($task) {
@@ -2871,7 +2849,7 @@ private function getTableColumns(string $table): array
     private function realRecommendedArticles(): array
     {
         if (!$this->tableExists('articles')) {
-            return $this->fallbackArticles();
+            return [];
         }
 
         $query = DB::table('articles');
@@ -2903,7 +2881,7 @@ private function getTableColumns(string $table): array
         $rows = $query->limit(3)->get();
 
         if ($rows->isEmpty()) {
-            return $this->fallbackArticles();
+            return [];
         }
 
         return $rows->map(function ($article) {
