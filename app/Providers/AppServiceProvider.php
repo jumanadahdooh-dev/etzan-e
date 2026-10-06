@@ -3,9 +3,13 @@
 namespace App\Providers;
 
 use App\Models\AppNotification;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +20,16 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // 5 محاولات بالدقيقة لكل إيميل + IP، و 20 لكل IP (حتى ما يجرب عدة إيميلات من نفس الجهاز)
+        RateLimiter::for('login', function (Request $request) {
+            $email = Str::lower((string) $request->input('email'));
+
+            return [
+                Limit::perMinute(5)->by($email . '|' . $request->ip()),
+                Limit::perMinute(20)->by($request->ip()),
+            ];
+        });
+
         View::composer([
             'layouts.patient',
             'patient.*',
