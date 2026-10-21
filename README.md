@@ -5,11 +5,15 @@ Atzaan is an Arabic (RTL) web platform for nutrition and chronic-condition follo
 daily tasks. Doctors set calorie goals, review meals and assign tasks. **Admins** moderate doctors,
 content and support conversations.
 
-> Screenshots: _placeholder_
->
-> | Patient home | Doctor dashboard | Admin dashboard |
-> |---|---|---|
-> | ![patient](docs/screenshots/patient-home.png) | ![doctor](docs/screenshots/doctor-dashboard.png) | ![admin](docs/screenshots/admin-dashboard.png) |
+## Highlights
+
+- **Solo graduation project** (Islamic University of Gaza, 2026), built end to end with Laravel 12
+- **Three roles** (Admin, Doctor, Patient) with role-based middleware, authorization policies and rate limiting
+- **AI meal analysis** from a photo or text via OpenRouter: estimates 16 nutritional values per meal with strict JSON validation and a rule-based health score
+- **Personalized AI health chatbot** that uses each patient's profile and meal history, with medical safety rules
+- **Doctor tools**: calorie goals (Mifflin-St Jeor), meal review, task assignment and appointment scheduling
+- **Dashboards** with Chart.js analytics and 26+ in-app notification types with scheduled reminders
+- **Fully Arabic RTL**, responsive interface (Blade + Bootstrap 5 RTL)
 
 ---
 
