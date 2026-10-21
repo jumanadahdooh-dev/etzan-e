@@ -15,6 +15,24 @@ content and support conversations.
 - **Dashboards** with Chart.js analytics and 26+ in-app notification types with scheduled reminders
 - **Fully Arabic RTL**, responsive interface (Blade + Bootstrap 5 RTL)
 
+## Screenshots
+
+| Login | AI meal analysis |
+|---|---|
+| <img src="docs/screenshots/login.jpeg" width="420"> | <img src="docs/screenshots/ai-meal-analysis.jpeg" width="260"> |
+
+| Patient dashboard | Doctor dashboard | Admin dashboard |
+|---|---|---|
+| <img src="docs/screenshots/patient-dashboard.jpeg" width="280"> | <img src="docs/screenshots/doctor-dashboard.jpeg" width="260"> | <img src="docs/screenshots/admin-dashboard.jpeg" width="140"> |
+
+| Nutrition plan | Appointment / consultation | Health articles |
+|---|---|---|
+| <img src="docs/screenshots/nutrition-plan.jpeg" width="280"> | <img src="docs/screenshots/consultation-request.jpeg" width="280"> | <img src="docs/screenshots/health-articles.jpeg" width="200"> |
+
+## Architecture
+
+<img src="docs/screenshots/architecture.png" width="520">
+
 ---
 
 ## Features by role
